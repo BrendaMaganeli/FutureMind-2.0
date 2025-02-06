@@ -7,10 +7,8 @@ UUma plataforma que oferece acesso acessível e de qualidade a sessões de psica
 
 
 # integrantes da equipe
-Mateus Silva
-Manassés Marcelino
-Vitor de Mattos
-Brenda Mganeli 
-Evelyn Lohanny
-
-https://github.com/BrendaMaganeli/FutureMind-2.0/commit/c2420064b32885e8621dd5d68860e761b1996b23
+Mateus Silva - MateusdasilvaDES
+Manassés Marcelino - ManassesMarcelino
+Vitor de Mattos - VitorMatt
+Brenda Mganeli - BrendaMaganeli
+Evelyn Lohanny - evylohanny

@@ -1,0 +1,33 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#root,body,html{
+    min-height: 100vh;
+}
+
+.pagamento-container{
+    display: flex;
+    margin: 0;
+
+}
+
+.lado-esquerdo{
+    width: 30%;
+    height: 100vh;
+    margin: 0%;
+    background-color: #5a789fa4;
+}
+
+.lado-Direito{
+    width: 70%;
+    height: 100vh;
+}
+
+.seta-pagamento{
+    width: 6%;
+    padding-left: 1%;
+    margin: 3%;
+}

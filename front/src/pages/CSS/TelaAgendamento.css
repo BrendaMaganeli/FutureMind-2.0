@@ -1,0 +1,45 @@
+.container-tela-agendamento_geral{
+       
+    background-color: white;
+    display: flex;
+    height: 100vh;
+
+    & .container-tela-agendamento_esquerda{
+        
+        background-color: rgb(255, 255, 255);
+        width: 60%;
+        
+        
+        & .container-perfil{
+
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 150px;
+           
+          & .container_foto_informações{
+            display: flex;
+            width: 30%;
+            justify-content: center;
+            
+          }
+
+          & .foto_perfil{
+            width: 25%;
+          }
+
+          & .container-perfil_informações{
+
+            padding-left: 20px;
+          }
+        }
+    }
+
+    & .container_tela_agendamento_direita{
+
+        background-color: #5A789F;
+        width: 40%;
+        
+
+    }
+}

@@ -1,17 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "DM Sans", serif;
 }
 
 #root,body,html{
     min-height: 100vh;
+    font-family: "DM Sans", serif;
 }
 
 .pagamento-container{
     display: flex;
     margin: 0;
-
 }
 
 .lado-esquerdo{
@@ -28,6 +30,71 @@
 
 .seta-pagamento{
     width: 6%;
+    padding-right: 2%;
+}
+
+.pagamento-pSuperior{
+    display: flex;
     padding-left: 1%;
     margin: 3%;
+    justify-content: start;
+    align-items: center;
+}
+
+.h3{
+    color: #011c30;
+}
+
+.style-fraseM{
+    color: #173b57;
+    font-size: 1.4em;
+}
+
+.frase-motivadora{
+    display: flex;
+    padding-left: 4%;
+    height: 200px;
+    align-items: center;
+}
+
+.valor-de-pagamento{
+    display: flex;
+    flex-direction: column;
+    padding-left: 4%;
+    height: 100px;
+    justify-content: center;
+}
+
+.valor-DPagamento{
+    color:  #011c30;
+    font-size: 1.8em;
+}
+
+.dados-de-consultaPag{
+    display: flex;
+    flex-direction: column;
+    padding-left: 4%;
+    height: 550px;
+    justify-content: center;
+    color:  #011c30;
+}
+
+.sub-dadosPag{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding-top: 4%;
+}
+
+.style-dadosPag{
+    font-size: 1.8em;
+}
+
+.style-linkPag{
+    color:#054c83;
+    text-decoration: none;
+}
+.linkPag-politica{
+    display: flex;
+    justify-content: center;
 }

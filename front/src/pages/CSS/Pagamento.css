@@ -98,3 +98,12 @@
     display: flex;
     justify-content: center;
 }
+
+.logoPag{
+    display: flex;
+    justify-content: end;
+}
+
+.cartao{
+    width: 10%;
+}

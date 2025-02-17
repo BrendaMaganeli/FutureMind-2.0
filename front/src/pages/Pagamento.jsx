@@ -2,8 +2,19 @@ import './CSS/Pagamento.css'
 import seta from '../assets/seta.svg'
 import logoHorizontal from '../assets/logoHorizontal.svg'
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import Debito from '../Components/Debito'
+import Credito from '../Components/Credito'
+import Pix from '../Components/Pix'
+import Boleto from '../Components/Boleto'
+import cartao from '../assets/cartao.webp'
+import boleto from '../assets/images 1.svg'
+import pix from '../assets/download 3.svg'
 
 function Pagamento() {
+
+    const [pagina,setPagina] = useState(<Debito />)
+
   return (
     <div className="pagamento-container">
 
@@ -37,8 +48,17 @@ function Pagamento() {
 
         <div className="lado-Direito">
             
-            <div>
+            <div className='logoPag'>
                 <img src={logoHorizontal} alt="" />
+            </div>
+            <div className='botoesPag'>
+                <button onClick={ () => {setPagina(<Debito />)} }> <img src={cartao} alt="" className='cartao'/></button>
+                <button onClick={ () => {setPagina(<Credito />)}}><img src={cartao} alt="" className='cartao'/></button>
+                <button onClick={ () => {setPagina(<Pix />)}}><img src={pix} alt="" /></button>
+                <button onClick={ () => {setPagina(<Boleto />)}}><img src={boleto} alt="" /></button>
+            </div>
+            <div>
+                {pagina}
             </div>
 
        </div>

@@ -16,6 +16,7 @@
           align-items: center;
           justify-content: space-between;
           height: 150px;
+          padding-left: 2%;
            
           & .container_foto_informações{
             display: flex;
@@ -25,12 +26,33 @@
           }
 
           & .foto_perfil{
-            width: 25%;
+            width: 30%;
           }
 
           & .container-perfil_informações{
-
+            
+            padding-top: 10%;
             padding-left: 20px;
+
+            & .div_button_chat{
+
+              padding-top: 10% ;
+
+              & .button_chat{
+
+                width: 45%;
+                padding: 4px;
+                background-color: #5A789F;
+                border: 1px solid #5A789F;
+                border-radius: 10px;
+                color: white;
+              }
+            }
+          }
+
+          & .logo{
+            width: 24%;
+            padding-top: 50px;
           }
         }
     }

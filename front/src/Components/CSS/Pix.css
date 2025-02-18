@@ -1,0 +1,63 @@
+.container-pix{
+    width: 100%;
+    min-height: 69vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.qrCode{
+    width: 40%;
+}
+
+.input-pix{
+    padding: 2%;
+    width: 55em;
+    border-radius: 5px;
+    border: 2px solid #00000042;
+}
+
+.input-pix::placeholder{
+    color: #000;
+}
+
+.input-pix:focus{
+    outline: #00000042;
+}
+
+.infopix-men{
+    display: flex;
+    padding-bottom: 2%;
+}
+
+.input-pixMen{
+    padding: 2%;
+    width: 27.5em;
+    border-radius: 5px;
+    border: 2px solid #00000042;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+.input-pixMen::placeholder{
+    color: #000;
+}
+
+.input-pixMen:focus{
+    outline: #00000042;
+}
+
+.input-com{
+    padding: 2%;
+    width: 55em;
+    border-radius: 5px;
+    border: 2px solid #00000042;
+}
+
+.anexo-comp{
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    padding-bottom: 2%;
+}

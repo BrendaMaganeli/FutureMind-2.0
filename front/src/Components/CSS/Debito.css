@@ -1,0 +1,83 @@
+.container-debito{
+    width: 100%;
+    min-height: 69vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.infoCard{
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+}
+
+.input-debito{
+    padding: 2%;
+    width: 55em;
+    border-radius: 5px;
+    border: 2px solid #00000042;
+}
+
+.input-debitoMen{
+    padding: 2%;
+    width: 27.5em;
+    border-radius: 5px;
+    border: 2px solid #00000042;
+}
+
+.infoCard-men{
+    display: flex;
+}
+
+.botaoPag-styles{
+    width: 33em;
+    border-radius: 10px;
+    padding: 2%;
+    background-color: #5a789f;
+    border: none;
+    color: white;
+    font-size: 1.4em;
+}
+.botaoPag-styles:hover{
+    transition: 0.3s;
+    border: none;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    background-color: rgb(53, 95, 173);
+}
+.botaoPag-styles:active{
+    transform: translateY(2px);
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+}
+
+.salvarcheckbox{
+    width: 45.5em;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 1%;
+    padding-top: 2%;
+    padding-bottom: 1%;
+}
+
+.inforegiao{
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+.checkpag {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #002D4E;  /* Borda azul escura */
+    border-radius: 4px;
+    background-color: transparent;
+    position: relative;
+    cursor: pointer;
+}
+
+.checkpag:checked {
+    background-color: #002D4E; /* Fundo azul quando selecionado */
+    border-color: #002D4E;
+}

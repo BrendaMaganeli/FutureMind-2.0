@@ -5,7 +5,23 @@ function Pix() {
   return (
     <div className="container-pix">
       <div className='infopix'>
+        <div className="qrcode-texto">
         <img src={qrCode} alt="" className="qrCode"/>
+        <div className="texto-Lqrcode">
+        <p>
+        1. Entre no aplicativo da sua instituição financeira e acesse o ambiente Pix;
+        </p>
+        <p>
+        2. Escolha a opção de Ler o QR Code;
+        </p>
+        <p>
+        3. Escaneie o QR Code;
+        </p>
+        <p>
+        4. Confirme as informações e confirme o pagamento.
+        </p>
+        </div>
+        </div>
         <p>Informações do Pix</p>
         <input type="number" placeholder='Brenda Maganeli Casimiro' className='input-pix' readOnly/>
       </div>

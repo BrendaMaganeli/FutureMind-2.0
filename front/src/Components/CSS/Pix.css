@@ -8,7 +8,13 @@
 }
 
 .qrCode{
-    width: 40%;
+    width: 30%;
+}
+
+.texto-Lqrcode{
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 2%;
 }
 
 .input-pix{

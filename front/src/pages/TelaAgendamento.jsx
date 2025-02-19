@@ -39,6 +39,45 @@ const TelaAgendamento = () => {
            </div>
           </div>
         </div>
+        <div className='container_instrucoes'>
+          <div className='subtitulo_instrucoes'>
+            <p>Instruções da sessão:</p>
+          </div>
+          <div className='div_intrucoes_p'>
+            <p className='p_intrucoes'>1-liberado a senha para a sessão 24h antes</p>
+          </div>
+          <div className='div_intrucoes_p'>
+            <p className='p_intrucoes'>2-Confirmação de sessão somente após o pagamento</p>
+          </div>
+          <div className='div_intrucoes_p'>
+            <p className='p_intrucoes'>3-Acesso a camera necessário se for combinado com seu psicologo.</p>
+          </div>
+        </div>
+        <div className='container_abordagens'>
+          <div className='subtitulo_abordagens'>
+            <p>Abordagens</p>
+          </div>
+          <div className='container_abordagens_dois'>
+            <div className='div_p_img_abordagens'>
+              <div className='div_img_bolinha'>
+               <img src="bolinha.svg" alt="" />
+              </div>
+              <p>Idosos</p>
+            </div>
+            <div className='div_p_img_abordagens'>
+              <div className='div_img_bolinha'>
+               <img src="bolinha.svg" alt="" />
+              </div>
+              <p>Crianças</p>
+            </div>
+            <div className='div_p_img_abordagens'>
+              <div className='div_img_bolinha'>
+               <img src="bolinha.svg" alt="" />
+              </div>
+              <p>Casais</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className='container_tela_agendamento_direita'>

@@ -88,6 +88,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: start;
+    gap: 70px;
   }
   
   .titulo {
@@ -97,9 +99,9 @@
   
 .caixa-comandos {
     width: 82%;
-    height: 150px;
+    height: 24%;
     background-color: #ffffff;
-    border-radius: 8px;
+    border-radius: 20px;
   }
 
   .topicos p {
@@ -109,7 +111,11 @@
 
   .funcionalidades {
 
-    padding: 2%;
+    border-radius: 20px;
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
   }
   
   /* Conteúdo principal */
@@ -121,47 +127,54 @@
     flex-direction: column;
     align-items: center;
     width: 75%;
+    justify-content: center;
   }
   
   /* Caixa de Informações */
   .caixa-informacoes {
     display: flex;
     gap: 20px;
-    margin-bottom: 30px;
-    background-color: #92a5bf;
-    padding: 20px;
-    border-radius: 10px;
+    background-color: #5a789f88;
+    border-radius: 20px;
     width: 100%;
     height: 100%;
+    justify-content: center;
+    padding: 3%;
+    align-items: start;
   }
   
   .cartao-informacao {
-      width: 250px;
+      width: 100%;
       background-color: #98a9c5;
-      border-radius: 8px;
+      border-radius: 20px 20px 0 0;
       overflow: hidden;
     }
-  
-.cabecalho-informacao {
-
+    
+  .cabecalho-informacao {
+      
     border-radius: 8px 8px 0 0;
     background-color: #c1c9d6;
-    padding: 10px;
-    font-weight: bold;
     height: 25%;
+    width: 100%;
+    border-radius: 20px 20px 0 0;
+  }
+  
+  .cabecalho-informacao h2 {
+    
+    margin: 0 0 0 10px;
   }
   
   .cartao-informacao-a {
 
     width: 40%;
-    height: 80%;
+    height: 70%;
     border-radius: 8px;
   }
 
   .cartao-informacao-e {
 
     width: 50%;
-    height: 80%;
+    height: 70%;
     border-radius: 8px;
   }
 
@@ -169,7 +182,7 @@
 
     height: 100%;
     background-color: #f0f1f4;
-    border-radius: 0 0 5px 5px;
+    border-radius: 0 0 20px 20px;
   }
   
   /* Caixa Sobre Mim */
@@ -181,23 +194,29 @@
   }
   
   .cabecalho-sobre-mim {
-    font-weight: bold;
-    margin-bottom: 5px;
+
+    font-size: 20px;
   }
   
   .corpo-sobre-mim {
-    height: 80%;
-    background-color: #7f94b1;
-    border-radius: 5px;
+    height: 50%;
+    background-color: #5a789f82;
+    border-radius: 20px;
   }
   
   .cabecalho-perfil {
-    text-align: center;
+
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin: 60px 0 60px 60px;
+    gap: 20px;
+    width: 90%;
   }
   
   .imagem-perfil {
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
     object-fit: cover;
   }
@@ -214,14 +233,21 @@
   }
   
   .experiencia-perfil {
-    margin-top: 20px;
+
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    justify-content: center;
+    align-items: start;
+    text-align: start;
+    gap: 10px;
   }
   
   .cartao-experiencia {
-    background-color: rgba(255, 255, 255, 0.2);
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;
+    border: 1.5px solid rgba(255, 255, 255, 0.706);
+    padding: 4% 5% 4% 3%;
+    border-radius: 10px;
+    width: 100%;
   }
   
   .ano {
@@ -231,21 +257,23 @@
   
   .botao-baixar {
     display: block;
-    width: 100%;
-    background-color: #ffffff;
-    color: #5a7896;
-    padding: 10px;
-    border: none;
+    width: 40%;
+    border: 1px solid white;
+    color: white;
+    padding: 2%;
     margin-top: 10px;
     border-radius: 5px;
     cursor: pointer;
+    background: none;
+    text-decoration: underline;
   }
 
   .arvore {
 
     width: 40%;
-    height: 100%;
+    height: 80%;
     position: absolute;
+    top: 15%;
   }
 
   .arvore img {
@@ -257,6 +285,62 @@
   .caixa-info-geral {
 
     width: 70%;
-    height: 36%;
+    height: 80%;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .topicos {
+
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+
+  .topicos p {
+
+    font-size: 18px;
+    color: #5a7da0;
+  }
+
+  .topicos img {
+
+    width: 8.5%;
+    height: 8.5%;
+  }
+
+  .cabecalho-informacao, .cabecalho-sobre-mim {
+
+    color: #5a7da0;
+    padding: 3%;
+    font-size: 20px;
+    height: 25%;
+    width: 100%;
+  }
+
+  .loguinho {
+
+    position: absolute;
+    display: flex;
+    left: 85%;
+    top: -2%;
+  }
+
+  .loguinho img {
+
+    width: fit-content;
+  }
+
+  .cartao-informacao-a .cabecalho-informacao, .cartao-informacao-e .cabecalho-informacao {
+
+    height: 30%;
+  }
+
+  .cartao-sobremim{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    height: 100%;
   }

@@ -7,7 +7,7 @@ import EditarProfissional from '../pages/EditarProfissional.jsx'
 
 const router = createBrowserRouter([
 {
-    path: '/',
+    path: '/pagamento',
     element: <Pagamento /> 
 },
 {

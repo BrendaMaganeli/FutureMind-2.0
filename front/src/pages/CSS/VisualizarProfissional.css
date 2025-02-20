@@ -98,10 +98,12 @@
   }
   
 .caixa-comandos {
+
     width: 82%;
-    height: 24%;
+    height: 30%;
     background-color: #ffffff;
     border-radius: 20px;
+    align-items: end;
   }
 
   .topicos p {
@@ -115,7 +117,8 @@
     padding: 5%;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
+    margin: 0 0 0 5px;
   }
   
   /* Conteúdo principal */
@@ -127,23 +130,25 @@
     flex-direction: column;
     align-items: center;
     width: 75%;
-    justify-content: center;
+    height: 100%;
+    justify-content: flex-end;
   }
   
   /* Caixa de Informações */
   .caixa-informacoes {
     display: flex;
-    gap: 20px;
+    gap: 40px;
     background-color: #5a789f88;
     border-radius: 20px;
     width: 100%;
     height: 100%;
     justify-content: center;
     padding: 3%;
-    align-items: start;
   }
   
   .cartao-informacao {
+
+      display: flex;
       width: 100%;
       background-color: #98a9c5;
       border-radius: 20px 20px 0 0;
@@ -166,15 +171,17 @@
   
   .cartao-informacao-a {
 
-    width: 40%;
+    width: 35%;
     height: 70%;
     border-radius: 8px;
+    margin-top: 1.5%;
   }
 
   .cartao-informacao-e {
 
-    width: 50%;
+    width: 55%;
     height: 70%;
+    margin-top: 1.5%;
     border-radius: 8px;
   }
 
@@ -343,4 +350,61 @@
     flex-direction: column;
     gap: 6px;
     height: 100%;
+  }
+
+  .topicos:hover {
+
+    transform: scale(1.03);
+    translate: 5px;
+    cursor: pointer;
+    transition: 0.5s;
+  }
+
+  .crp {
+
+    display: flex;
+    width: 70%;
+    height: 5%;
+    justify-content: end;
+    position: relative;
+    color: #013A63;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .botoes-maior {
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: start;
+    height: 15%;
+    width: 90%;
+  }
+  .botoes {
+
+    display: flex;
+    height: 35%;
+    position: relative;
+
+    &:hover {
+
+      cursor: pointer;
+    }
+  }
+
+  .corpo-informacao, .corpo-sobre-mim {
+
+    padding: 4%;
+    font-size: 18px;
+    text-align: start;
+  }
+
+  .corpo-informacao {
+
+    color: #5a7da0;
+  }
+
+  .corpo-sobre-mim {
+
+    color: white;
   }

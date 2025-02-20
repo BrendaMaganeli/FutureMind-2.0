@@ -6,6 +6,8 @@ import icon_dois from '../assets/cam-recorder (1) 11.svg';
 import icon_tres from '../assets/icons8-bate-papo-48 2.svg';
 import icon_quatro from '../assets/icons8-pagamento-50 (1) 2.svg';
 import logo from '../assets/Logo_SA_2FASE.png';
+import voltar from '../assets/voltar 2.svg';
+import anotar from '../assets/bloco-de-anotacoes.png';
 
 function VisualizarProfissional() {
   return (
@@ -61,8 +63,12 @@ function VisualizarProfissional() {
             <p>Chat</p>
          </div>
          <div className="topicos">
+            <img src={anotar} alt="" />
+            <p>Anotações</p>
+         </div>
+         <div className="topicos">
             <img src={icon_quatro} alt="" />
-            <p>Pagamento</p>
+            <p>Histórico</p>
          </div>
         </div>
       </div>
@@ -73,6 +79,11 @@ function VisualizarProfissional() {
             <img src="Arvore Perfil.png" alt="" />
         </div>
         
+        <div className="botoes-maior">
+          <div className="botoes">
+            <img src={voltar} alt="" />
+          </div>
+        </div>
         <div className="loguinho">
           <img src={logo} alt="" />
         </div>
@@ -84,13 +95,17 @@ function VisualizarProfissional() {
           <div className="cabecalho-informacao">
             <h2>Especialização</h2>
           </div>
-          <div className="corpo-informacao"></div>
+          <div className="corpo-informacao">
+            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+          </div>
         </div>
         <div className="cartao-informacao-a">
           <div className="cabecalho-informacao">
             <h2>Abordagem</h2>
           </div>
-          <div className="corpo-informacao"></div>
+          <div className="corpo-informacao">
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+          </div>
         </div>
       </div>
 
@@ -101,8 +116,13 @@ function VisualizarProfissional() {
             Sobre mim
           </h2>
           </div>
-        <div className="corpo-sobre-mim"></div>
+        <div className="corpo-sobre-mim">
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+        </div>
       </div>
+        </div>
+        <div className="crp">
+          <p>CRP: 48/0903347</p>
         </div>
     </main>
   

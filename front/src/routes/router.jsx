@@ -4,6 +4,7 @@ import VisualizarProfissional from '../pages/VisualizarProfissional.jsx'
 import TelaAgendamento from '../pages/TelaAgendamento.jsx'
 import EditarPaciente from '../pages/EditarPaciente.jsx'
 import EditarProfissional from '../pages/EditarProfissional.jsx'
+import Chat from '../pages/Chat.jsx'
 
 const router = createBrowserRouter([
 {
@@ -26,8 +27,10 @@ const router = createBrowserRouter([
     path: '/paciente',
     element: <EditarPaciente />
 },
-
-
+{
+    path: '/chats',
+    element: <Chat />
+}
 ])
 
 export default router

@@ -1,4 +1,3 @@
-import React from "react";
 import "./CSS/VisualizarProfissional.css";
 import mulher from '../assets/image 8.png';
 import icon_um from '../assets/agenda 2.svg';
@@ -96,7 +95,7 @@ function VisualizarProfissional() {
             <h2>Especialização</h2>
           </div>
           <div className="corpo-informacao">
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
           </div>
         </div>
         <div className="cartao-informacao-a">
@@ -104,7 +103,7 @@ function VisualizarProfissional() {
             <h2>Abordagem</h2>
           </div>
           <div className="corpo-informacao">
-          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s.</p>
           </div>
         </div>
       </div>
@@ -117,7 +116,7 @@ function VisualizarProfissional() {
           </h2>
           </div>
         <div className="corpo-sobre-mim">
-        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
         </div>
       </div>
         </div>

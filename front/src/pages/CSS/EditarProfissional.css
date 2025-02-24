@@ -1,0 +1,62 @@
+.editar-profissional-maior {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    width: 75%;
+}
+
+.editar-profissional {
+    background-color: #5a7da096;
+    border-radius: 10px;
+    width: 65%;
+    height: 70%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    position: relative;
+    padding: 5%;
+    align-items: start;
+}
+.editar-profissional input {
+    width: 100%;
+    padding: 3%;
+    border-radius: 10px;
+    border: none;
+    background-color: #d3dbe6;
+}
+.editar-profissional input:nth-child(11) {
+    grid-column: span 2;
+}
+.salvar-btn {
+    background-color: #5a6b83d4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    justify-self: end;
+    width: 40%;
+    height: 10%;
+}
+
+.arvore-profissional {
+
+    width: 35%;
+    height: 80%;
+    position: absolute;
+    top: 10%;
+    left: 40%;
+}
+
+.arvore-profissional img {
+
+    width: 115%;
+    height: 100%;
+}
+
+.editar-profissional label {
+
+    color: white;
+}

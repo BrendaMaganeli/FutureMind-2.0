@@ -24,4 +24,4 @@ const TelaAgendamento = () => {
   )
 }
 
-export default TelaAgendamento
+export default TelaAgendamento;

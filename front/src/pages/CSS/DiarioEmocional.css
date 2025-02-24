@@ -1,0 +1,104 @@
+.container-diarioemocional{
+    display: flex;
+    margin: 0;
+}
+
+.mini-lado-esquerdoDiario{
+    background-color: #54789fd3;
+    width: 4%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+}
+
+.seta-diario{
+    width: 80%;}
+
+.buttondiario{
+    background-color: transparent;
+    border: none;
+    padding-top: 5%;
+}
+
+.lado-esquerdoDiario{
+    width: 25%;
+    height: 100vh;
+}
+
+.div-cabecalhodiario{
+    width: 100%;
+    height: 10%;
+    background-color: #F1F2F3;
+    border-right: 1px solid #524b4b7c;
+    border-bottom: 1px solid #524b4b7c;
+    color: #013a63;
+}
+
+.cacecalhomenor{
+    display: flex;
+    justify-content: space-between;
+    height: 70%;
+    align-items: center;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.quantidadenotas{
+    padding-left: 2%;
+    font-weight: 600;
+}
+
+.botaonovanota{
+    color: #013a63;
+    font-weight: 600;
+    width: 30%;
+    height: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1em;
+    background-color: #C1DFF4;
+    border-radius: 10px;
+    border: none;
+}
+
+.botaonovanota img{
+    width: 20%;
+    padding-right: 5%;
+}
+
+.lado-direitoDiario{
+    width: 71%;
+    background-color: #F1F2F3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.arvoredefundodiario{
+    height: 100vh;
+    width: 100%;
+    position: relative;
+}
+
+.cabecalhonota{
+    position: absolute;
+    display: flex;
+    background-color: #fff;
+    width: 60%;
+    height: 6%;
+    border-radius: 20px;
+    margin-top: 2%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.div-buts{
+    display: flex;
+}
+
+.relogio{
+    width: 20%;
+    padding-left: 4%;
+}

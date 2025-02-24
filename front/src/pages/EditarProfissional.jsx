@@ -1,4 +1,4 @@
-import React from 'react'
+
 import mulher from '../assets/image 8.png';
 import icon_um from '../assets/agenda 2.svg';
 import icon_dois from '../assets/cam-recorder (1) 11.svg';

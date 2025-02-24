@@ -39,7 +39,7 @@
 
     display: flex;
     flex-direction: column;
-    width: 25%;
+    width: 22%;
     height: 100vh;
     border-left: 1px solid rgba(119, 119, 119, 0.329);
 }
@@ -66,7 +66,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 15%;
+    height: 10%;
 }
 
 .pesquisa-chats .input-pesquisa {
@@ -76,12 +76,12 @@
     align-items: center;
     padding: 2%;
     width: 100%;
-    height: 100%;
+    height: 70%;
 }
 
 .input-pesquisa input{
 
-    width: 90%;
+    width: 95%;
     height: 28px;
     border: none;
     border-radius: 10px;
@@ -92,6 +92,7 @@
 
     display: flex;
     width: 100%;
+    height: 20%;
     gap: 5%;
     justify-content: center;
     align-items: start;
@@ -99,19 +100,71 @@
 
 .boxs-pesquisa .box-pesquisa {
 
-    background-color: #5a7da075;
+    background-color: #5a7da0a2;
     border: none;
     border-radius: 0 10px 10px 10px;
     color: white;
-    width: 25%;
+    width: 28%;
     height: 120%;
+    align-items: center;
     text-align: center;
 }
 
 .chat {
 
     display: flex;
-    width: 70%;
+    width: 73%;
     height: 100vh;
-    background-color: red;
 }
+
+.conversas {
+
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-height: 60%;
+}
+
+.conversas .chat-barra {
+
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 14%;
+    border-top: 1px solid rgba(119, 119, 119, 0.329);
+    justify-content: start;
+    align-items: center;
+    gap: 5%;
+    padding: 3%;
+}
+
+.chat-barra .nome {
+
+    display: flex;
+    flex-direction: column;
+    height: 80%;
+    align-items: start;
+    justify-content: start;
+    font-size: 20px;
+}
+
+.chat-barra img {
+
+    width: 14%;
+}
+
+.chats .barra-final {
+
+    width: 100%;
+    height: 30%;
+    border-top: 1px solid rgba(119, 119, 119, 0.329);
+}
+
+/* .arvore-chat{
+    width: ;
+    
+}
+
+.arvore-chat img {
+
+} */

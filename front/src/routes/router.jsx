@@ -5,6 +5,7 @@ import TelaAgendamento from '../pages/TelaAgendamento.jsx'
 import EditarPaciente from '../pages/EditarPaciente.jsx'
 import EditarProfissional from '../pages/EditarProfissional.jsx'
 import Chat from '../pages/Chat.jsx'
+import DiarioEmocional from '../pages/DiarioEmocional.jsx'
 
 const router = createBrowserRouter([
 {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
 {
     path: '/chats',
     element: <Chat />
+},
+{
+    path: '/diarioemocional',
+    element: <DiarioEmocional />
 }
 ])
 

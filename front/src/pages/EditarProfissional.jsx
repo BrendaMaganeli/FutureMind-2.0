@@ -23,18 +23,22 @@ function EditarProfissional() {
       </div>
       <div className="experiencia-perfil">
         <h3>Experiência</h3>
-        <div className="cartao-experiencia">
+        <div className="cartao-experiencia-p">
+          <div style={{display: 'flex', gap: '240px'}}>
           <strong>Cargo</strong> <span className="ano">Ano</span>
-          <p>Breve descrição.</p>
+          </div>
+          <input maxLength='25' placeholder='Breve descrição' />
         </div>
-        <div className="cartao-experiencia">
+        <div className="cartao-experiencia-p">
+        <div style={{display: 'flex', gap: '240px'}}>
           <strong>Cargo</strong> <span className="ano">Ano</span>
-          <p>Breve descrição.</p>
+        </div>
+          <input maxLength='25' placeholder='Breve descrição' />
         </div>
         <button className="botao-baixar">Baixar currículo</button>
       </div>
       </div>
-      <div className="caixa-comandos">
+      <div className="caixa-comandos-p">
        
         <div className="cartao-informacao">
           <div className="cabecalho-informacao">
@@ -145,7 +149,10 @@ function EditarProfissional() {
         <input type="password" placeholder="Senha" />
         </div>
     </div>
+    <div className="BTN-SALVAR">
+
         <button className="salvar-btn">Salvar</button>
+    </div>
    </div>
     </div>
   )

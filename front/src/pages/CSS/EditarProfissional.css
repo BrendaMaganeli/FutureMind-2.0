@@ -1,3 +1,6 @@
+*{
+    outline: none;
+}
 .editar-profissional-maior {
 
     display: flex;
@@ -20,7 +23,7 @@
     align-items: start;
 }
 .editar-profissional input {
-    width: 100%;
+    width: 95%;
     padding: 3%;
     border-radius: 10px;
     border: none;
@@ -29,16 +32,37 @@
 .editar-profissional input:nth-child(11) {
     grid-column: span 2;
 }
+.BTN-SALVAR {
+
+    padding: 2%;
+    position: relative;
+    height: 5%;
+    width: 69%;
+    display: flex;
+    justify-content: end;
+    align-items: start;
+}
+
 .salvar-btn {
-    background-color: #5a6b83d4;
+    
+    position: relative;
+    width: 22%;
+    font-size: 15px;
+    background-color: #5A789F;
     color: white;
-    border: none;
-    border-radius: 5px;
+    border: 1px solid #5a7da0;
+    border-radius: 10px;
     cursor: pointer;
     text-align: center;
     justify-self: end;
-    width: 40%;
-    height: 10%;
+    padding: 1%;
+
+    &:hover {
+
+        background-color: white;
+        color: #5a7da0;
+        transition: 0.3s;
+    }
 }
 
 .arvore-profissional {
@@ -47,7 +71,7 @@
     height: 80%;
     position: absolute;
     top: 10%;
-    left: 40%;
+    left: 43%;
 }
 
 .arvore-profissional img {
@@ -59,4 +83,37 @@
 .editar-profissional label {
 
     color: white;
+}
+
+.cartao-experiencia-p input {
+    
+    border: none;
+    background: none;
+    width: 100%;
+    color: white;
+}
+
+.cartao-experiencia-p input::placeholder {
+    
+    color: white;
+}
+
+.cartao-experiencia-p {
+    
+    width: 100%;
+    padding: 4% 5% 4% 3%;
+    border: 1.5px solid rgba(255, 255, 255, 0.706);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.caixa-comandos-p {
+
+    width: 82%;
+    height: 24%;
+    background-color: #ffffff;
+    border-radius: 20px;
+    align-items: end;
 }

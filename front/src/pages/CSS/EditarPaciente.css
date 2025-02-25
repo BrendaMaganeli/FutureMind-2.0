@@ -1,0 +1,82 @@
+.editar-paciente-maior {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    width: 75%;
+    height: 100%;
+}
+
+.editar-paciente {
+    background-color: #5a7da096;
+    border-radius: 10px;
+    width: 65%;
+    height: 40%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    position: relative;
+    padding: 5%;
+    align-items: start;
+    justify-content: start;
+}
+
+.editar-paciente input {
+    width: 95%;
+    padding: 3%;
+    border-radius: 10px;
+    border: none;
+    background-color: #d3dbe6;
+}
+.editar-paciente input:nth-child(11) {
+    grid-column: span 2;
+}
+
+.editar-paciente label {
+
+    color: white;
+}
+
+.barra-lateral-p {
+
+    width: 25%;
+    background-color: #6b81a5;
+    padding: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    gap: 10px;
+}
+
+.botoes-maior-p {
+
+    
+    display: flex;
+    justify-content: flex-start;
+    padding: 80px 0 0 0;
+    height: 30%;
+    width: 90%;
+}
+
+.botoes-maior-p .botoes-p {
+
+    display: flex;
+    height: 22%;
+    position: relative;
+
+    &:hover {
+
+      cursor: pointer;
+    }
+}
+
+.loguinho-p {
+
+    position: absolute;
+    display: flex;
+    left: 85%;
+    top: 2.5%;
+}

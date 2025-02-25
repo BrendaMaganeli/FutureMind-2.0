@@ -3,12 +3,13 @@
     background-color: white;
     display: flex;
     height: 100vh;
-    background-image: url("arvore.svg");
+    background-image: url("arvore_fundo.svg");
     background-repeat: no-repeat;
 
     & .container-tela-agendamento_esquerda {
         
         width: 60%;
+        
         
 
         & .container {
@@ -62,6 +63,7 @@
 
                   color: white;
                   font-size: 30px;
+                  padding-top: 20px;
                 }
 
                 & p{
@@ -77,12 +79,12 @@
 
                   & .button_abrir_chat{
 
-                    width: 28%;
-                    background-color: #013A63;
+                    width: 35%;
+                    background-color: #5A789F;
                     color: white;
                     border: none;
                     border-radius: 5px;
-                    padding: 4px;
+                    padding: 5px;
                     
                   }
                 }
@@ -130,11 +132,115 @@
 
           & .container_retangulo_dois{
             
+            display: flex;
             background-color: rgba(90,120,159, .5);
             width: 70%;
             height: 280px;
             border-radius: 15px;
             margin-top: 50px;
+            
+            & .container-esquerdo_retangulo_dois{
+              
+              display: flex;
+              flex-direction: column;
+              width: 50%;
+              
+              
+              & .titulo_formacao{
+
+                color: white;
+                font-size: 25px;
+                padding-left: 60px;
+                padding-top: 25px;
+              }
+              & .div_bolinha_formacao_esquerda{
+
+                display: flex;
+                padding-left: 60px;
+                padding-top: 25px;
+                
+                & .imagem_bolinha{
+
+                  width: 5%;
+                  padding-top: 3px;
+                }
+                & .formacoes{
+
+                  color: white;
+                  font-size: 18px;
+                  padding-left: 10px;
+
+                }
+              }
+
+              & .div_button_abrir_curriculo{
+
+                width: 100%;
+                padding-left: 60px;
+                padding-top: 30px;
+
+                & .button_abrir_curriculo{
+                  
+                  width: 65%;
+                  font-size: 18px;
+                  background-color: #5A789F;
+                  color: white;
+                  border: none;
+                  border-radius: 15px;
+                  padding: 4px;
+                }
+                
+              }
+
+
+            }
+
+            & .container-direito_retangulo_dois{
+              
+              display: flex;
+              flex-direction: column;
+              width: 50%;
+              
+              
+              & .titulo_abordagem{
+                
+                color: white;
+                font-size: 25px;
+                padding-left: 60px;
+                padding-top: 25px;
+                
+              }
+              
+              & .container_bolinha_formacao_direita{
+
+                padding-top: 20px;
+                padding-left: 60px;
+
+                & .div_bolinha_formacao_direita{
+
+                  display: flex;
+                  background-color: #5A789F;
+                  width: 54%;
+                  padding: 4px;
+                  border-radius: 15px;
+                  
+
+                  & .imagem_bolinha_direita{
+
+                    padding-left: 6px;
+                    width: 12%;
+                  }
+                  
+                  & .abordagens{
+
+                  color: white;
+                  padding-left: 40px;
+                  font-size: 18px;
+                  
+                }
+              }
+             }
+            }
           }
         }
     }
@@ -144,6 +250,23 @@
         background-color: #5A789F;
         width: 40%;
         
+        & .div_agendar{
+           
+           display: flex;
+           width: 100%;
+           height: 185px;
+           
+
+           & .titulo_agendar{
+
+            font: 30px;
+            color: white;
+            padding-left: 95px;
+            padding-top: 100px;
+           }
+           
+        }
+
         
 
     }

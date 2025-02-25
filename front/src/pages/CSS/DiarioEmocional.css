@@ -30,8 +30,7 @@
     width: 100%;
     height: 10%;
     background-color: #F1F2F3;
-    border-right: 1px solid #524b4b7c;
-    border-bottom: 1px solid #524b4b7c;
+    border-right: 1px solid #524b4b36;
     color: #013a63;
 }
 
@@ -96,9 +95,287 @@
 
 .div-buts{
     display: flex;
+    width: 30%;
+    justify-content: space-between;
+    padding-right: 2%;
 }
 
 .relogio{
-    width: 20%;
+    width: 25%;
     padding-left: 4%;
 }
+
+.datadiario{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #013a63;
+    padding-left: 2%;
+}
+
+.botaoapagar{
+    background-color: #a74343;
+    color: #fff;
+    width: 40%;
+    padding: 1.5%;
+    border: none;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.botaocomp{
+    background-color: #ffffff;
+    color: #000;
+    width: 40%;
+    padding: 1.5%;
+    border: solid 1px #898989;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.setabaixo{
+    width: 20%;
+    border-left: solid 1px #898989;
+    padding-left: 7%;
+}
+
+.botaoaumentar{
+    background-color: #ffffff;
+    color: #000;
+    width: 10%;
+    padding: 1.5%;
+    border: solid 1px #898989;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;  
+}
+
+.botaoaumentar img{
+    width: 70%;
+}
+
+.area-digitacao {
+    width: 60%;
+    height: 70%;
+    background-color: rgba(84, 120, 159, 0.397); /* Torna o fundo um pouco translúcido */
+    color: white;
+    position: absolute;
+    top: 55%; 
+    left: 65%; 
+    transform: translate(-50%, -50%); 
+    padding: 20px;
+    border-radius: 10px;
+    color: #013a63;
+    font-size: 1.3em;
+    font-weight: 600;
+    padding: 2%;
+    border: none;
+    resize: none;
+}
+
+.area-digitacao:focus{
+    border: 0 none;
+    outline: 0;
+}
+
+.lista-de-notas {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: calc(100vh - 120px); /* Ajuste dinâmico para limitar a altura */
+    overflow-y: auto; 
+    border-right: 1px solid #524b4b36;
+}
+
+.nota-item {
+    background-color: #C1DFF4;
+    padding: 10px;
+    border-radius: 8px;
+    color: #013a63;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.nota-item:hover {
+    background-color: #A0CBE8;
+}
+
+.nota-item.ativa {
+    background-color: #74b2df;
+    color: white;
+}
+
+.nota-titulo {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #013a63;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px; /* Define um tamanho máximo */
+}
+
+
+.nota-data {
+    font-size: 0.8em;
+    color: #666;
+}
+
+/* Modo tela cheia */
+.fullscreen .lado-direitoDiario {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #F1F2F3;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.fullscreen .lado-esquerdoDiario,
+.fullscreen .mini-lado-esquerdoDiario {
+    display: none;
+}
+
+.fullscreen .area-digitacao {
+    width: 70%;  
+    height: 70%; 
+    top: 20%; 
+    left: 50%; 
+    transform: translateX(-50%);
+    padding: 5%; 
+    font-size: 1.5em; 
+    color: #013a63;
+    background-color: rgba(84, 120, 159, 0.397);;
+}
+
+.fullscreen .cabecalhonota {
+    position: absolute;
+    display: flex;
+    background-color: #fff;
+    width: 70%;
+    height: 6%;
+    border-radius: 20px;
+    margin-top: 2%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #013a63;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #015794;
+}
+
+/* Efeito de clique nos botões */
+.buttondiario:active,
+.botaonovanota:active,
+.botaoapagar:active,
+.botaocomp:active,
+.botaoaumentar:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+}
+
+.botaonovanota:active {
+    background-color: #A0CBE8;
+}
+
+.botaoapagar:active {
+    background-color: #8a2e2e;
+}
+
+.botaocomp:active {
+    background-color: #f0f0f0;
+}
+
+.botaoaumentar:active {
+    background-color: #f0f0f0;
+}
+
+.modal-compartilhar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .modal-content h2 {
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .input-email {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .botao-copiar,
+  .botao-enviar,
+  .botao-fechar {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .botao-copiar {
+    background: #f0f0f0;
+    color: #333;
+  }
+  
+  .botao-enviar {
+    background: #4CAF50;
+    color: white;
+  }
+  
+  .botao-fechar {
+    background: #d9534f;
+    color: white;
+  }

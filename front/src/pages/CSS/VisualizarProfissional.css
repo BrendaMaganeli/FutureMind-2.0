@@ -318,6 +318,21 @@
     height: 8.5%;
   }
 
+  .topicos:hover {
+
+    transform: scale(1.03);
+    translate: 5px;
+    cursor: pointer;
+    transition: 0.5s;
+  }
+
+  .botaocomponente{
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    color: #5a7da0;
+  }
+
   .cabecalho-informacao, .cabecalho-sobre-mim {
 
     color: #5a7da0;
@@ -350,14 +365,6 @@
     flex-direction: column;
     gap: 6px;
     height: 100%;
-  }
-
-  .topicos:hover {
-
-    transform: scale(1.03);
-    translate: 5px;
-    cursor: pointer;
-    transition: 0.5s;
   }
 
   .crp {

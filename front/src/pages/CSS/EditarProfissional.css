@@ -13,7 +13,7 @@
 .editar-profissional {
     background-color: #5a7da096;
     border-radius: 10px;
-    width: 65%;
+    width: 100vh;
     height: 70%;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -21,6 +21,7 @@
     position: relative;
     padding: 5%;
     align-items: start;
+    margin-top: 5%;
 }
 .editar-profissional input {
     width: 95%;
@@ -37,7 +38,7 @@
     padding: 2%;
     position: relative;
     height: 5%;
-    width: 69%;
+    width: 100vh;
     display: flex;
     justify-content: end;
     align-items: start;
@@ -112,8 +113,15 @@
 .caixa-comandos-p {
 
     width: 82%;
-    height: 24%;
+    height: 26%;
     background-color: #ffffff;
     border-radius: 20px;
     align-items: end;
+}
+
+.corpoeditarpro{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }

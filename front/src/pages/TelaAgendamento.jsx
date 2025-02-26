@@ -1,11 +1,50 @@
-import React from 'react'
+import React, { useState } from "react";
 import './CSS/TelaAgendamento.css'
-import { Swiper, SwiperSlide } from 'swiper/react';
+
 
 
 const TelaAgendamento = () => {
   
- 
+  const diasDaSemana = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira"];
+
+  // Função para formatar data como dd/mm/yyyy
+
+  const formatarData = (data) => {
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    const ano = data.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+  };
+
+  // Função para calcular a data do começo da semana
+
+  const calcularInicioDaSemana = (data) => {
+    const diaDaSemana = data.getDay();
+    const diferenca = diaDaSemana === 0 ? -6 : 1 - diaDaSemana; // Se for domingo (0), ajustamos para segunda-feira
+    data.setDate(data.getDate() + diferenca);
+    return data;
+  };
+
+  // Função para gerar as datas de segunda a sexta-feira
+  
+    const gerarDiasDaSemana = (data) => {
+    const dias = [];
+    for (let i = 0; i < 5; i++) {
+      dias.push({ dia: diasDaSemana[i], data: formatarData(data) });
+      data.setDate(data.getDate() + 1); // Avança um dia
+    }
+    return dias;
+  };
+
+  const [dataInicioSemana, setDataInicioSemana] = useState(calcularInicioDaSemana(new Date()));
+
+  const alterarSemana = (direcao) => {
+    const novaData = new Date(dataInicioSemana);
+    novaData.setDate(novaData.getDate() + (direcao * 7)); // Avança ou retrocede 7 dias
+    setDataInicioSemana(calcularInicioDaSemana(novaData));
+  };
+
+  const dias = gerarDiasDaSemana(new Date(dataInicioSemana));
   return (
     <div className='container-tela-agendamento_geral'>
       <div className='container-tela-agendamento_esquerda'>
@@ -83,11 +122,18 @@ const TelaAgendamento = () => {
          <h1 className='titulo_agendar'>Agendar consulta</h1>
         </div>
         <div>
-          <button className='voltar_semana'>voltar</button>
-          <Swiper>
-           
-          </Swiper>
-          <button className='proximo_semana'>proximo</button>
+        <div className="botoes">
+          <button onClick={() => alterarSemana(-1)}>Semana Passada</button>
+          <button onClick={() => alterarSemana(1)}>Próxima Semana</button>
+        </div>
+        <div className="container-semana">
+         {dias.map((dia, index) => (
+          <div className="div_dia_data">
+            <div>{dia.dia}</div>
+            <div>{dia.data}</div>
+          </div>
+          ))}
+         </div>
         </div>
       </div>
     </div>

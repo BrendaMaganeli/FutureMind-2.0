@@ -14,13 +14,8 @@
     "lucide-react": "^0.475.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-<<<<<<< HEAD
-    "react-icons": "^5.5.0",
-    "react-router-dom": "^7.1.5"
-=======
     "react-router-dom": "^7.1.5",
     "swiper": "^11.2.4"
->>>>>>> 81bf975bfc90a1b670d9b2bf93d0a60eb41f0a31
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

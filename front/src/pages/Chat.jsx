@@ -1,8 +1,9 @@
-import './CSS/Chat.css';
 import voltar from '../assets/voltar 2.svg';
 import config from '../assets/settings.svg';
 import help from '../assets/help 1.svg';
 import mulher from '../assets/image 8.png';
+import arvore from '../assets/Logo Para o Navegador do Google 3.svg';
+import './CSS/Chat.css';
 
 function Chat() {
 
@@ -38,7 +39,23 @@ function Chat() {
     {
         nome: 'Lúcia Katia',
         foto: mulher
-    }
+    },
+    {
+        nome: 'Lúcia Katia',
+        foto: mulher
+    },
+    {
+        nome: 'Lúcia Katia',
+        foto: mulher
+    },
+    {
+        nome: 'Lúcia Katia',
+        foto: mulher
+    },
+    {
+        nome: 'Lúcia Katia',
+        foto: mulher
+    },
 ];
 
   return (
@@ -79,12 +96,17 @@ function Chat() {
                     ))
                 }
             </div>
-            <div className="barra-final"></div>
+            <div className="barra-final-maior">
+                <div className="barra-final">
+                    
+                </div>
+            </div>
         </div>
-        <div className="chat">a</div>
+        <div className="chat">
+        </div>
           
         <div className="arvore-chat">
-            <img src="Arvore Perfil.png" alt="" />
+            <img src={arvore} alt="" />
         </div>
     
     </div>

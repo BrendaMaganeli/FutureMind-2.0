@@ -48,16 +48,16 @@
 
     display: flex;
     width: 100%;
-    height: 15%;
+    height: 10%;
     align-items: end;
     justify-content: start;
-    padding: 4%;
+    padding: 0 0 10px 20px;
     border-bottom: 1px solid rgba(119, 119, 119, 0.329);
 }
 .cabecalho-chats p {
 
-    font-size: 70px;
-    color: grey;
+    font-size: 50px;
+    color: #666666;
     font-weight: 500;
 }
 
@@ -66,8 +66,8 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 10%;
-    padding: 2%;
+    height: 12%;
+    padding: 1%;
 }
 
 .pesquisa-chats .input-pesquisa {
@@ -87,6 +87,13 @@
     border: none;
     border-radius: 10px;
     background-color: #5a7da075;
+    padding: 0 0 0 35px;
+    color: #5a7da0;
+}
+
+.input-pesquisa input::placeholder {
+
+    color: #5a7da0a9;
 }
 
 .pesquisa-chats .boxs-pesquisa {
@@ -106,10 +113,37 @@
     border-radius: 0 10px 10px 10px;
     color: white;
     width: 28%;
-    height: 160%;
+    height: 115%;
     align-items: center;
     text-align: center;
     font-size: 14px;
+}
+
+.box-pesquisa-checked {
+
+    background-color: #063ca0ad;
+    border: none;
+    border-radius: 0 10px 10px 10px;
+    color: white;
+    width: 28%;
+    height: 115%;
+    align-items: center;
+    text-align: center;
+    font-size: 14px;
+}
+
+.box-pesquisa-checked:hover {
+
+    background-color: #063ca07a;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.boxs-pesquisa .box-pesquisa:hover {
+
+    cursor: pointer;
+    background-color: #063ca0ad;
+    transition: 0.5s;
 }
 
 .chat {
@@ -125,7 +159,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 482px;
+    height: 692px;
     overflow-x: auto;
 }
 
@@ -188,8 +222,8 @@
     display: flex;
     background-color: white;
     width: 23%;
-    height: 10%;
-    top: 88%;
+    height: 5%;
+    top: 93%;
     border-top: 1px solid rgba(119, 119, 119, 0.329);
     align-items: end;
     position: fixed;
@@ -215,4 +249,42 @@
 
     width: 105%;
     height: 90%;
+}
+
+.img-lupa {
+
+    position: absolute;
+    left: 6.8%;
+    top: 13.1%;
+}
+
+.img-lupa:hover {
+
+    transform: scale(1.08);
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.barra-top {
+
+    display: flex;
+    width: 100%;
+    height: 15%;
+    background-color: white;
+    border-bottom: 1px solid rgba(119, 119, 119, 0.329);
+    border-left: 1px solid rgba(119, 119, 119, 0.329);
+}
+
+.barra-top .img-foto {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 10%;
+}
+
+.barra-top .img-foto img {
+
+    width: 40%;
 }

@@ -8,10 +8,16 @@ import voltar from '../assets/voltar 2.svg';
 import './CSS/EditarProfissional.css';
 import { useState } from 'react';
 import EditarProComponente from '../Components/EditarProComponente';
+import HistoricoConsulta from '../Components/HistoricoConsulta';
 
 function EditarProfissional() {
 
   const [ corpoPerfil, setCorpoPerfil ] = useState(<EditarProComponente />)
+
+  function mudarprahistorico(){
+    console.log("Botão clicado!!!")
+    setCorpoPerfil(<HistoricoConsulta />)
+  }
 
   return (
     <div className='container'>
@@ -69,7 +75,7 @@ function EditarProfissional() {
 
          <div className="topicos">
             <img src={icon_tres} alt="" />
-            <button className='botaocomponente' onClick={ () => {setCorpoPerfil()}}>Histórico de Consulta</button>
+            <button className='botaocomponente' onClick={mudarprahistorico}>Histórico de Consulta</button>
          </div>       
         </div>
       </div>

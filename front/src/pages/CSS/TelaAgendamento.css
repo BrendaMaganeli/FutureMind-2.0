@@ -259,12 +259,104 @@
 
            & .titulo_agendar{
 
-            font: 30px;
+            font-size: 30px;
             color: white;
             padding-left: 95px;
             padding-top: 100px;
            }
            
+        }
+
+        & .container_buttons_semana{
+
+          display: flex;
+          width: 100%;
+          justify-content: space-between;
+
+          & .container-semana{
+
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+            width: 70%;
+
+            & .div_dia_data{
+
+              color: white;
+              width: 100%;
+              
+              & .dia_semana{
+                
+                font-size: 21px;
+                
+
+              }
+
+              & .data_dia{
+
+                 font-size: 80%;
+                 
+              }
+
+              & .horarios{
+
+                display: flex;
+                flex-direction: column;
+                height: fit-content;
+              }
+
+            }
+
+          }
+          
+           & .div_button_arrow_direito{
+
+            display: flex;
+            width: 15%;
+            align-items: center;
+            justify-content: start;
+            text-align: center;
+
+            & .button_arrow_direito{
+
+              width: 25%;
+              background-color: #5A789F;
+              border: none;
+              color: white;
+              justify-content: center;
+           
+              
+ 
+              & img{
+
+                width: 53%;
+                
+              }
+            }
+           }
+            
+           & .div_button_arrow_esquerdo{
+            
+            display: flex;
+            width: 15%;
+            align-items: center;
+            justify-content: end;
+            text-align: center;
+
+            & .button_arrow_esquerdo{
+
+              width: 25%;
+              background-color: #5A789F;
+              border: none;
+              color: white;
+              
+              & img{
+
+                width:53%;
+
+              }
+           }
+          }
         }
     }
 }

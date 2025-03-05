@@ -1,363 +1,167 @@
-.container-tela-agendamento_geral{
-       
-    background-color: white;
-    display: flex;
-    height: 100vh;
-    background-image: url("arvore_fundo.svg");
-    background-repeat: no-repeat;
-
-    & .container-tela-agendamento_esquerda {
-        
-        width: 60%;
-        
-        
-
-        & .container {
-          
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-          height:100vh;
-          align-items: center;
-          justify-content: center;
-         
-
-          & .container_retangulo_um{
-
-            background-color: rgba(90,120,159, .5);
-            
-            width: 70%;
-            height: 360px;
-            border-radius: 15px;
-
-            & .container_informações_um{
-
-              display: flex;
-              opacity: 100%;
-              width: 100%;
-              justify-content: space-between ;
-              align-items: center;
-
-              & .informações{
-
-                display: flex;
-                width: 100%;
-                align-items: center;
-
-                & .div_image{
-
-                  width: 25%;
-                  text-align: center;
-                  padding-left: 40px;
-
-                  & img{
-
-                    width:100%;
-                    
-                    
-                  }
-
-                }
-                
-                & .nome_usuario {
-
-                  color: white;
-                  font-size: 30px;
-                  padding-top: 20px;
-                }
-
-                & p{
-
-                  color:white;
-                  padding-top: 3px;
-                  font-size: 20px;
-                }
-                
-                & .div_button_chat{
-
-                  margin-top: 15px;
-
-                  & .button_abrir_chat{
-
-                    width: 35%;
-                    background-color: #5A789F;
-                    color: white;
-                    border: none;
-                    border-radius: 5px;
-                    padding: 5px;
-                    
-                  }
-                }
-
-                & .container_nome_crc_button{
-
-                  width: 75%;
-                  padding-left: 20px;
-                }
-              }
-
-              & .logo_agendamento{
-
-                
-
-                & .imagem_logo{
-
-                  opacity: 1;
-                }
-              }
-            }
-
-            & .instrucoes_sessao{
-              
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              width: 100%;
-              padding-top: 20px;
-              
-              & .titulo_instrucoes{
-
-                color: white;
-                padding-left: 45px;
-                font-size: 25px;
-              }
-              & .instrucoes{
-
-                color: white;
-                padding-left: 45px;
-                padding-top: 15px
-              }
-            }
-          }
-
-          & .container_retangulo_dois{
-            
-            display: flex;
-            background-color: rgba(90,120,159, .5);
-            width: 70%;
-            height: 280px;
-            border-radius: 15px;
-            margin-top: 50px;
-            
-            & .container-esquerdo_retangulo_dois{
-              
-              display: flex;
-              flex-direction: column;
-              width: 50%;
-              
-              
-              & .titulo_formacao{
-
-                color: white;
-                font-size: 25px;
-                padding-left: 60px;
-                padding-top: 25px;
-              }
-              & .div_bolinha_formacao_esquerda{
-
-                display: flex;
-                padding-left: 60px;
-                padding-top: 25px;
-                
-                & .imagem_bolinha{
-
-                  width: 5%;
-                  padding-top: 3px;
-                }
-                & .formacoes{
-
-                  color: white;
-                  font-size: 18px;
-                  padding-left: 10px;
-
-                }
-              }
-
-              & .div_button_abrir_curriculo{
-
-                width: 100%;
-                padding-left: 60px;
-                padding-top: 30px;
-
-                & .button_abrir_curriculo{
-                  
-                  width: 65%;
-                  font-size: 18px;
-                  background-color: #5A789F;
-                  color: white;
-                  border: none;
-                  border-radius: 15px;
-                  padding: 4px;
-                }
-                
-              }
-
-
-            }
-
-            & .container-direito_retangulo_dois{
-              
-              display: flex;
-              flex-direction: column;
-              width: 50%;
-              
-              
-              & .titulo_abordagem{
-                
-                color: white;
-                font-size: 25px;
-                padding-left: 60px;
-                padding-top: 25px;
-                
-              }
-              
-              & .container_bolinha_formacao_direita{
-
-                padding-top: 20px;
-                padding-left: 60px;
-
-                & .div_bolinha_formacao_direita{
-
-                  display: flex;
-                  background-color: #5A789F;
-                  width: 54%;
-                  padding: 4px;
-                  border-radius: 15px;
-                  
-
-                  & .imagem_bolinha_direita{
-
-                    padding-left: 6px;
-                    width: 12%;
-                  }
-                  
-                  & .abordagens{
-
-                  color: white;
-                  padding-left: 40px;
-                  font-size: 18px;
-                  
-                }
-              }
-             }
-            }
-          }
-        }
-    }
-
-    & .container_tela_agendamento_direita{
-
-        background-color: #5A789F;
-        width: 40%;
-        
-        & .div_agendar{
-           
-           display: flex;
-           width: 100%;
-           height: 185px;
-           
-
-           & .titulo_agendar{
-
-            font-size: 30px;
-            color: white;
-            padding-left: 95px;
-            padding-top: 100px;
-           }
-           
-        }
-
-        & .container_buttons_semana{
-
-          display: flex;
-          width: 100%;
-          justify-content: space-between;
-
-          & .container-semana{
-
-            display: flex;
-            justify-content: space-between;
-            text-align: center;
-            width: 70%;
-
-            & .div_dia_data{
-
-              color: white;
-              width: 100%;
-              
-              & .dia_semana{
-                
-                font-size: 21px;
-                
-
-              }
-
-              & .data_dia{
-
-                 font-size: 80%;
-                 
-              }
-
-              & .horarios{
-
-                display: flex;
-                flex-direction: column;
-                height: fit-content;
-              }
-
-            }
-
-          }
-          
-           & .div_button_arrow_direito{
-
-            display: flex;
-            width: 15%;
-            align-items: center;
-            justify-content: start;
-            text-align: center;
-
-            & .button_arrow_direito{
-
-              width: 25%;
-              background-color: #5A789F;
-              border: none;
-              color: white;
-              justify-content: center;
-           
-              
- 
-              & img{
-
-                width: 53%;
-                
-              }
-            }
-           }
-            
-           & .div_button_arrow_esquerdo{
-            
-            display: flex;
-            width: 15%;
-            align-items: center;
-            justify-content: end;
-            text-align: center;
-
-            & .button_arrow_esquerdo{
-
-              width: 25%;
-              background-color: #5A789F;
-              border: none;
-              color: white;
-              
-              & img{
-
-                width:53%;
-
-              }
-           }
-          }
-        }
-    }
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  min-height: 100vh;
+  background-color: #CAD7EB;
 }
 
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #013A63;
+  margin-bottom: 1.5rem;
+  width: 75%;
+  display: flex;
+  justify-content: start;
+  align-items: end;
+  margin: 50px 0 0 0;
+}
+
+.content {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  padding-top: 4%;
+}
+
+.calendar-container, .appointments-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.calendar-container {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #013A63;
+  margin-bottom: 1rem;
+}
+
+.calendar-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.appointments-container {
+  width: 50%;
+}
+
+.appointments-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #013A63;
+  margin-bottom: 1rem;
+}
+
+.appointments-list {
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.appointment-item {
+  background: #f3f4f6;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 0.8rem;
+}
+
+.patient-name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #013A63;
+}
+
+.appointment-time {
+  color: #4b5563;
+}
+
+.schedule-container {
+  margin-top: 1.5rem;
+}
+
+.input-field {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+}
+
+.button {
+  background: #013A63;
+  color: white;
+  padding: 11px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+}
+
+.react-calendar__month-view__days__day--weekend{
+  color: #013A63;
+}
+
+.react-calendar__navigation button{
+  min-width: 44px;
+}
+
+
+.react-calendar {
+  width: 100% !important; 
+  max-width: 100% !important; 
+  height: 50vh; 
+  overflow: hidden; 
+  border: none !important;
+  padding-top: 2%;
+}
+
+.calendar-wrapper {
+  width: 90%; 
+  display: flex;
+  justify-content: center; 
+}
+
+.react-calendar__tile {
+  border: none !important; 
+}
+
+.react-calendar__tile--active{
+  background-color: #5A789F !important;
+  color: white;
+}
+
+
+.react-calendar__tile react-calendar__tile--active react-calendar__tile--range react-calendar__tile--rangeStart react-calendar__tile--rangeEnd react-calendar__tile--rangeBothEnds react-calendar__month-view__days__day react-calendar__month-view__days__day--weekend{
+  border-radius: 5px !important;
+}
+
+/* Aumenta o tamanho dos botões de navegação */
+.react-calendar__navigation button {
+  min-width: 60px;      /* Ajuste conforme sua necessidade */
+  min-height: 60px;     /* Ajuste conforme sua necessidade */
+  font-size: 1.5rem;    /* Se os ícones forem baseados em fonte, esse tamanho aumenta-os */
+}
+
+.react-calendar__navigation__label {
+  font-size: 0.5rem;    
+}
+
+.react-calendar__tile--now {
+  background: #013A63 !important;  /* Remove o fundo amarelo */
+  color: white; /* Ajuste a cor do texto para manter a visibilidade */
+  font-weight: bold;
+  border-radius: 5px;
+}

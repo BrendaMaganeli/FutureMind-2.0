@@ -12,16 +12,10 @@
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.3",
     "@radix-ui/react-tooltip": "^1.1.8",
-<<<<<<< HEAD
-    "@tailwindcss/vite": "^4.0.9",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "framer-motion": "^12.4.7",
-=======
     "font-awesome": "^4.7.0",
->>>>>>> 7898a36f7f504e4cbfa659cb61ae02f21cae13bb
     "lucide-react": "^0.475.0",
     "react": "^19.0.0",
+    "react-calendar": "^5.1.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.1.5",

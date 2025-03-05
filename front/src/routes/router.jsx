@@ -6,6 +6,9 @@ import EditarPaciente from '../pages/EditarPaciente.jsx'
 import EditarProfissional from '../pages/EditarProfissional.jsx'
 import Chat from '../pages/Chat.jsx'
 import DiarioEmocional from '../pages/DiarioEmocional.jsx'
+import Plano_saude from '../pages/Plano_saude.jsx'
+import Footer from '../Components/Footer.jsx'
+import Navbar from '../Components/Navbar.jsx'
 
 const router = createBrowserRouter([
 {
@@ -35,7 +38,20 @@ const router = createBrowserRouter([
 {
     path: '/diarioemocional',
     element: <DiarioEmocional />
-}
+},
+{
+    path: '/planoSaude',
+    element: <Plano_saude/>
+},
+{
+    path: '/footer',
+    element: <Footer/>
+},
+{
+    path: '/nav',
+    element: <Navbar />
+},
+
 ])
 
 export default router

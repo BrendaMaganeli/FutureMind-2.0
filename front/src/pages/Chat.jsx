@@ -8,6 +8,9 @@ import { useState } from 'react';
 import close from '../assets/Group 239210.svg';
 import cam from '../assets/cam-recorder (1) 1.svg';
 import block from '../assets/blocked 1.svg';
+import handClick from '../assets/image 17.svg';
+import microfone from '../assets/image 15.svg';
+import figurinhaIcon from '../assets/image 16.svg';
 import './CSS/Chat.css';
 
 function Chat() {
@@ -87,7 +90,7 @@ const click = (index) => {
     <div className="container-chats">
         <div className="barra-lateral-chat">
             <div className="barra-cima">
-                <img src={voltar} alt="" />
+                <img className='voltar-btn' src={voltar} alt="" />
                 <img src={config} alt="" />
             </div>
             <div className="barra-baixo">
@@ -145,14 +148,56 @@ const click = (index) => {
                     <img src={mulher} />
                 </div>
                 <div className="nome-user-chat">
-                    <h2>Joana Maria da Silva</h2>
+                    <h5>Jana Maria da Silva</h5>
                 </div>
                 <div className="icons-chat">
                     <div className="icons-chat-p">
-                        <img src={cam} alt="" />  
-                        <img src={block} alt="" />
+                        <img src={cam} className='icon-chat-p-1' alt="" />  
+                        <img src={block} className='icon-chat-p-2' alt="" />
                     </div>
-                    <img src={close} alt="" />
+                    <img src={close} className='icon-chat-p-3' alt="" />
+                </div>
+            </div>
+            <div className="acess-profile-div">
+                <div className="user-name">@jana.silvaa</div>
+                <div className="btn-acess">
+                    <b>
+                        Acessar perfil
+                    </b>
+                </div>
+            </div>
+            <div className="messages-div">
+                <div className="message-left">
+                    <div className="image-text-message-left">
+                        <div className="image-message-left">
+                            <img src={mulher} alt="" />
+                        </div>
+                        <div className="text-message-left">
+                            Bom dia! Tem disponibilidade amanhã (terça) às 14 ou 15hrs?
+                        </div>
+                    </div>
+                </div>
+                <div className="message-right">
+                <div className="image-text-message-right">
+                        <div className="text-message-right">
+                            Bom dia! Tem disponibilidade amanhã (terça) às 14 ou 15hrs?
+                        </div>
+                        <div className="image-message-right">
+                            <img src={mulher} alt="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="barra-bottom">
+                <div className="inpt-chat">
+                    <input type="text" placeholder='Enter a message...' />
+                </div>
+                <div className="icons-chat-inpt">
+                    <div className="icons-inpt-a">
+                        <img src={figurinhaIcon} alt="" />
+                        <img src={microfone} alt="" />
+                    </div>
+                    <img src={handClick} className='hand-click' alt="" />
                 </div>
             </div>
         </div>

@@ -101,13 +101,25 @@
 }
 
 .button {
-  background: #013A63;
+  width: 33em;
+  border-radius: 10px;
+  padding: 2%;
+  background-color: #5a789f;
+  border: none;
   color: white;
-  padding: 11px;
-  border-radius: 8px;
   font-weight: bold;
-  cursor: pointer;
-  width: 100%;
+  font-size: 1em;
+}
+
+.button:hover{
+  transition: 0.3s;
+  border: none;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  background-color: rgb(53, 95, 173);
+}
+.button:active{
+  transform: translateY(2px);
+  box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
 }
 
 .react-calendar__month-view__days__day--weekend{
@@ -148,11 +160,11 @@
   border-radius: 5px !important;
 }
 
-/* Aumenta o tamanho dos botões de navegação */
 .react-calendar__navigation button {
-  min-width: 60px;      /* Ajuste conforme sua necessidade */
-  min-height: 60px;     /* Ajuste conforme sua necessidade */
-  font-size: 1.5rem;    /* Se os ícones forem baseados em fonte, esse tamanho aumenta-os */
+  min-width: 60px;     
+  min-height: 60px;     
+  font-size: 1.5rem;  
+  color: #013A63; 
 }
 
 .react-calendar__navigation__label {
@@ -160,8 +172,47 @@
 }
 
 .react-calendar__tile--now {
-  background: #013A63 !important;  /* Remove o fundo amarelo */
-  color: white; /* Ajuste a cor do texto para manter a visibilidade */
+  background: #5a789f !important;  
+  color: white; 
   font-weight: bold;
   border-radius: 5px;
 }
+
+.error-message.floating {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgb(141, 25, 25);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 250px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.close-button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 16px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.back-arrow {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #000;
+}
+
+.react-calendar__month-view__weekdays__weekday{
+  color: #013A63;
+}
+
+

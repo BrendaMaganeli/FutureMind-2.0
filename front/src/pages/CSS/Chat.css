@@ -253,11 +253,6 @@
 
     width: 40%;
     height: 70%;
-    position: absolute;
-    top: 20%;
-    left: 43%;
-    opacity: 100%;
-    cursor: not-allowed;
 }
     
 .arvore-chat img {
@@ -407,12 +402,12 @@
     flex-direction: column;
     padding: 10px;
     gap: 10px;
-    max-height: 83%;
     height: 83%;
-    overflow-y: auto;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
     align-items: end;
     justify-content: end;
-    position: relative;
+    background-image: url('/src/assets/Logo Para o Navegador do Google 3.svg');
 }
 
 .message-right, .message-left {
@@ -551,4 +546,30 @@
 
     border: none;
     background: none;
+}
+
+.messages-div::-webkit-scrollbar-thumb {
+
+    background-color: #5a7da0c0;
+    height: 20%;
+}
+
+.messages-div::-webkit-scrollbar-track {
+    
+    border-left: 1px solid rgba(119, 119, 119, 0.329);
+    border-right: 1px solid rgba(119, 119, 119, 0.329);
+    border-top: 1px solid rgba(119, 119, 119, 0.329);
+    background-color: transparent;
+    border-radius: 0px;
+}
+
+.messages-div::-webkit-scrollbar-track:hover {
+    
+    background-color: transparent;
+}
+
+.messages-div::-webkit-scrollbar-thumb:hover {
+
+    background-color: #5a7da0a4;
+    transition: 0.5s;
 }

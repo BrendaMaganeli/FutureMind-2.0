@@ -99,9 +99,6 @@ function Chat() {
                 </div>
             </div>
             <div className="chat">
-                <div className="arvore-chat">
-                    <img src={arvore} alt="" />
-                </div>
                 <div className="barra-top">
                     <div className="img-foto">
                         <img src={mulher} alt="" />

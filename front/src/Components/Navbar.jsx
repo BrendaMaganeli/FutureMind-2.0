@@ -2,9 +2,9 @@
 import { Link } from 'react-router-dom';
 import './CSS/Navbar.css'
 
-function Navbar() {
+function Navbar({cor}) {
   return (
-      <div className='container-nav'>
+      <div className='container-nav' style={{backgroundColor: cor}}>
        <div className='container_logo'>
         <img src="Logo_sa_arvore.svg" alt="" />
        </div>

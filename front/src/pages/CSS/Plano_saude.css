@@ -1,0 +1,166 @@
+.container-planoSaude{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f1f2f3;
+
+}
+
+.container-boas-vindas{
+
+   background-color: rgba(90,120,159, .5);
+   width: 100%;
+   height: 32em;
+   align-items: center;
+   display: flex;
+   flex-direction: column;
+}
+
+.container-mensagemboas{
+    width: 80%;
+    color: white;
+}
+
+.info{
+
+    width: 40%;
+}
+
+.info_boas{
+
+    width: 100%;
+    height:100px;
+    display: flex;
+    font-size: 1.2em;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.info_texto_h1{
+
+   width: 100%;
+   height: 135px;
+   font-size: 1.5em;
+   color: #013A63;
+}
+
+.info_profissionais{
+    
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 60px;
+    justify-content: center;
+
+}
+
+.info_div_button{
+
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 70px;
+    justify-content: center;
+
+}
+
+.button_info{
+
+    padding: 12px;
+    border-radius: 20px;
+    background-color: #013A63;
+    color: white;
+    border: none;
+    font-weight: 600;
+    
+}
+
+.container-media-geral{
+
+   background-color: #FFFAF1;
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+   width: 80%;
+   height: 12em;
+   margin-top: -5%;
+   border-radius: 10px;
+
+}
+.media_pesquisa_10{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 33%;
+}
+.media_pesquisa{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 0.2px solid #013A63;
+    width: 33%;
+}
+.numeros{
+
+    font-size: 2.5em;
+}
+
+.texto_numero{
+    
+    color: #013A63;
+}
+
+.container-sobre-nos{
+
+    width: 100%;
+    height: 42em;
+    margin-top: 4%;
+    background-color: #5A789F;
+    display: flex;
+}
+
+.img-sobre{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+}
+
+.texto-sobre{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    width: 50%;
+    color: #C1DFF4;
+    font-weight: 600;
+}
+
+.tit-entenda{
+    width: 60%;
+    color: #C1DFF4;
+    padding-top: 2%;
+    font-size: 1.4em;
+}
+
+.texto-entenda{
+    width: 70%;
+    color: white;
+    font-weight: 300;
+    padding-top: 5%;
+}
+
+.container-entenda{
+
+    width: 100%;
+    background-image: url('./public/1651308509126 1 (7).svg');
+    background-repeat: no-repeat;
+    height: 21.5em;
+}
+
+.container-contato{
+    width: 100%;
+    height: 42em;
+}

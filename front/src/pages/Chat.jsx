@@ -2,7 +2,6 @@ import voltar from '../assets/voltar 2.svg';
 import config from '../assets/settings.svg';
 import help from '../assets/help 1.svg';
 import mulher from '../assets/image 8.png';
-import arvore from '../assets/Logo Para o Navegador do Google 3.svg';
 import lupa from '../assets/search 1.svg';
 import { useState } from 'react';
 import close from '../assets/Group 239210.svg';
@@ -19,6 +18,11 @@ function Chat() {
         { nome: 'Vitor Azevedo', foto: mulher },
         ...Array(35).fill({ nome: 'Lúcia Katia', foto: mulher })
     ];
+
+    const [chatSelected, setChatSelected] = useState();
+    const [busca, setBusca] = useState();
+    const [result, setResult] = useState([]);
+    const [useResult, setUseResult] = useState([]);
 
     const [filters, setFilters] = useState([
         { text: '3 não lidas', active: false },
@@ -54,6 +58,31 @@ function Chat() {
         }, 2000);
     };
 
+    function buscaProfissional(e) {
+
+        setBusca(e.target.value);
+
+        let resultAux = result;
+
+        chats.forEach(item => {
+            
+            if (item.nome==busca) {
+
+                resultAux.push(item);
+            }
+        });
+
+        setResult(resultAux);
+
+        if (result.length==0) {
+
+            setUseResult(false);
+        } else {
+
+            setUseResult(true);
+        }
+    }
+
     return (
         <div className="container-chats">
             <div className="barra-lateral-chat">
@@ -71,7 +100,7 @@ function Chat() {
                 </div>
                 <div className="pesquisa-chats">
                     <div className="input-pesquisa">
-                        <input type="text" placeholder='Busque por conversas...' />
+                        <input onChange={(e) => buscaProfissional(e)} value={busca} type="text" placeholder='Busque por conversas...' />
                         <div className="img-lupa">
                             <img src={lupa} alt='Lupa pesquisa' />
                         </div>
@@ -85,83 +114,107 @@ function Chat() {
                     </div>
                 </div>
                 <div className="conversas">
-                    {chats.map((item, index) => (
-                        <div key={index} className="chat-barra">
+                    {
+                        result 
+                        ?
+                        (
+                        chats.map((item, index) => (
+                        <div key={index} className="chat-barra" onClick={() => setChatSelected(item)}>
                             <img src={item.foto} alt="" />
                             <div className="nome">
                                 <p>{item.nome}</p>
                             </div>
                         </div>
+                        )
+                    )
+                )
+                        :
+                        (
+
+                            result.map((item, index) => (
+                                <div key={index} className="chat-barra" onClick={() => setChatSelected(item)}>
+                            <img src={item.foto} alt="" />
+                            <div className="nome">
+                                <p>{item.nome}</p>
+                            </div>
+                        </div>
+                        )
                     ))}
                 </div>
                 <div className="barra-final-maior">
                     <div className="barra-final"></div>
                 </div>
             </div>
-            <div className="chat">
-                <div className="barra-top">
-                    <div className="img-foto">
-                        <img src={mulher} alt="" />
-                    </div>
-                    <div className="nome-user-chat">
-                        <h5>Jana Maria da Silva</h5>
-                    </div>
-                    <div className="icons-chat">
-                        <div className="icons-chat-p">
-                            <img src={cam} className='icon-chat-p-1' alt="" />  
-                            <img src={block} className='icon-chat-p-2' alt="" />
+            {
+                chatSelected
+                ?
+                <div className="chat">
+                    <div className="barra-top">
+                        <div className="img-foto">
+                            <img src={chatSelected.foto} alt="" />
                         </div>
-                        <img src={close} className='icon-chat-p-3' alt="" />
-                    </div>
-                </div>
-                <div className="acess-profile-div">
-                    <div className="user-name">@jana.silvaa</div>
-                    <div className="btn-acess">
-                        <b>Acessar perfil</b>
-                    </div>
-                </div>
-                <div className="messages-div">
-                    {messages.map((msg, index) => (
-                        <div key={index} className={msg.sender === 'me' ? 'message-right' : 'message-left'}>
-
-                            {
-                                msg.sender !== 'me'
-                                &&
-                                <div className="image-message-right">
-                                    <img src={msg.foto} alt="" />
-                                </div>
-                            }
-                            
-                            <div className={msg.sender === 'me' ? 'text-message-right' : 'text-message-left'}>
-                                {msg.text}
+                        <div className="nome-user-chat">
+                            <h5>{chatSelected.nome}</h5>
+                        </div>
+                        <div className="icons-chat">
+                            <div className="icons-chat-p">
+                                <img src={cam} className='icon-chat-p-1' alt="" />  
+                                <img src={block} className='icon-chat-p-2' alt="" />
                             </div>
+                            <img onClick={() => setChatSelected('')} src={close} className='icon-chat-p-3' alt="" />
+                        </div>
+                    </div>
+                    <div className="acess-profile-div">
+                        <div className="user-name">@jana.silvaa</div>
+                        <div className="btn-acess">
+                            <b>Acessar perfil</b>
+                        </div>
+                    </div>
+                    <div className="messages-div">
+                        {messages.map((msg, index) => (
+                            <div key={index} className={msg.sender === 'me' ? 'message-right' : 'message-left'}>
 
-                            {
-
-                                msg.sender === 'me'
-                                &&
-                                <div className="image-message-left">
-                                    <img src={msg.foto} alt="" />
+                                {
+                                    msg.sender !== 'me'
+                                    &&
+                                    <div className="image-message-right">
+                                        <img src={msg.foto} alt="" />
+                                    </div>
+                                }
+                                
+                                <div className={msg.sender === 'me' ? 'text-message-right' : 'text-message-left'}>
+                                    {msg.text}
                                 </div>
-                            }
+
+                                {
+
+                                    msg.sender === 'me'
+                                    &&
+                                    <div className="image-message-left">
+                                        <img src={msg.foto} alt="" />
+                                    </div>
+                                }
+                            </div>
+                        ))}
+                    </div>
+                    <form onSubmit={sendMessage} className="barra-bottom">
+                        <div className="inpt-chat">
+                            <input type="text" placeholder='Enter a message...' value={inptvalue} onChange={(e) => setInptvalue(e.target.value)} />
                         </div>
-                    ))}
+                        <div className="icons-chat-inpt">
+                            <div className="icons-inpt-a">
+                                <img src={figurinhaIcon} alt="" />
+                                <img src={microfone} alt="" />
+                            </div>
+                            <button type='submit'>
+                                <img src={handClick} className='hand-click' alt="" />
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <form onSubmit={sendMessage} className="barra-bottom">
-                    <div className="inpt-chat">
-                        <input type="text" placeholder='Enter a message...' value={inptvalue} onChange={(e) => setInptvalue(e.target.value)} />
-                    </div>
-                    <div className="icons-chat-inpt">
-                        <div className="icons-inpt-a">
-                            <img src={figurinhaIcon} alt="" />
-                            <img src={microfone} alt="" />
-                        </div>
-                        <button type='submit'>
-                            <img src={handClick} className='hand-click' alt="" />
-                        </button>
-                    </div>
-                </form>
-            </div>
+                :
+                <div>Inicie uma conversa agora</div>
+            }
         </div>
     );
 };

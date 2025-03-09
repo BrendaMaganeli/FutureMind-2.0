@@ -3,7 +3,7 @@ import config from '../assets/settings.svg';
 import help from '../assets/help 1.svg';
 import mulher from '../assets/image 8.png';
 import lupa from '../assets/search 1.svg';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import close from '../assets/Group 239210.svg';
 import cam from '../assets/cam-recorder (1) 1.svg';
 import block from '../assets/blocked 1.svg';
@@ -14,6 +14,8 @@ import './CSS/Chat.css';
 
 function Chat() {
 
+
+    
     const chats = [
         { nome: 'Vitor Azevedo', foto: mulher },
         ...Array(35).fill({ nome: 'Lúcia Katia', foto: mulher })
@@ -22,7 +24,25 @@ function Chat() {
     const [chatSelected, setChatSelected] = useState();
     const [busca, setBusca] = useState();
     const [result, setResult] = useState([]);
-    const [useResult, setUseResult] = useState([]);
+    const [useResult, setUseResult] = useState(false);
+    const [visibleSettings, setVisibleSettings] = useState(false);
+    const settingsRef = useRef(null);
+    const [theme, setTheme] = useState('light');
+
+    const toggleTheme = () => {
+        setTheme(theme === 'light' ? 'dark' : 'light');
+    };
+
+    const [fontSize, setFontSize] = useState('medium');
+
+    const toggleFontSize = () => {
+        setFontSize((prevSize) => {
+            if (prevSize === 'small') return 'medium';
+            if (prevSize === 'medium') return 'large';
+            return 'small';
+        });
+    };
+
 
     const [filters, setFilters] = useState([
         { text: '3 não lidas', active: false },
@@ -59,36 +79,45 @@ function Chat() {
     };
 
     function buscaProfissional(e) {
-
-        setBusca(e.target.value);
-
-        let resultAux = result;
-
-        chats.forEach(item => {
-            
-            if (item.nome==busca) {
-
-                resultAux.push(item);
-            }
-        });
-
-        setResult(resultAux);
-
-        if (result.length==0) {
-
+        const termo = e.target.value;
+        setBusca(termo.toLowerCase());
+    
+        if (termo === '') {
+            setResult([]);
             setUseResult(false);
-        } else {
-
-            setUseResult(true);
+            return;
         }
-    }
+        
+        const filtrados = chats.filter(chat => chat.nome.toLowerCase().includes(termo));
+        
+        setResult(filtrados);
+        setUseResult(filtrados.length > 0);
+    }    
+    
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (settingsRef.current && !settingsRef.current.contains(event.target)) {
+                setVisibleSettings(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     return (
-        <div className="container-chats">
+        <div className={`container-chats ${theme} ${fontSize}`}>
             <div className="barra-lateral-chat">
                 <div className="barra-cima">
                     <img className='voltar-btn' src={voltar} alt="" />
-                    <img src={config} alt="" />
+                    <img onClick={() => setVisibleSettings(!visibleSettings)} src={config} alt="" />
+                    {
+                        visibleSettings
+                        &&
+                        <div className="settings" ref={settingsRef}>
+                            <div className="config" onClick={toggleFontSize}>Tamanho da fonte</div>
+                            <div className="config" onClick={toggleTheme}>Tema da Conversa</div>
+                        </div>
+                    }
                 </div>
                 <div className="barra-baixo">
                     <img src={help} alt="" />
@@ -115,31 +144,15 @@ function Chat() {
                 </div>
                 <div className="conversas">
                     {
-                        result 
-                        ?
-                        (
-                        chats.map((item, index) => (
-                        <div key={index} className="chat-barra" onClick={() => setChatSelected(item)}>
-                            <img src={item.foto} alt="" />
-                            <div className="nome">
-                                <p>{item.nome}</p>
+                        (useResult ? result : chats).map((item, index) => (
+                            <div key={index} className="chat-barra" onClick={() => setChatSelected(item)}>
+                                <img src={item.foto} alt="" />
+                                <div className="nome">
+                                    <p>{item.nome}</p>
+                                </div>
                             </div>
-                        </div>
-                        )
-                    )
-                )
-                        :
-                        (
-
-                            result.map((item, index) => (
-                                <div key={index} className="chat-barra" onClick={() => setChatSelected(item)}>
-                            <img src={item.foto} alt="" />
-                            <div className="nome">
-                                <p>{item.nome}</p>
-                            </div>
-                        </div>
-                        )
-                    ))}
+                        ))
+                    }
                 </div>
                 <div className="barra-final-maior">
                     <div className="barra-final"></div>
@@ -213,7 +226,10 @@ function Chat() {
                     </form>
                 </div>
                 :
-                <div>Inicie uma conversa agora</div>
+                <div className="no-chat-selected">
+                    <h2>Selecione uma conversa</h2>
+                    <p>Escolha um chat para visualizar as mensagens aqui.</p>
+                </div>
             }
         </div>
     );

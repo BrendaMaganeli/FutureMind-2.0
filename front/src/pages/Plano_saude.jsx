@@ -55,10 +55,45 @@ function Plano_saude() {
          </div>
        </div>
        <div className='container-entenda'>
-         entenda
+         <h1 className='entenda'>Entenda quem somos e porque existimos</h1>
        </div>
        <div className='container-contato'>
-         contato
+         <div className='container-contado_esquerdo'>
+          <div className='container_info_contato'>
+            <div className='div_h1_contato'>
+             <h1 className='h1_contato'>Entre em contato com a gente!</h1>
+            </div>
+           <div className='container_location_p'>
+             <img src="map_location.svg" alt="" />
+             <p className='loalizacao_email'>R. Amauri Souza, 346</p>
+           </div>
+           <div className='container_email_p'>
+             <img src="email_icon.svg" alt="" />
+             <p className='loalizacao_email'>contato@futuremind.com.br</p>
+           </div>
+           <div className='div_button_sobre'>
+             <button className='button_sobre'>Sobre nós</button>
+           </div>
+          </div>
+         </div>
+         <div className='container-contado_direito'>
+         <div className='container_conecte_plano'>
+           <div className='container_text_conect'>
+             <h1 className='text_conect'>Conecte seu plano de saúde</h1>
+           </div>
+           <div className='container_text_input_cadastro'>
+             <p className='p_padrao_plano'>Adicione o numero de cadastro</p>
+             <input placeholder='Ex: 56388763' className='input_padrao_plano' type="text" />
+           </div>
+           <div className='container_text_input_senha'>
+             <p className='p_padrao_plano'>Adicione sua senha</p>
+             <input placeholder='Ex: Bo98cu53' className='input_padrao_plano' type="text" />
+           </div>
+           <div className='container_button_plano'>
+            <button className='button_entrar_plano'>Entrar</button>
+           </div>
+         </div>
+         </div>
        </div>
         <Footer/>
     </div>

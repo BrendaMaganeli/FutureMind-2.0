@@ -23,7 +23,7 @@
 
 .info{
 
-    width: 40%;
+    width: 50%;
 }
 
 .info_boas{
@@ -48,7 +48,7 @@
     
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 85%;
     height: 60px;
     justify-content: center;
 
@@ -58,7 +58,7 @@
 
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 40%;
     height: 70px;
     justify-content: center;
 
@@ -158,9 +158,172 @@
     background-image: url('./public/1651308509126 1 (7).svg');
     background-repeat: no-repeat;
     height: 21.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
+
+.entenda{
+
+    width: 40%;
+    padding-left: 10%;
+    color: #013A63;
+    font-size: 2.2em;
+    opacity: 65%;
+}
+
 
 .container-contato{
     width: 100%;
     height: 42em;
+    display: flex;
 }
+
+.container-contado_esquerdo{
+
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container_info_contato{
+    
+    width: 55%;
+    height: 350px;
+}
+
+.div_h1_contato{
+
+    width: 100%;
+}
+.h1_contato{
+
+    width: 80%;
+    font-size: 2.2em;
+    color: #013A63;
+}
+
+.container_location_p{
+
+    display: flex;
+    padding-top: 40px;
+}
+
+.container_email_p{
+
+    display: flex;
+    padding-top: 20px;
+}
+
+.loalizacao_email{
+
+    padding-left: 10px;
+}
+
+.div_button_sobre{
+
+    width: 100%;
+    padding-top: 15%;
+}
+
+.button_sobre{
+
+    width: 70%;
+    border-radius: 20px;
+    padding: 10px;
+    border: none;
+    background-color: #013A63;
+    color: white;
+    font-size: 20px;
+}
+
+.container-contado_direito{
+   width: 50%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+}
+
+.container_conecte_plano{
+    
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(90,120,159, .5); 
+    width: 80%;
+    border-radius: 15px;
+    height: 370px;
+    
+    
+}
+
+.container_text_conect{
+
+    width: 100%;
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 10%;
+    
+}
+
+.text_conect{
+
+    font-size: 1.4em;
+    color: #013A63;
+    opacity: 70%;
+    padding-top: 10px;
+}
+
+.container_text_input_cadastro{
+
+    width: 100%;
+    padding-left: 10%;
+    
+}
+
+.p_padrao_plano{
+
+    padding-bottom: 10px;
+    color: white;
+}
+
+.input_padrao_plano{
+
+    width: 90%;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    box-shadow: 1px 2px rgb(135, 135, 135);
+}
+
+.container_text_input_senha{
+
+    width: 100%;
+    padding-left: 10%;
+    padding-top: 3%;
+}
+
+.container_button_plano{
+
+ padding-left: 10%;
+ width: 90%;
+ display: flex;
+ flex-direction: column;
+ align-items: end;
+ padding-top: 5%;
+
+}
+
+.button_entrar_plano{
+
+    background-color: #5A789F;
+    color: white;
+    border: none;
+    width: 30%;
+    padding: 10px;
+    border-radius: 15px;
+}
+

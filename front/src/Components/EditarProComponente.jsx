@@ -1,4 +1,3 @@
-import logo from '../assets/Logo_SA_2FASE.png';
 import voltar from '../assets/voltar 2.svg';
 
 function EditarProComponente() {
@@ -14,9 +13,6 @@ function EditarProComponente() {
       <div className="botoes">
         <img src={voltar} alt="" />
       </div>
-    </div>
-    <div className="loguinho">
-      <img src={logo} alt="" />
     </div>
         <div className="inpt-div">
           <label htmlFor="">

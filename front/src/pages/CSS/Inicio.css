@@ -1,0 +1,19 @@
+.container-inicio {
+
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+}
+
+.img-fundo {
+
+    position: absolute;
+    top: 20%;
+    width: 100%;
+}
+
+.img-fundo img {
+
+    width: 100%;
+}

@@ -345,14 +345,14 @@
   .loguinho {
 
     position: absolute;
-    display: flex;
     left: 85%;
     top: -2%;
   }
 
   .loguinho img {
 
-    width: fit-content;
+    width: 115%;
+    height: 100%;
   }
 
   .cartao-informacao-a .cabecalho-informacao, .cartao-informacao-e .cabecalho-informacao {

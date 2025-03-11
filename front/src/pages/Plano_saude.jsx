@@ -28,7 +28,7 @@ function Plano_saude() {
        </div>
        <div className='container-media-geral'>
         <div className='media_pesquisa'>
-          <h1 className='numeros'>+3.5000</h1>
+          <h1 className='numeros'>+3.500</h1>
           <p className='texto_numero'>Pacientes atendidos</p>
         </div>
         <div className='media_pesquisa'>

@@ -9,6 +9,7 @@ import DiarioEmocional from '../pages/DiarioEmocional.jsx'
 import Plano_saude from '../pages/Plano_saude.jsx'
 import Footer from '../Components/Footer.jsx'
 import Navbar from '../Components/Navbar.jsx'
+import Landing_page from '../pages/Landing_page.jsx'
 
 const router = createBrowserRouter([
 {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
     path: '/nav',
     element: <Navbar />
 },
+{
+    path: '/landingPage',
+    element: <Landing_page/>
+}
 
 ])
 

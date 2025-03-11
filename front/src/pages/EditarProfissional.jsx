@@ -1,10 +1,7 @@
-
 import mulher from '../assets/image 8.png';
 import icon_um from '../assets/agenda 2.svg';
 import icon_dois from '../assets/cam-recorder (1) 11.svg';
 import icon_tres from '../assets/icons8-bate-papo-48 2.svg';
-import logo from '../assets/Logo_SA_2FASE.png';
-import voltar from '../assets/voltar 2.svg';
 import './CSS/EditarProfissional.css';
 import { useState } from 'react';
 import EditarProComponente from '../Components/EditarProComponente';
@@ -81,19 +78,6 @@ function EditarProfissional() {
       </div>
     </aside> 
    <div className="editar-profissional-maior">
-        
-   <div className="arvore-profissional">
-        <img src="Arvore Perfil.png" alt="" />
-    </div>
-
-    <div className="botoes-maior">
-      <div className="botoes">
-        <img src={voltar} alt="" />
-      </div>
-    </div>
-    <div className="loguinho">
-      <img src={logo} alt="" />
-    </div>
     <div className='corpoeditarpro'>
       {corpoPerfil}
     </div>

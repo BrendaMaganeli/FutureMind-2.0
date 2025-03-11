@@ -177,13 +177,22 @@ function Chat() {
                             <img onClick={() => setChatSelected('')} src={close} className='icon-chat-p-3' alt="" />
                         </div>
                     </div>
+                    <div className="messages-div">
                     <div className="acess-profile-div">
                         <div className="user-name">@jana.silvaa</div>
                         <div className="btn-acess">
                             <b>Acessar perfil</b>
                         </div>
                     </div>
-                    <div className="messages-div">
+                    <div className="arvore-profissional">
+                        {
+                            theme === 'light'
+                            ?
+                            <img src="Arvore Perfil.png" alt="" />
+                            :
+                            <img src="src/assets/LOGO BRANCA.png" alt="" />
+                        }
+                    </div>
                         {messages.map((msg, index) => (
                             <div key={index} className={msg.sender === 'me' ? 'message-right' : 'message-left'}>
 

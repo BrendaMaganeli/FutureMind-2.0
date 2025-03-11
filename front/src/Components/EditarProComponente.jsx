@@ -1,8 +1,23 @@
+import logo from '../assets/Logo_SA_2FASE.png';
+import voltar from '../assets/voltar 2.svg';
 
 function EditarProComponente() {
   return (
-    <div>
+    <div style={{position: 'relative'}}>
         <div className="editar-profissional">
+
+        <div className="arvore-profissional">
+        <img src="Arvore Perfil.png" alt="" />
+    </div>
+
+    <div className="botoes-maior">
+      <div className="botoes">
+        <img src={voltar} alt="" />
+      </div>
+    </div>
+    <div className="loguinho">
+      <img src={logo} alt="" />
+    </div>
         <div className="inpt-div">
           <label htmlFor="">
           Nome completo

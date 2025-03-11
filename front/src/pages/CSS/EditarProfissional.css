@@ -1,6 +1,7 @@
 *{
     outline: none;
 }
+
 .editar-profissional-maior {
 
     display: flex;
@@ -22,6 +23,7 @@
     padding: 5%;
     align-items: start;
     margin-top: 5%;
+    position: relative;
 }
 .editar-profissional input {
     width: 95%;

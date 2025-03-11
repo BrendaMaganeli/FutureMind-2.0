@@ -415,7 +415,6 @@
     scroll-behavior: smooth;
     align-items: end;
     justify-content: end;
-    background-image: url('/src/assets/Logo Para o Navegador do Google 3.svg');
     background-repeat: no-repeat;
 }
 
@@ -423,6 +422,7 @@
     display: flex;
     align-items: center;
     max-width: 70%;
+    position: relative;
 }
 
 .message-right {
@@ -638,28 +638,17 @@
     background: #f0f0f0;
 }
 
-.container-chats.dark .chat .barra-top {
-    background-color: #5a7da0;
-    color: #fff;
-}
-
 .container-chats.dark .text-message-right {
-    background-color: #2c2c2cd2;
+    background-color: #8dbec5;
 }
 
 .container-chats.dark .text-message-left {
     background-color: #013a63;
 }
 
-.container-chats.dark .barra-bottom, .container-chats.dark .inpt-chat input {
+.container-chats.dark .messages-div {
 
     background-color: #5a7da0;
-    color: white;
-}
-
-.container-chats.dark .inpt-chat input::placeholder {
-
-    color: rgba(255, 255, 255, 0.767);
 }
 
 .container-chats.small {
@@ -672,4 +661,24 @@
 
 .container-chats.large {
     font-size: 20px;
+}
+
+.container-chats.dark .no-chat-selected {
+
+    background-color: #5a7da0;
+}
+
+.container-chats.dark .no-chat-selected h2, .container-chats.dark .no-chat-selected p {
+
+    color: white;
+}
+
+.container-chats.dark .acess-profile-div .btn-acess {
+
+    background-color: white;
+}
+
+.container-chats.dark .acess-profile-div .btn-acess b {
+
+    color: #5a7da0;
 }

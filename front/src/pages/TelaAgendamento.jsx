@@ -36,7 +36,7 @@ export default function TelaAgendamento() {
   };
 
   return (
-    <div className="container">
+    <div className="container-agendamento">
       <div className="back-arrow">
         <span>&lt;</span> 
     </div>

@@ -4,6 +4,7 @@ import icon_dois from '../assets/cam-recorder (1) 11.svg';
 import icon_tres from '../assets/icons8-bate-papo-48 2.svg';
 import './CSS/EditarProfissional.css';
 import { useState } from 'react';
+import logo from '../assets/Logo_SA_2FASE.png';
 import EditarProComponente from '../Components/EditarProComponente';
 import HistoricoConsulta from '../Components/HistoricoConsulta';
 
@@ -79,6 +80,9 @@ function EditarProfissional() {
     </aside> 
    <div className="editar-profissional-maior">
     <div className='corpoeditarpro'>
+    <div className="loguinho">
+      <img src={logo} alt="" />
+    </div>
       {corpoPerfil}
     </div>
    </div>

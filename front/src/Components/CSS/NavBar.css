@@ -23,25 +23,52 @@
     padding-left: 3%;
 }
 
-.container-links{
-
-    width: 62%;
+.container-links {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 4%;
+    width: 72%;
 }
 
-.container-links a{
+.container-links a {
+    display: flex;
     text-decoration: none;
     color: #013A63;
-    width: 7%;
+    font-weight: normal;
+    position: relative;
+    padding: 5px 10px;
+    transition: color 0.3s ease-in-out;
 }
+
+/* Linha dinâmica que se move entre os links */
+.underline {
+    position: absolute;
+    bottom: 18px;
+    height: 2px;
+    background-color: #013A63;
+    transition: all 0.3s ease-in-out;
+    width: 0;
+    left: 0;
+}
+
+/* Efeito no link ativo */
+.container-links a.active {
+    font-weight: bold;
+    color: #011F4B;
+}
+
 
 .container-icon{
 
-    width: 20%;
+    width: 15%;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.container-icon img {
+
+    width: 20%;
 }

@@ -22,8 +22,7 @@
 
 .container_h1_equilibrio{
 
-    width: 80%;
-    
+    width: 40ch;
     font-size: 1.8em;
     color: #013A63;
     padding-left: 17%;
@@ -31,18 +30,18 @@
 
 .container_p_moldamos{
 
-    width: 72%;
-    font-size: 1.2em;
-    padding-top: 2%;
+    width: 48ch;
+    font-size: 1.5em;
     color: #013A63;
     padding-left: 17%;
 }
 
 .container_button_comece_ja{
 
-    width: 100%;
+    width: 100ch;
     padding-left: 17%;
-    padding-top: 3%;
+    padding-top: 3%
+    
 }
 
 .button_comece_ja{

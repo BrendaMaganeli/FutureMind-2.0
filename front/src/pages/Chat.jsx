@@ -184,7 +184,7 @@ function Chat() {
                             <b>Acessar perfil</b>
                         </div>
                     </div>
-                    <div className="arvore-profissional">
+                    <div className="arvore-chat">
                         {
                             theme === 'light'
                             ?

@@ -70,7 +70,7 @@
     appearance: none;
     width: 16px;
     height: 16px;
-    border: 2px solid #002D4E;  /* Borda azul escura */
+    border: 2px solid #002D4E; 
     border-radius: 4px;
     background-color: transparent;
     position: relative;
@@ -78,6 +78,6 @@
 }
 
 .checkpag:checked {
-    background-color: #002D4E; /* Fundo azul quando selecionado */
+    background-color: #002D4E; 
     border-color: #002D4E;
 }

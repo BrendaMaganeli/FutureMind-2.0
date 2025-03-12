@@ -9,6 +9,7 @@
     align-items: center;
     justify-content: start;
     width: 75%;
+    background-color: aqua;
 }
 
 .editar-profissional {
@@ -25,6 +26,7 @@
     margin-top: 5%;
     position: relative;
 }
+
 .editar-profissional input {
     width: 95%;
     padding: 3%;
@@ -32,9 +34,11 @@
     border: none;
     background-color: #d3dbe6;
 }
+
 .editar-profissional input:nth-child(11) {
     grid-column: span 2;
 }
+
 .BTN-SALVAR {
 
     padding: 2%;

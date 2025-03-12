@@ -6,8 +6,8 @@ function Landing_page() {
   return (
     <div>
       <Navbar/>
-      <div className="container-geral_landing">
-          <div className="container-geral_landing_esquerda">
+      <div className='container-geral_landing_um'>
+          <div className='container-geral_landing_esquerda_um'>
             <div className='container_info_inicio_landing'>
             <div className='container_h1_equilibrio'>
               <h1>Equilíbrio e bem estar ao seu alcance</h1>
@@ -21,9 +21,30 @@ function Landing_page() {
              </div>  
              </div>
           </div>
-          <div className="container-geral_landing_direita">
-             olaaaaaa
+          <div className='container-geral_landing_direita_um'>
+            <div className='container-test-um '> 
+              <div className='cilindro_um_equilibrio'></div>
+              <div className='cilindro_dois_equilibrio'></div>
+              <div className='cilindro_tres_equilibrio'></div>
+              <div className='cilindro_quatro_equilibrio'></div>
+              <img className='imagem_computador' src="tela_computador.svg" alt="" />
+            </div>
           </div>
+      </div>
+      <div className='container-geral_landing_dois'>
+        <div className='container_info_emocional_esquerda'>
+          <div className='container_cilindros_emocional'>
+            <div className='cilindro_um_emocional'></div>
+            <div className='cilindro_dois_emocional'></div>
+            <div className='cilindro_tres_emocional'></div>
+            <div className='cilindro_quatro_emocional'></div>
+            <img className='imagem_emocional' src="imagem_emocional.svg" alt="" />
+          </div>
+          <div className='container_info_emocional_direita'> 
+            olaaaaaaaaa
+          </div>
+          <img src="" alt="" />
+        </div>
       </div>
     </div>
   )

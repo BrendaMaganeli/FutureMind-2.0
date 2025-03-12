@@ -1,11 +1,18 @@
-.container-geral_landing{
+
+*{
+    margin: 0;
+}
+
+/*parte um da tela*/
+
+.container-geral_landing_um{
 
     display: flex;
-    height:845px;
+    height:800px;
 
 }
 
-.container-geral_landing_esquerda{
+.container-geral_landing_esquerda_um{
 
     width: 50%;
     display: flex;
@@ -17,31 +24,35 @@
 .container_info_inicio_landing{
 
     width: 100%;
-    height: 500px;
+    height: 420px;
+
 }
 
 .container_h1_equilibrio{
 
     width: 40ch;
+    font-family: sans-serif;
     font-size: 1.8em;
     color: #013A63;
-    padding-left: 17%;
+    padding-left: 16%;
 }
 
 .container_p_moldamos{
 
     width: 48ch;
     font-size: 1.5em;
+    font-family: sans-serif;
     color: #013A63;
-    padding-left: 17%;
+    padding-left: 16%;
+    padding-top: 4%;
 }
 
 .container_button_comece_ja{
 
     width: 100ch;
-    padding-left: 17%;
-    padding-top: 3%
-    
+    padding-left: 16%;
+    padding-top: 6%
+
 }
 
 .button_comece_ja{
@@ -49,15 +60,180 @@
     background-color: #013A63;
     color: white;
     border: none;
-    padding: 12px;
+    padding: 15px;
     font-weight: 600;
-    width: 44%;
+    width: 46%;
     border-radius: 20px;
     font-size: 1.4em;
     opacity: 85%;
 }
 
-.container-geral_landing_direita{
+.container-geral_landing_direita_um{
 
     width: 50%;
+}
+
+.container-test-um{
+
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: center;
+    height: 800px;
+    
+    
+}
+
+.cilindro_um_equilibrio{
+     
+     display: flex;
+     flex-direction: column;
+     background-color: #013A63;
+     color: #013A63;
+     width: 70%;
+     border-top-left-radius: 120px ;
+     border-bottom-left-radius: 120px;
+     align-items: center;
+     height: 190px;
+     
+     
+}
+
+.cilindro_dois_equilibrio{
+
+    display: flex;
+     flex-direction: column;
+     background-color: #5A789F;
+     color: #5A789F;
+     width: 75%;
+     border-top-left-radius: 120px ;
+     border-bottom-left-radius: 120px;
+     align-items: center;
+     height: 190px;
+}
+
+.cilindro_tres_equilibrio{
+
+     display: flex;
+     flex-direction: column;
+     background-color: #C1DFF4;
+     color: #C1DFF4;
+     width: 90%;
+     border-top-left-radius: 120px ;
+     border-bottom-left-radius: 120px;
+     align-items: center;
+     height: 190px;
+}
+
+.cilindro_quatro_equilibrio{
+
+     display: flex;
+     flex-direction: column;
+     background-color: #2B4A60;
+     color: #2B4A60;
+     width: 60%;
+     border-top-left-radius: 120px ;
+     border-bottom-left-radius: 120px;
+     align-items: center;
+     height: 190px;
+}
+
+.imagem_computador{
+
+      position: absolute;
+      width: 40%;
+      padding-bottom: 1%;
+      padding-right: 2%;
+}
+
+/*parte dois da tela*/
+
+.container-geral_landing_dois{
+
+    display: flex;
+    height: 800px;
+    padding-top: 20px;
+}
+
+.container_info_emocional_esquerda{
+
+    width: 50%;
+
+}
+
+.container_cilindros_emocional{
+
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    height: 800px;
+    padding-top: 30px;
+}
+
+.cilindro_um_emocional{
+
+     display: flex;
+     flex-direction: column;
+     background-color: #013A63;
+     color: #013A63;
+     width: 65%;
+     border-top-right-radius: 120px ;
+     border-bottom-right-radius: 120px;
+     align-items: center;
+     height: 190px;
+}
+
+.cilindro_dois_emocional{
+
+    display: flex;
+    flex-direction: column;
+    background-color: #C1DFF4;
+    color: #C1DFF4;
+    width: 70%;
+    border-top-right-radius: 120px ;
+    border-bottom-right-radius: 120px;
+    align-items: center;
+    height: 190px;
+}
+
+.cilindro_tres_emocional{
+
+    display: flex;
+    flex-direction: column;
+    background-color: #013A63;
+    color: #013A63;
+    width: 85%;
+    border-top-right-radius: 120px ;
+    border-bottom-right-radius: 120px;
+    align-items: center;
+    height: 190px;
+}
+
+.cilindro_quatro_emocional{
+
+    display: flex;
+    flex-direction: column;
+    background-color: #C1DFF4;
+    color: #C1DFF4;
+    width: 55%;
+    border-top-right-radius: 120px ;
+    border-bottom-right-radius: 120px;
+    align-items: center;
+    height: 190px;
+}
+
+.imagem_emocional{
+
+    position: absolute;
+    width: 30%;
+    padding-left: 15%;
+    padding-bottom: 6%;
+}
+.container_info_emocional_direita{
+
+    width: 50%;
+
 }

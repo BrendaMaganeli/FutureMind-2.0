@@ -71,7 +71,7 @@ function EditarProfissional() {
     </div>
     <div style={{position: 'relative'}}>
     <div className="arvore-profissional">
-          <img src="Arvore Perfil.png" alt="" />
+          <img src="Arvore-perfil.svg" alt="" />
         </div>
         <div className="editar-profissional">
 

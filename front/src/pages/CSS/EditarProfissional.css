@@ -9,11 +9,11 @@
     align-items: center;
     justify-content: start;
     width: 75%;
-    background-color: aqua;
+    background-color: rgb(255, 255, 255);
 }
 
 .editar-profissional {
-    background-color: #5a7da096;
+    background-color: #5a7da000;
     border-radius: 10px;
     width: 100vh;
     height: 70%;
@@ -23,13 +23,13 @@
     position: relative;
     padding: 5%;
     align-items: start;
-    margin-top: 5%;
+    margin-top: 15%;
     position: relative;
 }
 
 .editar-profissional input {
     width: 95%;
-    padding: 3%;
+    padding: 4%;
     border-radius: 10px;
     border: none;
     background-color: #d3dbe6;

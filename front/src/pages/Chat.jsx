@@ -10,6 +10,8 @@ import block from '../assets/blocked 1.svg';
 import handClick from '../assets/image 17.svg';
 import microfone from '../assets/image 15.svg';
 import figurinhaIcon from '../assets/image 16.svg';
+import arvoreAzul from '../assets/Arvore Azul.svg';
+import arvoreBranca from '../assets/Arvore Branca.svg';
 import './CSS/Chat.css';
 
 function Chat() {
@@ -115,7 +117,7 @@ function Chat() {
                         &&
                         <div className="settings" ref={settingsRef}>
                             <div className="config" onClick={toggleFontSize}>Tamanho da fonte</div>
-                            <div className="config" onClick={toggleTheme}>Tema da Conversa</div>
+                            <div className="config" onClick={toggleTheme}>Mudar tema</div>
                         </div>
                     }
                 </div>
@@ -177,6 +179,7 @@ function Chat() {
                             <img onClick={() => setChatSelected('')} src={close} className='icon-chat-p-3' alt="" />
                         </div>
                     </div>
+                    <div style={{height: '83%', overflowY: 'auto'}}>
                     <div className="messages-div">
                     <div className="acess-profile-div">
                         <div className="user-name">@jana.silvaa</div>
@@ -188,9 +191,9 @@ function Chat() {
                         {
                             theme === 'light'
                             ?
-                            <img src="Arvore Perfil.png" alt="" />
+                            <img src={arvoreAzul} alt="" />
                             :
-                            <img src="src/assets/LOGO BRANCA.png" alt="" />
+                            <img src={arvoreBranca} alt="" />
                         }
                     </div>
                         {messages.map((msg, index) => (
@@ -209,7 +212,7 @@ function Chat() {
                                 </div>
 
                                 {
-
+                                    
                                     msg.sender === 'me'
                                     &&
                                     <div className="image-message-left">
@@ -218,6 +221,7 @@ function Chat() {
                                 }
                             </div>
                         ))}
+                        </div>
                     </div>
                     <form onSubmit={sendMessage} className="barra-bottom">
                         <div className="inpt-chat">

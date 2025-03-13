@@ -1,32 +1,13 @@
-import { useState } from "react";
+import React from 'react';
+import { CheckoutForm, Return } from '../Components/Pag.jsx';
 
-const Pagamento = () => {
-  const [loading, setLoading] = useState(false);
-
-  const handleCheckout = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch("http://localhost:3000/checkout", { 
-        method: "POST",
-        headers: { "Content-Type": "application/json" }
-      });
-
-      const data = await response.json();
-      if (data.url) {
-        window.location.href = data.url; // Redireciona para Stripe Checkout
-      }
-    } catch (error) {
-      console.error("Erro ao iniciar pagamento:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+function Pagamento() {
   return (
-    <button onClick={handleCheckout} disabled={loading}>
-      {loading ? "Processando..." : "Pagar"}
-    </button>
+    <div>
+      <CheckoutForm />
+      <Return />
+    </div>
   );
-};
+}
 
 export default Pagamento;

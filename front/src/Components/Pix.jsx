@@ -1,42 +1,36 @@
-import qrCode from "../assets/qrCode.webp"
-import './CSS/Pix.css'
+import './CSS/Pix.css';
+import { useState } from 'react';
+import axios from 'axios';
 
 function Pix() {
+  const [pixData, setPixData] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const generatePix = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get("http://localhost:5000/create-payment-intent", {
+        params: {
+          amount: 50,
+          currency: "brl",
+          payment_method_type: "pix",
+        }
+      });
+      setPixData(data.clientSecret);
+    } catch (error) {
+      console.error("Erro ao gerar Pix:", error);
+    }
+    setLoading(false);
+  };
+
   return (
     <div className="container-pix">
-      <div className='infopix'>
-        <div className="qrcode-texto">
-        <img src={qrCode} alt="" className="qrCode"/>
-        <div className="texto-Lqrcode">
-        <p>
-        1. Entre no aplicativo da sua instituição financeira e acesse o ambiente Pix;
-        </p>
-        <p>
-        2. Escolha a opção de Ler o QR Code;
-        </p>
-        <p>
-        3. Escaneie o QR Code;
-        </p>
-        <p>
-        4. Confirme as informações e confirme o pagamento.
-        </p>
-        </div>
-        </div>
-        <p>Informações do Pix</p>
-        <input type="number" placeholder='Brenda Maganeli Casimiro' className='input-pix' readOnly/>
-      </div>
-      <div className='infopix-men'>
-          <input type="number" placeholder='xxx.xxx.xxx.xx' className='input-pixMen' readOnly/>
-          <input type="number" placeholder='R$50,00' className='input-pixMen' readOnly/>
-      </div>
-      <div className="anexo-comp">
-        <input type="file" placeholder='Anexe seu comprovante aqui' className='input-com'/>
-      </div>
-      <div className='botaoPag'>
-        <button className='botaoPag-styles'>Concluir</button>
-      </div>
+      <button onClick={generatePix} className='botaoPag-styles' disabled={loading}>
+        {loading ? "Gerando Pix..." : "Gerar QR Code"}
+      </button>
+      {pixData && <p>Escaneie o QR Code com seu app de banco.</p>}
     </div>
-  )
+  );
 }
 
-export default Pix
+export default Pix;

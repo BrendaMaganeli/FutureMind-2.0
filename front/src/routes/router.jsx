@@ -1,5 +1,4 @@
 import { createBrowserRouter } from 'react-router-dom'
-import Pagamento from '../pages/Pagamento'
 import VisualizarProfissional from '../pages/VisualizarProfissional.jsx'
 import TelaAgendamento from '../pages/TelaAgendamento.jsx'
 import EditarPaciente from '../pages/EditarPaciente.jsx'
@@ -11,11 +10,12 @@ import Footer from '../Components/Footer.jsx'
 import Navbar from '../Components/Navbar.jsx'
 import Inicio from '../pages/Inicio.jsx'
 import Landing_page from '../pages/Landing_page.jsx'
+import Pagamento from '../pages/Pagamento.jsx'
 
 const router = createBrowserRouter([
 {
-    path: '/pagamento',
-    element: <Pagamento /> 
+    path: '/pagamentos',
+    element: <Pagamento />
 },
 {
     path: '/profissional',

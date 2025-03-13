@@ -11,6 +11,7 @@ import Footer from '../Components/Footer.jsx'
 import Navbar from '../Components/Navbar.jsx'
 import Landing_page from '../pages/Landing_page.jsx'
 import Inicio from '../pages/Inicio.jsx'
+import Pagamento from '../pages/Pagamentos.jsx'
 
 const router = createBrowserRouter([
 
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
 {
     path: '/inicio',
     element: <Inicio />
+},
+{
+    path: '/pagamento',
+    element: <Pagamento />
 }
 
 ])

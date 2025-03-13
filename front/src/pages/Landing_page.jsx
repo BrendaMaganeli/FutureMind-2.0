@@ -51,6 +51,27 @@ function Landing_page() {
           </div>
         </div>
       </div>
+      <div className='container-geral_funcionamento'>
+          <div className='container-geral_funcionamento_esquerda'>
+             <div className='conatainer_text_h1_funcionamento'>
+              <h1 className='text_h1_funcionamento'>Como funciona a terapia online? </h1>
+             </div>
+             <div className='container_text_p_funcionamento'>
+              <p className='text_p_funcionamento'>A FutureMind facilita o acesso à terapia online de forma prática e segura. Após um cadastro rápido, o paciente escolhe um psicólogo conforme suas necessidades, considerando especialidade, experiência e abordagem. O agendamento é feito diretamente pelo app, com notificações para lembrar os compromissos.
+                 As sessões ocorrem por chamada de vídeo de alta qualidade, proporcionando uma experiência próxima ao atendimento presencial. Além disso, o chat seguro permite a troca de mensagens sigilosas entre paciente e terapeuta.
+                 Com um sistema de pagamentos integrado e uma interface intuitiva, a FutureMind garante transparência, acessibilidade e um suporte psicológico de qualidade.</p>
+             </div>
+          </div>
+          <div className='container-geral_funcionamento_direita'>
+             olaaaaaaaaa
+          </div>
+      </div>
+
+      olsldsadasdsadsads
+      sadsadasdsadsad
+      sad
+      sad
+      sadsadasdsadsadasdsadsad
     </div>
   )
 }

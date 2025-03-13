@@ -265,3 +265,58 @@
     line-height: 1.5;
 
 }
+
+/* parte tres da tela */
+
+.container-geral_funcionamento{
+
+    display: flex;
+    width: 100%;
+    height: 500px;
+}
+
+.container-geral_funcionamento_esquerda{
+
+    width: 55%;
+    display: flex;
+    flex-direction: column;
+    background-color: #C1DFF4;
+    border-top-right-radius: 5%;
+    border-bottom-right-radius: 5%;
+    align-items: center;
+    
+}
+
+.conatainer_text_h1_funcionamento{
+
+    font-family: sans-serif;
+    width: 80ch;
+    padding-top: 10%;
+    
+}
+
+.text_h1_funcionamento{
+
+    width: 40%;
+    color: #013A63;
+}
+
+.container_text_p_funcionamento{
+
+    width: 85%;
+    padding-top: 4%;
+    
+}
+
+.text_p_funcionamento{
+
+    color: #013A63;
+    font-family: sans-serif;
+    line-height: 1.5;
+    width: 91%;
+}
+
+.container-geral_funcionamento_direita{
+
+    width: 45%;
+}

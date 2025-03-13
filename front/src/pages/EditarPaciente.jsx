@@ -5,6 +5,7 @@ import icon_tres from '../assets/icons8-bate-papo-48 2.svg';
 import logo from '../assets/Logo_SA_2FASE.png';
 import voltar from '../assets/voltar 2.svg';
 import './CSS/EditarPaciente.css';
+import Arvore from '../assets/Group 239274.svg';
 
 function EditarPaciente() {
   return (
@@ -52,7 +53,7 @@ function EditarPaciente() {
    <div className="editar-paciente-maior">
         
    <div className="arvore-profissional">
-        <img src="Arvore Perfil.png" alt="" />
+        <img src={Arvore} alt="" />
     </div>
 
     <div className="botoes-maior-p">
@@ -65,41 +66,41 @@ function EditarPaciente() {
     </div>
 
     <div className="editar-paciente">
-        <div className="inpt-div">
+        <div className="input-box">
           <label htmlFor="">
           Nome completo
         </label>
-        <input type="text" placeholder="Nome completo" />
+        <input type="text" />
         </div>
-        <div className="inpt-div">
+        <div className="input-box">
           <label htmlFor="">
           Cpf
         </label>
-        <input type="text" placeholder="Cpf" />
+        <input type="text" />
         </div>
-        <div className="inpt-div">
+        <div className="input-box">
           <label htmlFor="">
           Telefone
         </label>
-        <input type="text" placeholder="Telefone" />
+        <input type="text" />
         </div>
-        <div className="inpt-div">
+        <div className="input-box">
           <label htmlFor="">
           E-mail
         </label>
-        <input type="email" placeholder="E-mail" />
+        <input type="email" />
         </div>
-        <div className="inpt-div">
+        <div className="input-box">
           <label htmlFor="">
           Data de nascimento
         </label>
-        <input type="date" placeholder="Data de nascimento" />
+        <input type="date" />
         </div>
-        <div className="inpt-div">
+        <div className="input-box">
           <label htmlFor="">
           Senha
         </label>
-        <input type="password" placeholder="Senha" />
+        <input type="password" />
         </div>
     </div>
     <div className="BTN-SALVAR">

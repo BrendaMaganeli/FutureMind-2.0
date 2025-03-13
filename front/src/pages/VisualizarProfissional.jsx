@@ -65,10 +65,6 @@ function VisualizarProfissional() {
             <img src={anotar} alt="" />
             <p>Anotações</p>
          </div>
-         <div className="topicos">
-            <img src={icon_quatro} alt="" />
-            <p>Histórico</p>
-         </div>
         </div>
       </div>
     </aside>

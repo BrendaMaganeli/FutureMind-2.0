@@ -80,6 +80,7 @@
     height: 12%;
     padding: 1%;
     border-right: 1px solid rgba(119, 119, 119, 0.329);
+    border-bottom: 1px solid rgba(119, 119, 119, 0.329);
 }
 
 .pesquisa-chats .input-pesquisa {
@@ -209,8 +210,8 @@
     flex-direction: row;
     background-color: white;
     width: 100%;
-    height: 85px;
-    border-top: 1px solid rgba(119, 119, 119, 0.329);
+    height: 12%;
+    border-bottom: 1px solid rgba(119, 119, 119, 0.329);
     justify-content: start;
     align-items: center;
     gap: 5%;
@@ -229,8 +230,8 @@
     display: flex;
     flex-direction: column;
     height: 80%;
-    align-items: start;
-    justify-content: start;
+    align-items: center;
+    justify-content: center;
     font-size: 20px;
 }
 
@@ -260,14 +261,25 @@
 
 .arvore-chat {
 
-    width: 40%;
+    position: absolute;
+    top: 25%;
+    left: 48%;
+    width: 30%;
     height: 70%;
 }
     
-.arvore-chat img {
+.container-chats.dark .arvore-chat img {
 
-    width: 105%;
-    height: 90%;
+    width: 95%;
+    height: 80%;
+    opacity: 100%;
+}
+
+.container-chats.light .arvore-chat img {
+
+    width: 95%;
+    height: 80%;
+    opacity: 20%;
 }
 
 .img-lupa {
@@ -376,11 +388,12 @@
     gap: 10px;
 }
 
-.acess-profile-div .btn-acess {
+.container-chats.light .acess-profile-div .btn-acess {
 
     width: 10%;
     padding: 0.2%;
     background-color: #5a7da0;
+    border: 1px solid #5a7da0;
     color: white;
     font-size: 11px;
     display: flex;
@@ -391,15 +404,45 @@
     cursor: pointer;
 }
 
-.acess-profile-div .btn-acess:hover {
+.container-chats.dark .acess-profile-div .btn-acess {
 
+    width: 10%;
+    padding: 0.2%;
+    border: 1px solid #5a7da0;
     background-color: #5a7da0;
+    color: white;
+    font-size: 11px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.container-chats.light .acess-profile-div .btn-acess:hover {
+
+    background-color: #013a63;
+    opacity: 60%;
     transition: 0.3s;
 }
 
-.acess-profile-div .user-name {
+.container-chats.dark .acess-profile-div .btn-acess:hover {
+
+    background-color: rgba(255, 255, 255, 0.836);
+    transition: 0.3s;
+}
+
+.container-chats.light .acess-profile-div .user-name {
 
     background-color: #0000;
+    opacity: 60%;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.container-chats.dark .acess-profile-div .user-name {
+
+    color: #FFFF;
     opacity: 60%;
     font-size: 11px;
     cursor: pointer;
@@ -410,19 +453,19 @@
     flex-direction: column;
     padding: 10px;
     gap: 10px;
-    height: 83%;
-    overflow-y: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
     scroll-behavior: smooth;
     align-items: end;
     justify-content: end;
-    background-repeat: no-repeat;
 }
 
 .message-right, .message-left {
     display: flex;
     align-items: center;
-    max-width: 70%;
     position: relative;
+    height: fit-content;
+    width: 50%;
 }
 
 .message-right {
@@ -462,7 +505,7 @@
     display: flex;
     align-items: center;
     width: 8%;
-    height: 100%;
+    height: 10%;
     padding: 1%;
 }
 
@@ -475,7 +518,7 @@
 
     display: flex;
     align-items: center;
-    width: 15%;
+    width: 8.5%;
     height: 100%;
     padding: 1%;
 }

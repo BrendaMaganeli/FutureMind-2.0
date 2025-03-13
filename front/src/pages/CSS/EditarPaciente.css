@@ -9,9 +9,9 @@
 }
 
 .editar-paciente {
-    background-color: #5a7da096;
+    background-color: transparent;
     border-radius: 10px;
-    width: 65%;
+    width: 80%;
     height: 40%;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -22,7 +22,7 @@
     justify-content: start;
 }
 
-.editar-paciente input {
+/* .editar-paciente input {
     width: 95%;
     padding: 3%;
     border-radius: 10px;
@@ -36,6 +36,29 @@
 .editar-paciente label {
 
     color: white;
+} */
+
+.input-box {
+    position: relative;
+    flex: 1;
+    margin: 5px;
+}
+.input-box input {
+    width: 100%;
+    padding: 4%;
+    border: 1.9px solid #5A789F;
+    border-radius: 5px;
+    outline: none;
+    color: #013a63;
+}
+.input-box label {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    background: white;
+    padding: 0 5px;
+    font-size: 1.1em;
+    color: #5A789F;
 }
 
 .barra-lateral-p {

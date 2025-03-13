@@ -31,7 +31,7 @@
 
 .container_h1_equilibrio{
 
-    width: 40ch;
+    width: 100%;
     font-family: sans-serif;
     font-size: 1.7em;
     color: #013A63;
@@ -40,7 +40,7 @@
 
 .container_p_moldamos{
 
-    width: 48ch;
+    width: 100%;
     font-size: 1.4em;
     font-family: sans-serif;
     color: #013A63;
@@ -50,7 +50,7 @@
 
 .container_button_comece_ja{
 
-    width: 100ch;
+    width: 100%;
     padding-left: 16%;
     padding-top: 6%
 
@@ -63,7 +63,7 @@
     border: none;
     padding: 15px;
     font-weight: 600;
-    width: 46%;
+    width: 60%;
     border-radius: 20px;
     font-size: 1.4em;
     opacity: 85%;
@@ -226,7 +226,7 @@
 .imagem_emocional{
 
     position: absolute;
-    width: 28%;
+    width: 42%;
     padding-left: 15%;
     padding-top: 6%;
 }
@@ -240,8 +240,10 @@
 }
 
 .container_text_emocional{
-
-    width: 55%;
+    
+    display: flex;
+    flex-direction: column;
+    width:80%;
     font-family: sans-serif;
     color: #013A63;
     padding-top: 11%;
@@ -253,15 +255,227 @@
 
     font-size: 2.5em;
     opacity: 80%;
+    width: 80%;
+
 }
 
 .container_p_text_emocional{
 
-    width: 69%;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     font-family: sans-serif;
     color: #013A63;
     padding-top: 4%;
-    font-size: 1.1em;
+    font-size: 1.2em;
     line-height: 1.5;
 
 }
+
+/* parte tres da tela */
+
+.container-geral_funcionamento{
+
+    display: flex;
+    width: 100%;
+    height: 500px;
+}
+
+.container-geral_funcionamento_esquerda{
+
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    background-color: #C1DFF4;
+    border-top-right-radius: 5%;
+    border-bottom-right-radius: 5%;
+    box-shadow: 0px 2px  rgb(187, 187, 187);
+    align-items: center;
+    
+}
+
+.conatainer_text_h1_funcionamento{
+
+    font-family: sans-serif;
+    width: 100%;
+    padding-top: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 10%;
+    
+}
+
+.text_h1_funcionamento{
+
+    width: 40%;
+    flex-wrap: wrap;
+    color: #013A63;
+}
+
+.container_text_p_funcionamento{
+
+    width: 100%;
+    padding-top: 4%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.text_p_funcionamento{
+
+    color: #013A63;
+    font-family: sans-serif;
+    font-size: 1.2em;
+    line-height: 1.5;
+    width: 95%;
+    padding-left: 8%;
+}
+
+.container-geral_funcionamento_direita{
+
+    width: 50%; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.imagem_funcional{
+
+    width: 50%;
+}
+
+/* parte quatro tela */
+
+.container_text_bem-estar{
+
+   display: flex;
+   width: 100%;
+   align-items: center;
+   text-align: center;
+   
+}
+
+.h1_empresas{
+
+    color: #013A63;
+    padding-left: 25%;
+    padding-top: 25%;
+}
+
+.h1_bem-estar{
+
+    color: #61A5C2;
+    padding-left: 10px;
+    padding-top: 25%;
+}
+
+.container_bem-estar{
+
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 5%;
+}
+
+.container_imagems_empresas{
+
+    width: 13%;
+    padding: 15px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 1px 3px 5px rgb(135, 135, 135);
+    border: 1px solid rgb(134, 134, 134);
+}
+
+.imagems_empresas_parceiras{
+
+   width: 80%;
+}
+
+/* parte cinco tela*/
+
+.container-geral_empresas_parceiras{
+
+    display: flex;
+    padding-top: 10%;
+    height: 1000px;
+
+}
+
+.container-geral_empresas_parceiras_esquerda{
+
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+.container_esquerdo_info_empresas{
+
+     width: 100%;
+     padding-bottom: 20%;
+}
+
+.container_text_empresas_parceiras{
+
+    width: 100%;
+}
+
+.text_h1_empresas_parceiras{
+
+    color: #013A63;
+    font-size: 2.2em;
+    padding-left: 12%;
+    font-family: sans-serif;
+}
+
+.container_text_p_empresas_parceiras{
+
+    width: 100%;
+    font-size: 1.4em;
+    padding-top: 5%;
+
+}
+
+.text_p_empresas_parceiras{
+
+    color: #013A63;
+    padding-left: 12%;
+    width: 85%;
+    
+}
+
+.container_button_empresas_parceiras{
+
+    width: 100%;
+    padding-left: 12%;
+    padding-top: 6%;
+    
+}
+
+.button_empresas_parceiras{
+    
+    width: 45%;
+    background-color: #5A789F;
+    border: none;
+    border-radius: 20px;
+    padding: 15px;
+    color: white;
+    font-weight: 600;
+    font-size: 1.2em;
+}
+
+.container-geral_empresas_parceiras_direita{
+
+    width: 50%;
+
+}
+
+
+

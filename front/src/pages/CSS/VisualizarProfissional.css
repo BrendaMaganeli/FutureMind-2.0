@@ -1,79 +1,4 @@
-/* 
-.container {
-    display: flex;
-    height: 100vh;
-    background-color: #f8f9fc;
-  }
-  
-  .sidebar {
-    width: 30%;
-    background-color: #5c7694;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .title {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 14px;
-    margin-bottom: 20px;
-  }
-  
-  .profile-box {
-    width: 200px;
-    height: 120px;
-    background-color: #d1d5db;
-    border-radius: 10px;
-    opacity: 0.8;
-  }
-  
-  .content {
-    flex: 1;
-    padding: 40px;
-    background-color: white;
-  }
-  
-  .info-box {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 30px;
-    background-color: #92a5bf;
-    padding: 20px;
-    border-radius: 10px;
-  }
-  
-  .info-card {
-    flex: 1;
-    background-color: #e6e9ee;
-    border-radius: 10px;
-    padding: 15px;
-  }
-  
-  .info-header {
-    font-weight: bold;
-    background-color: #bfc7d2;
-    padding: 10px;
-    border-radius: 5px;
-  }
-  
-  .about-box {
-    background-color: #92a5bf;
-    padding: 20px;
-    border-radius: 10px;
-  }
-  
-  .about-header {
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .about-body {
-    background-color: #e6e9ee;
-    height: 100px;
-    border-radius: 10px;
-  } */
-  
+
   .container {
     display: flex;
     height: 100vh;
@@ -106,11 +31,6 @@
     align-items: end;
   }
 
-  .topicos p {
-
-    color: black;
-  }
-
   .funcionalidades {
 
     border-radius: 20px;
@@ -121,7 +41,6 @@
     margin: 0 0 0 5px;
   }
   
-  /* Conteúdo principal */
   .conteudo {
     flex: 1;
     background-color: #ffffff;
@@ -134,7 +53,6 @@
     justify-content: flex-end;
   }
   
-  /* Caixa de Informações */
   .caixa-informacoes {
     display: flex;
     gap: 40px;
@@ -192,7 +110,6 @@
     border-radius: 0 0 20px 20px;
   }
   
-  /* Caixa Sobre Mim */
   .caixa-sobre-mim {
     width: 80%;
     background-color: #98a9c5;
@@ -304,11 +221,12 @@
     display: flex;
     gap: 15px;
     align-items: center;
+    padding-bottom: 2%;
   }
 
   .topicos p {
 
-    font-size: 18px;
+    font-size: 1.3em;
     color: #5a7da0;
   }
 

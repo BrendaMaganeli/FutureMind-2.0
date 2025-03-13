@@ -9,13 +9,9 @@ import DiarioEmocional from '../pages/DiarioEmocional.jsx'
 import Plano_saude from '../pages/Plano_saude.jsx'
 import Footer from '../Components/Footer.jsx'
 import Navbar from '../Components/Navbar.jsx'
-<<<<<<< HEAD
 import Landing_page from '../pages/Landing_page.jsx'
 import Inicio from '../pages/Inicio.jsx'
-=======
-import Inicio from '../pages/Inicio.jsx'
-import Landing_page from '../pages/Landing_page.jsx'
->>>>>>> c54bdc2818896d9afc65e5d9628ef26f5d869a02
+import Pagamento from '../pages/Pagamentos.jsx'
 
 const router = createBrowserRouter([
 
@@ -56,24 +52,17 @@ const router = createBrowserRouter([
     element: <Navbar />
 },
 {
-<<<<<<< HEAD
     path: '/landingPage',
     element: <Landing_page/>
 },
 {
     path: '/inicio',
     element: <Inicio />
-}
-=======
-    path: '/inicio',
-    element: <Inicio />
 },
 {
-    path: '/landingPage',
-    element: <Landing_page />
-
-},
->>>>>>> c54bdc2818896d9afc65e5d9628ef26f5d869a02
+    path: '/pagamento',
+    element: <Pagamento />
+}
 
 ])
 

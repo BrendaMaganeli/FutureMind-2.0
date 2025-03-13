@@ -9,7 +9,6 @@
     align-items: center;
     justify-content: start;
     width: 75%;
-    background-color: aqua;
 }
 
 .editar-profissional {
@@ -44,7 +43,7 @@
     padding: 2%;
     position: relative;
     height: 5%;
-    width: 100vh;
+    width: 60.7%;
     display: flex;
     justify-content: end;
     align-items: start;
@@ -53,7 +52,7 @@
 .salvar-btn {
     
     position: relative;
-    width: 22%;
+    width: 30%;
     font-size: 15px;
     background-color: #5A789F;
     color: white;
@@ -85,6 +84,7 @@
 
     width: 115%;
     height: 100%;
+    opacity: 50%;
 }
 
 .editar-profissional label {

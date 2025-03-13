@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from '../Components/Navbar'
 import './CSS/Landing_page.css'
+import Footer from '../Components/Footer.jsx'
 
 function Landing_page() {
   return (
@@ -28,6 +29,8 @@ function Landing_page() {
               <div className='cilindro_tres_equilibrio'></div>
               <div className='cilindro_quatro_equilibrio'></div>
               <img className='imagem_computador' src="tela_computador.svg" alt="" />
+  
+
             </div>
           </div>
       </div>
@@ -63,15 +66,44 @@ function Landing_page() {
              </div>
           </div>
           <div className='container-geral_funcionamento_direita'>
-             olaaaaaaaaa
+             <img className='imagem_funcional' src="imagem_funcional.svg" alt="" />
           </div>
       </div>
-
-      olsldsadasdsadsads
-      sadsadasdsadsad
-      sad
-      sad
-      sadsadasdsadsadasdsadsad
+       <div className='container_text_bem-estar'>
+        <h1 className='h1_empresas'>Empresas</h1> <h1 className='h1_bem-estar'>que já cuidam do seu bem-estar dos colaboradores</h1>
+       </div>
+       <div className='container_bem-estar'>
+          <div className='container_imagems_empresas'><img className='imagems_empresas_parceiras' src="apoio-acate 1.svg" alt="" /></div>
+          <div className='container_imagems_empresas'><img className='imagems_empresas_parceiras' src="senai_color 1.svg" alt="" /></div>
+          <div className='container_imagems_empresas'><img className='imagems_empresas_parceiras' src="Softplan 1.svg" alt="" /></div>
+          <div className='container_imagems_empresas'><img className='imagems_empresas_parceiras' src="imagem_gogle.svg" alt="" /></div>
+          <div className='container_imagems_empresas'><img className='imagems_empresas_parceiras' src="imagem_bradesco.svg" alt="" /></div>
+       </div>
+       <div className='container-geral_empresas_parceiras'>
+          <div className='container-geral_empresas_parceiras_esquerda'>
+            <div className='container_esquerdo_info_empresas'>
+            <div className='container_text_empresas_parceiras'>
+              <h1 className='text_h1_empresas_parceiras'>Para empresas parceiras</h1>
+            </div>  
+            <div className='container_text_p_empresas_parceiras'>
+              <p className='text_p_empresas_parceiras'>
+              Empresas que investem na saúde mental de seus colaboradores colhem benefícios como maior engajamento,
+              produtividade e retenção de talentos. Com um sistema de terapia acessível e flexível, as equipes encontram
+              o suporte necessário para equilibrar vida pessoal e profissional, promovendo um ambiente de trabalho mais
+              saudável e motivador. Junte-se às empresas que já priorizam o bem-estar e transforme a experiência dos
+              seus colaboradores!
+              </p>
+            </div>
+            <div className='container_button_empresas_parceiras'>
+              <button className="button_empresas_parceiras">Começar agora!</button>
+            </div>
+            </div>  
+          </div>
+          <div className='container-geral_empresas_parceiras_direita'>
+             olaaaaaaa
+          </div>
+       </div>
+       <Footer/>
     </div>
   )
 }

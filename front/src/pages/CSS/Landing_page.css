@@ -25,6 +25,7 @@
 
     width: 100%;
     height: 420px;
+    padding-bottom: 5%;
 
 }
 
@@ -32,7 +33,7 @@
 
     width: 40ch;
     font-family: sans-serif;
-    font-size: 1.8em;
+    font-size: 1.7em;
     color: #013A63;
     padding-left: 16%;
 }
@@ -40,7 +41,7 @@
 .container_p_moldamos{
 
     width: 48ch;
-    font-size: 1.5em;
+    font-size: 1.4em;
     font-family: sans-serif;
     color: #013A63;
     padding-left: 16%;
@@ -79,10 +80,9 @@
     display: flex;
     flex-direction: column;
     align-items: end;
-    justify-content: center;
     height: 800px;
-    
-    
+    padding-top: 7%;
+      
 }
 
 .cilindro_um_equilibrio{
@@ -91,13 +91,12 @@
      flex-direction: column;
      background-color: #013A63;
      color: #013A63;
-     width: 70%;
+     width: 65%;
      border-top-left-radius: 120px ;
      border-bottom-left-radius: 120px;
      align-items: center;
-     height: 190px;
-     
-     
+     height: 140px;
+    
 }
 
 .cilindro_dois_equilibrio{
@@ -106,11 +105,11 @@
      flex-direction: column;
      background-color: #5A789F;
      color: #5A789F;
-     width: 75%;
+     width: 70%;
      border-top-left-radius: 120px ;
      border-bottom-left-radius: 120px;
      align-items: center;
-     height: 190px;
+     height: 140px;
 }
 
 .cilindro_tres_equilibrio{
@@ -119,11 +118,11 @@
      flex-direction: column;
      background-color: #C1DFF4;
      color: #C1DFF4;
-     width: 90%;
+     width: 85%;
      border-top-left-radius: 120px ;
      border-bottom-left-radius: 120px;
      align-items: center;
-     height: 190px;
+     height: 140px;
 }
 
 .cilindro_quatro_equilibrio{
@@ -132,19 +131,19 @@
      flex-direction: column;
      background-color: #2B4A60;
      color: #2B4A60;
-     width: 60%;
+     width: 55%;
      border-top-left-radius: 120px ;
      border-bottom-left-radius: 120px;
      align-items: center;
-     height: 190px;
+     height: 140px;
 }
 
 .imagem_computador{
 
       position: absolute;
-      width: 40%;
-      padding-bottom: 1%;
-      padding-right: 2%;
+      width: 35%;
+      padding-top: 8%;
+      padding-right: 5%;
 }
 
 /*parte dois da tela*/
@@ -153,7 +152,7 @@
 
     display: flex;
     height: 800px;
-    padding-top: 20px;
+    padding-top: 10px;
 }
 
 .container_info_emocional_esquerda{
@@ -168,9 +167,8 @@
     display: flex;
     flex-direction: column;
     align-items: start;
-    justify-content: center;
     height: 800px;
-    padding-top: 30px;
+    
 }
 
 .cilindro_um_emocional{
@@ -179,11 +177,11 @@
      flex-direction: column;
      background-color: #013A63;
      color: #013A63;
-     width: 65%;
+     width: 60%;
      border-top-right-radius: 120px ;
      border-bottom-right-radius: 120px;
      align-items: center;
-     height: 190px;
+     height: 140px;
 }
 
 .cilindro_dois_emocional{
@@ -192,11 +190,11 @@
     flex-direction: column;
     background-color: #C1DFF4;
     color: #C1DFF4;
-    width: 70%;
+    width: 65%;
     border-top-right-radius: 120px ;
     border-bottom-right-radius: 120px;
     align-items: center;
-    height: 190px;
+    height: 140px;
 }
 
 .cilindro_tres_emocional{
@@ -205,11 +203,11 @@
     flex-direction: column;
     background-color: #013A63;
     color: #013A63;
-    width: 85%;
+    width: 80%;
     border-top-right-radius: 120px ;
     border-bottom-right-radius: 120px;
     align-items: center;
-    height: 190px;
+    height: 140px;
 }
 
 .cilindro_quatro_emocional{
@@ -218,22 +216,52 @@
     flex-direction: column;
     background-color: #C1DFF4;
     color: #C1DFF4;
-    width: 55%;
+    width: 50%;
     border-top-right-radius: 120px ;
     border-bottom-right-radius: 120px;
     align-items: center;
-    height: 190px;
+    height: 140px;
 }
 
 .imagem_emocional{
 
     position: absolute;
-    width: 30%;
+    width: 28%;
     padding-left: 15%;
-    padding-bottom: 6%;
+    padding-top: 6%;
 }
 .container_info_emocional_direita{
 
     width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.container_text_emocional{
+
+    width: 55%;
+    font-family: sans-serif;
+    color: #013A63;
+    padding-top: 11%;
+    padding-right: 15%;
+    line-height: 1.3;
+}
+
+.text_emocional{
+
+    font-size: 2.5em;
+    opacity: 80%;
+}
+
+.container_p_text_emocional{
+
+    width: 69%;
+    font-family: sans-serif;
+    color: #013A63;
+    padding-top: 4%;
+    font-size: 1.1em;
+    line-height: 1.5;
 
 }

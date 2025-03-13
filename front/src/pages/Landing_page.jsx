@@ -40,10 +40,15 @@ function Landing_page() {
             <div className='cilindro_quatro_emocional'></div>
             <img className='imagem_emocional' src="imagem_emocional.svg" alt="" />
           </div>
-          <div className='container_info_emocional_direita'> 
-            olaaaaaaaaa
+        </div>
+        <div className='container_info_emocional_direita'> 
+          <div className='container_text_emocional'>
+            <h1 className='text_emocional'>Encontre uma vida emocional estável em suas mãos </h1>
           </div>
-          <img src="" alt="" />
+          <div className='container_p_text_emocional'>
+            <p className='p_text_emocional'>Cuidar das suas emoções é um passo essencial para uma vida mais plena e feliz. Encontrar estabilidade emocional significa cultivar o autoconhecimento, desenvolver resiliência e fortalecer seus relacionamentos. Com as ferramentas certas, você pode transformar desafios em oportunidades de crescimento e bem-estar.
+            Ao reconhecer suas emoções e aprender a lidar com elas, você constrói uma base sólida para enfrentar o dia a dia com mais tranquilidade e confiança. Pequenas mudanças na sua rotina podem trazer grandes impactos na sua qualidade de vida. </p>
+          </div>
         </div>
       </div>
     </div>

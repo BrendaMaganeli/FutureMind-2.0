@@ -65,37 +65,37 @@ function EditarPaciente() {
     </div>
 
     <div className="editar-paciente">
-        <div className="inpt-div">
+        <div className="input-box">
           <label htmlFor="">
           Nome completo
         </label>
         <input type="text" placeholder="Nome completo" />
         </div>
-        <div className="inpt-div">
+        <div className="input-box">
           <label htmlFor="">
           Cpf
         </label>
         <input type="text" placeholder="Cpf" />
         </div>
-        <div className="inpt-div">
+        <div className="input-box">
           <label htmlFor="">
           Telefone
         </label>
         <input type="text" placeholder="Telefone" />
         </div>
-        <div className="inpt-div">
+        <div className="input-box">
           <label htmlFor="">
           E-mail
         </label>
         <input type="email" placeholder="E-mail" />
         </div>
-        <div className="inpt-div">
+        <div className="input-box">
           <label htmlFor="">
           Data de nascimento
         </label>
         <input type="date" placeholder="Data de nascimento" />
         </div>
-        <div className="inpt-div">
+        <div className="input-box">
           <label htmlFor="">
           Senha
         </label>

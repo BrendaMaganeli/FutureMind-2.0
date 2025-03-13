@@ -18,7 +18,11 @@
 .buttondiario{
     background-color: transparent;
     border: none;
-    padding-top: 5%;
+    padding-top: 10%;
+}
+
+.buttondiario img{
+    width: 80%;
 }
 
 .lado-esquerdoDiario{
@@ -51,7 +55,7 @@
 .botaonovanota{
     color: #013a63;
     font-weight: 600;
-    width: 30%;
+    width: 35%;
     height: 60%;
     display: flex;
     justify-content: center;
@@ -95,9 +99,10 @@
 
 .div-buts{
     display: flex;
-    width: 30%;
-    justify-content: space-between;
+    width: 70%;
+    justify-content: end;
     padding-right: 2%;
+    gap: 2%;
 }
 
 .relogio{
@@ -116,7 +121,8 @@
 .botaoapagar{
     background-color: #a74343;
     color: #fff;
-    width: 40%;
+    width: 20%;
+    height: 20%;
     padding: 1.5%;
     border: none;
     border-radius: 5px;
@@ -128,8 +134,9 @@
 .botaocomp{
     background-color: #ffffff;
     color: #000;
-    width: 40%;
-    padding: 1.5%;
+    width: 20%;
+    height: 36px;
+    padding: 1%;
     border: solid 1px #898989;
     border-radius: 5px;
     display: flex;
@@ -138,16 +145,16 @@
 }
 
 .setabaixo{
-    width: 20%;
+    width: 22%;
     border-left: solid 1px #898989;
-    padding-left: 7%;
+    padding-left: 6%;
 }
 
 .botaoaumentar{
     background-color: #ffffff;
     color: #000;
-    width: 10%;
-    padding: 1.5%;
+    width: 6%;
+    padding: 1%;
     border: solid 1px #898989;
     border-radius: 5px;
     display: flex;
@@ -156,7 +163,7 @@
 }
 
 .botaoaumentar img{
-    width: 70%;
+    width: 75%;
 }
 
 .area-digitacao {

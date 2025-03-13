@@ -11,7 +11,7 @@
 .editar-paciente {
     background-color: transparent;
     border-radius: 10px;
-    width: 70%;
+    width: 80%;
     height: 40%;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -45,10 +45,11 @@
 }
 .input-box input {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
+    padding: 4%;
+    border: 1.9px solid #5A789F;
     border-radius: 5px;
     outline: none;
+    color: #013a63;
 }
 .input-box label {
     position: absolute;
@@ -56,8 +57,8 @@
     left: 10px;
     background: white;
     padding: 0 5px;
-    font-size: 12px;
-    color: #666;
+    font-size: 1.1em;
+    color: #5A789F;
 }
 
 .barra-lateral-p {

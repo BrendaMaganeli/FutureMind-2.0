@@ -9,10 +9,7 @@
     align-items: center;
     justify-content: start;
     width: 75%;
-<<<<<<< HEAD
     background-color: rgb(255, 255, 255);
-=======
->>>>>>> 5689667d1a9edde33ea7e108c33f53d6d2eaca3f
 }
 
 .editar-profissional {
@@ -47,7 +44,7 @@
     padding: 2%;
     position: relative;
     height: 5%;
-    width: 60.7%;
+    width: 73%;
     display: flex;
     justify-content: end;
     align-items: start;

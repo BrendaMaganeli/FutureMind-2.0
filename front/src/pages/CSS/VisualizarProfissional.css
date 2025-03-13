@@ -31,11 +31,6 @@
     align-items: end;
   }
 
-  .topicos p {
-
-    color: black;
-  }
-
   .funcionalidades {
 
     border-radius: 20px;
@@ -226,11 +221,12 @@
     display: flex;
     gap: 15px;
     align-items: center;
+    padding-bottom: 2%;
   }
 
   .topicos p {
 
-    font-size: 18px;
+    font-size: 1.3em;
     color: #5a7da0;
   }
 

@@ -453,6 +453,7 @@
     flex-direction: column;
     padding: 10px;
     gap: 10px;
+    min-height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     scroll-behavior: smooth;
@@ -724,4 +725,10 @@
 .container-chats.dark .acess-profile-div .btn-acess b {
 
     color: #5a7da0;
+}
+
+
+button {
+
+    cursor: pointer;
 }

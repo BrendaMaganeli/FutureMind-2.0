@@ -11,6 +11,8 @@ import Navbar from '../Components/Navbar.jsx'
 import Landing_page from '../pages/Landing_page.jsx'
 import Inicio from '../pages/Inicio.jsx'
 import Pagamento from '../pages/Pagamento.jsx'
+import CadastroProfissional1 from '../pages/CadastroProfissional1.jsx'
+import CadastroProfissional2 from '../pages/CadastroProfissional2.jsx'
 
 const router = createBrowserRouter([
 
@@ -61,7 +63,15 @@ const router = createBrowserRouter([
 {
     path: '/pagamento',
     element: <Pagamento />
-}
+},
+{
+    path: '/cadastroprofissional1',
+    element: <CadastroProfissional1 />
+},
+{
+    patha: '/cadastroProfissional2',
+    element: <CadastroProfissional2 />
+},
 
 ])
 

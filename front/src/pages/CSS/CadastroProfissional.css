@@ -1,0 +1,168 @@
+.container-profissional {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 5% 5%;
+    gap: 5%;
+}
+
+/* .lado-esquerdoProfissional {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+} */
+
+/* .lado-direitoProfissional {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+
+.titulo-logo {
+    display: flex;
+    align-items: center;
+    gap: 13%;
+    margin-bottom: 30px;
+    width: 70em;
+    justify-content: center;
+    padding-left: 7%;
+}
+
+.logo-paraCadastro{
+    width: 25%;
+    margin-top: 2%;
+}
+
+.titulo-cadastro {
+    font-size: 2.5em;
+    color: #5A789F;
+    text-align: center;
+}
+
+/* .inputs-cadastro-div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    width: 100%;
+    max-width: 700px;
+    justify-content: center;
+    margin-bottom: 5%;
+} */
+
+
+
+.input-cadastro label {
+    position: absolute;
+    top: -12px;
+    left: 12px;
+    background: white;
+    padding: 0 5px;
+    font-size: 1em;
+    color: #5A789F;
+}
+
+.input-cadastro input {
+    width: 100%;
+    padding: 14px;
+    border: 1.9px solid #5A789F;
+    border-radius: 5px;
+    outline: none;
+    color: #013a63;
+    font-size: 1.1em;
+}
+
+.botao-cadastro {
+    width: 100%;
+    max-width: 700px;
+    padding: 14px;
+    background-color: #5A789F;
+    color: white;
+    font-size: 1.3em;
+    border: none;
+    border-radius: 5px;
+    margin-top: 30px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+}
+
+.botao-cadastro:hover {
+    background-color: #466484;
+}
+
+.login-texto {
+    margin-top: 15px;
+    font-size: 1.1em;
+    color: #5A789F;
+    text-align: center;
+    justify-content: start;
+    display: flex;
+    width: 100%;
+}
+
+.login-texto a {
+    color: #013a63;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* .imagem-cadastro {
+    width: 100%;
+    max-width: 550px;
+} */
+
+
+
+
+.lado-esquerdoProfissional {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2%;
+}
+
+.lado-direitoProfissional {
+    width: 45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.imagem-cadastro {
+    width: 100%;
+    max-width: 650px;
+}
+
+.inputs-cadastro-div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    width: 100%;
+    max-width: 800px;
+    justify-content: center;
+    margin-bottom: 5%;
+}
+
+  .input-cadastro {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .erro {
+    color: red;
+    font-size: 0.85em;
+    min-height: 18px; /* Reserva espaço fixo para a mensagem de erro */
+    margin-top: 3px;
+    display: block; /* Sempre mantém o espaço mesmo sem erro */
+  }
+  
+  

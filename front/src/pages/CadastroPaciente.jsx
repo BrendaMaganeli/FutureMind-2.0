@@ -4,7 +4,7 @@ import logo from '../assets/logoCadastro2.svg';
 import imagem from '../assets/FotoCadastro.svg';
 import './CSS/Cadastros.css';
 
-function CadastroProfissional1() {
+function CadastroPaciente() {
   const navigate = useNavigate(); // Hook para navegação
 
   const handleCadastro = () => {
@@ -15,7 +15,7 @@ function CadastroProfissional1() {
     <div className='container-profissional'>
       <div className='lado-esquerdoProfissional'>
         <div className='titulo-logo'>
-          <p className='titulo-cadastro'>Cadastro Profissional</p>
+          <p className='titulo-cadastro'>Cadastro Paciente</p>
           <img src={logo} alt='Future Mind Logo' className='logo-paraCadastro' />
         </div>
         <div className='inputs-cadastro-div'>
@@ -24,7 +24,7 @@ function CadastroProfissional1() {
             <input type='text' />
           </div>
           <div className='input-cadastro'>
-            <label>CRP</label>
+            <label>CPF</label>
             <input type='text' />
           </div>
           <div className='input-cadastro'>
@@ -36,15 +36,18 @@ function CadastroProfissional1() {
             <input type='text' />
           </div>
           <div className='input-cadastro'>
-            <label>CPF</label>
+            <label>E-mail</label>
             <input type='text' />
           </div>
           <div className='input-cadastro'>
-            <label>Valor Consulta</label>
+            <label>Senha</label>
             <input type='text' />
           </div>
         </div>
-        <button className='botao-cadastro' onClick={handleCadastro}>Prosseguir com cadastro</button>
+        <div className='div-check'>
+        <input className='styles-check' type="checkbox" name="" id="" /> <label className='termos-styles' htmlFor="">Aceitar os</label> <a className='termos-a' href="termos">termos</a> <label htmlFor="">de uso</label>
+        </div>
+        <button className='botao-cadastro' onClick={handleCadastro}>Finalizar Cadastro</button>
         <p className='login-texto'>Já possui uma conta no nosso site? <a href='/login'>Aperte aqui</a></p>
       </div>
       <div className='lado-direitoProfissional'>
@@ -54,4 +57,4 @@ function CadastroProfissional1() {
   );
 }
 
-export default CadastroProfissional1;
+export default CadastroPaciente;

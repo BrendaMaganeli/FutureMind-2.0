@@ -4,7 +4,7 @@ import logo from '../assets/logoCadastro2.svg';
 import imagem from '../assets/FotoCadastro.svg';
 import './CSS/Cadastros.css';
 
-function CadastroProfissional1() {
+function CadastroProfissional2() {
   const navigate = useNavigate(); // Hook para navegação
 
   const handleCadastro = () => {
@@ -15,37 +15,27 @@ function CadastroProfissional1() {
     <div className='container-profissional'>
       <div className='lado-esquerdoProfissional'>
         <div className='titulo-logo'>
-          <p className='titulo-cadastro'>Cadastro Profissional</p>
+          <p className='titulo-cadastro'>Bem vindo de volta!</p>
           <img src={logo} alt='Future Mind Logo' className='logo-paraCadastro' />
         </div>
-        <div className='inputs-cadastro-div'>
-          <div className='input-cadastro'>
+        <div className='inputs-login-div'>
+          <div className='input-login'>
             <label>Nome</label>
             <input type='text' />
           </div>
-          <div className='input-cadastro'>
-            <label>CRP</label>
-            <input type='text' />
-          </div>
-          <div className='input-cadastro'>
+          
+          <div className='input-login'>
             <label>Telefone</label>
             <input type='text' />
           </div>
-          <div className='input-cadastro'>
-            <label>Data de nascimento</label>
-            <input type='text' />
-          </div>
-          <div className='input-cadastro'>
+          
+          <div className='input-login'>
             <label>CPF</label>
             <input type='text' />
           </div>
-          <div className='input-cadastro'>
-            <label>Valor Consulta</label>
-            <input type='text' />
-          </div>
         </div>
-        <button className='botao-cadastro' onClick={handleCadastro}>Prosseguir com cadastro</button>
-        <p className='login-texto'>Já possui uma conta no nosso site? <a href='/login'>Aperte aqui</a></p>
+        <button className='botao-login' onClick={handleCadastro}>Realizar Login</button>
+        <p className='login-texto'>Ainda não possui cadastro?<a href='/cadastroprofissional1'>Aperte aqui</a></p>
       </div>
       <div className='lado-direitoProfissional'>
         <img src={imagem} alt='Cadastro Profissional' className='imagem-cadastro' />
@@ -54,4 +44,4 @@ function CadastroProfissional1() {
   );
 }
 
-export default CadastroProfissional1;
+export default CadastroProfissional2;

@@ -166,3 +166,111 @@
   }
   
   
+  .inputs-login-div {
+    gap: 30px;
+    width: 100%;
+    max-width: 800px;
+    justify-content: center;
+    margin-bottom: 5%;
+}
+
+.input-login input {
+    width: 100%;
+    padding: 14px;
+    border: 1.9px solid #5A789F;
+    border-radius: 5px;
+    outline: none;
+    color: #013a63;
+    font-size: 1.1em;
+    margin-bottom: 5%;
+}
+
+.input-login {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .input-login label {
+    position: absolute;
+    top: -12px;
+    left: 12px;
+    background: white;
+    padding: 0 5px;
+    font-size: 1em;
+    color: #5A789F;
+}
+
+.botao-login {
+    width: 100%;
+    max-width: 700px;
+    padding: 14px;
+    background-color: #5A789F;
+    color: white;
+    font-size: 1.3em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+}
+
+.botao-login:hover {
+    background-color: #466484;
+}
+
+
+/* css da chackbox */
+.div-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1em;
+    color: #5A789F;
+    padding-right: 66%;
+}
+
+.styles-check {
+    appearance: none; /* Remove o estilo padrão do navegador */
+    width: 18px;
+    height: 18px;
+    border: 2px solid #5A789F;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+/* Quando estiver marcada */
+.styles-check:checked {
+    background-color: #5A789F;
+    border: 2px solid #5A789F;
+}
+
+/* Ícone de check */
+.styles-check:checked::after {
+    content: "✔";
+    font-size: 14px;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+}
+
+/* Texto e link */
+.termos-styles {
+    color: #5A789F;
+    font-size: 1em;
+}
+
+.termos-a {
+    color: #013a63;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+

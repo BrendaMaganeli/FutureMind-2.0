@@ -12,7 +12,10 @@ import Landing_page from '../pages/Landing_page.jsx'
 import Inicio from '../pages/Inicio.jsx'
 import Pagamento from '../pages/Pagamento.jsx'
 import CadastroProfissional1 from '../pages/CadastroProfissional1.jsx'
-import CadastroProfissional2 from '../pages/CadastroProfissional2.jsx'
+import CadastroProfissional2 from '../pages/Login.jsx'
+import Login from '../pages/Login.jsx'
+import CadastroPaciente from '../pages/CadastroPaciente.jsx'
+
 
 const router = createBrowserRouter([
 
@@ -69,9 +72,13 @@ const router = createBrowserRouter([
     element: <CadastroProfissional1 />
 },
 {
-    patha: '/cadastroProfissional2',
-    element: <CadastroProfissional2 />
+    path: '/Login',
+    element: <Login />
 },
+{
+    path: '/cadastroPaciente',
+    element: <CadastroPaciente />
+}
 
 ])
 

@@ -1,10 +1,10 @@
-
 .container-inicio {
 
     display: flex;
     flex-direction: column;
     height: 100vh;
     width: 100%;
+    align-items: center;
 }
 
 .img-fundo {
@@ -17,4 +17,188 @@
 .img-fundo img {
 
     width: 100%;
+}
+
+.filter-profissionais-div {
+
+    /* background: #CAD7EB; */
+    width: 80%;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    height: 75%;
+    gap: 40px;
+}
+
+.filter-profissionais-text {
+
+    width: 100%;
+    color: #013a63;
+    padding: 0 0 0 10px;
+}
+
+.filter-background {
+
+    width: 100%;
+    background-color: #cad7ebe0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    border-radius: 40px;
+}
+
+.filter-profissionais-text h1 {
+    font-weight: 550;
+}
+
+.filter-profissionais-container {
+
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    height: 100%;
+}
+
+.filtros-profissionais {
+
+    display: flex;
+    width: 100%;
+    height: 30%;
+    align-items: center;
+    gap: 30%;
+}
+
+.filtros-profissionais .inpt-filtro {
+
+    padding: 0 0 0 20px;
+    display: flex;
+    align-items: center;
+    border: none;
+    background-color: #5a7da0da;
+    border-radius: 10px;
+    padding: 0 2% 0 2%;
+    height: 35px;
+    width: 70%;
+    color: white;
+    gap: 10px;
+}
+
+.filtros-profissionais .inpt-filtro img {
+
+    width: 4%;
+}
+
+.filtros-profissionais .inpt-filtro input {
+
+    border: none;
+    background-color: transparent;
+    color: white;
+}
+
+.filtros-profissionais .inpt-filtro input::placeholder {
+
+    color: white;
+    opacity: 85%;
+}
+
+.filtros-profissionais .especialidade-filtro, .filtros-profissionais .abordagem-filtro {
+
+    width: 90%;
+}
+
+.especialidade-filtro select, .abordagem-filtro select {
+    
+    border: none;
+    color: white;
+    border-radius: 10px;
+    padding: 0 2% 0 2%;
+    height: 35px;
+}
+
+.abordagem-filtro select {
+
+    background-color: #5a7da0;
+}
+
+.especialidade-filtro select {
+
+    background-color: #61A5C2;
+    opacity: 78%;
+}
+
+.filtros-profissionais select {
+
+    width: 90%;
+}
+
+.filter-profissionais-baixo {
+
+    display: flex;
+    width: 100%;
+    height: 70%;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+}
+
+.filter-profissionais-baixo .plano-saude-img {
+
+    width: 80%;
+    height: 100%;
+}
+
+.filter-profissionais-baixo .plano-saude-img img {
+
+    width: 100%;
+    height: 100%;
+}
+
+.filter-profissionais-baixo .div-filtrar {
+
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height: 60%;
+    border-radius: 30px;
+    padding: 2%;
+    gap: 25px;
+    justify-content: end;
+}
+
+.div-filtrar .div-btn-filtro {
+
+    background-color: #5a7da0;
+    border: none;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2%;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.div-filtrar .text-btn-filtro {
+
+    width: 100%;
+    text-align: left;
+    color: #013a63;
+}
+
+.div-btn-filtro .btn-filtro {
+
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: white
+}
+
+.div-btn-filtro img {
+
+    width: 8%;
 }

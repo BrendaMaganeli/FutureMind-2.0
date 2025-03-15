@@ -51,11 +51,19 @@ function Chat() {
         { text: 'A-Z', active: false },
         { text: 'Antigas', active: false },
     ]);
-
+    
     const [messages, setMessages] = useState([
         { sender: 'other', text: 'Bom dia! Tem disponibilidade amanhã (terça) às 14 ou 15hrs?', foto: mulher }
     ]);
+    
+    const messagesEndRef = useRef(null);
 
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages]);
+    
     const [inptvalue, setInptvalue] = useState('');
 
     const click = (index) => {
@@ -231,6 +239,7 @@ function Chat() {
                                 }
                             </div>
                         ))}
+                        <div ref={messagesEndRef}></div>
                         </div>
                     </div>
                     <form onSubmit={sendMessage} className="barra-bottom">

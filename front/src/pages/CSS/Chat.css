@@ -732,3 +732,20 @@ button {
 
     cursor: pointer;
 }
+
+.no-results {
+
+    font-size: 18px;
+    text-align: center;
+    margin: 40px 0 0 20px;
+    width: 90%;
+    opacity: 80%;
+    color: #013a63;
+    font-weight: 650;
+}
+
+.arvore-results {
+
+    opacity: 30%;
+    margin: 60px 0 0 0;
+}

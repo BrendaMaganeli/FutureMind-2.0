@@ -92,8 +92,10 @@ function Chat() {
         
         const filtrados = chats.filter(chat => chat.nome.toLowerCase().includes(termo));
         
-        setResult(filtrados);
-        setUseResult(filtrados.length > 0);
+        const resultAux = filtrados ? filtrados : [];
+        setResult(resultAux);
+        setUseResult(true);
+        console.log(result);
     }    
     
     useEffect(() => {
@@ -154,6 +156,14 @@ function Chat() {
                                 </div>
                             </div>
                         ))
+                    }
+
+                    {
+                        (result.length===0 && useResult===true)&&
+                        <>
+                        <p className='no-results'>Não há resultados para esta busca.</p>
+                        <img className='arvore-results' src={arvoreAzul} />
+                        </>
                     }
                 </div>
                 <div className="barra-final-maior">

@@ -215,4 +215,50 @@
   color: #013A63;
 }
 
+.left-panel, .right-panel {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
 
+.left-panel {
+  width: 50%;
+}
+
+.right-panel {
+  width: 50%;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #013A63;
+}
+
+.dropdown, .horario-btn, .confirm-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+}
+
+.horarios-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
+  grid-template-rows: repeat(4, auto);
+  gap: 10px;
+}
+
+.confirm-button {
+  background-color: #5a789f;
+  color: white;
+  font-weight: bold;
+  border: none;
+}
+
+.confirm-button:hover {
+  background-color: rgb(53, 95, 173);
+}

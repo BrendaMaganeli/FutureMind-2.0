@@ -3,6 +3,19 @@
     margin: 0;
 }
 
+@media (max-width: 1600px){
+
+    .imagem_computador{
+
+        position: absolute;
+        width:40%;
+        padding-top: 8%;
+        padding-right: 5%;
+       
+  }
+}
+
+
 /*parte um da tela*/
 
 .container-geral_landing_um{
@@ -25,7 +38,7 @@
 
     width: 100%;
     height: 420px;
-    padding-bottom: 5%;
+    padding-bottom: 60%;
 
 }
 
@@ -138,13 +151,7 @@
      height: 140px;
 }
 
-.imagem_computador{
 
-      position: absolute;
-      width: 35%;
-      padding-top: 8%;
-      padding-right: 5%;
-}
 
 /*parte dois da tela*/
 
@@ -362,15 +369,15 @@
 .h1_empresas{
 
     color: #013A63;
-    padding-left: 25%;
-    padding-top: 25%;
+    padding-left: 20%;
+    padding-top: 20%;
 }
 
 .h1_bem-estar{
 
     color: #61A5C2;
     padding-left: 10px;
-    padding-top: 25%;
+    padding-top: 20%;
 }
 
 .container_bem-estar{
@@ -382,8 +389,9 @@
 
 .container_imagems_empresas{
 
-    width: 13%;
+    width: 15%;
     padding: 15px;
+    padding-left: 20px;
     border-radius: 15px;
     display: flex;
     align-items: center;
@@ -419,7 +427,7 @@
 .container_esquerdo_info_empresas{
 
      width: 100%;
-     padding-bottom: 20%;
+     padding-bottom: 10%;
 }
 
 .container_text_empresas_parceiras{
@@ -474,8 +482,66 @@
 .container-geral_empresas_parceiras_direita{
 
     width: 50%;
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+.container_info_cilindros_empresas{
+
+    width: 100%;
+    display: flex;
+    height: 192px;
+    
+}
+
+.cilindro_empresa_um{
+
+    width: 25%;
+    background-color: #2B4A60;
+    border-top-left-radius: 100px;
+    border-top-right-radius: 100px;
+    height: 460px;
+    margin-top: 60px;
+    margin-left: 20px;
+    padding-top: 55%;
+}
+
+.cilindro_empresa_dois{
+
+    width: 25%;
+    background-color: #5A789F;
+    border-top-left-radius: 100px;
+    border-top-right-radius: 100px;
+    height: 760px;
+    margin-top: -240px;
+    
+    padding-top: 55%;
+}
+
+.cilindro_empresa_tres{
+
+    width: 25%;
+    background-color: #C1DFF4;
+    border-top-left-radius: 100px;
+    border-top-right-radius: 100px;
+    height: 620px;
+    margin-top: -100px;
+    padding-top: 55%;
+}
+
+.cilindro_empresa_quatro{
+
+    width: 25%;
+    background-color: #013A63;
+    border-top-left-radius: 100px;
+    border-top-right-radius: 100px;
+    height: 500px;
+    margin-top: 20px;
+    padding-top: 55%;
+}
+
+
 
 
 

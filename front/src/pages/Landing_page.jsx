@@ -29,8 +29,6 @@ function Landing_page() {
               <div className='cilindro_tres_equilibrio'></div>
               <div className='cilindro_quatro_equilibrio'></div>
               <img className='imagem_computador' src="tela_computador.svg" alt="" />
-  
-
             </div>
           </div>
       </div>
@@ -100,7 +98,12 @@ function Landing_page() {
             </div>  
           </div>
           <div className='container-geral_empresas_parceiras_direita'>
-             olaaaaaaa
+             <div className='container_info_cilindros_empresas'>
+                <div className='cilindro_empresa_um'></div>
+                <div className='cilindro_empresa_dois'></div>
+                <div className='cilindro_empresa_tres'></div>
+                <div className='cilindro_empresa_quatro'></div>
+             </div>
           </div>
        </div>
        <Footer/>

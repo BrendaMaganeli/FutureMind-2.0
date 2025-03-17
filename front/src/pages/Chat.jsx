@@ -18,10 +18,27 @@ function Chat() {
 
 
     
-    const chats = [
+    const [chats, setChats] = useState([
         { nome: 'Vitor Azevedo', foto: mulher },
-        ...Array(35).fill({ nome: 'Lúcia Katia', foto: mulher })
-    ];
+        { nome: 'Anderson Silva', foto: mulher},
+        { nome: 'Lúcia Katia', foto: mulher},
+        { nome: 'Vanessa Lopes', foto: mulher},
+        { nome: 'Ritinha', foto: mulher},
+        { nome: 'Cristiano', foto: mulher},
+        { nome: 'Fundação E-Zag', foto: mulher},
+        { nome: 'Manassés da Rosa Marcelino', foto: mulher},
+        { nome: 'Silvana Barbosa', foto: mulher},
+        { nome: 'Cintia Chagas', foto: mulher},
+        { nome: 'Carlos Alberto', foto: mulher},
+        { nome: 'Andi Ferreira', foto: mulher},
+        { nome: 'Finneas', foto: mulher},
+        { nome: 'Melissa Carpenter', foto: mulher},
+        { nome: 'Melri Ribeiro', foto: mulher},
+        { nome: 'Bárbara Soares', foto: mulher},
+        { nome: 'Simone Monteiro', foto: mulher},
+        { nome: 'Isabella coach', foto: mulher},
+        { nome: 'Thiago klovisck', foto: mulher},
+    ]);
 
     const [chatSelected, setChatSelected] = useState();
     const [busca, setBusca] = useState();
@@ -72,7 +89,39 @@ function Chat() {
         clickedItem.active = !clickedItem.active;
         filtersAux.unshift(clickedItem);
         setFilters(filtersAux);
+
+        classifica(clickedItem);
     };
+
+    const classifica = (item) => {
+
+        if (item.active) {
+            
+            if (item.text === 'A-Z') {
+                const chatsAux = [...chats];
+                const sortedChats = chatsAux.sort((a, b) => a.nome.localeCompare(b.nome));
+                setResult(sortedChats);
+                setUseResult(true);
+            } else if (item.text === 'Antigas') {
+
+                const chatsAux = [...chats];
+                let oldToNewChats = [];
+
+                for (let i=1; i<chatsAux.length; i++) {
+
+                    oldToNewChats.push(chatsAux[chatsAux.length-i]);
+                }
+                setResult(oldToNewChats);
+                setUseResult(true);
+            }
+        } else {
+
+            if (item.text === 'A-Z' || item.text === 'Antigas') {
+
+                setUseResult(false);
+            }
+        }
+    }
 
     const sendMessage = (e) => {
         e.preventDefault();
@@ -141,9 +190,9 @@ function Chat() {
                 </div>
                 <div className="pesquisa-chats">
                     <div className="input-pesquisa">
-                        <input onChange={(e) => buscaProfissional(e)} value={busca} type="text" placeholder='Busque por conversas...' />
-                        <div className="img-lupa">
+                        <div className="div-lupa-input">
                             <img src={lupa} alt='Lupa pesquisa' />
+                            <input onChange={(e) => buscaProfissional(e)} value={busca} type="text" placeholder='Busque por conversas...' />
                         </div>
                     </div>
                     <div className="boxs-pesquisa">

@@ -93,16 +93,30 @@
     height: 70%;
 }
 
-.input-pesquisa input{
+.input-pesquisa .div-lupa-input {
 
+    display: flex;
+    align-items: center;
     width: 95%;
     height: 28px;
-    border: none;
     border-radius: 10px;
     background-color: #5a7da075;
-    padding: 0 0 0 35px;
+    padding: 0 0 0 10px;
+}
+
+.div-lupa-input img {
+
+    width: 5%;
+    cursor: pointer;
+}
+
+.input-pesquisa input{
+
+    border: none;
+    background: transparent;
     color: #5a7da0;
-    font-size: 17px;
+    font-size: 16px;
+    padding: 0 0 0 5px;
 }
 
 .input-pesquisa input::placeholder {
@@ -282,7 +296,7 @@
     opacity: 20%;
 }
 
-.img-lupa {
+/* .img-lupa {
 
     position: absolute;
     left: 6.8%;
@@ -294,7 +308,7 @@
     transform: scale(1.08);
     cursor: pointer;
     transition: 0.5s;
-}
+} */
 
 .barra-top {
 
@@ -325,7 +339,7 @@
     justify-content: start;
     align-items: center;
     text-align: center;
-    width: 20%;
+    width: 30%;
 }
 
 .barra-top .icons-chat {
@@ -599,32 +613,6 @@
 
     border: none;
     background: none;
-}
-
-.messages-div::-webkit-scrollbar-thumb {
-
-    background-color: #5a7da0c0;
-    height: 20%;
-}
-
-.messages-div::-webkit-scrollbar-track {
-    
-    border-left: 1px solid rgba(119, 119, 119, 0.329);
-    border-right: 1px solid rgba(119, 119, 119, 0.329);
-    border-top: 1px solid rgba(119, 119, 119, 0.329);
-    background-color: transparent;
-    border-radius: 0px;
-}
-
-.messages-div::-webkit-scrollbar-track:hover {
-    
-    background-color: transparent;
-}
-
-.messages-div::-webkit-scrollbar-thumb:hover {
-
-    background-color: #5a7da0a4;
-    transition: 0.5s;
 }
 
 .no-chat-selected {

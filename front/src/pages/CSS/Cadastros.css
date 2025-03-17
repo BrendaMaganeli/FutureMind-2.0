@@ -75,6 +75,17 @@
     font-size: 1.1em;
 }
 
+.input-cadastro select {
+    width: 100%;
+    padding: 14px;
+    border: 1.9px solid #5A789F;
+    border-radius: 5px;
+    outline: none;
+    color: #013a63;
+    font-size: 1.1em;
+
+}
+
 .botao-cadastro {
     width: 100%;
     max-width: 700px;
@@ -201,6 +212,23 @@
     padding: 0 5px;
     font-size: 1em;
     color: #5A789F;
+}
+
+.inputs-cadastro-divP {
+
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 800px;
+    justify-content: center;
+    margin-bottom: 5%;
+    gap: 25px;
+}
+
+.input-lados{
+    display: flex;
+    gap: 5%;
+    width: 100%;
 }
 
 .botao-login {

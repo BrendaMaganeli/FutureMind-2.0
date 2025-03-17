@@ -1,0 +1,195 @@
+.body-termos{
+    width: 100%;
+    height: 100vh;
+    background-color: #f0f1f5;
+}
+
+div::-webkit-scrollbar-track{
+
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+div::-webkit-scrollbar-thumb{
+
+
+    background-color: var(--cor-1);
+    border-radius: 3px;
+}
+
+div::-webkit-scrollbar{
+
+
+    width: 12px;
+}
+
+.body-termos {
+
+    width: 100%;
+    height: 100vh;
+}
+
+.botaodecisao{
+
+    width: 170%;
+    font-size: 140%;
+    border-top-left-radius: 100px;
+    border-bottom-left-radius: 100px;
+    border: none;
+    transition: 1s;
+    background-color: #cad7eb;
+    color: #5a789f;
+    padding: 5%;
+    text-align: center;
+    text-decoration: none;
+}
+
+.botaodecisaodois{
+    
+    width: 150%;
+    font-size: 140%;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    border: none;
+    transition: 1s;
+    background-color: #5a789f;
+    color: #fff;
+    padding: 5%;
+    text-align: center;
+    text-decoration: none;
+}
+
+
+.divBotoes{
+    margin: auto;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5%;
+    background-color: #f0f1f5;
+} 
+
+.T_titulo{
+    font-size: 160%;
+    color: #5a789f;
+    width: fit-content;
+    margin: auto;
+    text-align: center;
+    padding-top: 5%;
+}
+
+.textinho{
+    margin: auto;
+    align-items: center;
+    text-align:justify;
+    width: 40%;
+    color: #5a789f;
+    font-size: 150%;
+    padding-top: 3%;
+    line-height: 150%;
+    font-weight: 600;
+    background-color: #f0f1f5;
+}
+
+.introducao{
+    position: absolute;
+}
+
+.bolona_termos img{
+    width: 100%;
+}
+
+.bolona_termos{
+    width: 20%;
+    position: absolute;
+    padding-left: 80%;
+}
+
+.boolinha{
+    margin: auto;
+    display: flex;
+    width: 5%;
+    padding-left: 95%;
+}
+
+.bolinha2{
+    width: 5%;
+    padding-left: 24%;
+    padding-top: 30%;
+}
+
+.bolinha3{
+    width: 10%;
+    padding-left: 90%;
+}
+
+.bolonaes{
+    width: 20%;
+} 
+
+.accordion-container{
+    display: flex;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    padding-bottom: 2.5%;
+    background-color: #f0f1f5;
+}
+
+.accordion-container-final{
+    display: flex;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    padding-bottom: 2.5%;
+    background-color: #f0f1f5;
+    padding-bottom: 10%;
+}
+
+.textinhoAceitação{
+
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+    text-align:justify;
+    color: #5a789f;
+    font-size: 110%;
+    line-height: 150%;
+    font-weight: 600;
+    width: 60%;
+}
+
+.css-1i4ywhz-MuiCollapse-wrapperInner{
+    background-color: #f0f1f5;
+}
+
+.titulo_ac_um{
+
+    color: #5a789f;
+    font-size: 250%;
+    padding-top: 3%;
+    line-height: 150%;
+    font-weight: 600;
+    
+}
+
+.container_ac{
+
+    width: 70%;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #61a5c2;
+}
+
+
+
+.css-1umw9bq-MuiSvgIcon-root{
+
+    font-size: 4rem !important;
+    color: #5a789f ;
+
+}

@@ -1,25 +1,62 @@
-import logo from './logo.svg';
+import React, { useEffect, useRef, useState } from "react";
+import io from "socket.io-client";
 import './App.css';
 
-function App() {
+const socket = io("http://localhost:5000");
+
+const VideoConference = () => {
+  const localVideoRef = useRef(null);
+  const remoteVideoRef = useRef(null);
+  const peerConnection = useRef(null);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = stream;
+        }
+        peerConnection.current = new RTCPeerConnection();
+        stream.getTracks().forEach((track) => peerConnection.current.addTrack(track, stream));
+      })
+      .catch((error) => console.error("Erro ao acessar mídia:", error));
+  }, []);
+  
+
+  const sendMessage = () => {
+    socket.emit("chat-message", message);
+    setChatMessages((prev) => [...prev, { text: message, sender: "me" }]);
+    setMessage("");
+  };
+
+  useEffect(() => {
+    socket.on("chat-message", (msg) => {
+      setChatMessages((prev) => [...prev, { text: msg, sender: "other" }]);
+    });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h2>Videoconferência</h2>
+      <video ref={localVideoRef} autoPlay playsInline></video>
+      <video ref={remoteVideoRef} autoPlay playsInline></video>
+      <div>
+        <input
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Digite uma mensagem"
+        />
+        <button onClick={sendMessage}>Enviar</button>
+      </div>
+      <div>
+        {chatMessages.map((msg, index) => (
+          <p key={index} style={{ color: msg.sender === "me" ? "blue" : "red" }}>{msg.text}</p>
+        ))}
+      </div>
     </div>
   );
-}
+};
 
-export default App;
+export default VideoConference;

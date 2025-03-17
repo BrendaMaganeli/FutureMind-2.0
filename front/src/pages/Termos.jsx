@@ -9,9 +9,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import bolona from '../assets/bolona.png';
-import bolona2 from '../assets/bolona2.png';
-import bolonaEsquerda from '../assets/bolonaEsquerda.png';
+
 
 // Componente para rolar a página até o topo sempre que a rota mudar
 function ScrollToTop() {
@@ -31,45 +29,32 @@ function Termos() {
       {/* Barra de navegação */}
       <Navbar />
       <ScrollToTop />
-
       {/* Botões para navegação entre Política de Privacidade e Termos de Uso */}
       <div className='divBotoes'>
         <Link to='/politica' className='botaodecisao'>Política de Privacidade</Link>
         <Link to='/termo' className='botaodecisaodois'>Termos de Uso</Link>
       </div>
-
-      {/* Introdução com título e descrição */}
+      <div className='container_bola_um'>
+         imagem
+      </div>
       <div className='introducao'>
         <div className='T_titulo'>
           <h1>Termos de Uso da FutureMind</h1>
         </div>
         <div className='textinho'>
-          <div>
+          <div className='text_prioridade'>
             <p>Na FutureMind, a sua privacidade é nossa prioridade.</p>
           </div>
-          <div>
+          <div className='text_comprometendo'>
             <p>Comprometemo-nos a proteger suas informações pessoais e a garantir que você tenha uma experiência segura e confiável em nossa plataforma de terapia online.</p>
-            <img src={bolona} className='boolinha' alt='Decoração'/>
           </div>
           <div>
-            <p>Esta Política de Privacidade descreve como coletamos, utilizamos, armazenamos e protegemos suas informações, além de esclarecer seus direitos em relação a esses dados.</p>
-            <p>Ao utilizar nossos serviços, você concorda com as práticas aqui descritas, e estamos aqui para garantir que sua jornada rumo ao bem-estar mental seja transparente e respeitosa.</p>
-            <img src={bolona} className='bolinha3' alt='Decoração'/>
+            <p>Esta Política de Privacidade descreve como coletamos, utilizamos, armazenamos e protegemos suas informações, além de esclarecer seus direitos em relação a esses dados.
+            Ao utilizar nossos serviços, você concorda com as práticas aqui descritas, e estamos aqui para garantir que sua jornada rumo ao bem-estar mental seja transparente e respeitosa.</p>
           </div>
         </div>
       </div>
-
       {/* Elementos visuais decorativos */}
-      <div className='bolona_termos'>
-        <img src={bolona2} alt='Decoração'/>
-      </div>
-      <div className='bolaEsquerda'>
-        <img src={bolona} className='bolinha2' alt='Decoração'/>
-      </div>
-      <div className='bolaEsquerda'>
-        <img src={bolonaEsquerda} className='bolonaes' alt='Decoração'/>
-      </div>
-
       {/* Seção de Acordeões com informações detalhadas */}
       <div className='accordion-container'>
         {/* Primeiro Acordeão: Aceitação dos Termos */}

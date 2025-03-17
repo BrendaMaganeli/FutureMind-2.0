@@ -1,12 +1,12 @@
 .body-termos{
     width: 100%;
     height: 100vh;
-    background-color: #f0f1f5;
+    background-color: #ffffff;
 }
 
 div::-webkit-scrollbar-track{
 
-    background: #f1f1f1;
+    background: #ffffff;
     border-radius: 3px;
 }
 
@@ -53,7 +53,7 @@ div::-webkit-scrollbar{
     border: none;
     transition: 1s;
     background-color: #5a789f;
-    color: #fff;
+    color: #ffffff;
     padding: 5%;
     text-align: center;
     text-decoration: none;
@@ -67,8 +67,14 @@ div::-webkit-scrollbar{
     justify-content: center;
     align-items: center;
     padding-top: 5%;
-    background-color: #f0f1f5;
+    background-color: #ffffff;
 } 
+
+.container_bola_um{
+
+    width: 20%;
+    background-color: #5a789f;
+}
 
 .T_titulo{
     font-size: 160%;
@@ -85,48 +91,31 @@ div::-webkit-scrollbar{
     text-align:justify;
     width: 40%;
     color: #5a789f;
-    font-size: 150%;
+    font-size: 1.6em;
     padding-top: 3%;
     line-height: 150%;
     font-weight: 600;
-    background-color: #f0f1f5;
+    background-color: #ffffff;
 }
 
 .introducao{
-    position: absolute;
+ background-color: #ffffff;
+ width: 100%;
 }
 
-.bolona_termos img{
+.text_prioridade{
+
+    padding-top: 5%;
+    padding-bottom: 2%;
     width: 100%;
 }
 
-.bolona_termos{
-    width: 20%;
-    position: absolute;
-    padding-left: 80%;
+.text_comprometendo{
+
+    padding-top: 5%;
+    padding-bottom: 5%;
 }
 
-.boolinha{
-    margin: auto;
-    display: flex;
-    width: 5%;
-    padding-left: 95%;
-}
-
-.bolinha2{
-    width: 5%;
-    padding-left: 24%;
-    padding-top: 30%;
-}
-
-.bolinha3{
-    width: 10%;
-    padding-left: 90%;
-}
-
-.bolonaes{
-    width: 20%;
-} 
 
 .accordion-container{
     display: flex;
@@ -135,7 +124,7 @@ div::-webkit-scrollbar{
     justify-content: center;
     overflow-x: hidden;
     padding-bottom: 2.5%;
-    background-color: #f0f1f5;
+    background-color: #ffffff;
 }
 
 .accordion-container-final{
@@ -145,7 +134,7 @@ div::-webkit-scrollbar{
     justify-content: center;
     overflow-x: hidden;
     padding-bottom: 2.5%;
-    background-color: #f0f1f5;
+    background-color: #ffffff;
     padding-bottom: 10%;
 }
 
@@ -163,7 +152,7 @@ div::-webkit-scrollbar{
 }
 
 .css-1i4ywhz-MuiCollapse-wrapperInner{
-    background-color: #f0f1f5;
+    background-color: #ffffff;
 }
 
 .titulo_ac_um{

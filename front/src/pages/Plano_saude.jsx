@@ -12,7 +12,7 @@ function Plano_saude() {
         <div className='container-mensagemboas'>
           <div className='info'>
             <div className='info_boas'>
-              <h5>BOAS-VINDAS A FUTUREMIND👋</h5>
+              <h5>BOAS-VINDAS A FUTUREMIND</h5>
             </div>
             <div className='info_texto_h1'>
               <h1>Assistência psicológica simplificada para todos</h1>

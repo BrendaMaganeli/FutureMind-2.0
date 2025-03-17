@@ -15,9 +15,9 @@ import CadastroProfissional1 from '../pages/CadastroProfissional1.jsx'
 import CadastroProfissional2 from '../pages/Login.jsx'
 import Login from '../pages/Login.jsx'
 import CadastroPaciente from '../pages/CadastroPaciente.jsx'
-import SobreNos from '../pages/SobreNos.jsx'
 import Politica from '../pages/Politica.jsx'
 import Termos from '../pages/Termos.jsx'
+import Testeagenda from '../pages/Testeagenda.jsx'
 
 
 const router = createBrowserRouter([
@@ -83,16 +83,16 @@ const router = createBrowserRouter([
     element: <CadastroPaciente />
 },
 {
-    path: '/sobre',
-    element: <SobreNos />
-},
-{
     path: 'termo',
     element: <Termos />
 },
 {
     path: 'politica',
     element: <Politica />
+},
+{
+    path: '/testeag',
+    element: <Testeagenda />
 },
 
 ])

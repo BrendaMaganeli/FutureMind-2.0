@@ -59,40 +59,27 @@ export default function TelaAgendamento() {
             />
           </div>
         </div>
-        <div className="appointments-container">
-          <h2 className="appointments-title">Consultas em {dataSelecionada.toLocaleDateString()}</h2>
-          <div className="appointments-list">
-            {consultas.map((consulta, index) => (
-              <div key={index} className="appointment-item">
-                <p className="patient-name">{consulta.paciente}</p>
-                <p className="appointment-time">{consulta.horario}</p>
-              </div>
-            ))}
-          </div>
-          <div className="schedule-container">
-            <h2 className="section-title">Marcar Consulta</h2>
-            {mensagemErro && (
-              <div className="error-message floating">
-                <span>{mensagemErro}</span>
-                <button className="close-button" onClick={fecharMensagemErro}>X</button>
-              </div>
-            )}
-            <input 
-              type="text" 
-              placeholder="Nome do Paciente" 
-              value={novoPaciente} 
-              onChange={(e) => setNovoPaciente(e.target.value)} 
-              className="input-field" 
-            />
-            <input 
-              type="time" 
-              value={novoHorario} 
-              onChange={(e) => setNovoHorario(e.target.value)} 
-              className="input-field" 
-            />
-            <button onClick={agendarConsulta} className="button">Agendar</button>
-          </div>
+        <div className="left-panel">
+        
+        <h2>Convênio</h2>
+        <select className="dropdown">
+          <option>Selecione o convênio</option>
+        </select>
+
+        <h2>Procedimento</h2>
+        <select className="dropdown">
+          <option>Selecione o procedimento</option>
+        </select>
+
+        <h2>Horários Disponíveis</h2>
+        <div className="horarios-container">
+          {["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30"].map((horario) => (
+            <button key={horario} className="horario-btn">{horario}</button>
+          ))}
         </div>
+
+        <button className="confirm-button">Confirmar Agendamento</button>
+      </div>
       </div>
     </div>
   );

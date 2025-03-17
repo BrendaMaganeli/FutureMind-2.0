@@ -4,9 +4,13 @@ Uma plataforma que oferece acesso de qualidade a sessões de psicanálise. Ela c
 Integrantes da equipe:
 
 [Brenda Maganeli](https://github.com/BrendaMaganeli)
+
 [Evelyn Lohanny](https://guthub.com/evylohanny)
+
 [Manassés da Rosa Marcelino](https://github.com/ManassesMarcelino)
+
 [Mateus da Silva](https://github.com/MateusdasilvaDES)
+
 [Vitor de Mattos Azevedo](https://github.com/VitorMatt)
 
 REQUISITOS FUNCIONAIS:

@@ -57,13 +57,13 @@ function Inicio() {
         </div>
         <div className="resultados-container">
           <h1>Resultados</h1>
-          <div class="carrosel-profissional">
-            <div class="carousel">
-              <button class="prev">&#10094;</button>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <button class="next">&#10095;</button>
+          <div className="carrosel-profissional">
+            <div className="carousel">
+              <button className="prev">&#10094;</button>
+              <div className="card"></div>
+              <div className="card"></div>
+              <div className="card"></div>
+              <button className="next">&#10095;</button>
           </div>
           </div>
         </div>

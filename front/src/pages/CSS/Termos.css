@@ -23,12 +23,6 @@ div::-webkit-scrollbar{
     width: 12px;
 }
 
-.body-termos {
-
-    width: 100%;
-    height: 100vh;
-}
-
 .botaodecisao{
 
     width: 170%;
@@ -61,26 +55,90 @@ div::-webkit-scrollbar{
 
 
 .divBotoes{
-    margin: auto;
     width: fit-content;
     display: flex;
-    justify-content: center;
-    align-items: center;
     padding-top: 5%;
     background-color: #ffffff;
+    margin-left: 40%;
 } 
 
 .container_bola_um{
 
-    width: 20%;
-    background-color: #5a789f;
+    width: 10%;
+    background-color: #CAD7EB;
+    margin-left: 90%;
+    height: 350px;
+    position: absolute;
+    margin-top: 6%;
+    border-top-left-radius: 1000px;
+    border-bottom-left-radius: 1000px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px ;
 }
 
+.container_bola_dois{
+
+    width: 1%;
+    background-color: #CAD7EB;
+    margin-left: 68%;
+    height: 20px;
+    padding: 12px;
+    position: absolute;
+    margin-top: 23%;
+    border-top-left-radius: 1000px;
+    border-bottom-left-radius: 1000px;
+    border-top-right-radius: 1000px;
+    border-bottom-right-radius: 1000px ;
+}
+
+.container_bola_tres{
+
+    width: 1%;
+    background-color: #CAD7EB;
+    margin-left: 25%;
+    height: 20px;
+    padding: 35px;
+    position: absolute;
+    margin-top: 28%;
+    border-top-left-radius: 1000px;
+    border-bottom-left-radius: 1000px;
+    border-top-right-radius: 1000px;
+    border-bottom-right-radius: 1000px ;
+
+}
+
+.container_bola_quatro{
+
+    width: 1%;
+    background-color: #CAD7EB;
+    margin-left: 65%;
+    height: 20px;
+    padding: 35px;
+    position: absolute;
+    margin-top: 38%;
+    border-top-left-radius: 1000px;
+    border-bottom-left-radius: 1000px;
+    border-top-right-radius: 1000px;
+    border-bottom-right-radius: 1000px ;
+}
+
+.conatiner_bola_cinco{
+
+    width: 10%;
+    background-color: #CAD7EB;
+    height: 350px;
+    position: absolute;
+    margin-top: 40%;
+    border-top-right-radius: 1000px;
+    border-bottom-right-radius: 1000px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px ;
+}
 .T_titulo{
     font-size: 160%;
     color: #5a789f;
     width: fit-content;
-    margin: auto;
+    margin-left: 30%;
     text-align: center;
     padding-top: 5%;
 }
@@ -116,6 +174,12 @@ div::-webkit-scrollbar{
     padding-bottom: 5%;
 }
 
+.container_acodions{
+
+    width: 100%;
+    padding-top: 15%;
+    background-color: #ffffff;
+}
 
 .accordion-container{
     display: flex;
@@ -123,6 +187,7 @@ div::-webkit-scrollbar{
     align-items: center;
     justify-content: center;
     overflow-x: hidden;
+    
     padding-bottom: 2.5%;
     background-color: #ffffff;
 }

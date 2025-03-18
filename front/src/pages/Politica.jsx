@@ -40,43 +40,32 @@ function Politica() {
         <Link to='/politica' className='botaodecisaoo'>Política de Privacidade</Link>
         <Link to='/termo' className='botaodecisaodoiss'>Termos de uso</Link>
       </div>
-
+      <div className='container_bola_um'></div>
+      <div className='container_bola_dois'></div>
+      <div className='container_bola_tres'></div>
+      <div className='container_bola_quatro'></div>
+      <div className='conatiner_bola_cinco'></div>
       {/* Introdução da Política de Privacidade */}
       <div className='introducao'>
         <div className='T_titulo'>
           <h1>Política de Privacidade da FutureMind</h1>
         </div>
         <div className='textinho'>
-          <div>
+          <div className='text_prioridade'>
             <p>Na FutureMind, a sua privacidade é nossa prioridade.</p>
           </div>
-
-          <div>
+          <div className='text_comprometendo'>
             <p>Comprometemo-nos a proteger suas informações pessoais e a garantir que você tenha uma experiência segura e confiável em nossa plataforma de terapia online.</p>
-            <img src={bolona} className='boolinha' />
           </div>
-
           <div>
             <p>Esta Política de Privacidade descreve como coletamos, utilizamos, armazenamos e protegemos suas informações, além de esclarecer seus direitos em relação a esses dados. Ao utilizar nossos serviços, você concorda com as práticas aqui descritas, e estamos aqui para garantir que sua jornada rumo ao bem-estar mental seja transparente e respeitosa.</p>
-            <img src={bolona} className='bolinha3' />
+
           </div>
         </div>
       </div>
-
-      {/* Elementos visuais decorativos */}
-      <div className='bolona_termos'>
-        <img src={bolona2} />
-      </div>
-
-      <div className='bolaEsquerda'>
-        <img src={bolona} className='bolinha2' />
-      </div>
-
-      <div className='bolaEsquerda'>
-        <img src={bolonaEsquerda} className='bolonaes' />
-      </div>
-
       {/* Seções expansíveis (Accordion) */}
+      <div className='container_acodions'>
+
       <div className='accordion-container'>
         <Accordion className='container_ac'>
           <AccordionSummary
@@ -137,6 +126,7 @@ function Politica() {
             <p>Implementamos medidas de segurança para proteger suas informações pessoais contra acesso não autorizado, alteração ou divulgação. Somente pessoas autorizadas têm acesso a esses dados, e utilizamos tecnologia de criptografia para garantir sua segurança.</p>
           </AccordionDetails>
         </Accordion>
+      </div>
       </div>
 
       {/* Recursos que protegem os dados */}

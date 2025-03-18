@@ -26,6 +26,8 @@ function CadastroProfissional2() {
     navigate('/inicio'); // Redireciona para a próxima página
   };
 
+
+
   return (
     <div className='container-profissional'>
       <div className='lado-esquerdoProfissional'>
@@ -34,22 +36,28 @@ function CadastroProfissional2() {
           <img src={logo} alt='Future Mind Logo' className='logo-paraCadastro' />
         </div>
         <div className='inputs-cadastro-divP'>
-          <div className='input-cadastro'>
-            <label>Especialização</label>
+        <div className='input-cadastro'>
+            <label className='label-input'>Especialização</label>
             <Select
+              className="custom-react-select"
+              classNamePrefix="select"
               options={opcoesEspecializacao}
               isMulti
               onChange={(selectedOptions) => setEspecializacoes(selectedOptions)}
             />
           </div>
+
           <div className='input-cadastro'>
-            <label>Abordagens</label>
+            <label className='label-input'>Abordagens</label>
             <Select
+              className="custom-react-select"
+              classNamePrefix="select"
               options={opcoesAbordagens}
               isMulti
               onChange={(selectedOptions) => setAbordagens(selectedOptions)}
             />
           </div>
+
           <div className='input-lados'>
             <div className='input-cadastro'>
               <label>Telefone</label>

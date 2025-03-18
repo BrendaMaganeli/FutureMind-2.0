@@ -5,6 +5,7 @@ import {
   EmbeddedCheckout
 } from "@stripe/react-stripe-js";
 import { useNavigate } from "react-router-dom";
+import "./CSS/pagamento.css";
 
 const stripePromise = loadStripe("pk_test_51R1YgHEQe3FsCkK9J8GbnR0wv2F16QD0vjhLf1WG8N9S1ofrWYczdVI0ICYateUgN2TfQo3K3R1ChKTQoMkDesZN00YuRjeg7g");
 
@@ -30,13 +31,33 @@ const CheckoutForm = () => {
     fetchClientSecret().then((secret) => setClientSecret(secret));
   }, [fetchClientSecret]);
 
-  if (!clientSecret) return <p>Carregando...</p>;
+  if (!clientSecret) return <p className="loading">Carregando...</p>;
 
   return (
-    <div id="checkout">
-      <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
-        <EmbeddedCheckout />
-      </EmbeddedCheckoutProvider>
+    <div className="checkout-container">
+      {/* Painel esquerdo - Informações do pagamento */}
+      <div className="left-panel">
+        <h3>Seu bem-estar começa aqui.</h3>
+        <p className="total">Valor Total: <strong>R$ 800,00</strong></p>
+        <div className="consultation-details">
+          <img src="https://via.placeholder.com/50" alt="Foto do terapeuta" className="doctor-image" />
+          <div>
+            <p className="doctor-name">Dr. Joan Silva</p>
+            <p className="session-time">12/08 - 18h às 19h</p>
+          </div>
+        </div>
+        <p className="privacy-policy">📜 Termos e política de privacidade</p>
+      </div>
+
+      {/* Painel direito - Stripe Checkout */}
+      <div className="right-panel">
+        <div className="checkout-card">
+          <h2>Finalize sua compra com segurança</h2>
+          <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
+            <EmbeddedCheckout />
+          </EmbeddedCheckoutProvider>
+        </div>
+      </div>
     </div>
   );
 };
@@ -68,11 +89,11 @@ const Return = () => {
     }
   }, [status, navigate]);
 
-  if (!status) return <p>Verificando pagamento...</p>;
+  if (!status) return <p className="loading">Verificando pagamento...</p>;
 
   if (status === "complete") {
     return (
-      <section id="success">
+      <section className="success-message">
         <p>
           Agradecemos sua compra! Um e-mail de confirmação será enviado para {customerEmail}.
           Caso tenha dúvidas, envie um e-mail para <a href="mailto:orders@example.com">orders@example.com</a>.

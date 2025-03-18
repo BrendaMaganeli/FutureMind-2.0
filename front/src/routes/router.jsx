@@ -17,7 +17,6 @@ import CadastroPaciente from '../pages/CadastroPaciente.jsx'
 import CadastroProfissional2 from '../pages/CadastroProfissional2.jsx'
 import Politica from '../pages/Politica.jsx'
 import Termos from '../pages/Termos.jsx'
-import Testeagenda from '../pages/Testeagenda.jsx'
 
 
 const router = createBrowserRouter([
@@ -93,10 +92,6 @@ const router = createBrowserRouter([
 {
     path: 'politica',
     element: <Politica />
-},
-{
-    path: '/testeag',
-    element: <Testeagenda />
 },
 
 ])

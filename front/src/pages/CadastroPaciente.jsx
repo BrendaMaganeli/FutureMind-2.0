@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logoCadastro2.svg';
 import imagem from '../assets/FotoCadastro.svg';

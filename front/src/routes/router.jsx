@@ -14,13 +14,10 @@ import Pagamento from '../pages/Pagamento.jsx'
 import CadastroProfissional1 from '../pages/CadastroProfissional1.jsx'
 import Login from '../pages/Login.jsx'
 import CadastroPaciente from '../pages/CadastroPaciente.jsx'
-<<<<<<< HEAD
 import CadastroProfissional2 from '../pages/CadastroProfissional2.jsx'
-=======
 import Politica from '../pages/Politica.jsx'
 import Termos from '../pages/Termos.jsx'
 import Testeagenda from '../pages/Testeagenda.jsx'
->>>>>>> cc8541f73dba7fd1c97aab82f5d27937bb83d9ad
 
 
 const router = createBrowserRouter([
@@ -86,11 +83,10 @@ const router = createBrowserRouter([
     element: <CadastroPaciente />
 },
 {
-<<<<<<< HEAD
     path: '/cadastroProfissional2',
     element: <CadastroProfissional2 />
-}
-=======
+},
+{
     path: 'termo',
     element: <Termos />
 },
@@ -102,7 +98,6 @@ const router = createBrowserRouter([
     path: '/testeag',
     element: <Testeagenda />
 },
->>>>>>> cc8541f73dba7fd1c97aab82f5d27937bb83d9ad
 
 ])
 

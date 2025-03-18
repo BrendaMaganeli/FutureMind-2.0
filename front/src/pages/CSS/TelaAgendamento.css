@@ -1,264 +1,135 @@
-.container-agendamento {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem;
-  min-height: 100vh;
-  background-color: #CAD7EB;
-}
-
-.title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #013A63;
-  margin-bottom: 1.5rem;
-  width: 75%;
-  display: flex;
-  justify-content: start;
-  align-items: end;
-  margin: 50px 0 0 0;
-}
-
-.content {
-  display: flex;
-  gap: 2rem;
-  width: 100%;
-  max-width: 1200px;
-  padding-top: 4%;
-}
-
-.calendar-container, .appointments-container {
-  background: white;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.calendar-container {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.section-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #013A63;
-  margin-bottom: 1rem;
-}
-
-.calendar-wrapper {
-  width: 100%;
+Estilos gerais
+.appointment-container {
   display: flex;
   justify-content: center;
-}
-
-.appointments-container {
-  width: 50%;
-}
-
-.appointments-title {
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: #013A63;
-  margin-bottom: 1rem;
-}
-
-.appointments-list {
-  max-height: 180px;
-  overflow-y: auto;
-}
-
-.appointment-item {
-  background: #f3f4f6;
-  padding: 1rem;
-  border-radius: 12px;
-  margin-bottom: 0.8rem;
-}
-
-.patient-name {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #013A63;
-}
-
-.appointment-time {
-  color: #4b5563;
-}
-
-.schedule-container {
-  margin-top: 1.5rem;
-}
-
-.input-field {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-}
-
-.button {
-  width: 33em;
-  border-radius: 10px;
-  padding: 2%;
-  background-color: #5a789f;
-  border: none;
-  color: white;
-  font-weight: bold;
-  font-size: 1em;
-}
-
-.button:hover{
-  transition: 0.3s;
-  border: none;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-  background-color: rgb(53, 95, 173);
-}
-.button:active{
-  transform: translateY(2px);
-  box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
-}
-
-.react-calendar__month-view__days__day--weekend{
-  color: #013A63;
-}
-
-.react-calendar__navigation button{
-  min-width: 44px;
-}
-
-
-.react-calendar {
-  width: 100% !important; 
-  max-width: 100% !important; 
-  height: 50vh; 
-  overflow: hidden; 
-  border: none !important;
-  padding-top: 2%;
-}
-
-.calendar-wrapper {
-  width: 90%; 
-  display: flex;
-  justify-content: center; 
-}
-
-.react-calendar__tile {
-  border: none !important; 
-}
-
-.react-calendar__tile--active{
-  background-color: #5A789F !important;
-  color: white;
-}
-
-
-.react-calendar__tile react-calendar__tile--active react-calendar__tile--range react-calendar__tile--rangeStart react-calendar__tile--rangeEnd react-calendar__tile--rangeBothEnds react-calendar__month-view__days__day react-calendar__month-view__days__day--weekend{
-  border-radius: 5px !important;
-}
-
-.react-calendar__navigation button {
-  min-width: 60px;     
-  min-height: 60px;     
-  font-size: 1.5rem;  
-  color: #013A63; 
-}
-
-.react-calendar__navigation__label {
-  font-size: 0.5rem;    
-}
-
-.react-calendar__tile--now {
-  background: #5a789f !important;  
-  color: white; 
-  font-weight: bold;
-  border-radius: 5px;
-}
-
-.error-message.floating {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgb(141, 25, 25);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  min-width: 250px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-.close-button {
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 16px;
-  margin-left: 10px;
-  cursor: pointer;
+  min-height: 100vh;
+  background: #1e3a8a;
+  padding: 20px;
 }
 
-.back-arrow {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  font-size: 24px;
-  cursor: pointer;
-  color: #000;
-}
-
-.react-calendar__month-view__weekdays__weekday{
-  color: #013A63;
-}
-
-.left-panel, .right-panel {
+/* Lado Esquerdo: Calendário */
+.calendar-container {
+  width: 50%;
+  padding: 20px;
   background: white;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  margin-right: 20px;
 }
 
-.left-panel {
-  width: 50%;
-}
-
-.right-panel {
-  width: 50%;
-}
-
-.title {
+.calendar-title {
   font-size: 2rem;
   font-weight: bold;
-  color: #013A63;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1e3a8a;
 }
 
-.dropdown, .horario-btn, .confirm-button {
-  display: block;
+.custom-calendar {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
+  height: 500px;
+  font-size: 1.5rem;
+  border-radius: 20px;
+  border: none;
+  background: white;
+  padding: 20px;
 }
 
-.horarios-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); 
-  grid-template-rows: repeat(4, auto);
+.custom-calendar .react-calendar__tile {
+  border-radius: 10px;
+  padding: 20px;
+  font-size: 1.5rem;
+  transition: background 0.3s ease;
+}
+
+.custom-calendar .react-calendar__tile--active {
+  background: #2563eb;
+  color: white;
+}
+
+.custom-calendar .react-calendar__tile:hover {
+  background: #60a5fa;
+  color: white;
+}
+
+/* Lado Direito: Informações */
+.info-container {
+  width: 50%;
+  padding: 20px;
+  background: #bfdbfe;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.select-group {
+  display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 
-.confirm-button {
-  background-color: #5a789f;
+.select-group label {
+  font-size: 1.25rem;
+  color: #1e3a8a;
+}
+
+.select-input {
+  font-size: 1.25rem;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background: white;
+  transition: border-color 0.3s ease;
+}
+
+.select-input:focus {
+  border-color: #2563eb;
+  outline: none;
+}
+
+.available-times-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+.times-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.time-button {
+  font-size: 1.25rem;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background: white;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.time-button:hover {
+  background: #3b82f6;
   color: white;
-  font-weight: bold;
+}
+
+.confirm-button {
+  width: 100%;
+  font-size: 1.5rem;
+  padding: 20px;
+  background: linear-gradient(to right, #2563eb, #1e40af);
+  color: white;
   border: none;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
 }
 
 .confirm-button:hover {
-  background-color: rgb(53, 95, 173);
+  transform: scale(1.05);
 }

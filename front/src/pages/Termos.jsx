@@ -34,9 +34,11 @@ function Termos() {
         <Link to='/politica' className='botaodecisao'>Política de Privacidade</Link>
         <Link to='/termo' className='botaodecisaodois'>Termos de Uso</Link>
       </div>
-      <div className='container_bola_um'>
-         imagem
-      </div>
+      <div className='container_bola_um'></div>
+      <div className='container_bola_dois'></div>
+      <div className='container_bola_tres'></div>
+      <div className='container_bola_quatro'></div>
+      <div className='conatiner_bola_cinco'></div>
       <div className='introducao'>
         <div className='T_titulo'>
           <h1>Termos de Uso da FutureMind</h1>
@@ -56,6 +58,7 @@ function Termos() {
       </div>
       {/* Elementos visuais decorativos */}
       {/* Seção de Acordeões com informações detalhadas */}
+      <div className='container_acodions'>
       <div className='accordion-container'>
         {/* Primeiro Acordeão: Aceitação dos Termos */}
         <Accordion className='container_ac'>
@@ -65,7 +68,9 @@ function Termos() {
             </AccordionDetails>
           </AccordionSummary>
           <AccordionDetails className='textinhoAceitação'>
-            <p>Ao acessar e utilizar o site FutureMind, você concorda em cumprir e estar vinculado aos seguintes Termos de Uso...</p>
+            <p>Ao acessar e utilizar o site FutureMind, você concorda em cumprir e estar vinculado aos seguintes Termos de Uso. Se você não concordar com estes termos, pedimos que não utilize nosso site.
+               Os Termos de Uso são aplicáveis a todos os usuários, visitantes e qualquer pessoa que acesse o conteúdo e serviços oferecidos pelo FutureMind. Reservamo-nos o direito de modificar estes termos a qualquer momento, e recomendamos que você os revise periodicamente. Seu uso contínuo do site após a publicação de alterações constitui aceitação das novas condições.
+               No FutureMind, nossa missão é proporcionar um espaço seguro e acolhedor para a terapia e o bem-estar emocional. Ao utilizar nossos serviços, você concorda em respeitar as diretrizes e políticas estabelecidas, buscando sempre um ambiente positivo e construtivo.</p>
           </AccordionDetails>
         </Accordion>
       </div>
@@ -79,7 +84,11 @@ function Termos() {
             </AccordionDetails>
           </AccordionSummary>
           <AccordionDetails className='textinhoAceitação'>
-            <p>© 2024 FutureMind. Todos os direitos reservados...</p>
+            <p>© 2024 FutureMind. Todos os direitos reservados.
+            O conteúdo deste site, incluindo textos, imagens, gráficos, logotipos e materiais relacionados,
+            é protegido por leis de direitos autorais e propriedade intelectual. Nenhuma parte deste site 
+            pode ser reproduzida, distribuída, modificada ou utilizada de qualquer forma sem a autorização
+            prévia por escrito da FutureMind.</p>
           </AccordionDetails>
         </Accordion>
       </div>
@@ -93,7 +102,19 @@ function Termos() {
             </AccordionDetails>
           </AccordionSummary>
           <AccordionDetails className='textinhoAceitação'>
-            <p>Ao utilizar o site FutureMind, você concorda em fazer uso responsável e ético...</p>
+            <p>Ao utilizar o site FutureMind, você concorda em fazer uso responsável e ético de nossos serviços e conteúdos. O uso permitido inclui:
+              Acesso aos Conteúdos: Você pode acessar, visualizar e interagir com os materiais disponibilizados no site, como artigos, vídeos e recursos 
+              relacionados à terapia e ao bem-estar.
+              Compartilhamento de Experiências: Você é encorajado a compartilhar suas experiências e feedback, 
+              desde que faça isso de maneira respeitosa e construtiva, contribuindo para um ambiente acolhedor.
+              Criação de Conta: Caso decida criar uma conta, você deve fornecer informações precisas e atualizadas,
+               mantendo a confidencialidade de sua senha e sendo responsável por todas as atividades realizadas em sua conta.
+              Proibições: É estritamente proibido:
+              Utilizar o site para fins ilegais ou não autorizados.
+              Compartilhar informações falsas, enganosas ou prejudiciais.
+              Realizar atividades que possam comprometer a segurança do site ou a experiência de outros usuários, como assédio, discriminação ou spam.
+              Ao seguir estas diretrizes, você ajuda a manter um ambiente seguro e positivo para todos os usuários do FutureMind.
+               Agradecemos sua colaboração e desejamos uma experiência enriquecedora em sua jornada de autoconhecimento e crescimento pessoal!</p>
           </AccordionDetails>
         </Accordion>
       </div>
@@ -107,9 +128,18 @@ function Termos() {
             </AccordionDetails>
           </AccordionSummary>
           <AccordionDetails className='textinhoAceitação'>
-            <p>Estamos aqui para ajudar você! Se tiver dúvidas, sugestões ou precisar de mais informações...</p>
+            <p>Estamos aqui para ajudar você! Se você tiver dúvidas, sugestões ou precisar de mais informações sobre nossos serviços, não hesite em entrar em contato conosco. A sua experiência é importante para nós, e queremos garantir que você tenha todo o apoio necessário em sua jornada de autoconhecimento e bem-estar.
+              <br />
+               Formas de Contato:
+               <br />
+               E-mail:[futuremind.tecn@gmail.com]
+               <br />
+               Telefone:[(48)98982-1222]
+               <br />
+               Agradecemos por escolher a FutureMind. Estamos ansiosos para ouvir de você e apoiá-lo em sua jornada de terapia!</p>
           </AccordionDetails>
         </Accordion>
+      </div>
       </div>
       <Footer />
     </div>

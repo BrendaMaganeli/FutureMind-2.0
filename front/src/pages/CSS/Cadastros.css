@@ -5,6 +5,7 @@
     height: 100vh;
     padding: 5% 5%;
     gap: 5%;
+    background-color: white !important;
 }
 
 /* .lado-esquerdoProfissional {
@@ -159,14 +160,14 @@
     justify-content: center;
     margin-bottom: 5%;
 }
-
+/* 
   .input-cadastro {
     position: relative;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-  }
+  } */
   
   .erro {
     color: red;
@@ -302,3 +303,81 @@
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.input-cadastro {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Estilo do label */
+.label-input {
+    font-size: 1em;
+    color: #5A789F;
+    background: white;
+    padding: 0 5px;
+    position: absolute;
+    top: -10px;
+    left: 12px;
+    z-index: 10;
+}
+
+/* Ajuste no Select */
+.custom-react-select .select__control {
+    width: 36.3em;
+    padding: 7px;
+    border: 1.9px solid #5A789F !important;
+    border-radius: 5px;
+    outline: none;
+    font-size: 1.1em;
+    color: #013a63;
+    background-color: white;
+    box-shadow: none;
+}
+
+.custom-react-select .select__control:hover {
+    border-color: #466484 !important;
+}
+
+.custom-react-select .select__control--is-focused {
+    box-shadow: 0 0 3px rgba(90, 120, 159, 0.5);
+    border-color: #5A789F !important;
+}
+
+/* Ajuste para manter o tamanho das opções */
+.custom-react-select .select__multi-value {
+    background-color: #5A789F;
+    color: white;
+    border-radius: 4px;
+    padding: 3px 8px;
+}
+
+.custom-react-select .select__multi-value__label {
+    color: white;
+}
+
+.custom-react-select .select__multi-value__remove {
+    color: white;
+}
+
+.custom-react-select .select__multi-value__remove:hover {
+    background-color: #466484;
+}

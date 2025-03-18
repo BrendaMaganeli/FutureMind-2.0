@@ -10,6 +10,7 @@ const VideoConference = () => {
   const peerConnection = useRef(null);
   const [chatMessages, setChatMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const [active, setActive] = useState(true);
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
@@ -36,12 +37,48 @@ const VideoConference = () => {
     });
   }, []);
 
+  const activeCamera = () => {
+
+    const stateUptated = !active
+    setActive(stateUptated);
+
+    if (stateUptated) {
+
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = stream;
+        }
+        peerConnection.current = new RTCPeerConnection();
+        stream.getTracks().forEach((track) => peerConnection.current.addTrack(track, stream));
+      })
+      .catch((error) => console.error("Erro ao acessar mídia:", error));
+    }
+  }
+
   return (
-    <div>
-      <h2>Videoconferência</h2>
-      <video ref={localVideoRef} autoPlay playsInline></video>
-      <video ref={remoteVideoRef} autoPlay playsInline></video>
-      <div>
+    <div className="videoconferencia-container">
+      {
+        active
+        ?
+        <video className='me-video' ref={localVideoRef} autoPlay playsInline></video>
+        :
+        <div className='video-paused'>
+          <img src='off.png' />
+        </div>
+      }
+      <video className='other-video' ref={remoteVideoRef} autoPlay playsInline></video>
+
+      <div className="barra-config">
+        {
+          active
+          ?
+          <img src='video-desactive.png' onClick={activeCamera} />
+          :
+          <img src='video-active.svg' onClick={activeCamera} />
+        }
+      </div>
+      <div className='chat-live'>
         <input
           type="text"
           value={message}

@@ -6,15 +6,21 @@ import EditarProfissional from '../pages/EditarProfissional.jsx'
 import Chat from '../pages/Chat.jsx'
 import DiarioEmocional from '../pages/DiarioEmocional.jsx'
 import Plano_saude from '../pages/Plano_saude.jsx'
-import Footer from '../Components/Footer.jsx'
-import Navbar from '../Components/Navbar.jsx'
+// import Footer from '../Components/Footer.jsx'
+// import Navbar from '../Components/Navbar.jsx'
 import Landing_page from '../pages/Landing_page.jsx'
 import Inicio from '../pages/Inicio.jsx'
 import Pagamento from '../pages/Pagamento.jsx'
 import CadastroProfissional1 from '../pages/CadastroProfissional1.jsx'
 import Login from '../pages/Login.jsx'
 import CadastroPaciente from '../pages/CadastroPaciente.jsx'
+<<<<<<< HEAD
 import CadastroProfissional2 from '../pages/CadastroProfissional2.jsx'
+=======
+import Politica from '../pages/Politica.jsx'
+import Termos from '../pages/Termos.jsx'
+import Testeagenda from '../pages/Testeagenda.jsx'
+>>>>>>> cc8541f73dba7fd1c97aab82f5d27937bb83d9ad
 
 
 const router = createBrowserRouter([
@@ -47,14 +53,14 @@ const router = createBrowserRouter([
     path: '/planoSaude',
     element: <Plano_saude/>
 },
-{
-    path: '/footer',
-    element: <Footer/>
-},
-{
-    path: '/nav',
-    element: <Navbar />
-},
+// {
+//     path: '/footer',
+//     element: <Footer/>
+// },
+// {
+//     path: '/nav',
+//     element: <Navbar />
+// },
 {
     path: '/landingPage',
     element: <Landing_page/>
@@ -80,9 +86,23 @@ const router = createBrowserRouter([
     element: <CadastroPaciente />
 },
 {
+<<<<<<< HEAD
     path: '/cadastroProfissional2',
     element: <CadastroProfissional2 />
 }
+=======
+    path: 'termo',
+    element: <Termos />
+},
+{
+    path: 'politica',
+    element: <Politica />
+},
+{
+    path: '/testeag',
+    element: <Testeagenda />
+},
+>>>>>>> cc8541f73dba7fd1c97aab82f5d27937bb83d9ad
 
 ])
 

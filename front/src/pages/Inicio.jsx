@@ -55,7 +55,19 @@ function Inicio() {
           </div>
           </div>
         </div>
-    </div>
+        <div className="resultados-container">
+          <h1>Resultados</h1>
+          <div class="carrosel-profissional">
+            <div class="carousel">
+              <button class="prev">&#10094;</button>
+              <div class="card"></div>
+              <div class="card"></div>
+              <div class="card"></div>
+              <button class="next">&#10095;</button>
+          </div>
+          </div>
+        </div>
+      </div>
   )
 }
 

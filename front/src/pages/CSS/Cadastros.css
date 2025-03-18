@@ -5,6 +5,7 @@
     height: 100vh;
     padding: 5% 5%;
     gap: 5%;
+    background-color: white !important;
 }
 
 /* .lado-esquerdoProfissional {

@@ -7,35 +7,35 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-  },
+    methods: ["GET", "POST"]
+  }
 });
 
-let users = {}; // Armazena os usuários conectados
-
 io.on("connection", (socket) => {
-  console.log("Usuário conectado:", socket.id);
-  users[socket.id] = socket.id;
-
-  // Enviar a lista de usuários conectados para todos
-  io.emit("users-list", Object.keys(users));
+  console.log("Usuário conectado: ", socket.id);
 
   socket.on("offer", (data) => {
-    io.to(data.target).emit("offer", { sdp: data.sdp, caller: socket.id });
+    console.log("Repassando oferta", data);
+    socket.broadcast.emit("offer", data);
   });
 
   socket.on("answer", (data) => {
-    io.to(data.target).emit("answer", { sdp: data.sdp, responder: socket.id });
+    console.log("Repassando resposta", data);
+    socket.broadcast.emit("answer", data);
   });
 
   socket.on("ice-candidate", (data) => {
-    io.to(data.target).emit("ice-candidate", { candidate: data.candidate, sender: socket.id });
+    console.log("Repassando candidato ICE", data);
+    socket.broadcast.emit("ice-candidate", data);
+  });
+
+  socket.on("chat-message", (message) => {
+    console.log("Repassando mensagem de chat", message);
+    socket.broadcast.emit("chat-message", message);
   });
 
   socket.on("disconnect", () => {
-    console.log("Usuário desconectado:", socket.id);
-    delete users[socket.id];
-    io.emit("users-list", Object.keys(users));
+    console.log("Usuário desconectado: ", socket.id);
   });
 });
 

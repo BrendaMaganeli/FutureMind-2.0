@@ -43,6 +43,10 @@ const VideoConference = () => {
   useEffect(() => {
     socket.on("offer", async (offer) => {
       console.log("Recebendo oferta", offer);
+      if (peerConnection.current.signalingState !== "stable") {
+        console.warn("Ignorando oferta, conexão não estável");
+        return;
+      }
       await peerConnection.current.setRemoteDescription(new RTCSessionDescription(offer));
       const answer = await peerConnection.current.createAnswer();
       await peerConnection.current.setLocalDescription(answer);
@@ -51,6 +55,10 @@ const VideoConference = () => {
 
     socket.on("answer", async (answer) => {
       console.log("Recebendo resposta", answer);
+      if (peerConnection.current.signalingState === "stable") {
+        console.warn("Ignorando resposta, conexão já estabelecida");
+        return;
+      }
       await peerConnection.current.setRemoteDescription(new RTCSessionDescription(answer));
     });
 
@@ -65,6 +73,10 @@ const VideoConference = () => {
   }, []);
 
   const startCall = async () => {
+    if (peerConnection.current.signalingState !== "stable") {
+      console.warn("Chamada já em andamento");
+      return;
+    }
     const offer = await peerConnection.current.createOffer();
     await peerConnection.current.setLocalDescription(offer);
     console.log("Enviando oferta", offer);
@@ -72,6 +84,7 @@ const VideoConference = () => {
   };
 
   const sendMessage = () => {
+    if (message.trim() === "") return;
     socket.emit("chat-message", message);
     setChatMessages((prev) => [...prev, { text: message, sender: "me" }]);
     setMessage("");

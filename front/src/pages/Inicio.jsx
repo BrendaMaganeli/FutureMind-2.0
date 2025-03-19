@@ -74,7 +74,7 @@ function Inicio() {
                 </Link>
             </div>
             </div>
-          <div className="carrosel-profissional">
+          {/* <div className="carrosel-profissional">
             <Swiper
                 modules={[Navigation, Pagination, Scrollbar, A11y]}
                 spaceBetween={60}
@@ -87,12 +87,30 @@ function Inicio() {
                 <div className="carousel">
                     {[...Array(6)].map((_, index) => (
                         <SwiperSlide className="card" key={index}>
-                        <div className='card-interno'>Profissional {index + 1}</div>
-                    </SwiperSlide>
+                          <div className='card-interno'>Profissional {index + 1}</div>
+                        </SwiperSlide>
                     ))}
                 </div>
             </Swiper>
-          </div>
+          </div> */}
+          <div className="carrosel-profissional">
+
+          <Swiper
+                modules={[Navigation, Pagination, Scrollbar, A11y]}
+                spaceBetween={60}
+                slidesPerView={3}
+                navigation
+                pagination={{ clickable: true }}
+                onSwiper={(swiper) => console.log("Swiper inicializado", swiper)}
+                className='swiper-profi'
+                >
+                   {[...Array(6)].map((_, index) => (
+                     <SwiperSlide className="card" key={index}>
+                          <div className='card-interno'>Profissional {index + 1}</div>
+                        </SwiperSlide>
+                    ))}
+              </Swiper>
+              </div>
             </div>
         <Footer />
         </div>

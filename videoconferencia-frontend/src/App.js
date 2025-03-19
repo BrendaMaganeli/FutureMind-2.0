@@ -6,92 +6,100 @@ const socket = io("http://localhost:5000");
 
 const VideoConference = () => {
   const localVideoRef = useRef(null);
-  const [remoteVideos, setRemoteVideos] = useState({});
-  const peerConnections = useRef({});
-  const [users, setUsers] = useState([]);
-
+  const remoteVideoRef = useRef(null);
+  const peerConnection = useRef(new RTCPeerConnection({
+    iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+  }));
+  const [chatMessages, setChatMessages] = useState([]);
+  const [message, setMessage] = useState("");
+  
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then((stream) => {
         if (localVideoRef.current) {
           localVideoRef.current.srcObject = stream;
         }
-        socket.on("users-list", (userList) => {
-          setUsers(userList.filter((id) => id !== socket.id));
-        });
-
-        socket.on("offer", async ({ sdp, caller }) => {
-          const peerConnection = createPeerConnection(caller);
-          peerConnections.current[caller] = peerConnection;
-          await peerConnection.setRemoteDescription(new RTCSessionDescription(sdp));
-          const answer = await peerConnection.createAnswer();
-          await peerConnection.setLocalDescription(answer);
-          socket.emit("answer", { sdp: answer, target: caller });
-        });
-
-        socket.on("answer", async ({ sdp, responder }) => {
-          if (peerConnections.current[responder]) {
-            await peerConnections.current[responder].setRemoteDescription(new RTCSessionDescription(sdp));
-          }
-        });
-
-        socket.on("ice-candidate", ({ candidate, sender }) => {
-          if (peerConnections.current[sender]) {
-            peerConnections.current[sender].addIceCandidate(new RTCIceCandidate(candidate));
-          }
-        });
-
+        stream.getTracks().forEach(track => peerConnection.current.addTrack(track, stream));
       })
       .catch((error) => console.error("Erro ao acessar mídia:", error));
   }, []);
 
-  const createPeerConnection = (peerId) => {
-    const pc = new RTCPeerConnection();
-    pc.onicecandidate = (event) => {
+  useEffect(() => {
+    peerConnection.current.onicecandidate = (event) => {
       if (event.candidate) {
-        socket.emit("ice-candidate", { candidate: event.candidate, target: peerId });
+        console.log("Enviando ICE candidate", event.candidate);
+        socket.emit("ice-candidate", event.candidate);
       }
     };
-
-    pc.ontrack = (event) => {
-      setRemoteVideos((prev) => ({
-        ...prev,
-        [peerId]: event.streams[0],
-      }));
+    
+    peerConnection.current.ontrack = (event) => {
+      console.log("Recebendo stream remoto");
+      if (remoteVideoRef.current) {
+        remoteVideoRef.current.srcObject = event.streams[0];
+      }
     };
+  }, []);
 
-    localVideoRef.current.srcObject.getTracks().forEach((track) => {
-      pc.addTrack(track, localVideoRef.current.srcObject);
+  useEffect(() => {
+    socket.on("offer", async (offer) => {
+      console.log("Recebendo oferta", offer);
+      await peerConnection.current.setRemoteDescription(new RTCSessionDescription(offer));
+      const answer = await peerConnection.current.createAnswer();
+      await peerConnection.current.setLocalDescription(answer);
+      socket.emit("answer", answer);
     });
 
-    return pc;
+    socket.on("answer", async (answer) => {
+      console.log("Recebendo resposta", answer);
+      await peerConnection.current.setRemoteDescription(new RTCSessionDescription(answer));
+    });
+
+    socket.on("ice-candidate", async (candidate) => {
+      try {
+        console.log("Adicionando candidato ICE", candidate);
+        await peerConnection.current.addIceCandidate(new RTCIceCandidate(candidate));
+      } catch (error) {
+        console.error("Erro ao adicionar candidato ICE:", error);
+      }
+    });
+  }, []);
+
+  const startCall = async () => {
+    const offer = await peerConnection.current.createOffer();
+    await peerConnection.current.setLocalDescription(offer);
+    console.log("Enviando oferta", offer);
+    socket.emit("offer", offer);
   };
 
-  const callUser = async (userId) => {
-    const peerConnection = createPeerConnection(userId);
-    peerConnections.current[userId] = peerConnection;
-
-    const offer = await peerConnection.createOffer();
-    await peerConnection.setLocalDescription(offer);
-
-    socket.emit("offer", { sdp: offer, target: userId });
+  const sendMessage = () => {
+    socket.emit("chat-message", message);
+    setChatMessages((prev) => [...prev, { text: message, sender: "me" }]);
+    setMessage("");
   };
+
+  useEffect(() => {
+    socket.on("chat-message", (msg) => {
+      setChatMessages((prev) => [...prev, { text: msg, sender: "other" }]);
+    });
+  }, []);
 
   return (
     <div className="videoconferencia-container">
-      <video className='me-video' ref={localVideoRef} autoPlay playsInline></video>
-
-      <div className="remote-videos">
-        {Object.entries(remoteVideos).map(([id, stream]) => (
-          <video key={id} ref={(ref) => ref && (ref.srcObject = stream)} autoPlay playsInline className="other-video" />
-        ))}
+      <video className='me-video' ref={localVideoRef} autoPlay playsInline muted></video>
+      <video className='other-video' ref={remoteVideoRef} autoPlay playsInline></video>
+      <button onClick={startCall}>Iniciar Chamada</button>
+      <div className='chat-live'>
+        <input
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Digite uma mensagem"
+        />
+        <button onClick={sendMessage}>Enviar</button>
       </div>
-
-      <div className="barra-config">
-        {users.map((userId) => (
-          <button key={userId} onClick={() => callUser(userId)}>
-            Chamar {userId}
-          </button>
+      <div>
+        {chatMessages.map((msg, index) => (
+          <p key={index} style={{ color: msg.sender === "me" ? "blue" : "red" }}>{msg.text}</p>
         ))}
       </div>
     </div>

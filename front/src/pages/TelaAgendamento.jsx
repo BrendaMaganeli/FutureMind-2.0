@@ -1,79 +1,138 @@
 import { useState } from "react";
-import { Calendar } from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import { ChevronLeft, ChevronRight, ArrowLeft, X } from "lucide-react";
 import "./CSS/TelaAgendamento.css"; // Importando o CSS separado
 
-export default function AppointmentScreen() {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedConvenio, setSelectedConvenio] = useState("");
-  const [selectedProcedimento, setSelectedProcedimento] = useState("");
-  const horarios = [
-    "08:00", "08:30", "09:00", "09:30",
-    "10:00", "10:30", "13:00", "13:30",
-    "14:00", "14:30", "15:00", "15:30",
-    "18:00", "18:30", "19:00", "19:30",
-    "20:00", "20:30"
-  ];
+const getMonthData = (year) => {
+  const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+  const daysInMonth = [31, isLeapYear ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  return daysInMonth.map((days, index) => ({
+    name: new Date(year, index).toLocaleString("default", { month: "long" }),
+    days,
+    start: (new Date(year, index, 1).getDay() + 1) % 7,
+  }));
+};
+
+export default function AgendaConsultas() {
+  const [currentYear, setCurrentYear] = useState(2025);
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(8);
+  const [selectedDay, setSelectedDay] = useState(null);
+
+  const months = getMonthData(currentYear);
+
+  const handlePreviousMonth = () => {
+    setCurrentMonthIndex((prev) => (prev === 0 ? 11 : prev - 1));
+    if (currentMonthIndex === 0) setCurrentYear((year) => year - 1);
+  };
+
+  const handleNextMonth = () => {
+    setCurrentMonthIndex((prev) => (prev === 11 ? 0 : prev + 1));
+    if (currentMonthIndex === 11) setCurrentYear((year) => year + 1);
+  };
+
+  const handleDayClick = (day) => {
+    if (day.isCurrentMonth) {
+      setSelectedDay(day.date);
+    }
+  };
+
+  const handleClose = () => {
+    setSelectedDay(null);
+  };
+
+  const month = months[currentMonthIndex];
+  const prevMonth = months[(currentMonthIndex + 11) % 12];
+  const nextMonth = months[(currentMonthIndex + 1) % 12];
+
+  const days = [];
+  for (let i = 0; i < 42; i++) {
+    let date = null;
+    let isCurrentMonth = true;
+    let isSunday = i % 7 === 0;
+    let isUnavailable = false;
+
+    if (i < month.start) {
+      date = prevMonth.days - (month.start - i - 1);
+      isCurrentMonth = false;
+      isUnavailable = true;
+    } else if (i >= month.start + month.days) {
+      date = i - (month.start + month.days) + 1;
+      isCurrentMonth = false;
+      isUnavailable = true;
+    } else {
+      date = i - month.start + 1;
+    }
+
+    days.push({ id: i, date, isCurrentMonth, isSunday, isUnavailable });
+  }
 
   return (
-    <div className="appointment-container">
-      {/* Lado Esquerdo: Calendário */}
-      <div className="calendar-container">
-        <h2 className="calendar-title">Selecione uma Data</h2>
-        <Calendar
-          onChange={setSelectedDate}
-          value={selectedDate}
-          className="custom-calendar"
-        />
-      </div>
+    <div className="container-agenda">
+      <button className="back-button" onClick={() => window.history.back()}>
+        <ArrowLeft size={24} />
+      </button>
 
-      {/* Lado Direito: Informações */}
-      <div className="info-container">
-        <div className="info-content">
-          {/* Select para Convênio */}
-          <div className="select-group">
-            <label htmlFor="convenio">Selecione o convênio:</label>
-            <select
-              id="convenio"
-              value={selectedConvenio}
-              onChange={(e) => setSelectedConvenio(e.target.value)}
-              className="select-input"
+      <div className="calendar">
+        <div className="calendar-header">
+          <button onClick={handlePreviousMonth}>
+            <ChevronLeft />
+          </button>
+          <h2>{month.name} {currentYear}</h2>
+          <button onClick={handleNextMonth}>
+            <ChevronRight />
+          </button>
+        </div>
+
+        <div className="weekdays">
+          {"Dom Seg Ter Qua Qui Sex Sab".split(" ").map((day) => (
+            <div key={day}>{day}</div>
+          ))}
+        </div>
+
+        <div className="days-grid">
+          {days.map((day) => (
+            <div
+              key={day.id}
+              className={`day ${day.isSunday ? "sunday" : ""} ${day.isUnavailable ? "unavailable" : ""}`}
+              onClick={() => handleDayClick(day)}
             >
-              <option value="">Selecione...</option>
-              <option value="convenio1">Convênio 1</option>
-              <option value="convenio2">Convênio 2</option>
-            </select>
-          </div>
-
-          {/* Select para Procedimento */}
-          <div className="select-group">
-            <label htmlFor="procedimento">Selecione o procedimento:</label>
-            <select
-              id="procedimento"
-              value={selectedProcedimento}
-              onChange={(e) => setSelectedProcedimento(e.target.value)}
-              className="select-input"
-            >
-              <option value="">Selecione...</option>
-              <option value="proc1">Procedimento 1</option>
-              <option value="proc2">Procedimento 2</option>
-            </select>
-          </div>
-
-          {/* Horários Disponíveis */}
-          <h3 className="available-times-title">Horários Disponíveis</h3>
-          <div className="times-grid">
-            {horarios.map((horario) => (
-              <button key={horario} className="time-button">
-                {horario}
-              </button>
-            ))}
-          </div>
-
-          {/* Botão de Confirmação */}
-          <button className="confirm-button">Confirmar Agendamento</button>
+              <span>{day.date}</span>
+            </div>
+          ))}
         </div>
       </div>
+
+      {selectedDay && (
+        <div className="schedule">
+          <button className="close-button" onClick={handleClose}>
+            <X size={24} />
+          </button>
+          <h2>Horários disponíveis para {selectedDay} de {month.name}</h2>
+
+          <div className="form-group">
+            <label>Convênio</label>
+            <select>
+              <option>Selecione o convênio</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Procedimento</label>
+            <select>
+              <option>Selecione o procedimento</option>
+            </select>
+          </div>
+
+          <h3>Horários</h3>
+          <div className="times">
+            {["14:30", "17:30", "13:00", "16:10", "11:00", "19:20", "13:30"]
+              .map((time, index) => (
+                <button key={index} className="time-button">{time}</button>
+              ))}
+          </div>
+
+          <button className="confirm-button">Confirmar agendamento</button>
+        </div>
+      )}
     </div>
   );
 }

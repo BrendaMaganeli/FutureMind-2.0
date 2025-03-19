@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
-import './App.css';
+import "./App.css";
 
 const socket = io("http://localhost:5000");
 
@@ -16,16 +16,21 @@ const VideoConference = () => {
         if (localVideoRef.current) {
           localVideoRef.current.srcObject = stream;
         }
+
         socket.on("users-list", (userList) => {
           setUsers(userList.filter((id) => id !== socket.id));
         });
 
         socket.on("offer", async ({ sdp, caller }) => {
-          const peerConnection = createPeerConnection(caller);
-          peerConnections.current[caller] = peerConnection;
-          await peerConnection.setRemoteDescription(new RTCSessionDescription(sdp));
-          const answer = await peerConnection.createAnswer();
-          await peerConnection.setLocalDescription(answer);
+          if (!peerConnections.current[caller]) {
+            const peerConnection = createPeerConnection(caller);
+            peerConnections.current[caller] = peerConnection;
+          }
+          
+          await peerConnections.current[caller].setRemoteDescription(new RTCSessionDescription(sdp));
+          const answer = await peerConnections.current[caller].createAnswer();
+          await peerConnections.current[caller].setLocalDescription(answer);
+          
           socket.emit("answer", { sdp: answer, target: caller });
         });
 
@@ -35,18 +40,26 @@ const VideoConference = () => {
           }
         });
 
-        socket.on("ice-candidate", ({ candidate, sender }) => {
+        socket.on("ice-candidate", async ({ candidate, sender }) => {
           if (peerConnections.current[sender]) {
-            peerConnections.current[sender].addIceCandidate(new RTCIceCandidate(candidate));
+            await peerConnections.current[sender].addIceCandidate(new RTCIceCandidate(candidate));
           }
         });
 
       })
       .catch((error) => console.error("Erro ao acessar mídia:", error));
+
+    return () => {
+      socket.off("users-list");
+      socket.off("offer");
+      socket.off("answer");
+      socket.off("ice-candidate");
+    };
   }, []);
 
   const createPeerConnection = (peerId) => {
     const pc = new RTCPeerConnection();
+
     pc.onicecandidate = (event) => {
       if (event.candidate) {
         socket.emit("ice-candidate", { candidate: event.candidate, target: peerId });
@@ -68,18 +81,20 @@ const VideoConference = () => {
   };
 
   const callUser = async (userId) => {
-    const peerConnection = createPeerConnection(userId);
-    peerConnections.current[userId] = peerConnection;
+    if (!peerConnections.current[userId]) {
+      const peerConnection = createPeerConnection(userId);
+      peerConnections.current[userId] = peerConnection;
+    }
 
-    const offer = await peerConnection.createOffer();
-    await peerConnection.setLocalDescription(offer);
+    const offer = await peerConnections.current[userId].createOffer();
+    await peerConnections.current[userId].setLocalDescription(offer);
 
     socket.emit("offer", { sdp: offer, target: userId });
   };
 
   return (
     <div className="videoconferencia-container">
-      <video className='me-video' ref={localVideoRef} autoPlay playsInline></video>
+      <video className="me-video" ref={localVideoRef} autoPlay playsInline></video>
 
       <div className="remote-videos">
         {Object.entries(remoteVideos).map(([id, stream]) => (

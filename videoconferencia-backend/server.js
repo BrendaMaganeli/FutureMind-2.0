@@ -26,7 +26,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("answer", async ({ sdp, responder }) => {
-    const peerConnection = peerConnections.current[responder];
+    const peerConnection = peerConnection.current[responder];
     
     if (!peerConnection) {
       console.warn("PeerConnection não encontrada para o usuário:", responder);

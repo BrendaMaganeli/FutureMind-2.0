@@ -25,9 +25,26 @@ io.on("connection", (socket) => {
     io.to(data.target).emit("offer", { sdp: data.sdp, caller: socket.id });
   });
 
-  socket.on("answer", (data) => {
-    io.to(data.target).emit("answer", { sdp: data.sdp, responder: socket.id });
+  socket.on("answer", async ({ sdp, responder }) => {
+    const peerConnection = peerConnections.current[responder];
+    
+    if (!peerConnection) {
+      console.warn("PeerConnection não encontrada para o usuário:", responder);
+      return;
+    }
+  
+    // Verifica se o estado permite definir remoteDescription
+    if (peerConnection.signalingState !== "stable") {
+      try {
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(sdp));
+      } catch (error) {
+        console.error("Erro ao definir remoteDescription (answer):", error);
+      }
+    } else {
+      console.warn("Não foi possível definir a resposta SDP, pois o estado já está 'stable'.");
+    }
   });
+  
 
   socket.on("ice-candidate", (data) => {
     io.to(data.target).emit("ice-candidate", data);

@@ -6,10 +6,29 @@ import logo from '../assets/Logo_SA_2FASE.png';
 import voltar from '../assets/voltar 2.svg';
 import './CSS/EditarPaciente.css';
 import Arvore from '../assets/Group 239274.svg';
+import { useState } from 'react';
 
 function EditarPaciente() {
+
+  const [isVisible, setIsVisible] = useState(false);
+  
+  // Função para alternar a visibilidade da div
+  const toggleDiv = () => {
+    setIsVisible(true);
+    
+  };
+
+  const desativar_div =() => {
+
+    setIsVisible(false)
+  }
+
+
+  
+
   return (
-    <div className='container'>
+    <div>
+    <div className={`container ${isVisible ? 'blur' : ''}`}>
         <aside className="barra-lateral-p">
       <div style={{display: 'flex', flexDirection: 'column', gap: '20px', width: '100%', height: 'fit-content', alignItems: 'center'}}>
       <div className="cabecalho-perfil">
@@ -17,6 +36,7 @@ function EditarPaciente() {
           src={mulher}
           alt="Foto do perfil"
           className="imagem-perfil"
+          onClick={toggleDiv}
           />
         <h2 className="nome-perfil">José Carlos Azevedo</h2>
       </div>
@@ -108,6 +128,38 @@ function EditarPaciente() {
         <button className="salvar-btn">Salvar</button>
     </div>
    </div>
+   
+    </div>
+    {isVisible && (
+      <div className='container_oculto_editar'>
+        <div className='nav_div_oculta'>
+           <p className='text_editar_foto_perfil'>Editar foto de perfil</p>
+           <div className='conatiner_button_fechar_div_oculta'>
+           </div>
+        </div>
+        <div className='container_oculta_corpo_geral'>
+           <div className='container_oculta_corpo_esquerda'>
+             <div className='quadrado_fotos'>
+              <img className='fotos_editar' src="icone_usuario.svg" alt="" />
+              <div className='conatiner_button_selecionar_foto'>
+                <button className='button_selecionar_foto'>Selecionar Foto</button>
+              </div>
+             </div>
+           </div>
+           <div className='container_oculta_corpo_direita'>
+            <div className='container_info_prvia'>
+             <div className='conatiner_previa'>
+               <p className='titulo_previa'>Prévia</p>
+               <p className='descricao_previa'>Esta foto não interfere em seus documentos oficiais</p>
+             </div>
+             <div className='modelo_foto_redondo'>
+                oii
+             </div>
+             </div>
+           </div>
+        </div>
+      </div>
+    )}
     </div>
   )
 }

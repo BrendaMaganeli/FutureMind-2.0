@@ -118,8 +118,8 @@
     background-color: white;
     box-shadow: 10px 10px 10px  rgba(0, 0, 0, 0.1);
     z-index: 1000;
-    width:55%;
-    height: 550px;
+    width:65%;
+    height: 625px;
     border-radius: 10px;
 }
 
@@ -217,19 +217,18 @@
 .container_oculta_corpo_direita{
 
     width: 35%;
-    height: 500px;
+    height: 425px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.container_info_prvia{
+.container_info_previa{
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    
     height: 350px;
     
 }
@@ -239,27 +238,112 @@
     color: #013A63;
     font-weight: 600;
     font-size: 1.5em;
-    padding-top: 8%;
+    padding-top: 10%;
+   
     
 }
 
 .descricao_previa{
-
    
     color: #013A63;
     width: 80%;
     padding-bottom: 6%;
     padding-top: 3%;
 }
+
+.conatiner_modelo_redondo{
+
+    width: 100%;
+    padding-top: 10%;
+
+}
 .modelo_foto_redondo{
 
-    padding:25%;
+    padding:35%;
     border: 0.5px solid #919fa9;
     border-top-left-radius: 1000px;
     border-top-right-radius: 1000px;
     border-bottom-left-radius: 1000px;
     border-bottom-right-radius: 1000px;
     margin-right: 60px;
-    
+    width: 70%;
+
 }
     
+.container_footer_oculto{
+
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer_modelo_oculto{
+
+    width: 95%;
+    height: 50px;
+    background-color: rgb(200, 214, 233);
+    display: flex;
+    border-radius: 15px;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.container_button_remover_foto{
+
+    padding-left: 2%;
+    width: 15%;
+}
+
+.button_remover_foto{
+
+    background-color: #5A789F;
+    border: none;
+    color: white;
+    padding: 5%;
+    width: 100%;
+    border-radius: 10px;
+    font-weight: 400;
+}
+.conatiner_buttons_cancelar_gostei{
+
+    width: 25%;
+    display: flex;
+    justify-content: end;
+}
+
+.container_button_cancelar_editar{
+
+    width: 50%;
+    padding-right: 10px;
+}
+
+.button_cancelar_editar{
+
+    border: none;
+    background-color: white;
+    padding: 4%;
+    color: #013A63;
+    width: 90%;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.container_button_gostei_salvar{
+
+    width: 50%;
+    padding-right: 10px;
+}
+
+.button_gostei_salvar{
+
+    width: 100%;
+    background-color: #5A789F;
+    color: white;
+    border: none;
+    padding: 5%;
+    border-radius: 10px;
+    font-weight: 400;
+    
+}

@@ -142,21 +142,37 @@ function EditarPaciente() {
              <div className='quadrado_fotos'>
               <img className='fotos_editar' src="icone_usuario.svg" alt="" />
               <div className='conatiner_button_selecionar_foto'>
-                <button className='button_selecionar_foto'>Selecionar Foto</button>
+                <button className='button_selecionar_foto'> + Selecionar Foto</button>
               </div>
              </div>
            </div>
            <div className='container_oculta_corpo_direita'>
-            <div className='container_info_prvia'>
+            <div className='container_info_previa'>
              <div className='conatiner_previa'>
                <p className='titulo_previa'>Prévia</p>
                <p className='descricao_previa'>Esta foto não interfere em seus documentos oficiais</p>
              </div>
-             <div className='modelo_foto_redondo'>
-                oii
+             <div className='conatiner_modelo_redondo'>
+                <div className='modelo_foto_redondo'>
+                </div>
              </div>
              </div>
            </div>
+        </div>
+        <div className='container_footer_oculto'>
+          <div className='footer_modelo_oculto'>
+            <div className='container_button_remover_foto'>
+              <button className='button_remover_foto'>Remover foto</button>
+            </div>
+            <div className='conatiner_buttons_cancelar_gostei'>
+             <div className='container_button_cancelar_editar'>
+               <button className='button_cancelar_editar' onClick={desativar_div}>Cancelar</button>
+             </div>
+             <div className='container_button_gostei_salvar'>
+              <button className='button_gostei_salvar'>Gostei, Salvar</button>
+             </div>
+            </div>
+          </div>
         </div>
       </div>
     )}

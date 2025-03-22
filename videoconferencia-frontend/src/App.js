@@ -96,12 +96,15 @@ const VideoConference = () => {
     });
   }, []);
 
+  const [clicked, setClicked] = useState(false);
+
   return (
     <div className="videoconferencia-container">
-      <video className='me-video' ref={localVideoRef} autoPlay playsInline muted></video>
-      <video className='other-video' ref={remoteVideoRef} autoPlay playsInline></video>
+      <video onClick={() => setClicked(!clicked)} className={!clicked ? 'me-video' : 'other-video'} ref={!clicked ? localVideoRef : remoteVideoRef} autoPlay playsInline muted></video>
+      <video onClick={() => setClicked(!clicked)} className={!clicked ? 'other-video' : 'me-video'} ref={!clicked ? localVideoRef : remoteVideoRef} autoPlay playsInline></video>
       <button onClick={startCall}>Iniciar Chamada</button>
       <div className='chat-live'>
+        
         <input
           type="text"
           value={message}

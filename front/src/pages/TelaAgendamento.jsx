@@ -73,11 +73,11 @@ export default function AgendaConsultas() {
 
       <div className="calendar">
         <div className="calendar-header">
-          <button onClick={handlePreviousMonth}>
+          <button onClick={handlePreviousMonth} className="setaEsquerda">
             <ChevronLeft />
           </button>
           <h2>{month.name} {currentYear}</h2>
-          <button onClick={handleNextMonth}>
+          <button onClick={handleNextMonth} className="setadireita">
             <ChevronRight />
           </button>
         </div>
@@ -106,7 +106,7 @@ export default function AgendaConsultas() {
           <button className="close-button" onClick={handleClose}>
             <X size={24} />
           </button>
-          <h2>Horários disponíveis para {selectedDay} de {month.name}</h2>
+          <h1>Horários disponíveis para {selectedDay} de {month.name}</h1>
 
           <div className="form-group">
             <label>Convênio</label>

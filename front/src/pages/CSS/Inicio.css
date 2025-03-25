@@ -210,14 +210,14 @@
     background-color: #5a7da0;
     border-radius: 30px 30px 0 0;
     width: 100%;
-    height: 150vh;
+    height: 50%;
     top: 80%;
     position: absolute;
-    z-index: 0; /* Coloca a div atrás */
+    z-index: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 150px;
+    justify-content: start;
 }
 
 .filter-profissionais-div {
@@ -227,87 +227,11 @@
 
 .resultado-texto-anota{
     width: 80%;
-    height: 20%;
+    height: 100%;
     display: flex;
-    align-items: end;
+    align-items: center;
+    justify-content: center;
     padding: 1%;
-}
-
- .resultado-frase{
-    width: 50%;
-    height: 20%;
-    color: aliceblue;
-    display: flex;
-}
-
-.resultado-frase h1 {
-
-    font-weight: 550;
-    font-size: 40px;
-}
-
-
-.botao-anotacoes{
-    width: 50%;
-    height: 20%;
-    display: flex;
-    align-items: center;
-    justify-content: end;
-}
-
-.botao-anotacoes img {
-
-    width: 85%;
-    margin: 45px 0 0 0;
-    position: relative;
-}
-
-.carrosel-profissional {
-    background-color: #5a7da0;
-    border-radius: 30px;
-    width: 100%;
-    height: 150vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
-
-h2 {
-    color: white;
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
-.card {
-    width: 90%;
-    height: 100%;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.card-interno {
-
-    width: 100%;
-    height: 100%;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-/* button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 500%;
-    cursor: pointer;
-} */
-
-.swiper-profi {
-
-    width: 100%;
-    height: 100%;
 }
 
 .swiper-profi .swiper-button-next, .swiper-profi .swiper-button-prev {
@@ -321,11 +245,24 @@ h2 {
     background-color: grey !important;
 }
 
-.resultado-dois-de-cima {
-
+.swiper-profi .swiper-slide {
     display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 50%;
-    gap: 20%;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease-in-out;
+    height: 300%;
+    position: relative;
+}
+
+.swiper-slide .card {
+    
+    border-radius: 15px;
+    width: 90%;
+    height: 100%;
+    background: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.swiper-profi .swiper-slide:hover {
+    transform: scale(1.05);
 }

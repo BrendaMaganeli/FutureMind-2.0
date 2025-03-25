@@ -24,8 +24,8 @@
   
 .caixa-comandos {
 
-    width: 82%;
-    height: 30%;
+    width: 90%;
+    height: 40%;
     background-color: #ffffff;
     border-radius: 20px;
     align-items: end;
@@ -89,7 +89,7 @@
   
   .cartao-informacao-a {
 
-    width: 35%;
+    width: 40%;
     height: 70%;
     border-radius: 8px;
     margin-top: 1.5%;
@@ -97,7 +97,7 @@
 
   .cartao-informacao-e {
 
-    width: 55%;
+    width: 65%;
     height: 70%;
     margin-top: 1.5%;
     border-radius: 8px;
@@ -123,7 +123,7 @@
   }
   
   .corpo-sobre-mim {
-    height: 50%;
+    height: 60%;
     background-color: #5a789f82;
     border-radius: 20px;
   }

@@ -1,3 +1,15 @@
+
+.container{
+
+    transition: filter 0.3s;
+}
+.icone_editar{
+
+    position: absolute;
+    padding-left: 9%;
+    padding-top: 9%;
+    
+}
 .editar-paciente-maior {
 
     display: flex;
@@ -50,12 +62,13 @@
     border-radius: 5px;
     outline: none;
     color: #013a63;
+    background-color: #f4f4f9;
 }
 .input-box label {
     position: absolute;
     top: -10px;
     left: 10px;
-    background: white;
+    background: #f4f4f9;
     padding: 0 5px;
     font-size: 1.1em;
     color: #5A789F;
@@ -79,7 +92,9 @@
     
     display: flex;
     justify-content: flex-start;
-    padding: 80px 0 0 0;
+    padding-top: 5%;
+    margin-right: 2%;
+    opacity: 80%;
     height: 30%;
     width: 90%;
 }
@@ -100,6 +115,251 @@
 
     position: absolute;
     display: flex;
-    left: 85%;
-    top: 2.5%;
+    padding-left: 55%;
+    align-items: center;
+    justify-content: center;
+}
+
+.loguinho-p img{
+
+    width: 100%;
+}
+
+.container_oculto_editar{
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    box-shadow: 10px 10px 10px  rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width:65%;
+    height: 625px;
+    border-radius: 10px;
+}
+
+.nav_div_oculta{
+
+    display: flex;
+    align-items: center;
+    background-color: rgb(200, 214, 233);
+    width: 100%;
+    height: 60px;
+    border-radius: 10px;
+   
+}
+
+.text_editar_foto_perfil{
+
+    font-size: 20px;
+    color: #013A63;
+    font-weight: 600;
+    padding-left: 2%;
+}
+
+
+/* Classe para aplicar o desfoque */
+.blur {
+    filter: blur(2px);
+    opacity: 80%;
+ 
+  }
+  
+  /* Estilo para a div oculta */
+
+  
+  /* Estilo para o botão de fechar */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.container_oculta_corpo_geral{
+
+    display: flex;
+    width: 100%;
+}
+
+.container_oculta_corpo_esquerda{
+
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+}
+
+.quadrado_fotos{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 0.5px solid #919fa9;
+    border-radius: 15px;
+    height: 360px;
+    width: 85%;
+    
+}
+
+.fotos_editar{
+
+    width: 22%;
+}
+
+.conatiner_button_selecionar_foto{
+
+    padding-top: 4%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.button_selecionar_foto{
+
+    background-color: #5A789F;
+    color: white;
+    padding: 8px;
+    border: none;
+    border-radius: 10px;
+    width: 30%;
+}
+
+.container_oculta_corpo_direita{
+
+    width: 35%;
+    height: 425px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container_info_previa{
+
+    display: flex;
+    flex-direction: column;
+    
+    height: 350px;
+    
+}
+
+.titulo_previa{
+
+    color: #013A63;
+    font-weight: 600;
+    font-size: 1.5em;
+    padding-top: 10%;
+   
+    
+}
+
+.descricao_previa{
+   
+    color: #013A63;
+    width: 80%;
+    padding-bottom: 6%;
+    padding-top: 3%;
+}
+
+.conatiner_modelo_redondo{
+
+    width: 100%;
+    padding-top: 10%;
+
+}
+.modelo_foto_redondo{
+
+    padding:35%;
+    border: 0.5px solid #919fa9;
+    border-top-left-radius: 1000px;
+    border-top-right-radius: 1000px;
+    border-bottom-left-radius: 1000px;
+    border-bottom-right-radius: 1000px;
+    margin-right: 60px;
+    width: 70%;
+
+}
+    
+.container_footer_oculto{
+
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer_modelo_oculto{
+
+    width: 95%;
+    height: 50px;
+    background-color: rgb(200, 214, 233);
+    display: flex;
+    border-radius: 15px;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.container_button_remover_foto{
+
+    padding-left: 2%;
+    width: 15%;
+}
+
+.button_remover_foto{
+
+    background-color: #5A789F;
+    border: none;
+    color: white;
+    padding: 5%;
+    width: 100%;
+    border-radius: 10px;
+    font-weight: 400;
+}
+.conatiner_buttons_cancelar_gostei{
+
+    width: 25%;
+    display: flex;
+    justify-content: end;
+}
+
+.container_button_cancelar_editar{
+
+    width: 50%;
+    padding-right: 10px;
+}
+
+.button_cancelar_editar{
+
+    border: none;
+    background-color: white;
+    padding: 4%;
+    color: #013A63;
+    width: 90%;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.container_button_gostei_salvar{
+
+    width: 50%;
+    padding-right: 10px;
+}
+
+.button_gostei_salvar{
+
+    width: 100%;
+    background-color: #5A789F;
+    color: white;
+    border: none;
+    padding: 5%;
+    border-radius: 10px;
+    font-weight: 400;
+    
 }

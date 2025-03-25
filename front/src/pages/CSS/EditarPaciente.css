@@ -3,6 +3,13 @@
 
     transition: filter 0.3s;
 }
+.icone_editar{
+
+    position: absolute;
+    padding-left: 9%;
+    padding-top: 9%;
+    
+}
 .editar-paciente-maior {
 
     display: flex;
@@ -55,12 +62,13 @@
     border-radius: 5px;
     outline: none;
     color: #013a63;
+    background-color: #f4f4f9;
 }
 .input-box label {
     position: absolute;
     top: -10px;
     left: 10px;
-    background: white;
+    background: #f4f4f9;
     padding: 0 5px;
     font-size: 1.1em;
     color: #5A789F;
@@ -84,7 +92,9 @@
     
     display: flex;
     justify-content: flex-start;
-    padding: 80px 0 0 0;
+    padding-top: 5%;
+    margin-right: 2%;
+    opacity: 80%;
     height: 30%;
     width: 90%;
 }
@@ -105,8 +115,14 @@
 
     position: absolute;
     display: flex;
-    left: 85%;
-    top: 2.5%;
+    padding-left: 55%;
+    align-items: center;
+    justify-content: center;
+}
+
+.loguinho-p img{
+
+    width: 100%;
 }
 
 .container_oculto_editar{

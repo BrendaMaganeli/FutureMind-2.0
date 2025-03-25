@@ -28,6 +28,11 @@ function EditarPaciente() {
 
   return (
     <div>
+      <img onClick={toggleDiv}
+       className='icone_editar'
+       src="editar_icone.svg" 
+       alt="" 
+       />
     <div className={`container ${isVisible ? 'blur' : ''}`}>
         <aside className="barra-lateral-p">
       <div style={{display: 'flex', flexDirection: 'column', gap: '20px', width: '100%', height: 'fit-content', alignItems: 'center'}}>
@@ -36,7 +41,7 @@ function EditarPaciente() {
           src={mulher}
           alt="Foto do perfil"
           className="imagem-perfil"
-          onClick={toggleDiv}
+          
           />
         <h2 className="nome-perfil">José Carlos Azevedo</h2>
       </div>

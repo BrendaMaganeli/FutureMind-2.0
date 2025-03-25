@@ -2,7 +2,7 @@ import mulher from '../assets/image 8.png';
 import icon_um from '../assets/agenda 2.svg';
 import icon_dois from '../assets/cam-recorder (1) 11.svg';
 import icon_tres from '../assets/icons8-bate-papo-48 2.svg';
-
+import Arvore from '../assets/Group 239274.svg';
 import './CSS/EditarProfissional.css';
 import logo from '../assets/Logo_SA_2FASE.png';
 
@@ -64,99 +64,97 @@ function EditarProfissional() {
         </div>
       </div>
     </aside> 
-   <div className="editar-profissional-maior">
-    <div className='corpoeditarpro'>
-    <div className="loguinho">
-      <img src={logo} alt="" />
-    </div>
-    <div style={{position: 'relative'}}>
-    <div className="arvore-profissional">
-          <img src="Arvore-perfil.svg" alt="" />
-        </div>
-        <div className="editar-profissional">
-
+    <div className="editar-profissional-maior">
         
-
-    <div className="botoes-maior">
-      <div className="botoes">
-        {/* <img src={voltar} alt="" /> */}
-      </div>
-    </div>
-        <div className="inpt-div">
-          <label htmlFor="">
-          Nome completo
-        </label>
-        <input type="text" placeholder="Nome completo" />
+        <div className="arvore-profissional">
+             <img src={Arvore} alt="" />
+         </div>
+     
+         {/* <div className="botoes-maior-p">
+           <div className="botoes-p">
+             <img src={voltar} alt="" />
+           </div>
+         </div> */}
+         <div className="loguinho-p">
+           <img src={logo} alt="" />
+         </div>
+     
+         <div className="editar-profissional">
+             <div className="input-box">
+               <label htmlFor="">
+               Nome completo
+             </label>
+             <input type="text" />
+             </div>
+             <div className="input-box">
+               <label htmlFor="">
+               Cpf
+             </label>
+             <input type="text" />
+             </div>
+             <div className="input-box">
+               <label htmlFor="">
+               Telefone
+             </label>
+             <input type="text" />
+             </div>
+             <div className="input-box">
+               <label htmlFor="">
+               E-mail
+             </label>
+             <input type="email" />
+             </div>
+             <div className="input-box">
+               <label htmlFor="">
+               Data de nascimento
+             </label>
+             <input type="date" />
+             </div>
+             <div className="input-box">
+               <label htmlFor="">
+               Senha
+             </label>
+             <input type="password" />
+             </div>
+             <div className="input-box">
+               <label htmlFor="">
+               Preferências
+             </label>
+             <input type="password" />
+             </div>
+             <div className="input-box">
+               <label htmlFor="">
+               Especialização
+             </label>
+             <input type="password" />
+             </div>
+             <div className="input-box">
+               <label htmlFor="">
+               Crp
+             </label>
+             <input type="password" />
+             </div>
+             <div className="input-box">
+               <label htmlFor="">
+               Preço
+             </label>
+             <input type="password" />
+             </div>
+             <div className="input-box">
+               <label htmlFor="">
+               Abordagem
+             </label>
+             <input type="password" />
+             </div>
+         </div>
+         <div className="BTN-SALVAR">
+             <button className="salvar-btn">Salvar</button>
+         </div>
         </div>
-        <div className="inpt-div">
-          <label htmlFor="">
-          Cpf
-        </label>
-        <input type="text" placeholder="Cpf" />
-        </div>
-        <div className="inpt-div">
-          <label htmlFor="">
-          Telefone
-        </label>
-        <input type="text" placeholder="Telefone" />
-        </div>
-        <div className="inpt-div">
-          <label htmlFor="">
-          Preferências
-        </label>
-        <input type="text" placeholder="Preferências" />
-        </div>
-        <div className="inpt-div">
-          <label htmlFor="">
-          E-mail
-        </label>
-        <input type="email" placeholder="E-mail" />
-        </div>
-        <div className="inpt-div">
-          <label htmlFor="">
-          Crp
-        </label>
-        <input type="text" placeholder="Crp" />
-        </div>
-        <div className="inpt-div">
-          <label htmlFor="">
-          Data de nascimento
-        </label>
-        <input type="date" placeholder="Data de nascimento" />
-        </div>
-        <div className="inpt-div">
-          <label htmlFor="">
-          Especialização
-        </label>
-        <input type="text" placeholder="Especialização" />
-        </div>
-        <div className="inpt-div">
-          <label htmlFor="">
-          Preço
-        </label>
-        <input type="text" placeholder="Preço" />
-        </div>
-        <div className="inpt-div">
-          <label htmlFor="">
-          Abordagem
-        </label>
-        <input type="text" placeholder="Abordagem" />
-        </div>
-        <div className="inpt-div">
-          <label htmlFor="">
-          Senha
-        </label>
-        <input type="password" placeholder="Senha" />
-        </div>
-    </div>
-    <div className="BTN-SALVAR">
-        <button className="salvar-btn">Salvar</button>
-    </div>
-    </div>
-    </div>
-   </div>
+        
+         
     </div>
   )
 }
 
-export default EditarProfissional
+export default EditarProfissional;

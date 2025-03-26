@@ -100,7 +100,7 @@
   border-radius: 16px;
   position: relative;
   color: #013A63;
-  height:  81vh;
+  height:  80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -149,7 +149,7 @@
 .times {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 15px;
   margin-top: 8px;
 }
 
@@ -180,7 +180,7 @@
   padding: 15px;
   border-radius: 8px;
   width: 100%;
-  margin-top: 16px;
+  margin-top: 5%;
   border: none;
   font-weight: 500;
   transition: background 0.3s;

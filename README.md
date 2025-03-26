@@ -38,18 +38,18 @@ http://figma.com/design/b4vF9PzT2I4Nqa3LqOzuuZ/Telas-FutureMind?node-id=0-1&p=f&
 
 # Links de divulgação do projeto Futuremind
 
-## Instagram
+### Instagram
 https://www.instagram.com/p/DGMDOOKPOrY/?next=%2F&img_index=1
 
-## TikTok
+### TikTok
 https://www.tiktok.com/@futuremind.tecn
 
 # Link postagens:
 
-## TikTok
+### TikTok
 https://www.tiktok.com/@futuremind.tecn/video/7475079226568264965
 
-## Instagram
+### Instagram
 https://www.instagram.com/p/DGMDOOKPOrY/?img_index=1
 https://www.instagram.com/p/DGgSD0Iv8BE/
 https://www.instagram.com/p/DG8r8ZBveeg/?img_index=1

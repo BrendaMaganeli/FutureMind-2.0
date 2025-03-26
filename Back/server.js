@@ -1,40 +1,26 @@
-const stripe = require('stripe')('sk_test_Ho24N7La5CVDtbmpjc377lJI', {
-  apiVersion: '2025-02-24.acacia; custom_checkout_beta=v1;',
-});
-
+// This is your test secret API key.
+const stripe = require('stripe')('sk_test_51R1Yg9CagxYT8d5LK1GojIelsXM3KU4qcEklvb7tqGQuWgzp3xpd9JwYrzd3NAqSTpetwo2ooy6TmxMthjxHTKgi00RHfxiLI5');
 const express = require('express');
-const cors = require('cors'); // Importando CORS
 const app = express();
+app.use(express.static('public'));
 
-app.use(cors({ origin: 'http://localhost:5173' })); // Configurando CORS para permitir requisições da porta 5173
+const YOUR_DOMAIN = 'http://localhost:4242';
 
 app.post('/create-checkout-session', async (req, res) => {
-  try {
-    const session = await stripe.checkout.sessions.create({
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: 'T-shirt',
-            },
-            unit_amount: 2000,
-          },
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
-      ui_mode: 'custom',
-      return_url: 'http://localhost:5173/pagamento',
-    });
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+        price: '{{PRICE_ID}}',
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    success_url: `${YOUR_DOMAIN}?success=true`,
+    cancel_url: `${YOUR_DOMAIN}?canceled=true`,
+  });
 
-    res.json({ checkoutSessionClientSecret: session.client_secret });
-  } catch (error) {
-    console.error('Error creating checkout session:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
+  res.redirect(303, session.url);
 });
 
-app.listen(3000, () => {
-  console.log('Running on port 3000');
-});
+app.listen(4242, () => console.log('Running on port 4242'));

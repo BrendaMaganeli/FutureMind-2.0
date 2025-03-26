@@ -7,10 +7,12 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-import Footer from '../Components/Footer.jsx';
+import { Navigation, Pagination } from 'swiper/modules';
 
 function Inicio() {
+
+  const profissionais = Array(8).fill('a');
+
   return (
     <div className='container-inicio'>
         <NavBar />
@@ -63,56 +65,41 @@ function Inicio() {
           </div>
         </div>
         <div className="resultados-container">
-            <div className="resultado-dois-de-cima">
-          <div className="resultado-texto-anota">
-            <div className="resultado-frase">
-                <h1>Resultados</h1>
-            </div>
-            <div className="botao-anotacoes">
+            <div className="resultado-texto-anota">
+              <div className="resultado-frase">
+                <h2>Resultados</h2>
+              </div>
+              <div className="botao-anota">
                 <Link to='/diarioemocional'>
-                    <img src='botao-anota.svg' alt='' />
+                  <img src='botao-anota.svg' />
                 </Link>
-            </div>
-            </div>
-          {/* <div className="carrosel-profissional">
-            <Swiper
-                modules={[Navigation, Pagination, Scrollbar, A11y]}
-                spaceBetween={60}
-                slidesPerView={3}
-                navigation
-                pagination={{ clickable: true }}
-                onSwiper={(swiper) => console.log("Swiper inicializado", swiper)}
-                className='swiper-profi'
-                >
-                <div className="carousel">
-                    {[...Array(6)].map((_, index) => (
-                        <SwiperSlide className="card" key={index}>
-                          <div className='card-interno'>Profissional {index + 1}</div>
-                        </SwiperSlide>
-                    ))}
-                </div>
-            </Swiper>
-          </div> */}
-          <div className="carrosel-profissional">
-
-          <Swiper
-                modules={[Navigation, Pagination, Scrollbar, A11y]}
-                spaceBetween={60}
-                slidesPerView={3}
-                navigation
-                pagination={{ clickable: true }}
-                onSwiper={(swiper) => console.log("Swiper inicializado", swiper)}
-                className='swiper-profi'
-                >
-                   {[...Array(6)].map((_, index) => (
-                     <SwiperSlide className="card" key={index}>
-                          <div className='card-interno'>Profissional {index + 1}</div>
-                        </SwiperSlide>
-                    ))}
-              </Swiper>
               </div>
             </div>
-        <Footer />
+            <div className="swiper">
+              <Swiper
+                modules={[Navigation, Pagination]}
+                spaceBetween={50}
+                slidesPerView={3}
+                navigation
+                pagination={{ clickable: true }}
+                scrollbar={{ draggable: false }}
+                onSwiper={(swiper) => console.log(swiper)}
+                onSlideChange={() => console.log('slide change')}
+                className='swiper-profi'
+              >
+                {
+                  profissionais.map((item, index) => (
+
+                    <SwiperSlide key={index}>
+                      <div className="card">
+                        {item}
+                      </div>
+                    </SwiperSlide>
+                  ))
+                }
+              </Swiper>
+            </div>
+
         </div>
       </div>
   )

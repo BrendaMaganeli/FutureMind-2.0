@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import  { useState, useEffect } from "react";
 import "./CSS/Pagamento.css";
+=======
+import { CheckoutForm, Return} from '../Components/Pag.jsx'
+import './CSS/Pagamento.css';
+>>>>>>> c2083c52a21fed9df8e5604b0c2ab6736e47dca4
 
 const ProductDisplay = () => (
   <section>
@@ -13,6 +18,7 @@ const ProductDisplay = () => (
       <h5>$20.00</h5>
       </div>
     </div>
+<<<<<<< HEAD
     <form action="/create-checkout-session" method="POST">
       <button type="submit">
         Checkout
@@ -51,3 +57,9 @@ export default function App() {
     <ProductDisplay />
   );
 }
+=======
+  )
+}
+
+export default Pagamento;
+>>>>>>> c2083c52a21fed9df8e5604b0c2ab6736e47dca4

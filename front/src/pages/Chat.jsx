@@ -12,12 +12,12 @@ import microfone from '../assets/image 15.svg';
 import figurinhaIcon from '../assets/image 16.svg';
 import arvoreAzul from '../assets/Arvore Azul.svg';
 import arvoreBranca from '../assets/Arvore Branca.svg';
+import io from "socket.io-client";
 import './CSS/Chat.css';
 
 function Chat() {
-
-
     
+    const socket = io("http://localhost:3001");
     const [chats, setChats] = useState([
         { nome: 'Vitor Azevedo', foto: mulher },
         { nome: 'Anderson Silva', foto: mulher},
@@ -123,6 +123,15 @@ function Chat() {
         }
     }
 
+    useEffect(() => {
+        socket.on("receiveMessage", (data) => {
+
+            const newMessage = { sender: 'other', text: data, foto: mulher};
+          setMessages([...messages, newMessage]);
+        });
+        return () => socket.off("receiveMessage");
+      }, []);
+
     const sendMessage = (e) => {
         e.preventDefault();
         if (inptvalue.trim() === '') return;
@@ -130,11 +139,7 @@ function Chat() {
         const newMessage = { sender: 'me', text: inptvalue, foto: mulher };
         setMessages([...messages, newMessage]);
         setInptvalue('');
-
-        setTimeout(() => {
-            const autoResponse = { sender: 'other', text: 'Ok, estarei disponível às 14h!', foto: mulher };
-            setMessages((prevMessages) => [...prevMessages, autoResponse]);
-        }, 2000);
+        socket.emit("sendMessage", newMessage.text);
     };
 
     function buscaProfissional(e) {

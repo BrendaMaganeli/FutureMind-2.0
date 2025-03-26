@@ -31,27 +31,6 @@ Uma plataforma que oferece acesso de qualidade a sessões de psicanálise. Ela c
 
 http://figma.com/design/b4vF9PzT2I4Nqa3LqOzuuZ/Telas-FutureMind?node-id=0-1&p=f&t=WSHzVAyxjesG32hE-0
 
-# Links de divulgação do projeto Futuremind
-
-### Instagram
-https://www.instagram.com/p/DGMDOOKPOrY/?next=%2F&img_index=1
-
-### TikTok
-https://www.tiktok.com/@futuremind.tecn
-
-# Link postagens:
-
-### TikTok
-https://www.tiktok.com/@futuremind.tecn/video/7475079226568264965
-
-### Instagram
-https://www.instagram.com/p/DGMDOOKPOrY/?img_index=1
-https://www.instagram.com/p/DGgSD0Iv8BE/
-https://www.instagram.com/p/DG8r8ZBveeg/?img_index=1
-
-### Linkedin
-[https://www.linkedin.com/in/brenda-m-771824316/recent-activity/all/](https://www.linkedin.com/posts/activity-7292270491631865856-eyEB?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFKl1H0BdIN8tN1u1lPrzF6kt5kFT7JFbWI)
-
 # Protótipos:
 
 ![image](https://github.com/user-attachments/assets/0adcf32a-d90c-45c1-a1ce-0165e0b096f9)

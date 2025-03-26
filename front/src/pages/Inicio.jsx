@@ -7,8 +7,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-import Footer from '../Components/Footer.jsx';
+import { Navigation, Pagination } from 'swiper/modules';
 
 function Inicio() {
 
@@ -75,6 +74,30 @@ function Inicio() {
                   <img src='botao-anota.svg' />
                 </Link>
               </div>
+            </div>
+            <div className="swiper">
+              <Swiper
+                modules={[Navigation, Pagination]}
+                spaceBetween={50}
+                slidesPerView={3}
+                navigation
+                pagination={{ clickable: true }}
+                scrollbar={{ draggable: false }}
+                onSwiper={(swiper) => console.log(swiper)}
+                onSlideChange={() => console.log('slide change')}
+                className='swiper-profi'
+              >
+                {
+                  profissionais.map((item, index) => (
+
+                    <SwiperSlide key={index}>
+                      <div className="card">
+                        {item}
+                      </div>
+                    </SwiperSlide>
+                  ))
+                }
+              </Swiper>
             </div>
 
         </div>

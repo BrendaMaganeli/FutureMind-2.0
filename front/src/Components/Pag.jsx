@@ -1,13 +1,11 @@
-import React, { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 import {loadStripe} from '@stripe/stripe-js';
 import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout
 } from '@stripe/react-stripe-js';
 import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
+  BrowserRouter as
   Navigate
 } from "react-router-dom";
 

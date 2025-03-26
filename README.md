@@ -1,7 +1,7 @@
 # FutureMind-2.0
 Uma plataforma que oferece acesso de qualidade a sessões de psicanálise. Ela conecta indivíduos que buscam apoio psicológico a recém-formados em psicologia, permitindo que esses profissionais em início de carreira ganham experiência prática.
 
-Integrantes da equipe:
+# Integrantes da equipe:
 
 [Brenda Maganeli](https://github.com/BrendaMaganeli)
 
@@ -13,7 +13,7 @@ Integrantes da equipe:
 
 [Vitor de Mattos Azevedo](https://github.com/VitorMatt)
 
-REQUISITOS FUNCIONAIS:
+# REQUISITOS FUNCIONAIS:
 
 1. [Brenda]*RF1: Cadastrar-se como paciente ou profissional. 
 2. [Mateus]*RF2: Agendar consultas.
@@ -27,13 +27,32 @@ REQUISITOS FUNCIONAIS:
 10. [Manasses]*RF10: sistema de aviso para retorno de paciente.
 11. [Evelyn]*RF11: sistema de anotações para paciente e profissional.
 
-Link do Figma:
+# Link do Figma:
 
 http://figma.com/design/b4vF9PzT2I4Nqa3LqOzuuZ/Telas-FutureMind?node-id=0-1&p=f&t=WSHzVAyxjesG32hE-0
 
-Protótipos
+# Protótipos:
 
 ![image](https://github.com/user-attachments/assets/0adcf32a-d90c-45c1-a1ce-0165e0b096f9)
 ![image](https://github.com/user-attachments/assets/2ad2ed08-920e-4f04-9564-5e2ba7893fa8)
 
+# Links de divulgação do projeto Futuremind
 
+## Instagram
+https://www.instagram.com/p/DGMDOOKPOrY/?next=%2F&img_index=1
+
+## TikTok
+https://www.tiktok.com/@futuremind.tecn
+
+# Link postagens:
+
+## TikTok
+https://www.tiktok.com/@futuremind.tecn/video/7475079226568264965
+
+## Instagram
+https://www.instagram.com/p/DGMDOOKPOrY/?img_index=1
+https://www.instagram.com/p/DGgSD0Iv8BE/
+https://www.instagram.com/p/DG8r8ZBveeg/?img_index=1
+
+## Linkedin
+https://www.linkedin.com/in/brenda-m-771824316/recent-activity/all/

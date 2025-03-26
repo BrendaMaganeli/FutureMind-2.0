@@ -161,6 +161,7 @@
 
 /* Classe para aplicar o desfoque */
 .blur {
+    
     filter: blur(2px);
     opacity: 80%;
  

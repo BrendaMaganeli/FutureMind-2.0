@@ -33,5 +33,5 @@ http://figma.com/design/b4vF9PzT2I4Nqa3LqOzuuZ/Telas-FutureMind?node-id=0-1&p=f&
 
 Protótipos
 
-<img src='file:///C:/Users/mateu/Downloads/Frame%2024.svg' />
-<img src='file:///C:/Users/mateu/Downloads/Frame%2031.svg' />
+![image](https://github.com/user-attachments/assets/0adcf32a-d90c-45c1-a1ce-0165e0b096f9)
+

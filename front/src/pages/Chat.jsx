@@ -40,6 +40,8 @@ function Chat() {
         { nome: 'Thiago klovisck', foto: mulher},
     ]);
 
+    const user = {name: 'vitor'}
+
     const [chatSelected, setChatSelected] = useState();
     const [busca, setBusca] = useState();
     const [result, setResult] = useState([]);
@@ -126,8 +128,16 @@ function Chat() {
     useEffect(() => {
         socket.on("receiveMessage", (data) => {
 
-            const newMessage = { sender: 'other', text: data, foto: mulher};
-          setMessages([...messages, newMessage]);
+            let newMessage = JSON.parse(data);
+
+            if (newMessage.name === user.name) {
+
+                newMessage.sender = 'me';
+            } else {
+
+                newMessage.sender = 'other';
+            }
+            setMessages(prevMessages => [...prevMessages, newMessage]);
         });
         return () => socket.off("receiveMessage");
       }, []);
@@ -136,10 +146,9 @@ function Chat() {
         e.preventDefault();
         if (inptvalue.trim() === '') return;
 
-        const newMessage = { sender: 'me', text: inptvalue, foto: mulher };
-        setMessages([...messages, newMessage]);
+        const newMessage = { sender: 'me', text: inptvalue, foto: mulher, name: 'tiago' };
         setInptvalue('');
-        socket.emit("sendMessage", newMessage.text);
+        socket.emit("sendMessage", JSON.stringify(newMessage));
     };
 
     function buscaProfissional(e) {

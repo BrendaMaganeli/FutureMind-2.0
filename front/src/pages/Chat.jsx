@@ -71,9 +71,7 @@ function Chat() {
         { text: 'Antigas', active: false },
     ]);
     
-    const [messages, setMessages] = useState([
-        { sender: 'other', text: 'Bom dia! Tem disponibilidade amanhã (terça) às 14 ou 15hrs?', foto: mulher }
-    ]);
+    const [messages, setMessages] = useState([]);
     
     const messagesEndRef = useRef(null);
 

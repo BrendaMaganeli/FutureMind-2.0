@@ -19,6 +19,7 @@ export default function AgendaConsultas() {
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [confirmationMessage, setConfirmationMessage] = useState("");
+  const [appointments, setAppointments] = useState({});
 
   const months = getMonthData(currentYear);
 
@@ -52,8 +53,16 @@ export default function AgendaConsultas() {
 
   const handleConfirm = () => {
     if (selectedDay && selectedTime) {
+      setAppointments((prev) => {
+        const key = `${currentYear}-${currentMonthIndex}-${selectedDay}`;
+        return { ...prev, [key]: [...(prev[key] || []), selectedTime] };
+      });
       setConfirmationMessage(`Consulta agendada para ${selectedDay} de ${months[currentMonthIndex].name} às ${selectedTime}`);
     }
+  };
+
+  const handleClearMessage = () => {
+    setConfirmationMessage("");
   };
 
   const month = months[currentMonthIndex];
@@ -65,6 +74,7 @@ export default function AgendaConsultas() {
     let isCurrentMonth = true;
     let isSunday = i % 7 === 0;
     let isUnavailable = false;
+    let hasAppointments = false;
 
     if (i < month.start) {
       date = prevMonth.days - (month.start - i - 1);
@@ -76,9 +86,11 @@ export default function AgendaConsultas() {
       isUnavailable = true;
     } else {
       date = i - month.start + 1;
+      const key = `${currentYear}-${currentMonthIndex}-${date}`;
+      hasAppointments = appointments[key]?.length > 0;
     }
 
-    days.push({ id: i, date, isCurrentMonth, isSunday, isUnavailable });
+    days.push({ id: i, date, isCurrentMonth, isSunday, isUnavailable, hasAppointments });
   }
 
   return (
@@ -112,6 +124,7 @@ export default function AgendaConsultas() {
               onClick={() => handleDayClick(day)}
             >
               <span>{day.date}</span>
+              {day.hasAppointments && <div className="appointment-indicator">●</div>}
             </div>
           ))}
         </div>
@@ -151,8 +164,6 @@ export default function AgendaConsultas() {
           </div>
 
           <button className="confirm-button" onClick={handleConfirm} disabled={!selectedTime}>Confirmar agendamento</button>
-
-          {confirmationMessage && <p className="confirmation-message">{confirmationMessage}</p>}
         </div>
       )}
     </div>

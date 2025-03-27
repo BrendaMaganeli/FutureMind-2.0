@@ -217,15 +217,29 @@
 .confirmation-message {
   margin-top: 16px;
   padding: 12px;
-  background: #d4edda;
-  color: #155724;
+  background: #CCE6EA;
+  color: #00434E;
   border-radius: 8px;
   text-align: center;
   font-weight: bold;
   opacity: 1;
   transition: opacity 1s ease-in-out;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.confirmation-message.hidden {
-  opacity: 100%;
+.clear-message-button {
+  background-color: transparent;
+  color: #525C5E;
+  font-weight: 600;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-left: 10px;
+  transition: background-color 0.3s ease;
 }
+
+

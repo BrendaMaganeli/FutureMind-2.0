@@ -146,7 +146,7 @@ function Chat() {
         e.preventDefault();
         if (inptvalue.trim() === '') return;
 
-        const newMessage = { sender: 'me', text: inptvalue, foto: mulher, name: 'tiago' };
+        const newMessage = { sender: 'me', text: inptvalue, foto: mulher, name: 'vitor' };
         setInptvalue('');
         socket.emit("sendMessage", JSON.stringify(newMessage));
     };

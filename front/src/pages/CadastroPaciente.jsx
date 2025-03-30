@@ -1,4 +1,3 @@
-
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logoCadastro2.svg';
 import imagem from '../assets/FotoCadastro.svg';
@@ -45,7 +44,10 @@ function CadastroPaciente() {
           </div>
         </div>
         <div className='div-check'>
-        <input className='styles-check' type="checkbox" name="" id="" /> <label className='termos-styles' htmlFor="">Aceitar os</label> <a className='termos-a' href="termos">termos</a> <label htmlFor="">de uso</label>
+          <div className='container_styles-check'>
+            <input className='styles-check' type="checkbox" name="" id="" />
+          </div>
+         <label className='termos-styles' htmlFor="">Aceitar os</label> <a className='termos-a' href="termos">termos</a> <label className='de_uso' htmlFor="">de uso</label>
         </div>
         <button className='botao-cadastro' onClick={handleCadastro}>Finalizar Cadastro</button>
         <p className='login-texto'>Já possui uma conta no nosso site? <a href='/login'>Aperte aqui</a></p>

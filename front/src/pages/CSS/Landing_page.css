@@ -204,7 +204,7 @@
     width: 60%;
     border-radius: 20px;
     font-size: 1.4em;
-    opacity: 85%;
+    
 }
 
 .container-geral_landing_direita_um{
@@ -596,7 +596,7 @@
 .button_empresas_parceiras{
     
     width: 45%;
-    background-color: #5A789F;
+    background-color: #013A63;
     border: none;
     border-radius: 20px;
     padding: 15px;

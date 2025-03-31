@@ -19,7 +19,7 @@ function CadastroProfissional1() {
         </div>
         <div className='inputs-cadastro-div'>
           <div className='input-cadastro'>
-            <label>Nome</label>
+            <label>Nome completo</label>
             <input type='text' />
           </div>
           <div className='input-cadastro'>

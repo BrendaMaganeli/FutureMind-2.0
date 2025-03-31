@@ -302,24 +302,6 @@
     font-weight: bold;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .input-cadastro {
     position: relative;
     width: 100%;
@@ -380,4 +362,13 @@
 
 .custom-react-select .select__multi-value__remove:hover {
     background-color: #466484;
+}
+
+
+
+.imagem_olho{
+  position: absolute;
+  width: 7%;
+  margin-left: 90%;
+  margin-top: 4%;
 }

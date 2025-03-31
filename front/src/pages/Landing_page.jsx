@@ -1,11 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from '../Components/Navbar'
 import './CSS/Landing_page.css'
 import Footer from '../Components/Footer.jsx'
+import { Link } from 'react-router-dom';
 
 function Landing_page() {
+
+  
+    const [isVisible, setIsVisible] = useState(false)
+    
+    // Função para alternar a visibilidade da div
+    const toggleDiv = () => {
+      setIsVisible(true);
+      
+    };
+  
+    const desativar_div =() => {
+  
+      setIsVisible(false)
+    }
+
   return (
     <div>
+    <div className={`'container-geral_landing_um' ${isVisible ? 'blur' : ''}`}>
       <Navbar/>
       <div className='container-geral_landing_um'>
           <div className='container-geral_landing_esquerda_um'>
@@ -18,7 +35,7 @@ function Landing_page() {
               nossa mente. Vamos cultivar esse futuro promissor juntos!</p>
             </div>
              <div className='container_button_comece_ja'>
-               <button className='button_comece_ja'>Comece já</button>
+               <button onClick={toggleDiv} className='button_comece_ja'>Comece já</button>
              </div>  
              </div>
           </div>
@@ -107,6 +124,40 @@ function Landing_page() {
           </div>
        </div>
        <Footer/>
+    </div>
+    {isVisible && (
+       <div className='container_escolher_conta'>
+        <div className='container_button_x_escolher_conta'>
+         <button className='button_x_escolher_conta' onClick={desativar_div}><img src="imagem_voltar_escolher.svg" alt="" /></button>
+        </div>
+        <div className='container_geral_escolher'>
+          <div className='container_esquerda_escolher'>
+          <Link className='link_geral' to="/cadastroprofissional1">
+            <div className='container_foto_p_escolher'>
+              <img className='imagem_profissional_escolher' src="imagem_profissional.svg" alt="" />
+              <div  className='container_text_escolher_profissional'>
+                <p className='text_escolher_profissional'>Sou Profissional</p>
+              </div>  
+            </div>
+            </Link>
+          </div>
+          
+           <div className='container_direita_escolher'>
+           <Link className='link_geral' to="/cadastroPaciente">
+            <div className='container_foto_p_escolher_paciente'>           
+              <img className='imagem_paciente_escolher' src="imagem_paciente.svg" alt="" />
+             <div className='container_text_escolher_paciente'>
+              <p className='text_escolher_paciente'>Sou Paciente</p>
+             </div>
+             </div>
+             </Link>
+           </div>
+          
+         
+        </div>
+       
+       </div>
+    )}
     </div>
   )
 }

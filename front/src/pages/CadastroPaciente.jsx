@@ -1,4 +1,3 @@
-
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logoCadastro2.svg';
 import imagem from '../assets/FotoCadastro.svg';
@@ -13,16 +12,19 @@ function CadastroPaciente() {
       navigate('/cadastroProfissional2'); 
     }
     
-  
    const formatarCPF = (value) => {
+
     value = value.replace(/\D/g, ''); 
     value = value.replace(/^(\d{3})(\d)/, "$1.$2"); 
     value = value.replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3"); 
     value = value.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3-$4");
     return value.slice(0, 14); 
+
+
    };
 
    const formatarNome = (value) => {
+  
     return value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, ''); 
    };
   
@@ -35,20 +37,20 @@ function CadastroPaciente() {
  
     const [cpf, setCpf] = useState('');
   
-   const identificadorCpf = (e) => {
+    const identificadorCpf = (e) => {
       setCpf(formatarCPF(e.target.value));
-   };
+    };
 
    const [telefone, setTelefone] = useState('');
 
    const identificadorTelefone = (e) => {
-     let value = e.target.value;
+    let value = e.target.value;
 
     value = value.replace(/\D/g, '');
     value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1)$2-$3');
 
      
-     setTelefone(value);
+    setTelefone(value);
    }
 
    const [dataNascimento, setDataNascimento] = useState('')
@@ -138,7 +140,10 @@ function CadastroPaciente() {
           </div>
         </div>
         <div className='div-check'>
-        <input className='styles-check' type="checkbox" name="" id="" /> <label className='termos-styles' htmlFor="">Aceitar os</label> <a className='termos-a' href="termos">termos</a> <label htmlFor="">de uso</label>
+          <div className='container_styles-check'>
+            <input className='styles-check' type="checkbox" name="" id="" />
+          </div>
+         <label className='termos-styles' htmlFor="">Aceitar os</label> <a className='termos-a' href="termos">termos</a> <label className='de_uso' htmlFor="">de uso</label>
         </div>
         <button className='botao-cadastro' onClick={handleCadastro}>Finalizar Cadastro</button>
         <p className='login-texto'>Já possui uma conta no nosso site? <a href='/login'>Aperte aqui</a></p>

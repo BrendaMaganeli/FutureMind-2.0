@@ -94,6 +94,7 @@ const router = createBrowserRouter([
     element: <Politica />
 },
 
+
 ])
 
 export default router

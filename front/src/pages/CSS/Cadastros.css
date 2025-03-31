@@ -255,21 +255,33 @@
 .div-check {
     display: flex;
     align-items: center;
-    gap: 8px;
     font-size: 1em;
     color: #5A789F;
-    padding-right: 66%;
+    width: 100%;
+    justify-content: start;
+}
+
+.container_styles-check{
+
+    width: 3%;
+    
 }
 
 .styles-check {
     appearance: none; /* Remove o estilo padrão do navegador */
-    width: 18px;
+    width: 100%;
     height: 18px;
     border: 2px solid #5A789F;
     border-radius: 4px;
     background-color: white;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.de_uso{
+
+    width: 20%;
+    padding-left: 1%;
 }
 
 /* Quando estiver marcada */
@@ -294,12 +306,17 @@
 .termos-styles {
     color: #5A789F;
     font-size: 1em;
+    width: fit-content;
+    width: 13%;
+    padding-left: 1%;
+  
 }
 
 .termos-a {
     color: #013a63;
     text-decoration: none;
     font-weight: bold;
+    padding-left: 1%;
 }
 
 .input-cadastro {

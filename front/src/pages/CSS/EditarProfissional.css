@@ -9,34 +9,47 @@
     align-items: center;
     justify-content: start;
     width: 75%;
-    background-color: rgb(255, 255, 255);
+    height: 100%;
 }
 
 .editar-profissional {
-    background-color: #5a7da000;
+    background-color: transparent;
     border-radius: 10px;
-    width: 100vh;
-    height: 70%;
+    width: 80%;
+    height: 40%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
     position: relative;
     padding: 5%;
     align-items: start;
-    margin-top: 15%;
+    justify-content: start;
+    margin: 12% 0 0 0;
+}
+
+.inpt-div {
     position: relative;
+    flex: 1;
+    margin: 5px;
 }
 
-.editar-profissional input {
-    width: 95%;
+.inpt-div input {
+    width: 100%;
     padding: 4%;
-    border-radius: 10px;
-    border: none;
-    background-color: #d3dbe6;
+    border: 1.9px solid #5A789F;
+    border-radius: 5px;
+    outline: none;
+    color: #013a63;
+    background-color: #f4f4f9;
 }
-
-.editar-profissional input:nth-child(11) {
-    grid-column: span 2;
+.inpt-div label {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    background: #f4f4f9;
+    padding: 0 5px;
+    font-size: 1.1em;
+    color: #5A789F;
 }
 
 .BTN-SALVAR {
@@ -44,16 +57,17 @@
     padding: 2%;
     position: relative;
     height: 5%;
-    width: 73%;
+    width: 43%;
     display: flex;
     justify-content: end;
     align-items: start;
+    margin: 6.5% 0 0 30%;
 }
 
 .salvar-btn {
     
     position: relative;
-    width: 30%;
+    width: 50%;
     font-size: 15px;
     background-color: #5A789F;
     color: white;
@@ -62,7 +76,7 @@
     cursor: pointer;
     text-align: center;
     justify-self: end;
-    padding: 1%;
+    padding: 2%;
 
     &:hover {
 
@@ -86,11 +100,6 @@
     width: 115%;
     height: 100%;
     opacity: 50%;
-}
-
-.editar-profissional label {
-
-    color: white;
 }
 
 .cartao-experiencia-p input {

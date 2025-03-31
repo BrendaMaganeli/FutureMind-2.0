@@ -12,12 +12,12 @@ import microfone from '../assets/image 15.svg';
 import figurinhaIcon from '../assets/image 16.svg';
 import arvoreAzul from '../assets/Arvore Azul.svg';
 import arvoreBranca from '../assets/Arvore Branca.svg';
+import io from "socket.io-client";
 import './CSS/Chat.css';
 
 function Chat() {
-
-
     
+    const socket = io("http://localhost:3001");
     const [chats, setChats] = useState([
         { nome: 'Vitor Azevedo', foto: mulher },
         { nome: 'Anderson Silva', foto: mulher},
@@ -39,6 +39,8 @@ function Chat() {
         { nome: 'Isabella coach', foto: mulher},
         { nome: 'Thiago klovisck', foto: mulher},
     ]);
+
+    const user = {name: 'vitor'}
 
     const [chatSelected, setChatSelected] = useState();
     const [busca, setBusca] = useState();
@@ -123,18 +125,30 @@ function Chat() {
         }
     }
 
+    useEffect(() => {
+        socket.on("receiveMessage", (data) => {
+
+            let newMessage = JSON.parse(data);
+
+            if (newMessage.name === user.name) {
+
+                newMessage.sender = 'me';
+            } else {
+
+                newMessage.sender = 'other';
+            }
+            setMessages(prevMessages => [...prevMessages, newMessage]);
+        });
+        return () => socket.off("receiveMessage");
+      }, []);
+
     const sendMessage = (e) => {
         e.preventDefault();
         if (inptvalue.trim() === '') return;
 
-        const newMessage = { sender: 'me', text: inptvalue, foto: mulher };
-        setMessages([...messages, newMessage]);
+        const newMessage = { sender: 'me', text: inptvalue, foto: mulher, name: 'vitor' };
         setInptvalue('');
-
-        setTimeout(() => {
-            const autoResponse = { sender: 'other', text: 'Ok, estarei disponível às 14h!', foto: mulher };
-            setMessages((prevMessages) => [...prevMessages, autoResponse]);
-        }, 2000);
+        socket.emit("sendMessage", JSON.stringify(newMessage));
     };
 
     function buscaProfissional(e) {

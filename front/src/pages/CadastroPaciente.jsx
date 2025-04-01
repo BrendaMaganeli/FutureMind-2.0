@@ -8,18 +8,16 @@ function CadastroPaciente() {
    const navigate = useNavigate(); // Hook para navegação
 
    const handleCadastro = () => {
-
-      navigate('/cadastroProfissional2'); 
-    }
+    navigate('/cadastroProfissional2');
+  }
     
    const formatarCPF = (value) => {
-
-    value = value.replace(/\D/g, ''); 
-    value = value.replace(/^(\d{3})(\d)/, "$1.$2"); 
-    value = value.replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3"); 
-    value = value.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3-$4");
-    return value.slice(0, 14); 
-
+   
+     value = value.replace(/\D/g, ''); 
+     value = value.replace(/^(\d{3})(\d)/, "$1.$2"); 
+     value = value.replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3"); 
+     value = value.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3-$4");
+     return value.slice(0, 14); 
 
    };
 
@@ -47,7 +45,7 @@ function CadastroPaciente() {
     let value = e.target.value;
 
     value = value.replace(/\D/g, '');
-    value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1)$2-$3');
+    value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
 
      
     setTelefone(value);
@@ -72,12 +70,12 @@ function CadastroPaciente() {
      if(tipoInput == 'password'){
 
       setTipoInput('text')
-      setTipoIconSenha('icon_ver.png')
+      setTipoIconSenha('icon_nao_ver.png')
 
      }else{
 
       setTipoInput('password')
-      setTipoIconSenha('icon_nao_ver.png')
+      setTipoIconSenha('icon_ver.png')
      }
    };
  
@@ -131,7 +129,8 @@ function CadastroPaciente() {
             <label>Senha</label>
              <input 
              type={tipoInput} 
-             maxLength={8}/>
+             
+             maxLength={15}/>
             <img 
             onClick={alternarTipo}
             className='imagem_olho'

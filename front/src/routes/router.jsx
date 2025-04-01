@@ -58,7 +58,7 @@ const router = createBrowserRouter([
 //     element: <Navbar />
 // },
 {
-    path: '/landingPage',
+    path: '/',
     element: <Landing_page/>
 },
 {

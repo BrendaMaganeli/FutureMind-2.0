@@ -771,3 +771,18 @@
     color: #013A63;
 
 }
+
+
+.container_escolher_conta_botao_2{
+
+    position: absolute;
+    top: 370%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 255, 255);
+    box-shadow: 15px 15px 15px 15px  rgba(0, 0, 0, 0.1);
+    width:65%;
+    height: 70%;
+    border-radius: 10px;
+    z-index: 1000;
+}

@@ -34,6 +34,7 @@
   align-items: center;
   justify-content: start;
   margin-bottom: 8px;
+  text-transform: capitalize;
 }
 
 .calendar-header h2{
@@ -54,6 +55,7 @@
   margin-bottom: 8px;
   color: #013A63;
   font-size: 0.8em;
+  text-transform: capitalize;
 }
 
 .days-grid {
@@ -215,31 +217,28 @@
 }
 
 .confirmation-message {
-  margin-top: 16px;
-  padding: 12px;
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
   background: #CCE6EA;
   color: #00434E;
+  padding: 10px 20px;
   border-radius: 8px;
-  text-align: center;
-  font-weight: bold;
-  opacity: 1;
-  transition: opacity 1s ease-in-out;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
-.clear-message-button {
-  background-color: transparent;
-  color: #525C5E;
-  font-weight: 600;
+.close-confirmation {
+  background: none;
   border: none;
-  padding: 8px 12px;
-  border-radius: 5px;
+  color: #00434E;
   cursor: pointer;
-  font-size: 1em;
-  margin-left: 10px;
-  transition: background-color 0.3s ease;
+  font-size: 16px;
+  display: flex;
 }
-
-

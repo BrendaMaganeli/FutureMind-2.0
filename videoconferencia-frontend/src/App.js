@@ -102,12 +102,26 @@ const VideoConference = () => {
     setCallInProgress(true);
   };
 
+  const [videoActive, setVideoActive] = useState(true);
+
   return (
     <div className="videoconferencia-container">
+      
       <video onClick={() => setClicked(!clicked)} ref={!clicked ? localVideoRef : remoteVideoRef} className={!clicked ? 'me-video' : 'other-video'} autoPlay playsInline muted />
-      <video onClick={() => setClicked(!clicked)} ref={!clicked ? remoteVideoRef : localVideoRef} className={!clicked ? 'other-video' : 'me-video'} autoPlay playsInline />
+      <video onClick={() => setClicked(!clicked)} ref={!clicked ? remoteVideoRef : localVideoRef} className={!clicked ? 'other-video' : 'me-video'} autoPlay playsInline muted />
       {!callInProgress && <button className="start-call-button" onClick={startCall}>Iniciar Chamada</button>}
-      {offer && <button className="accept-offer-button" onClick={acceptOffer}>Aceitar Chamada</button>}
+      {offer && <button className="start-call-button" onClick={acceptOffer}>Aceitar Chamada</button>}
+
+      <div className="barra-config">
+        {
+          videoActive 
+          ?
+          <img onClick={() => setVideoActive(!videoActive)} src='video-desactive.png' />
+          :
+          <img onClick={() => setVideoActive(!videoActive)} src='video-active.svg' />
+        }
+        <img src='mic.png' />
+      </div>
     </div>
   );
 };

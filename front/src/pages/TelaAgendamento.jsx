@@ -40,13 +40,16 @@ export default function AgendaConsultas() {
   };
 
   const handleDayClick = (day) => {
-    if (day.isCurrentMonth) {
+    if (day.isCurrentMonth && !day.isUnavailable) {
       setSelected({ day: day.date, time: null});
     }
   };
 
   const handleTimeClick = (time) => {
-    setSelected((prev) => ({ ...prev, time }));
+    const key = `${currentYear}-${currentMonthIndex}-${selected.day}`;
+    if (!appointments[key]) {
+      setSelected((prev) => ({ ...prev, time}));
+    }
   };
 
   const handleClose = () => {
@@ -55,11 +58,11 @@ export default function AgendaConsultas() {
 
   const handleConfirm = () => {
     if (selected.day && selected.time) {
-      setAppointments((prev) => {
-        const key = `${currentYear}-${currentMonthIndex}-${selected.day}`;
-        return { ...prev, [key]: [...(prev[key] || []), selected.time] };
-      });
-      setConfirmationMessage(`Consulta agendada para ${selected.day} de ${months[currentMonthIndex].name} às ${selected.time}`);
+      const key = `${currentYear}-${currentMonthIndex}-${selected.day}`;
+      if (!appointments[key]) {
+        setAppointments((prev) => ({ ...prev, [key]: [selected.time] }));
+        setConfirmationMessage(`Consulta agendada para ${selected.day} de ${months[currentMonthIndex].name} às ${selected.time}`);
+      }
     }
   };
 
@@ -74,7 +77,7 @@ export default function AgendaConsultas() {
     let date = null;
     let isCurrentMonth = true;
     let isUnavailable = false;
-    let hasAppointments = false;
+    let appointmentsForDay = [];
     
     if (i < month.start) {
       date = prevMonth.days - (month.start - i - 1);
@@ -87,10 +90,11 @@ export default function AgendaConsultas() {
     } else {
       date = i - month.start + 1;
       const key = `${currentYear}-${currentMonthIndex}-${date}`;
-      hasAppointments = appointments[key]?.length > 0;
+      appointmentsForDay = appointments[key] || [];
+      isUnavailable = appointmentsForDay.length > 0;
     }
 
-    return { id: i, date, isCurrentMonth, isUnavailable, hasAppointments };
+    return { id: i, date, isCurrentMonth, isUnavailable, appointmentsForDay };
   });
 
   return (
@@ -132,7 +136,9 @@ export default function AgendaConsultas() {
               onClick={() => handleDayClick(day)}
             >
               <span>{day.date}</span>
-              {day.hasAppointments && <div className="appointment-indicator">●</div>}
+              {day.appointmentsForDay.map((appt, index) => (
+                    <div key={index} className="appointment-detail">{appt}</div>
+                  ))}
             </div>
           ))}
         </div>

@@ -33,7 +33,7 @@
   background-repeat: no-repeat;
 }
 
-.chat-live {
+/* .chat-live {
   position: absolute;
   bottom: 20px;
   left: 50%;
@@ -67,7 +67,7 @@
 
 .chat-live p {
   margin: 5px 0;
-}
+} */
 
 .start-call-button {
   position: absolute;
@@ -97,4 +97,86 @@
   padding: 1%;
   border-radius: 15px;
   gap: 25px;
+}
+
+.barra-config img {
+
+  cursor: pointer;
+}
+
+/* Estilo geral do container do chat */
+.chat-live {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  height: 79%;
+  width: 25%; /* Largura máxima (ajuste conforme necessário) */
+  margin: 0 auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f9f9f9;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  left: 10%;
+}
+
+/* Barra superior (com ícone) */
+.barra-cima-v {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: white; /* Roxo do Material Design (ou ajuste a cor) */
+  color: black;
+  border-bottom: 1px solid #5a7da0;
+  gap: 25px;
+}
+
+.barra-cima-v img {
+
+  width: 10%;
+}
+
+.barra-cima-v p {
+
+  font-size: 18px;
+}
+
+/* Área de conversa (mensagens) */
+.conversa {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background: #fff;
+}
+
+/* Barra inferior (input + botão) */
+.barra-baixo-v {
+  display: flex;
+  padding: 10px;
+  background: #f5f5f5;
+  border-top: 1px solid #e0e0e0;
+}
+
+.barra-baixo-v input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+}
+
+.barra-baixo-v button {
+  margin-left: 10px;
+  padding: 0 10% 0 10%;
+  background: #5a7da0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.barra-baixo-v button:hover {
+  background: #013a63;
 }

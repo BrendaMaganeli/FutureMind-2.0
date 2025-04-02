@@ -17,7 +17,7 @@ import './CSS/Chat.css';
 
 function Chat() {
     
-    const socket = io("http://localhost:3001");
+    const socket = io("http://192.168.0.100:3001");
     const [chats, setChats] = useState([
         { nome: 'Vitor Azevedo', foto: mulher },
         { nome: 'Anderson Silva', foto: mulher},

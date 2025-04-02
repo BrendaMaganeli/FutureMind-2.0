@@ -20,6 +20,7 @@
     "@stripe/stripe-js": "^6.1.0",
     "axios": "^1.8.3",
     "font-awesome": "^4.7.0",
+    "keen-slider": "^6.8.6",
     "lucide-react": "^0.475.0",
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",

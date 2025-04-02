@@ -211,7 +211,7 @@
     width: 100%;
     margin: auto;
     padding: 40px 20px;
-    background-color: #5a7da0;
+    background-color: #5a7da0d5;
     border-radius: 20px;
     position: absolute;
     top: 80%;
@@ -260,15 +260,15 @@
   
 .card {
     background: #ffffff;
-    padding: 20px;
-    border-radius: 15px;
+    padding: 35px;
+    border-radius: 20px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
     text-align: left;
     width: 100%;
-    height: 550px;
+    height: 580px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+
     transition: transform 0.3s ease-in-out;
 }
   .card:hover {
@@ -372,5 +372,62 @@
     .card {
       width: 90%;
     }
+  }
+  
+
+  .foto-perfilInicio{
+    display: flex;
+    align-items: center;
+  
+  }
+
+  .perfil-nomeValor{
+    padding-left: 5%;
+    color: #013A63;
+    font-size: 1.1em;
+  }
+
+  .div-especializacao{
+    display: flex;
+    gap: 3%;
+    flex-wrap: wrap;
+    justify-content: start;
+    margin-top: 3%;
+  }
+
+  .especializacao-style{
+    background-color: #5a789f7c;
+    margin-top: 2%;
+    color: white;
+    width: 25%;
+    padding: 1%;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 80%;
+  }
+
+  .sobremim-inicio{
+    display: flex;
+    flex-direction: column;
+    
+    margin-top: 1%;
+  }
+
+  .textSobremim{
+    border: 1px solid #013a6385;
+    padding: 4%;
+    border-radius: 20px;
+    font-size: 80%;
+    color: #546e7aaf;
+    width: 100%;
+    margin-top: 3%;
+    margin-right: 2%;
+  }
+
+  .crp-inicio{
+    display: flex;
+    justify-content: end;
+    margin-top: 5%;
+    color: #013A63;
   }
   

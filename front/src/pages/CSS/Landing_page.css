@@ -786,3 +786,46 @@
     border-radius: 10px;
     z-index: 1000;
 }
+
+  @keyframes stretchAnimation {
+    0% { transform: scaleY(1); }
+    50% { transform: scaleY(1.1); } /* Aumentei a escala vertical */
+    100% { transform: scaleY(1); }
+  }
+  
+  /* Diferentes delays para um efeito natural */
+  .cilindro_empresa_um { animation: stretchAnimation 3s ease-in-out infinite; transform-origin: bottom; animation-delay: 0s; }
+  .cilindro_empresa_dois { animation: stretchAnimation 3s ease-in-out infinite; transform-origin: bottom; animation-delay: 1.3s; }
+  .cilindro_empresa_tres { animation: stretchAnimation 3s ease-in-out infinite; transform-origin: bottom; animation-delay: 2.6s; }
+  .cilindro_empresa_quatro { animation: stretchAnimation 3s ease-in-out infinite; transform-origin: bottom; animation-delay: 3.9s; }
+
+  @keyframes slideAnimation {
+    0% { width: 50%; }
+    50% { width: 100%; } /* Expande para o lado */
+    100% { width: 50%; }
+  }
+  
+  /* Diferentes delays para um efeito mais natural */
+  .cilindro_um_emocional { animation: slideAnimation 7s ease-in-out infinite; animation-delay: 0s; }
+  .cilindro_tres_emocional { animation: slideAnimation 7s ease-in-out infinite; animation-delay: 2.6s; }
+  .cilindro_quatro_emocional { animation: slideAnimation 7s ease-in-out infinite; animation-delay: 3.9s; }
+  .cilindro_dois_emocional { animation: slideAnimation 7s ease-in-out infinite; animation-delay: 1.3s; }
+
+  @keyframes sAnimation {
+    0% { width: 50%; }
+    50% { width: 100%; } /* Expande para o lado */
+    100% { width: 50%; }
+  }
+  
+  /* Diferentes delays para um efeito mais natural */
+  .cilindro_um_equilibrio { animation: sAnimation 7s ease-in-out infinite; animation-delay: 0s; }
+  .cilindro_tres_equilibrio { animation: sAnimation 7s ease-in-out infinite; animation-delay: 2.6s; }
+  .cilindro_quatro_equilibrio { animation: sAnimation 7s ease-in-out infinite; animation-delay: 3.9s; }
+  .cilindro_dois_emocional { animation: sAnimation 7s ease-in-out infinite; animation-delay: 1.3s; }
+
+  @keyframes backgroundFade {
+    0% { background: #92A9BD; }  /* Tom inicial azul acinzentado */
+    50% { background: #5C7A99; } /* Azul mais escuro */
+    100% { background: #92A9BD; } /* Volta ao tom inicial */
+  }
+  

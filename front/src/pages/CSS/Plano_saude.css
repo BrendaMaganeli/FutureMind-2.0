@@ -7,13 +7,12 @@
 }
 
 .container-boas-vindas{
-
-   background-color: rgba(90,120,159, .5);
    width: 100%;
    height: 32em;
    align-items: center;
    display: flex;
    flex-direction: column;
+   animation: backgroundFade 6s infinite alternate ease-in-out;
 }
 
 .container-mensagemboas{

@@ -11,6 +11,10 @@
   "description": "",
   "dependencies": {
     "express": "^5.1.0",
+<<<<<<< HEAD
+=======
+    "ip": "^2.0.1",
+>>>>>>> a997f55a85a96b5f5038f0cf6c7dce519d79980d
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1"
   }

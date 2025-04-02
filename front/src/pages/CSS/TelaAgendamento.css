@@ -242,3 +242,18 @@
   font-size: 16px;
   display: flex;
 }
+
+.appointment-detail {
+  background-color: #3E6D8F; /* Verde para indicar agendamento */
+  color: white;
+  font-size: 12px;
+  padding: 2px 4px;
+  border-radius: 10px;
+  display: block;
+  text-align: center;
+  margin-top: 15%;
+  font-weight: bold;
+  white-space: nowrap;
+  width: 100%;
+}
+

@@ -8,10 +8,11 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Navigation, Pagination } from 'swiper/modules';
+import foto from '../assets/fotoInicio.svg'
 
 function Inicio() {
 
-  const profissionais = Array(8).fill('a');
+  const profissionais = Array(8).fill(null);
 
   return (
     <div className='container-inicio'>
@@ -54,7 +55,8 @@ function Inicio() {
                 <img src='planoSaude.svg' alt='' />
               </div>
               <div className="div-filtrar">
-                <div className="text-btn-filtro">Selecione os botões acima para escolher a especialidade e o assunto desejado para a sua consulta. Em seguida, clique no botão para filtrar os profissionais mais adequados para você.</div>
+                <div className="text-btn-filtro">Selecione os botões acima para escolher a especialidade e o assunto desejado para a sua consulta.</div>
+                <div className="text-btn-filtro"> Em seguida, clique no botão para filtrar os profissionais mais adequados para você.</div>
                 <div className="div-btn-filtro">
                   <button className="btn-filtro">Filtrar</button>
                   <img src='filter-icon.svg' alt='' />
@@ -93,6 +95,34 @@ function Inicio() {
                     <SwiperSlide key={index}>
                       <div className="card">
                         {item}
+                        <div className='foto-perfilInicio'>
+                        <img src={foto} alt="" /> 
+                        <div className='perfil-nomeValor'>
+                        <h2>João Pedro Garcia</h2>
+                        <p>R$ 50/60 min </p>
+                        </div>
+                        </div>
+                        <div className='div-especializacao'>
+                          <p className='especializacao-style'>Adolecencia</p> 
+                          <p className='especializacao-style'>Idosos</p> 
+                          <p className='especializacao-style'>Crianças</p>
+                          <p className='especializacao-style'>Crianças</p>
+                        </div>
+                        <div className='sobremim-inicio'>
+                          <h3>Sobre mim:</h3>
+                          <div className='textSobremim'>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore, voluptates ducimus consectetur praesentium temporibus ut veniam nesciunt incidunt reprehenderit, deserunt, cupiditate eaque cumque magni nobis omnis? Iure temporibus doloribus libero?
+                          </div>
+                        </div>
+                        <div className='sobremim-inicio'>
+                          <h3>Abordagens:</h3>
+                          <div className='textSobremim'>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore, voluptates ducimus consectetur praesentium temporibus ut 
+                          </div>
+                          <div className='crp-inicio'>
+                            CRP 98/12345
+                          </div>
+                        </div>
                       </div>
                     </SwiperSlide>
                   ))

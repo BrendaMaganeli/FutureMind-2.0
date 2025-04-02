@@ -14,6 +14,12 @@ const io = new Server(server, {
 
 app.use(cors());
 
+app.get('/chats', (req, res) => {
+  const clientIp = req.ip;  // Pega o IP da requisição HTTP
+  console.log("IP do cliente:", clientIp);
+  res.json({ ip: clientIp });
+});
+
 io.on("connection", (socket) => {
   console.log("Usuário conectado", socket.id);
 

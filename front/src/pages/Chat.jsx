@@ -17,7 +17,23 @@ import './CSS/Chat.css';
 
 function Chat() {
     
-    const socket = io("http://10.3.61.20:3001");
+    const [serverIp, setServerIp] = useState(null);
+    const getIp = async() => {
+
+        const response = await fetch('http://localhost:3001/chats');
+
+        const data = await response.json();
+
+        setServerIp(data);
+    }
+
+    useEffect(() => {
+
+        getIp();
+    }, []);
+
+    const socket = io(`http://${serverIp}:3001`);
+
     const [chats, setChats] = useState([
         { nome: 'Vitor Azevedo', foto: mulher },
         { nome: 'Anderson Silva', foto: mulher},

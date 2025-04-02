@@ -678,8 +678,12 @@
     border-radius: 5px;
 }
 
-.config:hover {
+.container-chats.dark .config:hover {
     background: #f0f0f0;
+}
+
+.container-chats.light .config:hover {
+    background: #5a7da0b6;
 }
 
 .container-chats.dark .text-message-right {

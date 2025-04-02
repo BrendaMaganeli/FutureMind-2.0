@@ -19,6 +19,7 @@
     "@stripe/react-stripe-js": "^3.5.1",
     "@stripe/stripe-js": "^6.1.0",
     "axios": "^1.8.3",
+    "fetch": "^1.1.0",
     "font-awesome": "^4.7.0",
     "lucide-react": "^0.475.0",
     "react": "^19.0.0",

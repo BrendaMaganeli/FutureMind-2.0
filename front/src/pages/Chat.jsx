@@ -16,23 +16,8 @@ import io from "socket.io-client";
 import './CSS/Chat.css';
 
 function Chat() {
-    
-    const [serverIp, setServerIp] = useState(null);
-    const getIp = async() => {
 
-        const response = await fetch('http://localhost:3001/chats');
-
-        const data = await response.json();
-
-        setServerIp(data);
-    }
-
-    useEffect(() => {
-
-        getIp();
-    }, []);
-
-    const socket = io(`http://${serverIp}:3001`);
+    const socket = io(`https://seu-projeto.up.railway.app`);
 
     const [chats, setChats] = useState([
         { nome: 'Vitor Azevedo', foto: mulher },
@@ -63,6 +48,7 @@ function Chat() {
     const [visibleSettings, setVisibleSettings] = useState(false);
     const settingsRef = useRef(null);
     const [theme, setTheme] = useState('light');
+    const tema = theme==='light' ? 'escuro' : 'claro';
 
     const toggleTheme = () => {
         setTheme(theme === 'light' ? 'dark' : 'light');
@@ -85,9 +71,7 @@ function Chat() {
         { text: 'Antigas', active: false },
     ]);
     
-    const [messages, setMessages] = useState([
-        { sender: 'other', text: 'Bom dia! Tem disponibilidade amanhã (terça) às 14 ou 15hrs?', foto: mulher }
-    ]);
+    const [messages, setMessages] = useState([]);
     
     const messagesEndRef = useRef(null);
     
@@ -211,7 +195,7 @@ function Chat() {
                         &&
                         <div className="settings" ref={settingsRef}>
                             <div className="config" onClick={toggleFontSize}>Tamanho da fonte</div>
-                            <div className="config" onClick={toggleTheme}>Mudar tema</div>
+                            <div className="config" onClick={toggleTheme}>Tema {tema}</div>
                         </div>
                     }
                 </div>

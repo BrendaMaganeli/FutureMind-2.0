@@ -21,26 +21,24 @@ function Chat() {
     const [chats, setChats] = useState([
         { nome: 'Vitor Azevedo', foto: mulher },
         { nome: 'Anderson Silva', foto: mulher},
-        { nome: 'Lúcia Katia', foto: mulher},
-        { nome: 'Vanessa Lopes', foto: mulher},
-        { nome: 'Ritinha', foto: mulher},
-        { nome: 'Cristiano', foto: mulher},
-        { nome: 'Fundação E-Zag', foto: mulher},
-        { nome: 'Manassés da Rosa Marcelino', foto: mulher},
-        { nome: 'Silvana Barbosa', foto: mulher},
-        { nome: 'Cintia Chagas', foto: mulher},
-        { nome: 'Carlos Alberto', foto: mulher},
-        { nome: 'Andi Ferreira', foto: mulher},
-        { nome: 'Finneas', foto: mulher},
-        { nome: 'Melissa Carpenter', foto: mulher},
-        { nome: 'Melri Ribeiro', foto: mulher},
-        { nome: 'Bárbara Soares', foto: mulher},
-        { nome: 'Simone Monteiro', foto: mulher},
-        { nome: 'Isabella coach', foto: mulher},
-        { nome: 'Thiago klovisck', foto: mulher},
+        { nome: 'Lúcia Katia', foto: mulher },
+        { nome: 'Vanessa Lopes', foto: mulher },
+        { nome: 'Ritinha', foto: mulher },
+        { nome: 'Cristiano', foto: mulher },
+        { nome: 'Fundação E-Zag', foto: mulher },
+        { nome: 'Manassés da Rosa Marcelino', foto: mulher },
+        { nome: 'Silvana Barbosa', foto: mulher },
+        { nome: 'Cintia Chagas', foto: mulher },
+        { nome: 'Carlos Alberto', foto: mulher },
+        { nome: 'Andi Ferreira', foto: mulher },
+        { nome: 'Finneas', foto: mulher },
+        { nome: 'Melissa Carpenter', foto: mulher },
+        { nome: 'Melri Ribeiro', foto: mulher },
+        { nome: 'Bárbara Soares', foto: mulher },
+        { nome: 'Simone Monteiro', foto: mulher },
+        { nome: 'Isabella coach', foto: mulher },
+        { nome: 'Thiago klovisck', foto: mulher },
     ]);
-
-    const user = {name: 'vitor'}
 
     const [chatSelected, setChatSelected] = useState();
     const [busca, setBusca] = useState();
@@ -76,7 +74,7 @@ function Chat() {
     ]);
     
     const messagesEndRef = useRef(null);
-
+    
     useEffect(() => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -84,19 +82,19 @@ function Chat() {
     }, [messages]);
     
     const [inptvalue, setInptvalue] = useState('');
-
+    
     const click = (index) => {
         const filtersAux = [...filters];
         const [clickedItem] = filtersAux.splice(index, 1);
         clickedItem.active = !clickedItem.active;
         filtersAux.unshift(clickedItem);
         setFilters(filtersAux);
-
+        
         classifica(clickedItem);
     };
-
+    
     const classifica = (item) => {
-
+        
         if (item.active) {
             
             if (item.text === 'A-Z') {
@@ -105,29 +103,36 @@ function Chat() {
                 setResult(sortedChats);
                 setUseResult(true);
             } else if (item.text === 'Antigas') {
-
+                
                 const chatsAux = [...chats];
                 let oldToNewChats = [];
-
+                
                 for (let i=1; i<chatsAux.length; i++) {
-
+                    
                     oldToNewChats.push(chatsAux[chatsAux.length-i]);
                 }
                 setResult(oldToNewChats);
                 setUseResult(true);
             }
         } else {
-
+            
             if (item.text === 'A-Z' || item.text === 'Antigas') {
-
+                
                 setUseResult(false);
             }
         }
     }
-
+    
+    const [name, setName] = useState('');
+    const user = {name: name};
+    
     useEffect(() => {
-        socket.on("receiveMessage", (data) => {
 
+        const nameAux = prompt('Qual seu nome?');
+        setName(nameAux);
+        user.name = nameAux;
+        socket.on("receiveMessage", (data) => {
+            
             let newMessage = JSON.parse(data);
 
             if (newMessage.name === user.name) {
@@ -146,7 +151,7 @@ function Chat() {
         e.preventDefault();
         if (inptvalue.trim() === '') return;
 
-        const newMessage = { sender: 'me', text: inptvalue, foto: mulher, name: 'vitor' };
+        const newMessage = { sender: 'me', text: inptvalue, foto: mulher, name: user.name };
         setInptvalue('');
         socket.emit("sendMessage", JSON.stringify(newMessage));
     };

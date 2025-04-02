@@ -103,6 +103,8 @@ const VideoConference = () => {
   };
 
   const [videoActive, setVideoActive] = useState(true);
+  const [micActive, setMicActive] = useState(true);
+  const [chatActive, setChatActive] = useState(false);
 
   return (
     <div className="videoconferencia-container">
@@ -113,15 +115,46 @@ const VideoConference = () => {
       {offer && <button className="start-call-button" onClick={acceptOffer}>Aceitar Chamada</button>}
 
       <div className="barra-config">
+        <img src='phone.png' />
         {
           videoActive 
           ?
-          <img onClick={() => setVideoActive(!videoActive)} src='video-desactive.png' />
+          <img onClick={() => setVideoActive(!videoActive)} src='video-active.png' />
           :
-          <img onClick={() => setVideoActive(!videoActive)} src='video-active.svg' />
+          <img onClick={() => setVideoActive(!videoActive)} src='video-desactive.png' />
         }
-        <img src='mic.png' />
+
+        {
+          micActive
+          ?
+          <img onClick={() => setMicActive(!micActive)} src='mic.png' />
+          :
+          <img onClick={() => setMicActive(!micActive)} src='mute.png' />
+        }
+        {
+          chatActive
+          ?
+          <img onClick={() => setChatActive(!chatActive)} src='comment (1).png' />
+          :
+          <img onClick={() => setChatActive(!chatActive)} src='comment.png' />
+        }
       </div>
+      {
+        chatActive
+        &&
+      <div className='chat-live'>
+        <div className='barra-cima-v'>
+          <img src='image.svg' />
+          <p>Jana Maria da Silva</p>
+        </div>
+        <div className='conversa'>
+        </div>
+        <div className='barra-baixo-v'>
+          <input placeholder='Digite uma mensagem' />
+          <button>Enviar</button>
+        </div>
+      </div>
+      }
     </div>
   );
 };

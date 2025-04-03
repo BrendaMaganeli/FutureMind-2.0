@@ -389,20 +389,16 @@
   margin-left: 90%;
   margin-top: 4%;
 }
+
 .container_alerta_nulo{
 
     color: white;
-
+    padding-top: 2%;
 }
 
-.container_nome_mostra{
+.container_geral_mostra{
 
-    color: red;
- 
+     color: #8faaaf;
+     padding-top: 2%;
 }
 
-.container_cpf_mostra{
-
-    
-    color: red;
-}

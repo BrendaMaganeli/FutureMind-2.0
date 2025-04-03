@@ -147,19 +147,19 @@ function CadastroPaciente() {
   }
 
    const [tipoInput, setTipoInput] = useState("password");
-   const [tipoIconSenha, setTipoIconSenha] = useState('icon_ver.png')
+   const [tipoIconSenha, setTipoIconSenha] = useState('icon_nao_ver.png')
 
    const alternarTipo = () => {
 
      if(tipoInput == 'password'){
 
       setTipoInput('text')
-      setTipoIconSenha('icon_nao_ver.png')
+      setTipoIconSenha('icon_ver.png')
 
      }else{
 
       setTipoInput('password')
-      setTipoIconSenha('icon_ver.png')
+      setTipoIconSenha('icon_nao_ver.png')
      }
    };
 
@@ -205,8 +205,8 @@ function CadastroPaciente() {
             value={nome}
             onChange={identificadorNome }
             />
-           <div className={`container_alerta_nulo ${nomeValido ? 'container_nome_mostra' : ''}`}>
-              <p>Nome invalido</p>
+           <div className={`container_alerta_nulo ${nomeValido ? 'container_geral_mostra' : ''}`}>
+              <p>Nome invalido!</p>
             </div>
           </div>
           <div className='input-cadastro'>
@@ -216,7 +216,7 @@ function CadastroPaciente() {
             onChange={identificadorCpf}
             maxLength="14"
             type='text' />
-            <div className={`container_alerta_nulo ${cpfValido ? 'container_cpf_mostra' : ''}`}>
+            <div className={`container_alerta_nulo ${cpfValido ? 'container_geral_mostra' : ''}`}>
               <p>CPF invalido!</p>
             </div>
           </div>
@@ -228,7 +228,7 @@ function CadastroPaciente() {
             maxLength="14"
             onChange={identificadorTelefone}
           />
-           <div className={`container_alerta_nulo ${telefoneValido ? 'container_cpf_mostra' : ''}`}>
+           <div className={`container_alerta_nulo ${telefoneValido ? 'container_geral_mostra' : ''}`}>
               <p>Telefone invalido!</p>
             </div>
           </div>
@@ -240,8 +240,8 @@ function CadastroPaciente() {
              maxLength="8"
              onChange={identificadorData} 
             />
-            <div className={`container_alerta_nulo ${dataNascimentoValido ? 'container_cpf_mostra' : ''}`}>
-              <p>Você não é maior que 18 anos</p>
+            <div className={`container_alerta_nulo ${dataNascimentoValido ? 'container_geral_mostra' : ''}`}>
+              <p>Você não é maior que 18 anos!</p>
             </div>
 
           </div>
@@ -251,7 +251,7 @@ function CadastroPaciente() {
             type='text'
             onChange={indentificadorEmail}
             />
-            <div className={`container_alerta_nulo ${emailValido ? 'container_cpf_mostra' : ''}`}>
+            <div className={`container_alerta_nulo ${emailValido ? 'container_geral_mostra' : ''}`}>
               <p>Email incorreto!</p>
             </div>
           </div>
@@ -262,8 +262,8 @@ function CadastroPaciente() {
              maxLength={15}
              onChange={indentificadorSenha}
              />
-             <div className={`container_alerta_nulo ${senhaValido ? 'container_cpf_mostra' : ''}`}>
-              <p>Senha deve ter no minimo 8 caracteres</p>
+             <div className={`container_alerta_nulo ${senhaValido ? 'container_geral_mostra' : ''}`}>
+              <p>Senha deve ter no minimo 8 caracteres!</p>
             </div>
 
             <img 

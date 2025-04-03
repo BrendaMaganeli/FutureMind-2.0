@@ -6,11 +6,46 @@ import { useState } from 'react';
 
 function CadastroPaciente() {
    const navigate = useNavigate(); // Hook para navegação
+   const [nomeValido, setNomeValido] = useState()
+   const [cpfValido, setCpfValido] = useState()
+   const [telefoneValido, setTelefoneValido] = useState()
+   const [dataNascimentoValido, setDataNascimentoValido] = useState()
+   const [emailValido, setEmailValido] = useState()
+   const [senhaValido, setSenhaValido] = useState()
+   const [valorEmail, setValorEmail] = useState()
+   const [valorSenha, setValorSenha] =  useState()
 
    const handleCadastro = () => {
-    navigate('/cadastroProfissional2');
-  }
+    if(nomeValido == false && cpfValido == false && telefoneValido == false && dataNascimentoValido == false && emailValido == false && senhaValido == false){
+
+      navigate('/cadastroProfissional2');
+    }
+    if(nome.trim().length < 1){
+
+       setNomeValido(true)
+    }
+    if(cpf.trim().length < 14){
+
+      setCpfValido(true)
+    }
+    if(telefone.trim().length < 15){
+
+      setTelefoneValido(true)
+    }
+    if(dataNascimento.trim().length < 8){
+
+      setDataNascimentoValido(true)
+    }
+    if(!valorEmail?.trim().endsWith("@gmail.com") && !valorEmail?.endsWith("@hotmail.com")){
+
+      setEmailValido(true)
+    }
+    if (!valorSenha || valorSenha.trim().length < 8) {
+      setSenhaValido(true);
+    }
     
+  }
+
    const formatarCPF = (value) => {
    
      value = value.replace(/\D/g, ''); 
@@ -29,14 +64,33 @@ function CadastroPaciente() {
     const [nome, setNome] = useState('');
   
     const identificadorNome = (e) => {
-      setNome(formatarNome(e.target.value));
+
+      const nomeAux = e.target.value;
+      setNome(formatarNome(nomeAux));
+
+      if (nomeAux.length>=1) {
+
+        setNomeValido(false);
+      } else {
+
+        setNomeValido(true)
+      }
     };
 
  
     const [cpf, setCpf] = useState('');
   
     const identificadorCpf = (e) => {
-      setCpf(formatarCPF(e.target.value));
+      const cpfAux = e.target.value
+      setCpf(formatarCPF(cpfAux));
+
+      if (cpfAux.trim().length == 14) {
+
+        setCpfValido(false);
+      } else {
+
+        setCpfValido(true)
+      }
     };
 
    const [telefone, setTelefone] = useState('');
@@ -46,21 +100,51 @@ function CadastroPaciente() {
 
     value = value.replace(/\D/g, '');
     value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-
      
     setTelefone(value);
+  
+    if(value.trim().length == 15){
+
+      setTelefoneValido(false)
+    }else{
+
+      setTelefoneValido(true)
+    }
    }
 
    const [dataNascimento, setDataNascimento] = useState('')
 
    const identificadorData = (e) => {
 
-    let value = e.target.value
+    let value = e.target.value;
+    
     value = value.replace(/\D/g, '');
     value = value.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3');
+    setDataNascimento(value);
 
-    setDataNascimento(value)
-   }
+    if (value.length === 10) {
+
+        const dia = parseInt(value.slice(0, 2), 10);
+        const mes = parseInt(value.slice(3, 5), 10);
+        const ano = parseInt(value.slice(6, 10), 10);
+    
+        const nascimento = new Date(ano, mes - 1, dia);
+        const hoje = new Date();
+    
+        let idade = hoje.getFullYear() - nascimento.getFullYear();
+        const aniversarioAindaNaoPassou = 
+            hoje.getMonth() < nascimento.getMonth() || 
+            (hoje.getMonth() === nascimento.getMonth() && hoje.getDate() < nascimento.getDate());
+    
+        if (aniversarioAindaNaoPassou) {
+            idade--;
+        }
+    
+        setDataNascimentoValido(idade < 18);
+    } else {
+        setDataNascimentoValido(true);
+    }
+  }
 
    const [tipoInput, setTipoInput] = useState("password");
    const [tipoIconSenha, setTipoIconSenha] = useState('icon_ver.png')
@@ -78,6 +162,33 @@ function CadastroPaciente() {
       setTipoIconSenha('icon_ver.png')
      }
    };
+
+   const indentificadorEmail = (e) =>{
+
+    let valor_email = e.target.value 
+    setValorEmail(valor_email)
+    if(valor_email.trim().endsWith("@gmail.com") || valor_email.endsWith("@gmail.com") ){
+
+      setEmailValido(false)
+    }else{
+
+      setEmailValido(true)
+    }
+   }
+
+   const indentificadorSenha = (e) => {
+
+    let valor_senha = e.target.value
+    setValorSenha(valor_senha)
+    if(valor_senha.trim().length >= 8){
+
+      setSenhaValido(false)
+
+    }else{
+
+      setSenhaValido(true)
+    }
+   }
  
   return (
     <div className='container-profissional'>
@@ -92,8 +203,11 @@ function CadastroPaciente() {
             <input 
             type="text"
             value={nome}
-            onChange={identificadorNome}
+            onChange={identificadorNome }
             />
+           <div className={`container_alerta_nulo ${nomeValido ? 'container_nome_mostra' : ''}`}>
+              <p>Nome invalido</p>
+            </div>
           </div>
           <div className='input-cadastro'>
             <label>CPF</label>
@@ -102,6 +216,9 @@ function CadastroPaciente() {
             onChange={identificadorCpf}
             maxLength="14"
             type='text' />
+            <div className={`container_alerta_nulo ${cpfValido ? 'container_cpf_mostra' : ''}`}>
+              <p>CPF invalido!</p>
+            </div>
           </div>
           <div className='input-cadastro'>
             <label>Telefone</label>
@@ -111,6 +228,9 @@ function CadastroPaciente() {
             maxLength="14"
             onChange={identificadorTelefone}
           />
+           <div className={`container_alerta_nulo ${telefoneValido ? 'container_cpf_mostra' : ''}`}>
+              <p>Telefone invalido!</p>
+            </div>
           </div>
           <div className='input-cadastro'>
             <label>Data de nascimento</label>
@@ -120,17 +240,32 @@ function CadastroPaciente() {
              maxLength="8"
              onChange={identificadorData} 
             />
+            <div className={`container_alerta_nulo ${dataNascimentoValido ? 'container_cpf_mostra' : ''}`}>
+              <p>Você não é maior que 18 anos</p>
+            </div>
+
           </div>
           <div className='input-cadastro'>
             <label>E-mail</label>
-            <input type='text' />
+            <input 
+            type='text'
+            onChange={indentificadorEmail}
+            />
+            <div className={`container_alerta_nulo ${emailValido ? 'container_cpf_mostra' : ''}`}>
+              <p>Email incorreto!</p>
+            </div>
           </div>
           <div className='input-cadastro'>
             <label>Senha</label>
              <input 
-             type={tipoInput} 
-             
-             maxLength={15}/>
+             type={tipoInput}  
+             maxLength={15}
+             onChange={indentificadorSenha}
+             />
+             <div className={`container_alerta_nulo ${senhaValido ? 'container_cpf_mostra' : ''}`}>
+              <p>Senha deve ter no minimo 8 caracteres</p>
+            </div>
+
             <img 
             onClick={alternarTipo}
             className='imagem_olho'

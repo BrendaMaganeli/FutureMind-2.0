@@ -389,3 +389,20 @@
   margin-left: 90%;
   margin-top: 4%;
 }
+.container_alerta_nulo{
+
+    color: white;
+
+}
+
+.container_nome_mostra{
+
+    color: red;
+ 
+}
+
+.container_cpf_mostra{
+
+    
+    color: red;
+}

@@ -148,6 +148,7 @@ const VideoConference = () => {
           <p>Jana Maria da Silva</p>
         </div>
         <div className='conversa'>
+          
         </div>
         <div className='barra-baixo-v'>
           <input placeholder='Digite uma mensagem' />

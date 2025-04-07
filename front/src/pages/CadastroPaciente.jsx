@@ -68,7 +68,7 @@ function CadastroPaciente() {
       const nomeAux = e.target.value;
       setNome(formatarNome(nomeAux));
 
-      if (nomeAux.length>=1) {
+      if (nomeAux.length > 0) {
 
         setNomeValido(false);
       } else {

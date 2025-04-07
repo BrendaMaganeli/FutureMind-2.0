@@ -821,5 +821,5 @@
   .cilindro_um_equilibrio { animation: sAnimation 7s ease-in-out infinite; animation-delay: 0s; }
   .cilindro_tres_equilibrio { animation: sAnimation 7s ease-in-out infinite; animation-delay: 2.6s; }
   .cilindro_quatro_equilibrio { animation: sAnimation 7s ease-in-out infinite; animation-delay: 3.9s; }
-  .cilindro_dois_emocional { animation: sAnimation 7s ease-in-out infinite; animation-delay: 1.3s; }
+  .cilindro_dois_equilibrio { animation: sAnimation 7s ease-in-out infinite; animation-delay: 1.3s; }
   

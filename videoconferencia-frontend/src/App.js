@@ -1,4 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
+import close from '../assets/Group 239210.svg';
+import cam from '../assets/cam-recorder (1) 1.svg';
+import block from '../assets/blocked 1.svg';
+import handClick from '../assets/image 17.svg';
+import microfone from '../assets/image 15.svg';
+import figurinhaIcon from '../assets/image 16.svg';
+import arvoreAzul from '../assets/Arvore Azul.svg';
+import arvoreBranca from '../assets/Arvore Branca.svg';
 import io from "socket.io-client";
 import './App.css';
 
@@ -106,6 +114,57 @@ const VideoConference = () => {
   const [micActive, setMicActive] = useState(true);
   const [chatActive, setChatActive] = useState(false);
 
+  const [chatSelected, setChatSelected] = useState();
+  const settingsRef = useRef(null);
+  const [theme, setTheme] = useState('light');
+  const tema = theme==='light' ? 'escuro' : 'claro';
+  const [messages, setMessages] = useState([]);
+  const messagesEndRef = useRef(null);
+  const [inptvalue, setInptvalue] = useState('');
+  const [name, setName] = useState('');
+
+  const toggleTheme = () => {
+      setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
+  useEffect(() => {
+      const nameAux = prompt('Qual seu nome?');
+      setName(nameAux);
+
+      socket.on("receiveMessage", (data) => {
+          let newMessage = JSON.parse(data);
+          newMessage.sender = newMessage.name === nameAux ? 'me' : 'other';
+          setMessages(prevMessages => [...prevMessages, newMessage]);
+      });
+
+      return () => socket.off("receiveMessage");
+  }, []);
+
+  useEffect(() => {
+      if (messagesEndRef.current) {
+          messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+  }, [messages]);
+
+  useEffect(() => {
+      function handleClickOutside(event) {
+          if (settingsRef.current && !settingsRef.current.contains(event.target)) {
+              setVisibleSettings(false);
+          }
+      }
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const sendMessage = (e) => {
+      e.preventDefault();
+      if (inptvalue.trim() === '') return;
+
+      const newMessage = { sender: 'me', text: inptvalue, foto: mulher, name: name };
+      setInptvalue('');
+      socket.emit("sendMessage", JSON.stringify(newMessage));
+  };
+
   return (
     <div className="videoconferencia-container">
       
@@ -143,17 +202,66 @@ const VideoConference = () => {
         chatActive
         &&
       <div className='chat-live'>
-        <div className='barra-cima-v'>
-          <img src='image.svg' />
-          <p>Jana Maria da Silva</p>
-        </div>
-        <div className='conversa'>
-          
-        </div>
-        <div className='barra-baixo-v'>
-          <input placeholder='Digite uma mensagem' />
-          <button>Enviar</button>
-        </div>
+          <div className="barra-top">
+              <div className="img-foto">
+                  <img src={chatSelected.foto} alt="" />
+              </div>
+              <div className="nome-user-chat">
+                  <h5>{chatSelected.nome}</h5>
+              </div>
+              <div className="icons-chat">
+                  <div className="icons-chat-p">
+                      <img src={cam} className='icon-chat-p-1' alt="" />  
+                      <img src={block} className='icon-chat-p-2' alt="" />
+                  </div>
+                  <img onClick={() => setChatSelected('')} src={close} className='icon-chat-p-3' alt="" />
+              </div>
+          </div>
+          <div style={{height: '83%', overflowY: 'auto'}}>
+              <div className="messages-div">
+                  <div className="acess-profile-div">
+                      <div className="user-name">@jana.silvaa</div>
+                      <div className="btn-acess">
+                          <b>Acessar perfil</b>
+                      </div>
+                  </div>
+                  <div className="arvore-chat">
+                      {theme === 'light' ? <img src={arvoreAzul} alt="" /> : <img src={arvoreBranca} alt="" />}
+                  </div>
+                  {messages.map((msg, index) => (
+                      <div key={index} className={msg.sender === 'me' ? 'message-right' : 'message-left'}>
+                          {msg.sender !== 'me' &&
+                              <div className="image-message-right">
+                                  <img src={msg.foto} alt="" />
+                              </div>
+                          }
+                          <div className={msg.sender === 'me' ? 'text-message-right' : 'text-message-left'}>
+                              {msg.text}
+                          </div>
+                          {msg.sender === 'me' &&
+                              <div className="image-message-left">
+                                  <img src={msg.foto} alt="" />
+                              </div>
+                          }
+                      </div>
+                  ))}
+                  <div ref={messagesEndRef}></div>
+              </div>
+          </div>
+          <form onSubmit={sendMessage} className="barra-bottom">
+              <div className="inpt-chat">
+                  <input type="text" placeholder='Enter a message...' value={inptvalue} onChange={(e) => setInptvalue(e.target.value)} />
+              </div>
+              <div className="icons-chat-inpt">
+                  <div className="icons-inpt-a">
+                      <img src={figurinhaIcon} alt="" />
+                      <img src={microfone} alt="" />
+                  </div>
+                  <button type='submit'>
+                      <img src={handClick} className='hand-click' alt="" />
+                  </button>
+              </div>
+          </form>
       </div>
       }
     </div>

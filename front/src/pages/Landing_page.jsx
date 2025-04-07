@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import React, { useState, useEffect } from 'react'
 import Navbar from '../Components/Navbar'
 import './CSS/Landing_page.css'
 import Footer from '../Components/Footer.jsx'
@@ -6,7 +8,13 @@ import { Link } from 'react-router-dom';
 
 function Landing_page() {
 
-  
+  useEffect(() => {
+    AOS.init({
+      duration: 2000,
+      once: true,
+    });
+  }, []);  
+
     const [isVisible, setIsVisible] = useState(false)
     const [isVisibleDois, setIsVisibleDois] = useState(false)
     
@@ -31,7 +39,7 @@ function Landing_page() {
     <div>
     <div className={`'container-geral_landing_um' ${isVisible || isVisibleDois ? 'blur' : ''}`}>
       <Navbar/>
-      <div className='container-geral_landing_um'>
+      <div className='container-geral_landing_um' data-aos="fade-up" data-aos-delay="0">
           <div className='container-geral_landing_esquerda_um'>
             <div className='container_info_inicio_landing'>
             <div className='container_h1_equilibrio'>
@@ -56,7 +64,7 @@ function Landing_page() {
             </div>
           </div>
       </div>
-      <div className='container-geral_landing_dois'>
+      <div className='container-geral_landing_dois' data-aos="fade-up" data-aos-delay="200">
         <div className='container_info_emocional_esquerda'>
           <div className='container_cilindros_emocional'>
             <div className='cilindro_um_emocional'></div>
@@ -76,7 +84,7 @@ function Landing_page() {
           </div>
         </div>
       </div>
-      <div className='container-geral_funcionamento'>
+      <div className='container-geral_funcionamento' data-aos="fade-up" data-aos-delay="400">
           <div className='container-geral_funcionamento_esquerda'>
              <div className='conatainer_text_h1_funcionamento'>
               <h1 className='text_h1_funcionamento'>Como funciona a terapia online? </h1>
@@ -91,17 +99,17 @@ function Landing_page() {
              <img className='imagem_funcional' src="imagem_funcional.svg" alt="" />
           </div>
       </div>
-       <div className='container_text_bem-estar'>
+       <div className='container_text_bem-estar' data-aos="fade-up" data-aos-delay="600">
         <h1 className='h1_empresas'>Empresas</h1> <h1 className='h1_bem-estar'>que já cuidam do seu bem-estar dos colaboradores</h1>
        </div>
-       <div className='container_bem-estar'>
+       <div className='container_bem-estar' data-aos="fade-up" data-aos-delay="600">
           <div className='container_imagems_empresas'><img className='imagems_empresas_parceiras' src="apoio-acate 1.svg" alt="" /></div>
           <div className='container_imagems_empresas'><img className='imagems_empresas_parceiras' src="senai_color 1.svg" alt="" /></div>
           <div className='container_imagems_empresas'><img className='imagems_empresas_parceiras' src="Softplan 1.svg" alt="" /></div>
           <div className='container_imagems_empresas'><img className='imagems_empresas_parceiras' src="imagem_gogle.svg" alt="" /></div>
           <div className='container_imagems_empresas'><img className='imagems_empresas_parceiras' src="imagem_bradesco.svg" alt="" /></div>
        </div>
-       <div className='container-geral_empresas_parceiras'>
+       <div className='container-geral_empresas_parceiras' data-aos="fade-up" data-aos-delay="800">
           <div className='container-geral_empresas_parceiras_esquerda'>
             <div className='container_esquerdo_info_empresas'>
             <div className='container_text_empresas_parceiras'>

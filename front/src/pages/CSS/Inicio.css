@@ -74,11 +74,19 @@
     gap: 30%;
 }
 
+.div-filtro{
+  display: flex;
+  width: 100%; 
+  justify-content: end;
+  
+}
+
 .filtros-profissionais .inpt-filtro {
 
     padding: 0 0 0 20px;
     display: flex;
     align-items: center;
+    justify-content: start;
     border: none;
     background-color: #5a7da0da;
     border-radius: 12px;
@@ -110,17 +118,16 @@
 
 .filtros-profissionais .especialidade-filtro, .filtros-profissionais .abordagem-filtro {
 
-    width: 90%;
+    width: 80%;
 }
 
 .especialidade-filtro select, .abordagem-filtro select {
     
     border: none;
     color: white;
-    border-radius: 12px;
-    padding: 0 2% 0 2%;
-    height: 45px;
-    width: 85%;
+    border-radius: 10px;
+    padding: 4%;
+    width: 90%;
 }
 
 .abordagem-filtro select {
@@ -161,17 +168,17 @@
 .filter-profissionais-baixo .div-filtrar {
 
     width: 40%;
-    height: 74%;
+    height: 80%;
     display: flex;
     flex-direction: column;
     background-color: white;
-    border-radius: 30px;
-    padding: 1%;
-    gap: 25px;
+    border-radius: 20px;
+    padding: 3%;
+    gap: 15px;
     justify-content: center;
 }
 
-.div-filtrar .div-btn-filtro {
+.div-btn-filtro {
 
     background-color: #5a7da0;
     border: none;
@@ -179,16 +186,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1%;
+    padding: 2%;
     cursor: pointer;
 }
 
-.div-filtrar .text-btn-filtro {
+.text-btn-filtro {
 
     width: 100%;
     text-align: left;
     color: #013a63;
-    padding: 5% 5% 0 5%;
+    /* padding: 5% 5% 0 5%; */
 }
 
 .div-btn-filtro .btn-filtro {

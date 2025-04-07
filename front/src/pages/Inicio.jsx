@@ -32,7 +32,7 @@ function Inicio() {
                 <img src='search.png' alt="" />
                 <input type='text' placeholder='Buscar profissional...' />
               </div>
-              <div style={{ display: 'flex', width: '100%' }}>
+              <div className='div-filtro'>
                 <div className="especialidade-filtro">
                   <select>
                     <option value="">Especialidade</option>

@@ -69,7 +69,7 @@
 
     display: flex;
     width: 100%;
-    height: 30%;
+    height: 40%;
     align-items: center;
     gap: 30%;
 }
@@ -81,9 +81,9 @@
     align-items: center;
     border: none;
     background-color: #5a7da0da;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 0 2% 0 2%;
-    height: 35px;
+    height: 18%;
     width: 70%;
     color: white;
     gap: 10px;
@@ -99,6 +99,7 @@
     border: none;
     background-color: transparent;
     color: white;
+    height: 100%;
 }
 
 .filtros-profissionais .inpt-filtro input::placeholder {
@@ -116,9 +117,10 @@
     
     border: none;
     color: white;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 0 2% 0 2%;
-    height: 35px;
+    height: 45px;
+    width: 85%;
 }
 
 .abordagem-filtro select {
@@ -130,18 +132,15 @@
 
     background-color: #61A5C2;
     opacity: 78%;
-}
-
-.filtros-profissionais select {
-
-    width: 90%;
-}
+  }
+  
+  
 
 .filter-profissionais-baixo {
 
     display: flex;
     width: 100%;
-    height: 70%;
+    height: 60%;
     gap: 30px;
     justify-content: center;
     align-items: center;
@@ -162,14 +161,14 @@
 .filter-profissionais-baixo .div-filtrar {
 
     width: 40%;
+    height: 74%;
     display: flex;
     flex-direction: column;
     background-color: white;
-    height: 60%;
     border-radius: 30px;
-    padding: 2%;
+    padding: 1%;
     gap: 25px;
-    justify-content: end;
+    justify-content: center;
 }
 
 .div-filtrar .div-btn-filtro {
@@ -180,8 +179,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2%;
-    gap: 6px;
+    padding: 1%;
     cursor: pointer;
 }
 
@@ -190,6 +188,7 @@
     width: 100%;
     text-align: left;
     color: #013a63;
+    padding: 5% 5% 0 5%;
 }
 
 .div-btn-filtro .btn-filtro {
@@ -198,12 +197,12 @@
     border: none;
     font-size: 16px;
     font-weight: 500;
-    color: white
+    color: white;
 }
 
 .div-btn-filtro img {
 
-    width: 8%;
+    width: 6%;
 }
 
 /* Container principal */
@@ -241,193 +240,226 @@
     height: 85px;
   }
   
-  /* Estilização do swiper */
   .swiper {
+
     width: 80%;
-    padding: 20px 0;
+    padding: 2% 0;
   }
   
   .swiper-profi {
     display: flex;
     align-items: center;
     width: 100%;
+    height: 68vh;
   }
-
+  
   .swiper-profi .swiper-slide {
-
     width: 30%;
   }
   
-.card {
+  .card {
     background: #ffffff;
-    padding: 35px;
-    border-radius: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    padding: 10%;
+    border-radius: 30px;
+    box-shadow: 0 0.4em 1em rgba(0, 0, 0, 0.15);
     text-align: left;
-    width: 100%;
-    height: 580px;
+    width: 98%;
+    height: 100%;
     display: flex;
     flex-direction: column;
-
     transition: transform 0.3s ease-in-out;
-}
-  .card:hover {
-   cursor: pointer;
+    justify-content: end;
+    gap: 2%;
   }
   
-  /* Imagem do profissional */
+  .card:hover {
+    cursor: pointer;
+  }
+  
   .card img {
-    width: 70px;
-    height: 70px;
+    width: 20%;
+    height: auto;
     border-radius: 50%;
     object-fit: cover;
   }
   
-  /* Nome e preço */
   .card h3 {
-    font-size: 18px;
+    font-size: 1.2em;
     font-weight: bold;
     color: #2C3E50;
-    margin-top: 10px;
+    margin-top: 1em;
   }
   
   .card .preco {
-    font-size: 16px;
+    font-size: 1em;
     font-weight: bold;
     color: #007bff;
   }
   
-  /* Tags */
   .card .tags {
     display: flex;
-    gap: 5px;
-    margin-top: 10px;
+    gap: 0.5em;
+    margin-top: 1em;
     flex-wrap: wrap;
   }
   
   .card .tag {
     background: #e3eaf2;
     color: #546e7a;
-    font-size: 12px;
-    padding: 5px 10px;
+    font-size: 0.85em;
+    padding: 0.5em 1em;
     border-radius: 8px;
     font-weight: 500;
   }
   
-  /* Seção "Sobre mim" */
   .card .sobre {
-    font-size: 14px;
+    font-size: 0.9em;
     color: #4A5A77;
-    margin-top: 10px;
+    margin-top: 1em;
   }
   
-  /* Estilo da abordagem */
   .card .abordagem {
     background: #F0F4F8;
-    padding: 10px;
+    padding: 1em;
     border-radius: 8px;
-    margin-top: 10px;
-    font-size: 14px;
+    margin-top: 1em;
+    font-size: 0.9em;
     font-weight: 500;
   }
   
-  /* CRP */
   .card .crp {
-    font-size: 12px;
+    font-size: 0.8em;
     color: #78909C;
-    margin-top: 10px;
+    margin-top: 1em;
     font-weight: 500;
   }
   
-  /* Estilização das setas do Swiper */
+  /* Setas do Swiper */
   .swiper-button-next,
   .swiper-button-prev {
     color: #4A5A77 !important;
-    font-size: 20px;
+    font-size: 1.2em;
     font-weight: bold;
   }
   
   .swiper-button-next::after,
   .swiper-button-prev::after {
-    font-size: 25px;
+    font-size: 1.6em;
   }
   
   .swiper-profi .swiper-scrollbar {
-
     background: transparent;
   }
-
+  
   .swiper-profi .swiper-pagination-bullet-active {
-
     background-color: #00000066 !important;
   }
-
+  
   /* Responsividade */
   @media (max-width: 1024px) {
     .swiper-profi {
-      flex-wrap: wrap;
-      justify-content: center;
+        flex-wrap: wrap;
+        justify-content: center;
     }
-    
+  
     .card {
-      width: 90%;
+        width: 90%;
     }
   }
   
-
-  .foto-perfilInicio{
+  .foto-perfilInicio {
     display: flex;
     align-items: center;
-  
   }
-
-  .perfil-nomeValor{
+  
+  .perfil-nomeValor {
     padding-left: 5%;
     color: #013A63;
     font-size: 1.1em;
   }
-
-  .div-especializacao{
+  
+  .div-especializacao {
     display: flex;
     gap: 3%;
     flex-wrap: wrap;
     justify-content: start;
     margin-top: 3%;
   }
-
-  .especializacao-style{
+  
+  .especializacao-style {
     background-color: #5a789f7c;
-    margin-top: 2%;
     color: white;
     width: 25%;
     padding: 1%;
     border-radius: 20px;
     text-align: center;
-    font-size: 80%;
+    font-size: 0.8em;
   }
-
-  .sobremim-inicio{
+  
+  .sobremim-inicio {
     display: flex;
     flex-direction: column;
-    
     margin-top: 1%;
   }
-
-  .textSobremim{
+  
+  .textSobremim {
     border: 1px solid #013a6385;
     padding: 4%;
     border-radius: 20px;
-    font-size: 80%;
+    font-size: 0.8em;
     color: #546e7aaf;
     width: 100%;
     margin-top: 3%;
     margin-right: 2%;
   }
-
-  .crp-inicio{
+  
+  .crp-inicio {
     display: flex;
     justify-content: end;
     margin-top: 5%;
     color: #013A63;
+  }
+  
+  .swiper-wrapper-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .swiper-filho {
+
+    width: 80%;
+  }
+  
+  .swiper-button-prev-custom,
+  .swiper-button-next-custom {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    font-size: 100px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease-in-out;
+    color: white;
+  }
+  
+  .swiper-button-prev-custom:hover,
+  .swiper-button-next-custom:hover {
+    scale: 1.05;
+    color: #013a63;
+    transition: 0.3s;
+  }
+  
+  .swiper-button-prev-custom {
+    left: 50px;
+  }
+  
+  .swiper-button-next-custom {
+    right: 50px;
   }
   

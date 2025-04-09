@@ -16,45 +16,52 @@ import io from "socket.io-client";
 import './CSS/Chat.css';
 
 function Chat() {
-    
-    const socket = io("http://localhost:3001");
+    const socket = io("https://futuremind-2-0.onrender.com");
+
     const [chats, setChats] = useState([
         { nome: 'Vitor Azevedo', foto: mulher },
         { nome: 'Anderson Silva', foto: mulher},
-        { nome: 'Lúcia Katia', foto: mulher},
-        { nome: 'Vanessa Lopes', foto: mulher},
-        { nome: 'Ritinha', foto: mulher},
-        { nome: 'Cristiano', foto: mulher},
-        { nome: 'Fundação E-Zag', foto: mulher},
-        { nome: 'Manassés da Rosa Marcelino', foto: mulher},
-        { nome: 'Silvana Barbosa', foto: mulher},
-        { nome: 'Cintia Chagas', foto: mulher},
-        { nome: 'Carlos Alberto', foto: mulher},
-        { nome: 'Andi Ferreira', foto: mulher},
-        { nome: 'Finneas', foto: mulher},
-        { nome: 'Melissa Carpenter', foto: mulher},
-        { nome: 'Melri Ribeiro', foto: mulher},
-        { nome: 'Bárbara Soares', foto: mulher},
-        { nome: 'Simone Monteiro', foto: mulher},
-        { nome: 'Isabella coach', foto: mulher},
-        { nome: 'Thiago klovisck', foto: mulher},
+        { nome: 'Lúcia Katia', foto: mulher },
+        { nome: 'Vanessa Lopes', foto: mulher },
+        { nome: 'Ritinha', foto: mulher },
+        { nome: 'Cristiano', foto: mulher },
+        { nome: 'Fundação E-Zag', foto: mulher },
+        { nome: 'Manassés da Rosa Marcelino', foto: mulher },
+        { nome: 'Silvana Barbosa', foto: mulher },
+        { nome: 'Cintia Chagas', foto: mulher },
+        { nome: 'Carlos Alberto', foto: mulher },
+        { nome: 'Andi Ferreira', foto: mulher },
+        { nome: 'Finneas', foto: mulher },
+        { nome: 'Melissa Carpenter', foto: mulher },
+        { nome: 'Melri Ribeiro', foto: mulher },
+        { nome: 'Bárbara Soares', foto: mulher },
+        { nome: 'Simone Monteiro', foto: mulher },
+        { nome: 'Isabella coach', foto: mulher },
+        { nome: 'Thiago klovisck', foto: mulher },
     ]);
 
-    const user = {name: 'vitor'}
-
     const [chatSelected, setChatSelected] = useState();
-    const [busca, setBusca] = useState();
+    const [busca, setBusca] = useState('');
     const [result, setResult] = useState([]);
     const [useResult, setUseResult] = useState(false);
     const [visibleSettings, setVisibleSettings] = useState(false);
     const settingsRef = useRef(null);
     const [theme, setTheme] = useState('light');
+    const tema = theme==='light' ? 'escuro' : 'claro';
+    const [fontSize, setFontSize] = useState('medium');
+    const [filters, setFilters] = useState([
+        { text: '3 não lidas', active: false },
+        { text: 'A-Z', active: false },
+        { text: 'Antigas', active: false },
+    ]);
+    const [messages, setMessages] = useState([]);
+    const messagesEndRef = useRef(null);
+    const [inptvalue, setInptvalue] = useState('');
+    const [name, setName] = useState('');
 
     const toggleTheme = () => {
         setTheme(theme === 'light' ? 'dark' : 'light');
     };
-
-    const [fontSize, setFontSize] = useState('medium');
 
     const toggleFontSize = () => {
         setFontSize((prevSize) => {
@@ -64,109 +71,67 @@ function Chat() {
         });
     };
 
-
-    const [filters, setFilters] = useState([
-        { text: '3 não lidas', active: false },
-        { text: 'A-Z', active: false },
-        { text: 'Antigas', active: false },
-    ]);
-    
-    const [messages, setMessages] = useState([]);
-    
-    const messagesEndRef = useRef(null);
-
-    useEffect(() => {
-        if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    }, [messages]);
-    
-    const [inptvalue, setInptvalue] = useState('');
-
     const click = (index) => {
         const filtersAux = [...filters];
         const [clickedItem] = filtersAux.splice(index, 1);
         clickedItem.active = !clickedItem.active;
         filtersAux.unshift(clickedItem);
         setFilters(filtersAux);
-
         classifica(clickedItem);
     };
 
     const classifica = (item) => {
-
         if (item.active) {
-            
             if (item.text === 'A-Z') {
-                const chatsAux = [...chats];
-                const sortedChats = chatsAux.sort((a, b) => a.nome.localeCompare(b.nome));
+                const sortedChats = [...chats].sort((a, b) => a.nome.localeCompare(b.nome));
                 setResult(sortedChats);
                 setUseResult(true);
             } else if (item.text === 'Antigas') {
-
-                const chatsAux = [...chats];
-                let oldToNewChats = [];
-
-                for (let i=1; i<chatsAux.length; i++) {
-
-                    oldToNewChats.push(chatsAux[chatsAux.length-i]);
-                }
+                const oldToNewChats = [...chats].reverse();
                 setResult(oldToNewChats);
                 setUseResult(true);
             }
         } else {
-
             if (item.text === 'A-Z' || item.text === 'Antigas') {
-
                 setUseResult(false);
             }
         }
-    }
+    };
 
     useEffect(() => {
+        const nameAux = prompt('Qual seu nome?');
+        setName(nameAux);
+
         socket.on("receiveMessage", (data) => {
-
             let newMessage = JSON.parse(data);
-
-            if (newMessage.name === user.name) {
-
-                newMessage.sender = 'me';
-            } else {
-
-                newMessage.sender = 'other';
-            }
+            newMessage.sender = newMessage.name === nameAux ? 'me' : 'other';
             setMessages(prevMessages => [...prevMessages, newMessage]);
         });
+
         return () => socket.off("receiveMessage");
-      }, []);
+    }, []);
 
-    const sendMessage = (e) => {
-        e.preventDefault();
-        if (inptvalue.trim() === '') return;
-
-        const newMessage = { sender: 'me', text: inptvalue, foto: mulher, name: 'tiago' };
-        setInptvalue('');
-        socket.emit("sendMessage", JSON.stringify(newMessage));
-    };
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages]);
 
     function buscaProfissional(e) {
         const termo = e.target.value;
         setBusca(termo.toLowerCase());
-    
+
         if (termo === '') {
             setResult([]);
             setUseResult(false);
             return;
         }
-        
+
         const filtrados = chats.filter(chat => chat.nome.toLowerCase().includes(termo));
-        
-        const resultAux = filtrados ? filtrados : [];
-        setResult(resultAux);
+        setResult(filtrados || []);
         setUseResult(true);
-        console.log(result);
-    }    
-    
+    }
+
     useEffect(() => {
         function handleClickOutside(event) {
             if (settingsRef.current && !settingsRef.current.contains(event.target)) {
@@ -177,6 +142,15 @@ function Chat() {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    const sendMessage = (e) => {
+        e.preventDefault();
+        if (inptvalue.trim() === '') return;
+
+        const newMessage = { sender: 'me', text: inptvalue, foto: mulher, name: name };
+        setInptvalue('');
+        socket.emit("sendMessage", JSON.stringify(newMessage));
+    };
+
     return (
         <div className={`container-chats ${theme} ${fontSize}`}>
             <div className="barra-lateral-chat">
@@ -184,11 +158,10 @@ function Chat() {
                     <img className='voltar-btn' src={voltar} alt="" />
                     <img onClick={() => setVisibleSettings(!visibleSettings)} src={config} alt="" />
                     {
-                        visibleSettings
-                        &&
+                        visibleSettings &&
                         <div className="settings" ref={settingsRef}>
                             <div className="config" onClick={toggleFontSize}>Tamanho da fonte</div>
-                            <div className="config" onClick={toggleTheme}>Mudar tema</div>
+                            <div className="config" onClick={toggleTheme}>Tema {tema}</div>
                         </div>
                     }
                 </div>
@@ -204,7 +177,7 @@ function Chat() {
                     <div className="input-pesquisa">
                         <div className="div-lupa-input">
                             <img src={lupa} alt='Lupa pesquisa' />
-                            <input onChange={(e) => buscaProfissional(e)} value={busca} type="text" placeholder='Busque por conversas...' />
+                            <input onChange={buscaProfissional} value={busca} type="text" placeholder='Busque por conversas...' />
                         </div>
                     </div>
                     <div className="boxs-pesquisa">
@@ -228,10 +201,10 @@ function Chat() {
                     }
 
                     {
-                        (result.length===0 && useResult===true)&&
+                        (result.length === 0 && useResult) &&
                         <>
-                        <p className='no-results'>Não há resultados para esta busca.</p>
-                        <img className='arvore-results' src={arvoreAzul} />
+                            <p className='no-results'>Não há resultados para esta busca.</p>
+                            <img className='arvore-results' src={arvoreAzul} />
                         </>
                     }
                 </div>
@@ -240,8 +213,7 @@ function Chat() {
                 </div>
             </div>
             {
-                chatSelected
-                ?
+                chatSelected ?
                 <div className="chat">
                     <div className="barra-top">
                         <div className="img-foto">
@@ -259,48 +231,34 @@ function Chat() {
                         </div>
                     </div>
                     <div style={{height: '83%', overflowY: 'auto'}}>
-                    <div className="messages-div">
-                    <div className="acess-profile-div">
-                        <div className="user-name">@jana.silvaa</div>
-                        <div className="btn-acess">
-                            <b>Acessar perfil</b>
-                        </div>
-                    </div>
-                    <div className="arvore-chat">
-                        {
-                            theme === 'light'
-                            ?
-                            <img src={arvoreAzul} alt="" />
-                            :
-                            <img src={arvoreBranca} alt="" />
-                        }
-                    </div>
-                        {messages.map((msg, index) => (
-                            <div key={index} className={msg.sender === 'me' ? 'message-right' : 'message-left'}>
-
-                                {
-                                    msg.sender !== 'me'
-                                    &&
-                                    <div className="image-message-right">
-                                        <img src={msg.foto} alt="" />
-                                    </div>
-                                }
-                                
-                                <div className={msg.sender === 'me' ? 'text-message-right' : 'text-message-left'}>
-                                    {msg.text}
+                        <div className="messages-div">
+                            <div className="acess-profile-div">
+                                <div className="user-name">@jana.silvaa</div>
+                                <div className="btn-acess">
+                                    <b>Acessar perfil</b>
                                 </div>
-
-                                {
-                                    
-                                    msg.sender === 'me'
-                                    &&
-                                    <div className="image-message-left">
-                                        <img src={msg.foto} alt="" />
-                                    </div>
-                                }
                             </div>
-                        ))}
-                        <div ref={messagesEndRef}></div>
+                            <div className="arvore-chat">
+                                {theme === 'light' ? <img src={arvoreAzul} alt="" /> : <img src={arvoreBranca} alt="" />}
+                            </div>
+                            {messages.map((msg, index) => (
+                                <div key={index} className={msg.sender === 'me' ? 'message-right' : 'message-left'}>
+                                    {msg.sender !== 'me' &&
+                                        <div className="image-message-right">
+                                            <img src={msg.foto} alt="" />
+                                        </div>
+                                    }
+                                    <div className={msg.sender === 'me' ? 'text-message-right' : 'text-message-left'}>
+                                        {msg.text}
+                                    </div>
+                                    {msg.sender === 'me' &&
+                                        <div className="image-message-left">
+                                            <img src={msg.foto} alt="" />
+                                        </div>
+                                    }
+                                </div>
+                            ))}
+                            <div ref={messagesEndRef}></div>
                         </div>
                     </div>
                     <form onSubmit={sendMessage} className="barra-bottom">
@@ -326,6 +284,6 @@ function Chat() {
             }
         </div>
     );
-};
+}
 
 export default Chat;

@@ -1,5 +1,5 @@
-import  { useState, useEffect } from "react";
-import "./CSS/Pagamento.css";
+import { CheckoutForm, Return} from '../Components/Pag.jsx'
+import './CSS/Pagamento.css';
 
 const ProductDisplay = () => (
   <section>

@@ -1,70 +1,182 @@
 .videoconferencia-container {
+  font-family: 'DM Sans', sans-serif;
+  background-color: #121212;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  width: 100%;
+  position: relative;
+}
 
-    font-family: 'DM Sans', sans-serif;
-    background-color: #121212;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+.me-video, .other-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .me-video {
-
   position: absolute;
   top: 5%;
   left: 80%;
-  width: 20%;
+  width: 15%;
   height: 20%;
-}
-
-.video-paused {
-
-  position: absolute;
-  top: 5%;
-  left: 84%;
-  width: 12%;
-  height: 20%;
-  background-color: rgb(186, 186, 186);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.video-paused img {
-
-  width: 20%;
+  border-radius: 10px;
 }
 
 .other-video {
-
-  position: relative;
   width: 100%;
   height: 100vh;
-  background-color: blue;
+  background-image: url('/public/background.svg');
+  background-repeat: no-repeat;
 }
 
-.chat-live, p {
-
+/* .chat-live {
   position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 10px;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-live input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  width: 80%;
+  background-color: #333;
+  color: #fff;
+}
+
+.chat-live button {
+  padding: 10px;
+  background-color: #5a7da0;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.chat-live p {
+  margin: 5px 0;
+} */
+
+.start-call-button {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #5a7da0;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .barra-config {
 
-  width: 3%;
-  height: 70%;
+  position: absolute;
+  display: flex;
+  left: 3%;
+  top: 10%;
+  width: 2%;
+  height: 75%;
+  background-color: #5a7da0;
   display: flex;
   flex-direction: column;
-  position: absolute;
-  left: 5%;
-  background-color: #5a7da0;
-  border-radius: 10px;
-  align-items: center;
+  padding: 1%;
+  border-radius: 15px;
+  gap: 25px;
 }
 
 .barra-config img {
 
-  width: 80%;
+  cursor: pointer;
+}
+
+/* Estilo geral do container do chat */
+.chat-live {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  height: 79%;
+  width: 25%; /* Largura máxima (ajuste conforme necessário) */
+  margin: 0 auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f9f9f9;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  left: 10%;
+}
+
+/* Barra superior (com ícone) */
+.barra-cima-v {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: white; /* Roxo do Material Design (ou ajuste a cor) */
+  color: black;
+  border-bottom: 1px solid #5a7da0;
+  gap: 25px;
+}
+
+.barra-cima-v img {
+
+  width: 10%;
+}
+
+.barra-cima-v p {
+
+  font-size: 18px;
+}
+
+/* Área de conversa (mensagens) */
+.conversa {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background: #fff;
+}
+
+/* Barra inferior (input + botão) */
+.barra-baixo-v {
+  display: flex;
+  padding: 10px;
+  background: #f5f5f5;
+  border-top: 1px solid #e0e0e0;
+}
+
+.barra-baixo-v input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+}
+
+.barra-baixo-v button {
+  margin-left: 10px;
+  padding: 0 10% 0 10%;
+  background: #5a7da0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.barra-baixo-v button:hover {
+  background: #013a63;
 }

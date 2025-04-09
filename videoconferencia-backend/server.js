@@ -15,27 +15,22 @@ io.on("connection", (socket) => {
   console.log("Usuário conectado: ", socket.id);
 
   socket.on("offer", (data) => {
-    console.log("Repassando oferta", data);
+    console.log("Repassando oferta de", socket.id);
     socket.broadcast.emit("offer", data);
   });
 
   socket.on("answer", (data) => {
-    console.log("Repassando resposta", data);
+    console.log("Repassando resposta de", socket.id);
     socket.broadcast.emit("answer", data);
   });
 
   socket.on("ice-candidate", (data) => {
-    console.log("Repassando candidato ICE", data);
+    console.log("Repassando candidato ICE de", socket.id);
     socket.broadcast.emit("ice-candidate", data);
   });
 
-  socket.on("chat-message", (message) => {
-    console.log("Repassando mensagem de chat", message);
-    socket.broadcast.emit("chat-message", message);
-  });
-
   socket.on("disconnect", () => {
-    console.log("Usuário desconectado: ", socket.id);
+    console.log("Usuário desconectado:", socket.id);
   });
 });
 

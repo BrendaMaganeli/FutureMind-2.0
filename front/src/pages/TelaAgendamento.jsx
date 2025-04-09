@@ -9,63 +9,76 @@ const getMonthData = (year) => {
   return daysInMonth.map((days, index) => ({
     name: new Date(year, index).toLocaleString("default", { month: "long" }),
     days,
-    start: (new Date(year, index, 1).getDay() + 1) % 7,
+    start: new Date(year, index, 1).getDay(),
   }));
 };
 
 export default function AgendaConsultas() {
-  const [currentYear, setCurrentYear] = useState(2025);
-  const [currentMonthIndex, setCurrentMonthIndex] = useState(8);
-  const [selectedDay, setSelectedDay] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
+  const today = new Date();
+  const [currentYear, setCurrentYear] = useState(today.getFullYear());
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(today.getMonth());
+  const [selected, setSelected] = useState({ day: null, time: null, message: "" });
   const [confirmationMessage, setConfirmationMessage] = useState("");
+  const [appointments, setAppointments] = useState({});
 
   const months = getMonthData(currentYear);
 
-  const handlePreviousMonth = () => {
-    setCurrentMonthIndex((prev) => (prev === 0 ? 11 : prev - 1));
-    if (currentMonthIndex === 0) setCurrentYear((year) => year - 1);
-  };
-
-  const handleNextMonth = () => {
-    setCurrentMonthIndex((prev) => (prev === 11 ? 0 : prev + 1));
-    if (currentMonthIndex === 11) setCurrentYear((year) => year + 1);
+  const handleChangeMonth = (direction) => {
+    setCurrentMonthIndex((prev) => {
+      let newMonth = prev + direction;
+      let newYear = currentYear;
+      if (newMonth < 0) {
+        newMonth = 11;
+        newYear -= 1;
+      } else if (newMonth > 11) {
+        newMonth = 0;
+        newYear += 1;
+      }
+      setCurrentYear(newYear);
+      return newMonth;
+    });
   };
 
   const handleDayClick = (day) => {
-    if (day.isCurrentMonth) {
-      setSelectedDay(day.date);
-      setSelectedTime(null);
-      setConfirmationMessage("");
+    if (day.isCurrentMonth && !day.isUnavailable) {
+      setSelected({ day: day.date, time: null});
     }
   };
 
   const handleTimeClick = (time) => {
-    setSelectedTime(time);
+    const key = `${currentYear}-${currentMonthIndex}-${selected.day}`;
+    if (!appointments[key]) {
+      setSelected((prev) => ({ ...prev, time}));
+    }
   };
 
   const handleClose = () => {
-    setSelectedDay(null);
-    setSelectedTime(null);
-    setConfirmationMessage("");
+    setSelected({ day: null, time: null});
   };
 
   const handleConfirm = () => {
-    if (selectedDay && selectedTime) {
-      setConfirmationMessage(`Consulta agendada para ${selectedDay} de ${months[currentMonthIndex].name} às ${selectedTime}`);
+    if (selected.day && selected.time) {
+      const key = `${currentYear}-${currentMonthIndex}-${selected.day}`;
+      if (!appointments[key]) {
+        setAppointments((prev) => ({ ...prev, [key]: [selected.time] }));
+        setConfirmationMessage(`Consulta agendada para ${selected.day} de ${months[currentMonthIndex].name} às ${selected.time}`);
+      }
     }
+  };
+
+  const closeConfirmation = () => {
+    setConfirmationMessage("");
   };
 
   const month = months[currentMonthIndex];
   const prevMonth = months[(currentMonthIndex + 11) % 12];
 
-  const days = [];
-  for (let i = 0; i < 42; i++) {
+  const days = Array.from({ length: 42 }, (_, i) => {
     let date = null;
     let isCurrentMonth = true;
-    let isSunday = i % 7 === 0;
     let isUnavailable = false;
-
+    let appointmentsForDay = [];
+    
     if (i < month.start) {
       date = prevMonth.days - (month.start - i - 1);
       isCurrentMonth = false;
@@ -76,24 +89,35 @@ export default function AgendaConsultas() {
       isUnavailable = true;
     } else {
       date = i - month.start + 1;
+      const key = `${currentYear}-${currentMonthIndex}-${date}`;
+      appointmentsForDay = appointments[key] || [];
+      isUnavailable = appointmentsForDay.length > 0;
     }
 
-    days.push({ id: i, date, isCurrentMonth, isSunday, isUnavailable });
-  }
+    return { id: i, date, isCurrentMonth, isUnavailable, appointmentsForDay };
+  });
 
   return (
     <div className="container-agenda">
+      {confirmationMessage && (
+        <div className="confirmation-message">
+          <span>{confirmationMessage}</span>
+          <button className="close-confirmation" onClick={closeConfirmation}>
+            <X size={16} />
+          </button>
+        </div>
+      )}
       <button className="back-button" onClick={() => window.history.back()}>
         <ArrowLeft size={24} />
       </button>
 
       <div className="calendar">
         <div className="calendar-header">
-          <button onClick={handlePreviousMonth} className="setaEsquerda">
+          <button onClick={() => handleChangeMonth(-1)} className="setaEsquerda">
             <ChevronLeft />
           </button>
           <h2>{month.name} {currentYear}</h2>
-          <button onClick={handleNextMonth} className="setadireita">
+          <button onClick={() => handleChangeMonth(1)} className="setadireita">
             <ChevronRight />
           </button>
         </div>
@@ -108,10 +132,13 @@ export default function AgendaConsultas() {
           {days.map((day) => (
             <div
               key={day.id}
-              className={`day ${day.isSunday ? "sunday" : ""} ${day.isUnavailable ? "unavailable" : ""}`}
+              className={`day ${day.isUnavailable ? "unavailable" : ""}`}
               onClick={() => handleDayClick(day)}
             >
               <span>{day.date}</span>
+              {day.appointmentsForDay.map((appt, index) => (
+                    <div key={index} className="appointment-detail">{appt}</div>
+                  ))}
             </div>
           ))}
         </div>
@@ -122,12 +149,12 @@ export default function AgendaConsultas() {
         <img src={imgConsulta} alt="" />
       </div>
 
-      {selectedDay && (
+      {selected.day && (
         <div className="schedule">
           <button className="close-button" onClick={handleClose}>
             <X size={24} />
           </button>
-          <h1>Horários disponíveis para {selectedDay} de {month.name}</h1>
+          <h1>Horários disponíveis para {selected.day} de {month.name}</h1>
 
           <div className="form-group">
             <label>Convênio</label>
@@ -146,13 +173,11 @@ export default function AgendaConsultas() {
           <h3>Horários</h3>
           <div className="times">
             {["14:30", "17:30", "13:00", "16:10", "11:00", "19:20", "13:30"].map((time) => (
-              <button key={time} className={`time-button ${selectedTime === time ? "selected-time" : ""}`} onClick={() => handleTimeClick(time)}>{time}</button>
+              <button key={time} className={`time-button ${selected.time === time ? "selected-time" : ""}`} onClick={() => handleTimeClick(time)}>{time}</button>
             ))}
           </div>
 
-          <button className="confirm-button" onClick={handleConfirm} disabled={!selectedTime}>Confirmar agendamento</button>
-
-          {confirmationMessage && <p className="confirmation-message">{confirmationMessage}</p>}
+          <button className="confirm-button" onClick={handleConfirm} disabled={!selected.time}>Confirmar agendamento</button>
         </div>
       )}
     </div>

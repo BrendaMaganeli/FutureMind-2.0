@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import './CSS/pagamento.css'
+
 export default function PagamentoConsulta() {
   const [pacienteSelecionado, setPacienteSelecionado] = useState("");
   const [mostrarModal, setMostrarModal] = useState(false);
@@ -36,26 +37,18 @@ export default function PagamentoConsulta() {
   };
 
   return (
-    <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "16px", display: "grid", gridTemplateColumns: "2fr 1fr", gap: "24px" }}>
+    <div style={{ maxWidth: "1300px", margin: "0 auto", padding: "16px", display: "grid", gridTemplateColumns: "2fr 1fr", gap: "24px" }}>
       <div>
         <h2 style={{ fontSize: "24px", fontWeight: "600", marginBottom: "16px" }}>Finalize seu agendamento</h2>
 
         <p style={{ fontWeight: "500", marginBottom: "8px" }}>Forma de pagamento</p>
-        <div style={{ display: "flex", gap: "12px", marginBottom: "16px", backgroundColor: "#f1f5f9", borderRadius: "8px", padding: "4px", width: "60%" }}>
+        <div className="tabs-container">
+          <div className="slider" style={{ left: `${['cartao', 'boleto', 'pix'].indexOf(metodoSelecionado) * 33.333}%` }} />
           {[{ value: "cartao", label: "Cartão de crédito" }, { value: "boleto", label: "Boleto bancário" }, { value: "pix", label: "Pix" }].map((metodo) => (
             <button
               key={metodo.value}
               onClick={() => setMetodoSelecionado(metodo.value)}
-              style={{
-                backgroundColor: metodoSelecionado === metodo.value ? "white" : "transparent",
-                border: "none",
-                padding: "8px 16px",
-                borderRadius: "6px",
-                fontWeight: metodoSelecionado === metodo.value ? "600" : "500",
-                color: metodoSelecionado === metodo.value ? "black" : "#64748b",
-                cursor: "pointer",
-                transition: "all 0.3s ease"
-              }}
+              className={`tab ${metodoSelecionado === metodo.value ? 'active' : ''}`}
             >
               {metodo.label}
             </button>
@@ -65,27 +58,27 @@ export default function PagamentoConsulta() {
         {metodoSelecionado === "cartao" && (
           <div style={{ border: "1px solid #ddd", padding: "16px", borderRadius: "8px", marginBottom: "24px" }}>
             <h3 style={{ fontWeight: "500" }}>Adicionar novo cartão</h3>
-            <div class="floating-input">
-            <input type="text" id="nome" placeholder=" " required />
-            <label for="nome">Apelido do Cartão</label>
-          </div>
-          <div class="floating-input">
-            <input type="text" id="nome" placeholder=" " required />
-            <label for="nome">Número do Cartão</label>
-          </div>
-          <div class="floating-input">
-          <input type="text" id="nome" placeholder=" " required />
-          <label for="nome">Nome como aparece no cartão</label>
-        </div>
-          <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
-          <div class="floating-input-2">
-          <input type="text" id="nome" placeholder=" " required />
-          <label for="nome">Validade</label>
-        </div>
-        <div class="floating-input-2">
-          <input type="text" id="nome" placeholder=" " required />
-          <label for="nome">CVV</label>
-        </div>
+            <div className="floating-input">
+              <input type="text" placeholder=" " required />
+              <label>Apelido do Cartão</label>
+            </div>
+            <div className="floating-input">
+              <input type="text" placeholder=" " required />
+              <label>Número do Cartão</label>
+            </div>
+            <div className="floating-input">
+              <input type="text" placeholder=" " required />
+              <label>Nome como aparece no cartão</label>
+            </div>
+            <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+              <div className="floating-input-2">
+                <input type="text" placeholder=" " required />
+                <label>Validade</label>
+              </div>
+              <div className="floating-input-2">
+                <input type="text" placeholder=" " required />
+                <label>CVV</label>
+              </div>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "8px" }}>
               <input type="checkbox" id="padrao" />
@@ -108,11 +101,11 @@ export default function PagamentoConsulta() {
 
         <p style={{ fontWeight: "500", marginBottom: "8px" }}>Tem um cupom de desconto?</p>
         <div style={{ display: "flex", gap: "8px", marginBottom: "24px", width: "100%" }}>
-        <div class="cupom">
-            <input type="text" id="nome" placeholder=" " required />
-            <label for="nome">Inserir código de desconto</label>
+          <div className="cupom">
+            <input type="text" placeholder=" " required />
+            <label>Inserir código de desconto</label>
           </div>
-          <button style={{ backgroundColor: "#ff7a00", color: "white", padding: " 8px 16px", border: "none", borderRadius: "4px", width: "20%", height: "50px", marginTop: "3%" }}>Aplicar</button>
+          <button style={{ backgroundColor: "#013a63", color: "white", padding: " 8px 16px", border: "none", borderRadius: "4px", width: "20%", height: "50px", marginTop: "3%" }}>Aplicar</button>
         </div>
 
         <div style={{ border: "1px solid #ddd", padding: "16px", borderRadius: "8px" }}>
@@ -133,43 +126,55 @@ export default function PagamentoConsulta() {
 
         {mostrarModal && (
           <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <div style={{ backgroundColor: "white", padding: "24px", borderRadius: "8px", width: "400px" }}>
+            <div style={{ backgroundColor: "white", padding: "24px", borderRadius: "8px", width: "30%" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <h3 style={{ fontSize: "18px", fontWeight: "600" }}>Cadastre um novo dependente!</h3>
                 <button onClick={() => setMostrarModal(false)} style={{ border: "none", background: "none", fontSize: "20px" }}>×</button>
               </div>
-              <input placeholder="Nome completo" style={{ width: "100%", padding: "8px", marginTop: "12px" }} />
-              <input placeholder="DD/MM/YYYY" style={{ width: "100%", padding: "8px", marginTop: "12px" }} />
-              <div class="floating-select">
-  <select id="genero" required>
-    <option value="" disabled selected hidden></option>
-    <option value="masculino">Masculino</option>
-    <option value="feminino">Feminino</option>
-    <option value="outro">Outro</option>
-  </select>
-  <label for="genero">Gênero</label>
-</div>
-              <button style={{ width: "100%", marginTop: "16px", backgroundColor: "#ff7a00", color: "white", padding: "10px", border: "none", borderRadius: "4px", fontWeight: "600" }}>Cadastrar</button>
+              <div className="floating-input-3">
+                <input type="text" placeholder=" " required />
+                <label>Nome Completo</label>
+              </div>
+              <div className="floating-input-3">
+                <input type="date" placeholder=" " required />
+                <label>Data de Nascimento</label>
+              </div>
+              <div className="floating-select">
+                <select required>
+                  <option value="" disabled selected hidden></option>
+                  <option value="masculino">Masculino</option>
+                  <option value="feminino">Feminino</option>
+                  <option value="outro">Outro</option>
+                </select>
+                <label>Gênero</label>
+              </div>
+              <button style={{ width: "100%", marginTop: "16px", backgroundColor: "#013a63", color: "white", padding: "15px", border: "none", borderRadius: "4px", fontWeight: "600", fontSize: "1em" }}>Cadastrar</button>
             </div>
           </div>
         )}
 
-        <button onClick={handleFinalizar} style={{ width: "100%", marginTop: "24px", backgroundColor: "#ff7a00", color: "white", padding: "12px", border: "none", borderRadius: "4px", fontWeight: "600" }}>
+        <button onClick={handleFinalizar} style={{ width: "100%", marginTop: "24px", backgroundColor: "#013a63", color: "white", padding: "12px", border: "none", borderRadius: "4px", fontWeight: "600" }}>
           Finalizar agendamento
         </button>
       </div>
 
+      {/* COLUNA DIREITA (RESUMO + AGENDAMENTO) */}
       <div>
-        <div style={{ border: "1px solid #ddd", padding: "16px", borderRadius: "8px" }}>
+        <div style={{ border: "1px solid #ddd", padding: "30px", borderRadius: "8px" }}>
           <p style={{ fontWeight: "600" }}>Resumo</p>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
             <span>Consultas</span>
             <span>R$165</span>
           </div>
-          <div style={{ fontWeight: "700", textAlign: "right", fontSize: "18px" }}>R$165</div>
+          <div style={{ borderTop: "1px solid #eee", margin: "8px 0" }}></div>
+          <div style={{ fontWeight: "700", textAlign: "right", fontSize: "18px" }}>
+            Valor a ser pago <br />
+            <span style={{ fontSize: "22px" }}>R$165</span>
+          </div>
 
+          <div style={{ marginTop: "24px" }}>
           <p style={{ fontWeight: "600", marginTop: "16px" }}>Agendamentos</p>
-          <div style={{ display: "flex", alignItems: "center", gap: "16px", marginTop: "12px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "25px", marginTop: "12px" }}>
             <img src="https://via.placeholder.com/40" alt="Foto profissional" style={{ borderRadius: "9999px", width: "40px", height: "40px" }} />
             <div>
               <p style={{ fontWeight: "500" }}>Jeciana Botelho</p>
@@ -177,13 +182,16 @@ export default function PagamentoConsulta() {
               <p style={{ fontSize: "14px" }}>Atendimento Online</p>
             </div>
           </div>
-          <div style={{ fontSize: "14px", marginTop: "8px" }}>
-            <p>Data: 12/04/25</p>
-            <p>Horário: 10:00</p>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "8px" }}>
+            <div style={{ fontSize: "14px" }}>
+              <p><strong>Data</strong> 12/04/25</p>
+              <p><strong>Horário</strong> 10:00</p>
+            </div>
+            <div style={{ display: "flex", gap: "8px" }}>
+              <button style={{ backgroundColor: "#ff6b00", color: "white", padding: "8px 16px", border: "none", borderRadius: "4px" }}>Alterar</button>
+              <button onClick={handleRemoverAgendamento} style={{ padding: "8px 16px", border: "1px solid #ddd", borderRadius: "4px" }}>Remover</button>
+            </div>
           </div>
-          <div style={{ display: "flex", gap: "8px", marginTop: "12px" }}>
-            <button style={{ backgroundColor: "#ff7a00", color: "white", padding: "8px 16px", border: "none", borderRadius: "4px" }}>Alterar</button>
-            <button onClick={handleRemoverAgendamento} style={{ padding: "8px 16px", border: "1px solid #ddd", borderRadius: "4px" }}>Remover</button>
           </div>
         </div>
       </div>

@@ -256,7 +256,7 @@
     
     display: flex;
     flex-direction: column;
-    background-color: rgba(90,120,159, .5); 
+    background-color: #C1DFF4; 
     width: 80%;
     border-radius: 15px;
     height: 370px;
@@ -332,4 +332,54 @@
     padding: 10px;
     border-radius: 15px;
 }
+
+.floating-input-plano {
+    position: relative;
+    margin-top: 20px;
+    width: 80%;
+  }
+  
+  .floating-input-plano input {
+    width: 100%;
+    padding: 16px 12px 8px;
+    font-size: 16px;
+    border: 2px solid #2E6C99;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s;
+    background-color: #C1DFF4;
+  }
+  
+  .floating-input-plano input:focus {
+    border-color: #013A63;
+  }
+  
+  .floating-input-plano label {
+    position: absolute;
+    left: 12px;
+    top: 14px;
+    padding: 0 4px;
+    color: #2E6C99;
+    font-size: 16px;
+    pointer-events: none;
+    transition: 0.2s ease all;
+    background-color: #C1DFF4;
+  }
+  
+  /* Quando o input está focado ou tem conteúdo */
+  .floating-input-plano input:focus + label,
+  .floating-input-plano input:not(:placeholder-shown) + label {
+    top: -8px;
+    left: 10px;
+    font-size: 13px;
+    color: #013A63;
+  }
+
+  .div-inp{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
 

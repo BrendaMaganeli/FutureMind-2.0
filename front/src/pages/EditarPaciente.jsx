@@ -91,42 +91,30 @@ function EditarPaciente() {
     </div>
 
     <div className="editar-paciente">
-        <div className="input-box">
-          <label htmlFor="">
-          Nome completo
-        </label>
-        <input type="text" />
-        </div>
-        <div className="input-box">
-          <label htmlFor="">
-          Cpf
-        </label>
-        <input type="text" />
-        </div>
-        <div className="input-box">
-          <label htmlFor="">
-          Telefone
-        </label>
-        <input type="text" />
-        </div>
-        <div className="input-box">
-          <label htmlFor="">
-          E-mail
-        </label>
-        <input type="email" />
-        </div>
-        <div className="input-box">
-          <label htmlFor="">
-          Data de nascimento
-        </label>
-        <input type="date" />
-        </div>
-        <div className="input-box">
-          <label htmlFor="">
-          Senha
-        </label>
-        <input type="password" />
-        </div>
+      <div className="floating-input-pac">
+        <input type="text" placeholder=" " required />
+        <label>Nome Completo</label>
+      </div>
+      <div className="floating-input-pac">
+        <input type="text" placeholder=" " required />
+        <label>CPF</label>
+      </div>
+      <div className="floating-input-pac">
+        <input type="text" placeholder=" " required />
+        <label>Telefone</label>
+      </div>
+      <div className="floating-input-pac">
+        <input type="text" placeholder=" " required />
+        <label>E-mail</label>
+      </div>
+      <div className="floating-input-pac">
+        <input type="text" placeholder=" " required />
+        <label>Data de Nascimento</label>
+      </div>
+      <div className="floating-input-pac">
+        <input type="password" placeholder=" " required />
+        <label>Senha</label>
+      </div>
     </div>
     <div className="BTN-SALVAR">
 

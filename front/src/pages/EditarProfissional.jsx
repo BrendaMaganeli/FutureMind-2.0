@@ -80,72 +80,50 @@ function EditarProfissional() {
          </div>
      
          <div className="editar-profissional">
-             <div className="input-box">
-               <label htmlFor="">
-               Nome completo
-             </label>
-             <input type="text" />
-             </div>
-             <div className="input-box">
-               <label htmlFor="">
-               Cpf
-             </label>
-             <input type="text" />
-             </div>
-             <div className="input-box">
-               <label htmlFor="">
-               Telefone
-             </label>
-             <input type="text" />
-             </div>
-             <div className="input-box">
-               <label htmlFor="">
-               E-mail
-             </label>
-             <input type="email" />
-             </div>
-             <div className="input-box">
-               <label htmlFor="">
-               Data de nascimento
-             </label>
-             <input type="date" />
-             </div>
-             <div className="input-box">
-               <label htmlFor="">
-               Senha
-             </label>
-             <input type="password" />
-             </div>
-             <div className="input-box">
-               <label htmlFor="">
-               Preferências
-             </label>
-             <input type="password" />
-             </div>
-             <div className="input-box">
-               <label htmlFor="">
-               Especialização
-             </label>
-             <input type="password" />
-             </div>
-             <div className="input-box">
-               <label htmlFor="">
-               Crp
-             </label>
-             <input type="password" />
-             </div>
-             <div className="input-box">
-               <label htmlFor="">
-               Preço
-             </label>
-             <input type="password" />
-             </div>
-             <div className="input-box">
-               <label htmlFor="">
-               Abordagem
-             </label>
-             <input type="password" />
-             </div>
+             <div className="floating-input-pac">
+                <input type="text" placeholder=" " required />
+                <label>Nome Completo</label>
+              </div>
+              <div className="floating-input-pac">
+                <input type="text" placeholder=" " required />
+                <label>CPF</label>
+              </div>
+              <div className="floating-input-pac">
+                <input type="text" placeholder=" " required />
+                <label>Telefone</label>
+              </div>
+              <div className="floating-input-pac">
+                <input type="text" placeholder=" " required />
+                <label>E-mail</label>
+              </div>
+              <div className="floating-input-pac">
+                <input type="text" placeholder=" " required />
+                <label>Data de Nascimento</label>
+              </div>
+              <div className="floating-input-pac">
+                <input type="text" placeholder=" " required />
+                <label>Senha</label>
+              </div>
+              <div className="floating-input-pac">
+                <input type="text" placeholder=" " required />
+                <label>Preferências</label>
+              </div>
+              <div className="floating-input-pac">
+                <input type="text" placeholder=" " required />
+                <label>Especialização</label>
+              </div>
+              <div className="floating-input-pac">
+                <input type="text" placeholder=" " required />
+                <label>CRP</label>
+              </div>
+              <div className="floating-input-pac">
+                <input type="text" placeholder=" " required />
+                <label>Preço</label>
+              </div>
+              <div className="floating-input-pac">
+                <input type="text" placeholder=" " required />
+                <label>Abordagem</label>
+              </div>
          </div>
          <div className="BTN-SALVAR">
              <button className="salvar-btn">Salvar</button>

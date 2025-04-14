@@ -141,3 +141,44 @@
     align-items: center;
     width: 100%;
 }
+
+.floating-input-pro {
+    position: relative;
+    margin-top: 20px;
+    width: 100%;
+  }
+  
+  .floating-input-pro input {
+    width: 100%;
+    padding: 16px 12px 8px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  
+  .floating-input-pro input:focus {
+    border-color: #013a63;
+  }
+  
+  .floating-input-pro label {
+    position: absolute;
+    left: 12px;
+    top: 14px;
+    background: white;
+    padding: 0 4px;
+    color: #999;
+    font-size: 16px;
+    pointer-events: none;
+    transition: 0.2s ease all;
+  }
+  
+  /* Quando o input está focado ou tem conteúdo */
+  .floating-input-pro input:focus + label,
+  .floating-input-pro input:not(:placeholder-shown) + label {
+    top: -8px;
+    left: 10px;
+    font-size: 13px;
+    color: #013a63;
+  }

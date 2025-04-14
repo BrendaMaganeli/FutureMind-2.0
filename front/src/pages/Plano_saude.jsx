@@ -26,7 +26,8 @@ function Plano_saude() {
           </div>   
         </div>
        </div>
-       <div className='container-media-geral' data-aos="fade-up" data-aos-delay="0">
+       <div className='container-media-geral'>
+       {/* data-aos="fade-up" data-aos-delay="0" */}
         <div className='media_pesquisa'>
           <h1 className='numeros'>+3.500</h1>
           <p className='texto_numero'>Pacientes atendidos</p>
@@ -40,7 +41,8 @@ function Plano_saude() {
           <p className='texto_numero'>Anos no mercado</p>
         </div>
        </div>
-       <div className='container-sobre-nos' data-aos="fade-up" data-aos-delay="400">
+       <div className='container-sobre-nos'>
+       {/* data-aos="fade-up" data-aos-delay="400" */}
          <div className='img-sobre'>
           <img src={Foto} alt="" />
          </div>
@@ -54,10 +56,12 @@ function Plano_saude() {
           </div>
          </div>
        </div>
-       <div className='container-entenda' data-aos="fade-up" data-aos-delay="600">
+       <div className='container-entenda'>
+       {/* data-aos="fade-up" data-aos-delay="600" */}
          <h1 className='entenda'>Entenda quem somos e porque existimos</h1>
        </div>
-       <div className='container-contato' data-aos="fade-up" data-aos-delay="800">
+       <div className='container-contato'>
+       {/* data-aos="fade-up" data-aos-delay="800" */}
          <div className='container-contado_esquerdo'>
           <div className='container_info_contato'>
             <div className='div_h1_contato'>
@@ -81,13 +85,15 @@ function Plano_saude() {
            <div className='container_text_conect'>
              <h1 className='text_conect'>Conecte seu plano de saúde</h1>
            </div>
-           <div className='container_text_input_cadastro'>
-             <p className='p_padrao_plano'>Adicione o numero de cadastro</p>
-             <input placeholder='Ex: 56388763' className='input_padrao_plano' type="text" />
-           </div>
-           <div className='container_text_input_senha'>
-             <p className='p_padrao_plano'>Adicione sua senha</p>
-             <input placeholder='Ex: Bo98cu53' className='input_padrao_plano' type="text" />
+           <div className='div-inp'>
+              <div className="floating-input-plano">
+                <input type="text" placeholder=" " required />
+                <label>Adicione o número de cadastro</label>
+              </div>
+              <div className="floating-input-plano">
+                <input type="text" placeholder=" " required />
+                <label>Adicione sua senha</label>
+              </div>
            </div>
            <div className='container_button_plano'>
             <button className='button_entrar_plano'>Entrar</button>

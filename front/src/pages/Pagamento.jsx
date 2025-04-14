@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import './CSS/pagamento.css'
+import Seta from '../assets/caret-down-solid.svg'
 
 export default function PagamentoConsulta() {
   const [pacienteSelecionado, setPacienteSelecionado] = useState("");
@@ -60,7 +61,7 @@ export default function PagamentoConsulta() {
             <h3 style={{ fontWeight: "500" }}>Adicionar novo cartão</h3>
             <div className="floating-input">
               <input type="text" placeholder=" " required />
-              <label>Apelido do Cartão</label>
+              <label>Banco</label>
             </div>
             <div className="floating-input">
               <input type="text" placeholder=" " required />
@@ -105,7 +106,7 @@ export default function PagamentoConsulta() {
             <input type="text" placeholder=" " required />
             <label>Inserir código de desconto</label>
           </div>
-          <button style={{ backgroundColor: "#013a63", color: "white", padding: " 8px 16px", border: "none", borderRadius: "4px", width: "20%", height: "50px", marginTop: "3%" }}>Aplicar</button>
+          <button style={{ backgroundColor: "#013a63", color: "white", padding: " 8px 16px", border: "none", borderRadius: "4px", width: "20%", height: "50px", marginTop: "3%", cursor: "pointer" }}>Aplicar</button>
         </div>
 
         <div style={{ border: "1px solid #ddd", padding: "16px", borderRadius: "8px" }}>
@@ -117,7 +118,8 @@ export default function PagamentoConsulta() {
               setPacienteSelecionado(value);
               if (value === "novo") setMostrarModal(true);
             }}
-            style={{ width: "100%", padding: "8px", marginTop: "8px" }}
+          style={{ width: "100%", height: "45px", padding: "8px", marginTop: "8px", backgroundColor: "rgba(247, 249, 251)", border: "0.5px solid rgba(231, 234, 244)", borderRadius: "4px", cursor: "pointer", padding: "10px",  paddingRight: "36px", backgroundPosition: "right 10px center", backgroundRepeat: "no-repeat", appearance: "none", backgroundImage: {Seta}
+          }}
           >
             <option value="evelyn">Evelyn Lohanny Santos Da Silva</option>
             <option value="novo">Cadastrar novo dependente</option>

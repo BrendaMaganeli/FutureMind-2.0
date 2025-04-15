@@ -3,14 +3,6 @@
     margin: 0;
 }
 
-.mini-lado-esquerdoDiario{
-    background-color: #54789fd3;
-    width: 4%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: start;
-}
 
 .seta-diario{
     width: 80%;}
@@ -26,7 +18,7 @@
 }
 
 .lado-esquerdoDiario{
-    width: 25%;
+    width: 30%;
     height: 100vh;
 }
 
@@ -387,3 +379,7 @@
     color: white;
     border-radius: 5px;
   }
+
+
+
+  

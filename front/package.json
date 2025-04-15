@@ -25,6 +25,7 @@
     "classnames": "^2.5.1",
     "fetch": "^1.1.0",
     "font-awesome": "^4.7.0",
+    "framer-motion": "^12.7.3",
     "keen-slider": "^6.8.6",
     "lucide-react": "^0.475.0",
     "react": "^19.0.0",

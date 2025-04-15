@@ -118,7 +118,7 @@ export default function PagamentoConsulta() {
               setPacienteSelecionado(value);
               if (value === "novo") setMostrarModal(true);
             }}
-          style={{ width: "100%", height: "45px", padding: "8px", marginTop: "8px", backgroundColor: "rgba(247, 249, 251)", border: "0.5px solid rgba(231, 234, 244)", borderRadius: "4px", cursor: "pointer", padding: "10px",  paddingRight: "36px", backgroundPosition: "right 10px center", backgroundRepeat: "no-repeat", appearance: "none", backgroundImage: {Seta}
+          style={{ width: "100%", height: "45px", padding: "8px", marginTop: "8px", backgroundColor: "rgba(247, 249, 251)", border: "0.5px solid rgba(231, 234, 244)", borderRadius: "4px", cursor: "pointer", paddingRight: "36px", backgroundPosition: "right 10px center", backgroundRepeat: "no-repeat", appearance: "none", backgroundImage: {Seta}
           }}
           >
             <option value="evelyn">Evelyn Lohanny Santos Da Silva</option>

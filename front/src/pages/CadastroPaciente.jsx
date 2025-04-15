@@ -79,7 +79,7 @@ function CadastroPaciente() {
 
   const handleCadastro = () => {
     let validacoes = true;
-  
+
     // Nome
     if (nome.trim().length < 1) {
       setNomeValido(true);
@@ -87,7 +87,7 @@ function CadastroPaciente() {
     } else {
       setNomeValido(false);
     }
-  
+
     // CPF
     if (cpf.trim().length < 14) {
       setCpfValido(true);
@@ -95,7 +95,7 @@ function CadastroPaciente() {
     } else {
       setCpfValido(false);
     }
-  
+
     // Telefone
     if (telefone.trim().length < 15) {
       setTelefoneValido(true);
@@ -103,19 +103,17 @@ function CadastroPaciente() {
     } else {
       setTelefoneValido(false);
     }
-  
+
     // Data de nascimento
     if (dataNascimento.length === 10) {
-      const [dia, mes, ano] = dataNascimento.split('/');
-      const nascimento = new Date(`${ano}-${mes}-${dia}`);
-  
-      const dataValida = (
-        nascimento.getDate() == dia &&
-        nascimento.getMonth() + 1 == mes &&
-        nascimento.getFullYear() == ano
-      );
-  
-      if (!dataValida) {
+      const [dia, mes, ano] = dataNascimento.split('/').map(Number);
+      const nascimento = new Date(ano, mes - 1, dia);
+
+      if (
+        nascimento.getFullYear() !== ano ||
+        nascimento.getMonth() !== mes - 1 ||
+        nascimento.getDate() !== dia
+      ) {
         setDataNascimentoValido(true);
         validacoes = false;
       } else {
@@ -123,9 +121,9 @@ function CadastroPaciente() {
         let idade = hoje.getFullYear() - nascimento.getFullYear();
         const naoFezAniversario = hoje.getMonth() < nascimento.getMonth() ||
           (hoje.getMonth() === nascimento.getMonth() && hoje.getDate() < nascimento.getDate());
-  
+
         if (naoFezAniversario) idade--;
-  
+
         if (idade < 18) {
           setDataNascimentoValido(true);
           validacoes = false;
@@ -137,7 +135,7 @@ function CadastroPaciente() {
       setDataNascimentoValido(true);
       validacoes = false;
     }
-  
+
     // Email
     if (!valorEmail?.trim().endsWith("@gmail.com") && !valorEmail?.trim().endsWith("@hotmail.com")) {
       setEmailValido(true);
@@ -145,7 +143,7 @@ function CadastroPaciente() {
     } else {
       setEmailValido(false);
     }
-  
+
     // Senha
     if (!valorSenha || valorSenha.trim().length < 8) {
       setSenhaValido(true);
@@ -153,13 +151,12 @@ function CadastroPaciente() {
     } else {
       setSenhaValido(false);
     }
-  
+
     // Se tudo estiver válido, redireciona
     if (validacoes) {
-      navigate('/cadastroProfissional2');
+      navigate('/login');
     }
   };
-  
 
   return (
     <div className='container-profissional'>
@@ -216,26 +213,26 @@ function CadastroPaciente() {
           </div>
 
           <div className="cadastro-input">
-  <input 
-    type={tipoInput} 
-    value={valorSenha} 
-    onChange={(e) => {
-      setValorSenha(e.target.value);
-      setSenhaValido(false);
-    }} 
-    placeholder=" " 
-    required 
-  />
-  <label>Senha</label>
-  <span className={`erro ${senhaValido ? 'visivel' : ''}`}>Mínimo 8 caracteres</span>
-  <img 
-    src={tipoIconSenha} 
-    alt="Mostrar senha" 
-    className="icone-senha" 
-    onClick={alternarTipo} 
-  />
-</div>
-</div>
+            <input 
+              type={tipoInput} 
+              value={valorSenha} 
+              onChange={(e) => {
+                setValorSenha(e.target.value);
+                setSenhaValido(false);
+              }} 
+              placeholder=" " 
+              required 
+            />
+            <label>Senha</label>
+            <span className={`erro ${senhaValido ? 'visivel' : ''}`}>Mínimo 8 caracteres</span>
+            <img 
+              src={tipoIconSenha} 
+              alt="Mostrar senha" 
+              className="icone-senha" 
+              onClick={alternarTipo} 
+            />
+          </div>
+        </div>
 
         <div className='div-check'>
           <div className='container_styles-check'>

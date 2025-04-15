@@ -132,6 +132,8 @@ function CadastroProfissional2() {
                 setEspecializacoes(opcoes);
                 setEspecializacaoValida(opcoes.length > 0);
               }}
+              menuPortalTarget={document.body}
+              styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
             />
             <div className={`container_alerta_nulo ${!especializacaoValida ? 'container_geral_mostra' : ''}`}>
               <p>Selecione pelo menos uma especialização.</p>
@@ -150,39 +152,43 @@ function CadastroProfissional2() {
                 setAbordagens(opcoes);
                 setAbordagemValida(opcoes.length > 0);
               }}
+              menuPortalTarget={document.body}
+              styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
             />
             <div className={`container_alerta_nulo ${!abordagemValida ? 'container_geral_mostra' : ''}`}>
               <p>Selecione pelo menos uma abordagem.</p>
             </div>
           </div>
           <div className='input-lados'>
-            <div className='input-cadastro'>
-              <label>Email</label>
-              <input 
-              type='text'
-              onChange={indentificadorEmail}
-               />
-              <div className={`container_alerta_nulo ${emailValido ? 'container_geral_mostra' : ''}`}>
-               <p>Email incorreto!</p>
-              </div>
-            </div>
-            <div className='input-cadastro'>
-              <label>Senha</label>
-              <input
-              type={tipoInput}  
-              maxLength={15}
-              onChange={indentificadorSenha} 
-              />
-              <div className={`container_alerta_nulo ${senhaValido ? 'container_geral_mostra' : ''}`}>
-               <p>Senha deve ter no minimo 8 caracteres!</p>
-              </div>
+          <div className="cadastro-input">
+            <input type="text" value={valorEmail} onChange={(e) => {
+              setValorEmail(e.target.value);
+              setEmailValido(false);
+            }} placeholder=" " required />
+            <label>E-mail</label>
+            <span className={`erro ${emailValido ? 'visivel' : ''}`}>E-mail deve terminar com @gmail.com ou @hotmail.com</span>
+          </div>
 
-              <img 
-              onClick={alternarTipo}
-              className='imagem_olho'
-              src={tipoIconSenha} alt=""
-              />
-            </div>
+          <div className="cadastro-input">
+            <input 
+              type={tipoInput} 
+              value={valorSenha} 
+              onChange={(e) => {
+                setValorSenha(e.target.value);
+                setSenhaValido(false);
+              }} 
+              placeholder=" " 
+              required 
+            />
+            <label>Senha</label>
+            <span className={`erro ${senhaValido ? 'visivel' : ''}`}>Mínimo 8 caracteres</span>
+            <img 
+              src={tipoIconSenha} 
+              alt="Mostrar senha" 
+              className="icone-senha" 
+              onClick={alternarTipo} 
+            />
+          </div>
           </div>
         </div>
         <button className='botao-cadastro' onClick={handleCadastro}>Prosseguir com cadastro</button>

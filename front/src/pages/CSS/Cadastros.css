@@ -343,7 +343,7 @@
 .custom-react-select .select__control {
     width: 36.3em;
     padding: 7px;
-    border: 1.9px solid #5A789F !important;
+    border: 2px solid #ccc !important;
     border-radius: 5px;
     outline: none;
     font-size: 1.1em;
@@ -476,5 +476,59 @@
     
   }
   
+  .icone-senha-login {
+    position: absolute;
+    top: 37%;
+    right: 90px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 25px; /* Ajuste o tamanho do ícone conforme necessário */
+    height: auto;
+    
+  }
   
 
+  .login-input {
+    position: relative;
+    width: 100%;
+    position: relative;
+  }
+  
+  .login-input input {
+    width: 45em;
+    padding: 16px 12px 8px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  
+  .login-input input:focus {
+    border-color: #013a63;
+  }
+  
+  .login-input label {
+    position: absolute;
+    left: 12px;
+    top: 14px;
+    background: white;
+    padding: 0 4px;
+    color: #999;
+    font-size: 16px;
+    pointer-events: none;
+    transition: 0.2s ease all;
+  }
+  
+  /* Quando o input está focado ou tem conteúdo */
+  .login-input input:focus + label,
+  .login-input input:not(:placeholder-shown) + label {
+    top: -8px;
+    left: 10px;
+    font-size: 13px;
+    color: #013a63;
+  }
+
+
+
+  

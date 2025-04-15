@@ -58,6 +58,25 @@ function CadastroPaciente() {
     return value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '');
   };
 
+  const fazRequisicao = async () => {
+
+    try {
+
+      const res = await fetch('https://localhost:4242', {
+
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(nome)
+      }) 
+
+    } catch (err) {
+
+      console.error(err);
+    }
+  }
+
   const handleCadastro = () => {
     let validacoes = true;
   

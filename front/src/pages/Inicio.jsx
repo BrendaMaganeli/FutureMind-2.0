@@ -9,9 +9,25 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Navigation, Pagination } from 'swiper/modules';
 import foto from '../assets/fotoInicio.svg';
+import { useEffect, useState } from 'react';
 
 function Inicio() {
-  const profissionais = Array(8).fill(null);
+
+  const [profissionais, setProfissionais] = useState([]);
+
+  const buscaProfissionais = async() => {
+
+    const response = await fetch('http://localhost:4242');
+
+    const data = response.json();
+
+    setProfissionais(data);
+  };
+
+  useEffect(() => {
+
+    buscaProfissionais();
+  }, []);
 
   return (
     <div className='container-inicio'>

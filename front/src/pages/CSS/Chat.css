@@ -391,6 +391,12 @@
     width: 3%;
 }
 
+.icon-chat-p-1:hover,
+.icon-chat-p-2:hover,
+.icon-chat-p-3:hover {
+    filter: drop-shadow(1px 3px 3px rgba(100, 100, 100, 0.793));
+}
+
 .barra-top img, .barra-top h5 {
 
     cursor: pointer;

@@ -8,6 +8,7 @@ import Lixo from '../assets/Vector.svg';
 import Setas from '../assets/down-left-and-up-right-to-center-solid.svg';
 import SetaBaixo from '../assets/angle-down-solid.svg';
 
+
 function DiarioEmocional() {
   const [notas, setNotas] = useState([]);
   const [notaAtiva, setNotaAtiva] = useState(null);
@@ -72,11 +73,7 @@ function DiarioEmocional() {
 
   return (
     <div className={`container-diarioemocional ${telaCheia ? 'fullscreen' : ''}`}>
-      <div className='mini-lado-esquerdoDiario'>
-        <button className='buttondiario'>
-          <img src={seta} alt="" className='seta-diaraio'/>
-        </button>
-      </div>
+
 
       <div className='lado-esquerdoDiario'>
         <div className='div-cabecalhodiario'>

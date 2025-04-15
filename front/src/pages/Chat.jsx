@@ -4,7 +4,7 @@ import help from '../assets/help 1.svg';
 import mulher from '../assets/image 8.png';
 import lupa from '../assets/search 1.svg';
 import { useState, useEffect, useRef } from 'react';
-import close from '../assets/Group 239210.svg';
+import close from '../assets/close-2.svg';
 import cam from '../assets/cam-recorder (1) 1.svg';
 import block from '../assets/blocked 1.svg';
 import handClick from '../assets/image 17.svg';

@@ -348,6 +348,7 @@
     outline: none;
     transition: border-color 0.3s;
     background-color: #C1DFF4;
+    color: #013A63;
   }
   
   .floating-input-plano input:focus {

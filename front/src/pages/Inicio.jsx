@@ -9,6 +9,8 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Navigation, Pagination } from 'swiper/modules';
 import foto from '../assets/fotoInicio.svg';
+import Lottie from 'react-lottie';
+import animationData from '../assets/wired-flat-112-book-morph-open.json';
 import { useEffect, useState } from 'react';
 
 function Inicio() {
@@ -28,6 +30,17 @@ function Inicio() {
 
     buscaProfissionais();
   }, []);
+
+  const [isHovered, setIsHovered] = useState(false);
+
+  const [animationOptions, setAnimationOptions] = useState({
+    loop: true,
+    autoplay: true, 
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice'
+    }
+  });
 
   return (
     <div className='container-inicio'>
@@ -96,11 +109,6 @@ function Inicio() {
           <div className="resultado-frase">
             <h2>Resultados</h2>
           </div>
-          <div className="botao-anota">
-            <Link to='/diarioemocional'>
-              <img src='botao-anota.svg' />
-            </Link>
-          </div>
         </div>
 
         <div className="swiper-wrapper-container">
@@ -158,6 +166,22 @@ function Inicio() {
           </div>
           <div className="swiper-button-next-custom">›</div>
         </div>
+      </div>
+      <div className="botao-anota">
+            <Link to='/diarioemocional'
+            onMouseEnter={() => setIsHovered(true)}  // Ativa a animação ao passar o mouse
+            onMouseLeave={() => setIsHovered(false)} // Desativa a animação ao tirar o mouse
+            >
+            <Lottie 
+            options={animationOptions} 
+            height={60} 
+            width={60} 
+            isStopped={false} 
+            isPaused={false}
+            speed={0.4} // Tente diminuir mais a velocidade aqui
+            isStopped={!isHovered}  // A animação só acontece quando está "hovering"
+            />
+            </Link>
       </div>
     </div>
   );

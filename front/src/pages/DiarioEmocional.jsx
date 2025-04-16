@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './CSS/DiarioEmocional.css';
 import seta from '../assets/reply-solid (1) 2.svg';
 import Nota from '../assets/file-pen-solid 1.svg';
@@ -7,9 +7,18 @@ import Relógio from '../assets/clock-regular 1.svg';
 import Lixo from '../assets/Vector.svg';
 import Setas from '../assets/down-left-and-up-right-to-center-solid.svg';
 import SetaBaixo from '../assets/angle-down-solid.svg';
-
+import Lottie from 'lottie-react';
+import animacao from '../assets/animacao.json';
+import { motion } from 'framer-motion';
+import lixoAnimacao from '../assets/trash.json';
+import clock from '../assets/clock.json'
 
 function DiarioEmocional() {
+  const lottieRef = useRef();
+  const lottieRefDeletar = useRef();
+  const [isHoveredDeletar, setIsHoveredDeletar] = useState(false);
+  const [isHoveredClock, setIsHoveredClock] = useState(false);
+  const lottieRefClock = useRef();
   const [notas, setNotas] = useState([]);
   const [notaAtiva, setNotaAtiva] = useState(null);
   const [textoDigitado, setTextoDigitado] = useState('');
@@ -20,7 +29,7 @@ function DiarioEmocional() {
     const novaNota = {
       id: Date.now(),
       titulo: "Nova Nota",
-      texto: "",
+      texto: "Nova Nota.....",
       data: new Date().toLocaleDateString()
     };
     setNotas([novaNota, ...notas]);
@@ -52,8 +61,8 @@ function DiarioEmocional() {
     setTextoDigitado(novoTexto);
 
     if (notaAtiva) {
-      const tituloGerado = novoTexto.length > 10 
-        ? novoTexto.split(' ').slice(0, 4).join(' ').slice(0, 10) + "..." 
+      const tituloGerado = novoTexto.length > 10
+        ? novoTexto.split(' ').slice(0, 4).join(' ').slice(0, 10) + "..."
         : novoTexto.split(' ').slice(0, 4).join(' ');
 
       setNotaAtiva({ ...notaAtiva, texto: novoTexto, titulo: tituloGerado });
@@ -72,43 +81,102 @@ function DiarioEmocional() {
   }, [notas, notaAtiva]);
 
   return (
-    <div className={`container-diarioemocional ${telaCheia ? 'fullscreen' : ''}`}>
-
-
+    <motion.div
+      className={`container-diarioemocional ${telaCheia ? 'fullscreen' : ''}`}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ type: 'spring', stiffness: 100, damping: 30 }}
+    >
       <div className='lado-esquerdoDiario'>
         <div className='div-cabecalhodiario'>
           <div className='cacecalhomenor'>
             <h2>Diário Emocional</h2>
-            <button className='botaonovanota' onClick={adicionarNota}>
-              <img src={Nota} alt="" />Nova Nota
+            <button
+              className='botaonovanota'
+              onClick={adicionarNota}
+              onMouseEnter={() => {
+                lottieRef.current.play();
+              }}
+              onMouseLeave={() => {
+                lottieRef.current.stop();
+              }}
+            >
+              <Lottie 
+                lottieRef={lottieRef}
+                animationData={animacao}
+                loop={false}
+                autoplay={false}
+                className="lottie-animation"
+              />
+              <p>Nova Nota</p>
             </button>
           </div>
           <p className='quantidadenotas'>{notas.length} notas</p>
         </div>
-        
+
         <div className='lista-de-notas'>
           {notas.map((nota) => (
-            <div key={nota.id} className={`nota-item ${notaAtiva?.id === nota.id ? 'ativa' : ''}`} onClick={() => selecionarNota(nota)}>
+            <motion.div
+              key={nota.id}
+              className={`nota-item ${notaAtiva?.id === nota.id ? 'ativa' : ''}`}
+              onClick={() => selecionarNota(nota)}
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 50 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            >
               <p className='nota-data'>{nota.data}</p>
               <p className='nota-titulo'>{nota.titulo}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
 
-      <div className='lado-direitoDiario'>
-        <img src={Arvore} alt="" className='arvoredefundodiario'/>
+      <div className={`lado-direitoDiario ${telaCheia ? 'fullscreen-note' : ''}`}>
+        <img src={Arvore} alt="" className='arvoredefundodiario' />
         <div className='cabecalhonota'>
-          <div className='datadiario'>
-            <img src={Relógio} alt="" className='relogio'/>
-            <p>{notaAtiva ? notaAtiva.data : "Selecione uma nota"}</p>
+          <div 
+              className='datadiario' 
+              onMouseEnter={() => {
+                lottieRefClock.current?.play();
+              }}
+              onMouseLeave={() => {
+                lottieRefClock.current?.stop();
+              }}
+              >
+            
+              <Lottie 
+                lottieRef={lottieRefClock}
+                animationData={clock}
+                loop={false}
+                autoplay={false}
+                className="lottie-animation-clock"
+              />
+            <p className='data-diario'>{notaAtiva ? notaAtiva.data : "Selecione uma nota"}</p>
           </div>
           <div className='div-buts'>
-            <button className='botaoapagar' onClick={apagarNota}>
-              <img src={Lixo} alt="" />Apagar Nota
+            <button 
+              className='botaoapagar' 
+              onClick={apagarNota}
+              onMouseEnter={() => {
+                lottieRefDeletar.current?.play();
+              }}
+              onMouseLeave={() => {
+                lottieRefDeletar.current?.stop();
+              }}
+            >
+              <Lottie 
+                lottieRef={lottieRefDeletar}
+                animationData={lixoAnimacao}
+                loop={false}
+                autoplay={false}
+                className="lottie-animation"
+              />
+              Apagar Nota
             </button>
             <button className='botaocomp' onClick={() => setModalAberto(true)}>
-              Compartilhar <img src={SetaBaixo} alt="" className='setabaixo'/>
+              Compartilhar <img src={SetaBaixo} alt="" className='setabaixo' />
             </button>
             <button className='botaoaumentar' onClick={alternarTelaCheia}>
               <img src={Setas} alt="" />
@@ -116,10 +184,10 @@ function DiarioEmocional() {
           </div>
         </div>
 
-        <textarea 
-          className='area-digitacao' 
-          value={textoDigitado} 
-          onChange={atualizarTextoNota} 
+        <textarea
+          className='area-digitacao'
+          value={textoDigitado}
+          onChange={atualizarTextoNota}
           placeholder="Digite aqui..."
         />
       </div>
@@ -135,7 +203,7 @@ function DiarioEmocional() {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
 

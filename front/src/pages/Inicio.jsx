@@ -9,13 +9,9 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Navigation, Pagination } from 'swiper/modules';
 import foto from '../assets/fotoInicio.svg';
-<<<<<<< HEAD
-import React, { useState } from 'react';
 import Lottie from 'react-lottie';
 import animationData from '../assets/wired-flat-112-book-morph-open.json';
-=======
 import { useEffect, useState } from 'react';
->>>>>>> 487ea223ed04046494f647e7b89d040325a30df3
 
 function Inicio() {
 

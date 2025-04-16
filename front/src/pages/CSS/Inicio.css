@@ -76,9 +76,9 @@
 
 .div-filtro{
   display: flex;
-  width: 100%; 
+  width: 50%; 
   justify-content: end;
-  
+  gap: 2%;
 }
 
 .filtros-profissionais .inpt-filtro {
@@ -474,4 +474,87 @@
   .swiper-button-next-custom {
     right: 50px;
   }
+
+  .select-filtro {
+    position: relative;
+    width: 100%;
+    display: flex;
+}
+
+.label-select {
+  font-size: 1em;
+  color: #5A789F;
+  background: #cad7ebe0;
+  padding: 0 5px;
+  position: absolute;
+  top: -10px;
+  left: 12px;
+  z-index: 10;
+}
+
+/* Ajuste no Select */
+.custom-select .select__control {
+  width: 12.5em;
+  padding: 7px;
+  border: 2px solid #ccc !important;
+  border-radius: 5px;
+  outline: none;
+  font-size: 1.1em;
+  color: #013a63;
+  background-color: white;
+  box-shadow: none;
+  min-height: 45px;
+  max-height: 55px; /* altura máxima antes de scroll */
+  padding-bottom: 40px !important; /* cria espaço pra seta */
+  position: relative;
+}
+
+.custom-select .select__control:hover {
+  border-color: #466484 !important;
+}
+
+.custom-select .select__control--is-focused {
+  box-shadow: 0 0 3px rgba(90, 120, 159, 0.5);
+  border-color: #5A789F !important;
+}
+
+/* Ajuste para manter o tamanho das opções */
+.custom-select .select__multi-value {
+  background-color: #5A789F;
+  color: white;
+  border-radius: 4px;
+  padding: 3px 8px;
+  max-width: 100px;
+  white-space: nowrap;
+}
+
+.custom-select .select__multi-value__label {
+  color: white;
+}
+
+.custom-select .select__multi-value__remove {
+  color: white;
+}
+
+.custom-select .select__multi-value__remove:hover {
+  background-color: #466484;
+}
+
+.custom-select .select__value-container {
+  max-height: 45px;
+  overflow-y: auto;
+  flex-wrap: wrap; /* permite quebrar linha */
+  align-items: center;
+  gap: 4px; /* espaçamento entre os itens */
+  padding: 2px 8px;
+}
+
+.custom-select .select__indicators {
+  position: absolute;
+  right: -3px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  pointer-events: none;
+}
   

@@ -12,6 +12,7 @@ import foto from '../assets/fotoInicio.svg';
 import Lottie from 'react-lottie';
 import animationData from '../assets/wired-flat-112-book-morph-open.json';
 import { useEffect, useState } from 'react';
+import Select from 'react-select';
 
 function Inicio() {
 
@@ -34,13 +35,30 @@ function Inicio() {
   const [isHovered, setIsHovered] = useState(false);
 
   const [animationOptions, setAnimationOptions] = useState({
-    loop: true,
-    autoplay: true, 
+    loop: false,
+    autoplay: false, 
     animationData: animationData,
     rendererSettings: {
       preserveAspectRatio: 'xMidYMid slice'
     }
   });
+
+  const opcoesEspecializacao = [
+    { value: 'psicologia-clinica', label: 'Psicologia Clínica' },
+    { value: 'psicopedagogia', label: 'Psicopedagogia' },
+    { value: 'neuropsicologia', label: 'Neuropsicologia' },
+  ];
+  
+  const opcoesAbordagens = [
+    { value: 'cognitivo-comportamental', label: 'Cognitivo-Comportamental' },
+    { value: 'psicanalise', label: 'Psicanálise' },
+    { value: 'humanista', label: 'Humanista' },
+  ];
+
+  const [especializacoes, setEspecializacoes] = useState([]);
+  const [abordagens, setAbordagens] = useState([]);
+  const [especializacaoValida, setEspecializacaoValida] = useState(true);
+  const [abordagemValida, setAbordagemValida] = useState(true);
 
   return (
     <div className='container-inicio'>
@@ -62,22 +80,38 @@ function Inicio() {
                 <input type='text' placeholder='Buscar profissional...' />
               </div>
               <div className='div-filtro'>
-                <div className="especialidade-filtro">
-                  <select>
-                    <option value="">Especialidade</option>
-                    <option value="">b</option>
-                    <option value="">c</option>
-                    <option value="">d</option>
-                  </select>
-                </div>
-                <div className="abordagem-filtro">
-                  <select>
-                    <option value="">Abordagem</option>
-                    <option value="">b</option>
-                    <option value="">c</option>
-                    <option value="">d</option>
-                  </select>
-                </div>
+          <div className='select-filtro'>
+            <label className='label-select'>Especialização</label>
+            <Select
+              className="custom-select"
+              classNamePrefix="select"
+              options={opcoesEspecializacao}
+              isMulti
+              onChange={(selectedOptions) => {
+                const opcoes = selectedOptions || [];
+                setEspecializacoes(opcoes);
+                setEspecializacaoValida(opcoes.length > 0);
+              }}
+              menuPortalTarget={document.body}
+              styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+            />
+          </div>
+          <div className='select-filtro'>
+            <label className='label-select'>Abordagens</label>
+            <Select
+              className="custom-select"
+              classNamePrefix="select"
+              options={opcoesAbordagens}
+              isMulti
+              onChange={(selectedOptions) => {
+                const opcoes = selectedOptions || [];
+                setAbordagens(opcoes);
+                setAbordagemValida(opcoes.length > 0);
+              }}
+              menuPortalTarget={document.body}
+              styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+            />
+          </div>
               </div>
             </div>
 
@@ -176,7 +210,6 @@ function Inicio() {
             options={animationOptions} 
             height={60} 
             width={60} 
-            isStopped={false} 
             isPaused={false}
             speed={0.4} // Tente diminuir mais a velocidade aqui
             isStopped={!isHovered}  // A animação só acontece quando está "hovering"

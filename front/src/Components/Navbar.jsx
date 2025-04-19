@@ -1,5 +1,5 @@
 import icon from '../assets/icon-profile.svg';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import './CSS/Navbar.css';
 
@@ -21,7 +21,9 @@ function Navbar({ cor }) {
   return (
     <div className='container-nav' style={{ backgroundColor: cor }}>
       <div className='container_logo'>
-        <img src="Logo_sa_arvore.svg" alt="Logo" />
+        <Link to='/'>
+          <img src="Logo_sa_arvore.svg" alt="Logo" />
+        </Link>
       </div>
       <div className='container-links'>
         <div className="underline" style={underlineStyle}></div>

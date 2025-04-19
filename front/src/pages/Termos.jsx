@@ -1,7 +1,7 @@
 // Importações de bibliotecas e componentes necessários
 import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import Navbar from '../Components/Navbar';
+import Footer from '../Components/Footer';
 import './CSS/Termos.css';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';

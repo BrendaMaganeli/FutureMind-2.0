@@ -1,7 +1,8 @@
 import icon from '../assets/icon-profile.svg';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
-import './CSS/Navbar.css';
+
+import './CSS/NavBar.css';
 
 function Navbar({ cor }) {
   const location = useLocation();

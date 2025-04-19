@@ -11,7 +11,7 @@ import Lottie from 'lottie-react';
 import animacao from '../assets/animacao.json';
 import { motion } from 'framer-motion';
 import lixoAnimacao from '../assets/trash.json';
-import clock from '../assets/clock.json'
+import clock from '../assets/Clock.json'
 
 function DiarioEmocional() {
   const lottieRef = useRef();

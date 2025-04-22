@@ -481,41 +481,29 @@
     display: flex;
 }
 
-.label-select {
-  font-size: 1em;
-  color: #5A789F;
-  background: #cad7ebe0;
-  padding: 0 5px;
-  position: absolute;
-  top: -10px;
-  left: 12px;
-  z-index: 10;
-}
-
 /* Ajuste no Select */
 .custom-select .select__control {
   width: 12.5em;
   padding: 7px;
-  border: 2px solid #ccc !important;
+  border: 2px solid #5A789F !important;
   border-radius: 5px;
-  outline: none;
   font-size: 1.1em;
-  color: #013a63;
-  background-color: white;
+  background-color: #cad7ebe0;
   box-shadow: none;
   min-height: 45px;
   max-height: 55px; /* altura máxima antes de scroll */
-  padding-bottom: 40px !important; /* cria espaço pra seta */
+  padding-bottom: 25px !important; /* cria espaço pra seta */
   position: relative;
+  overflow-x: hidden;
 }
 
-.custom-select .select__control:hover {
-  border-color: #466484 !important;
-}
+/* .custom-select .select__control:hover {
+  border-color: #7ba6dd !important;
+} */
 
 .custom-select .select__control--is-focused {
   box-shadow: 0 0 3px rgba(90, 120, 159, 0.5);
-  border-color: #5A789F !important;
+  border-color: #7ba6dd !important;
 }
 
 /* Ajuste para manter o tamanho das opções */
@@ -524,7 +512,7 @@
   color: white;
   border-radius: 4px;
   padding: 3px 8px;
-  max-width: 100px;
+  max-width: 115px;
   white-space: nowrap;
 }
 
@@ -542,7 +530,6 @@
 
 .custom-select .select__value-container {
   max-height: 45px;
-  overflow-y: auto;
   flex-wrap: wrap; /* permite quebrar linha */
   align-items: center;
   gap: 4px; /* espaçamento entre os itens */
@@ -557,4 +544,37 @@
   z-index: 1;
   pointer-events: none;
 }
-  
+
+.custom-select .select__placeholder {
+  color: #013A63; /* Cor do texto quando nada está selecionado */
+  opacity: 1; /* Garante visibilidade */
+  transition: color 0.3s ease;
+}
+
+/* Cor do placeholder quando o select está em foco */
+.custom-select .select__control--is-focused .select__placeholder {
+  color: #7ba6dd; /* Altere para a cor que quiser no focus */
+}
+
+.custom-select .select__dropdown-indicator svg {
+  color: #013A63; /* Altere para a cor que quiser */
+  transition: color 0.3s ease;
+}
+
+.custom-select .select__dropdown-indicator:hover svg,
+.custom-select .select__control--is-focused .select__dropdown-indicator svg {
+  color: #7ba6dd; /* cor ao passar o mouse ou ao focar */
+}
+
+
+
+.custom-select .select__indicators::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20px; /* altura da linha pequena */
+  width: 1.1px;
+  background-color: #5A789F;
+}

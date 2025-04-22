@@ -79,10 +79,10 @@ function Inicio() {
                 <img src='search.png' alt="" />
                 <input type='text' placeholder='Buscar profissional...' />
               </div>
-              <div className='div-filtro'>
+          <div className='div-filtro'>
           <div className='select-filtro'>
-            <label className='label-select'>Especialização</label>
             <Select
+              placeholder="Especialização"
               className="custom-select"
               classNamePrefix="select"
               options={opcoesEspecializacao}
@@ -92,13 +92,14 @@ function Inicio() {
                 setEspecializacoes(opcoes);
                 setEspecializacaoValida(opcoes.length > 0);
               }}
+              value={especializacoes}
               menuPortalTarget={document.body}
-              styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+              styles={{ menuPortal: base => ({ ...base, zIndex: 9999}) }}
             />
           </div>
           <div className='select-filtro'>
-            <label className='label-select'>Abordagens</label>
             <Select
+              placeholder="Abordagem"
               className="custom-select"
               classNamePrefix="select"
               options={opcoesAbordagens}
@@ -108,11 +109,13 @@ function Inicio() {
                 setAbordagens(opcoes);
                 setAbordagemValida(opcoes.length > 0);
               }}
+              value={abordagens}
               menuPortalTarget={document.body}
               styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
             />
           </div>
-              </div>
+
+          </div>
             </div>
 
             <div className="filter-profissionais-baixo">

@@ -6,16 +6,16 @@ export const GlobalContextProvider = ({children}) => {
 
 const [profissional, setProfissional] =  useState({
 
-    nome_completo: '',
+    nome: '',
     cpf:'',
     telefone:'',
-    preferencias: [],
     data_nascimento: '',
     especializacao: [],
     senha: '',
     foto: 'iconuser.svg',
-    abordagem: '',
+    abordagem: [],
     email: '',
+    email_profissional: '',
     crp:'',
     preco: 0.00
 });

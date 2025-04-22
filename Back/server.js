@@ -54,7 +54,45 @@ app.post('/cadastro-paciente', async(req, res) => {
             Telefone
         } = req.body;
 
-        const [rows] = await pool.query('INSERT INTO paciente (Nome_completo, data_nascimento, cpf, Email, Telefone, Senha) VALUES (?, ?, ?, ?, ?, ?)', [
+        const [rows] = await pool.query('INSERT INTO pacientes (nome, data_nascimento, cpf, email, telefone, senha) VALUES (?, ?, ?, ?, ?, ?)', [
+            Nome_completo,
+            Idade,
+            cpf,
+            Email,
+            Telefone,
+            Senha
+        ]);
+
+        if (rows.affectedRows > 0) {
+
+            res.status(201).json(rows);
+        } else {
+
+            res.status(400).json('Erro');
+        }
+    } catch (error) {
+        
+        res.status(500).json('Servidor crashou');
+        console.log(error);
+    }
+});
+
+app.post('/cadastro-profissional', async(req, res) => {
+
+    try {
+
+        const Idade = '2007-12-28';
+        const {
+            Nome_completo,
+            cpf,
+            Email,
+            Senha,
+            Telefone,
+            crp,
+            areaAtendimento
+        } = req.body;
+
+        const [rows] = await pool.query('INSERT INTO profissional (Nome_completo, data_nascimento, cpf, Email, Telefone, Senha, CRP, ) VALUES (?, ?, ?, ?, ?, ?)', [
             Nome_completo,
             Idade,
             cpf,

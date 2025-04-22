@@ -11,7 +11,7 @@ import Lottie from 'lottie-react';
 import animacao from '../assets/animacao.json';
 import { motion } from 'framer-motion';
 import lixoAnimacao from '../assets/trash.json';
-import clock from '../assets/clock.json'
+import clock from '../assets/Clock.json'
 
 function DiarioEmocional() {
   const lottieRef = useRef();
@@ -81,13 +81,8 @@ function DiarioEmocional() {
   }, [notas, notaAtiva]);
 
   return (
-    <motion.div
-      className={`container-diarioemocional ${telaCheia ? 'fullscreen' : ''}`}
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ type: 'spring', stiffness: 100, damping: 30 }}
-    >
+<div className={`container-diarioemocional ${telaCheia ? 'fullscreen' : ''}`}>
+
       <div className='lado-esquerdoDiario'>
         <div className='div-cabecalhodiario'>
           <div className='cacecalhomenor'>
@@ -203,7 +198,7 @@ function DiarioEmocional() {
           </div>
         </div>
       )}
-    </motion.div>
+      </div>
   );
 }
 

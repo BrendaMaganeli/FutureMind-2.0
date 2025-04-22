@@ -225,9 +225,7 @@
     z-index: 1000;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    transition: all 0.5s ease-in-out;
-    
+    align-items: center; 
 }
 
 .fullscreen .lado-esquerdoDiario,
@@ -427,16 +425,6 @@
 }
 
 
-
-.fullscreen-animar {
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .fullscreen-note {
-    transform: translateX(10px);  /* Ou ajuste qualquer outro valor que achar necessário */
-    transition: all 0.3s ease-in-out;
-    position: relative;  /* Se necessário para garantir o comportamento do fundo */
-}
 
 
 

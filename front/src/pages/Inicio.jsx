@@ -21,7 +21,7 @@ function Inicio() {
 
     const response = await fetch('http://localhost:4242');
 
-    const data = response.json();
+    const data = await response.json();
 
     setProfissionais(data);
   };
@@ -126,15 +126,14 @@ function Inicio() {
             pagination={{ clickable: true }}
             className='swiper-profi'
             >
-            {profissionais.map((item, index) => (
+            {profissionais.length > 0 && profissionais.map((item, index) => (
               <SwiperSlide key={index}>
                 <div className="card">
-                  {item}
                   <div className='foto-perfilInicio'>
                     <img src={foto} alt="" />
                     <div className='perfil-nomeValor'>
-                      <h2>João Pedro Garcia</h2>
-                      <p>R$ 50/60 min </p>
+                      <h2>{item.Nome_completo}</h2>
+                      <p>R$ 50/60 min</p>
                     </div>
                   </div>
                   <div className='div-especializacao'>
@@ -155,7 +154,7 @@ function Inicio() {
                       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore, voluptates ducimus consectetur praesentium temporibus ut 
                     </div>
                     <div className='crp-inicio'>
-                      CRP 98/12345
+                      CRP {item.CRP}
                     </div>
                   </div>
                 </div>

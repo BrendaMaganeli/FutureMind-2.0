@@ -5,6 +5,7 @@ import './CSS/Cadastros.css';
 import { useState } from 'react';
 
 function CadastroPaciente() {
+
   const navigate = useNavigate();
 
   const [nome, setNome] = useState('');
@@ -13,6 +14,37 @@ function CadastroPaciente() {
   const [dataNascimento, setDataNascimento] = useState('');
   const [valorEmail, setValorEmail] = useState('');
   const [valorSenha, setValorSenha] = useState('');
+
+  const handleFinish = async () => {
+
+    try {
+      
+      const paciente = {
+        Nome_completo: nome,
+        cpf: cpf,
+        Idade: dataNascimento,
+        Telefone: telefone,
+        Email: valorEmail,
+        Senha: valorSenha
+      }
+      const response = await fetch('http://localhost:4242/cadastro-paciente', {
+
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(paciente)
+      });
+
+      if (response.ok) {
+
+        navigate('/login');
+      }
+    } catch (cavalo) {
+      
+      console.log({cavalo: 'Erro no servidor'});
+    }
+  }
 
   const [nomeValido, setNomeValido] = useState(false);
   const [cpfValido, setCpfValido] = useState(false);
@@ -57,25 +89,6 @@ function CadastroPaciente() {
   const formatarNome = (value) => {
     return value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '');
   };
-
-  const fazRequisicao = async () => {
-
-    try {
-
-      const res = await fetch('https://localhost:4242', {
-
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(nome)
-      }) 
-
-    } catch (err) {
-
-      console.error(err);
-    }
-  }
 
   const handleCadastro = () => {
     let validacoes = true;
@@ -241,7 +254,7 @@ function CadastroPaciente() {
           <label className='termos-styles'>Aceitar os</label> <a className='termos-a' href="termos">termos</a> <label className='de_uso'>de uso</label>
         </div>
 
-        <button className='botao-cadastro' onClick={handleCadastro}>Finalizar Cadastro</button>
+        <button className='botao-cadastro' onClick={handleFinish}>Finalizar Cadastro</button>
         <p className='login-texto'>Já possui uma conta no nosso site? <a href='/login'>Aperte aqui</a></p>
       </div>
 

@@ -1,11 +1,11 @@
-import Navbar from '../components/Navbar';
+import Navbar from '../Components/Navbar';
 import { Link } from 'react-router-dom';
 import './CSS/Politica.css';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Footer from '../components/Footer';
+import Footer from '../Components/Footer';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import bolona from '../assets/bolona.png';

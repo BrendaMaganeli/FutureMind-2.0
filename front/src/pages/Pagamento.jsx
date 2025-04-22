@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import './CSS/pagamento.css'
+import './CSS/Pagamento.css'
 import Seta from '../assets/caret-down-solid.svg'
 
 export default function PagamentoConsulta() {

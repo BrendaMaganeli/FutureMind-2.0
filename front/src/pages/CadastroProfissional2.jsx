@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
+import { GlobalContext } from '../Context/GlobalContext';
 import Select from 'react-select';
 import { useState } from 'react';
 import logo from '../assets/logoCadastro2.svg';
@@ -19,16 +21,37 @@ const opcoesAbordagens = [
 
 function CadastroProfissional2() {
   const navigate = useNavigate(); // Hook para navegação
-  const [especializacoes, setEspecializacoes] = useState([]);
-  const [abordagens, setAbordagens] = useState([]);
+  const {profissional, setProfissional} = useContext(GlobalContext);
+  const [especializacoes, setEspecializacoes] = useState(profissional.especializacao);
+  const [abordagens, setAbordagens] = useState(profissional.abordagem);
   const [especializacaoValida, setEspecializacaoValida] = useState(true);
   const [abordagemValida, setAbordagemValida] = useState(true);
-  const [emailValido, setEmailValido] = useState()
-  const [senhaValido, setSenhaValido] = useState()
-  const [valorEmail, setValorEmail] = useState()
-  const [valorSenha, setValorSenha] =  useState()
+  const [emailValido, setEmailValido] = useState();
+  const [senhaValido, setSenhaValido] = useState();
+  const [valorEmail, setValorEmail] = useState(profissional.email);
+  const [valorSenha, setValorSenha] =  useState(profissional.senha);
   const [tipoInput, setTipoInput] = useState("password");
-  const [tipoIconSenha, setTipoIconSenha] = useState('icon_nao_ver.png')
+  const [tipoIconSenha, setTipoIconSenha] = useState('icon_nao_ver.png');
+
+  useEffect(() => {
+
+    setProfissional((prev) => ({...prev, especializacao: JSON.stringify(especializacoes)}));
+  }, [especializacoes]);
+
+  useEffect(() => {
+
+    setProfissional((prev) => ({...prev, abordagem: JSON.stringify(abordagens)}));
+  }, [abordagens]);
+
+  useEffect(() => {
+
+    setProfissional((prev) => ({...prev, email: valorEmail}));
+  }, [valorEmail]);
+
+  useEffect(() => {
+
+    setProfissional((prev) => ({...prev, senha: valorSenha}));
+  }, [valorSenha]);
 
   const handleCadastro = () => {
    
@@ -66,7 +89,7 @@ function CadastroProfissional2() {
     }
 
     if (!erro) {
-      navigate('/inicio');
+      req();
     }
   };
 
@@ -111,6 +134,42 @@ function CadastroProfissional2() {
     }
   };
 
+  const req = async() => {
+
+    try {
+
+      const response = await fetch('http://localhost:4242/cadastro-profissional', {
+
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(profissional)
+      });
+
+        if (response.ok) {
+
+          setProfissional({
+            nome: '',
+            cpf:'',
+            telefone:'',
+            data_nascimento: '',
+            especializacao: [],
+            senha: '',
+            foto: '../assets/icon-profile.svg',
+            abordagem: [],
+            email: '',
+            email_profissional: '@futuremind.com',
+            crp:'',
+            valor_consulta: 0.00
+          });
+          navigate('/login');
+        }
+    } catch(err) {
+
+      console.log(err);
+    }
+  }
 
   return (
     <div className='container-profissional'>

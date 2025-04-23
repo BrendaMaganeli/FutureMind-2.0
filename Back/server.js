@@ -23,20 +23,12 @@ const pool = mysql.createPool({
 });
 
 app.get('/', async(req, res) => {
-
     try {
-        
-        const [rows] = await pool.query('SELECT * FROM profissional');
+        const [rows] = await pool.query('SELECT * FROM profissionais');
 
-        if (rows.length > 0){
-
-            res.status(201).json(rows);
-        }else{
-
-            res.status(400).json('erro');
-        }
+        res.status(200).json(rows); // Sempre retorna 200, mesmo se estiver vazio
     } catch (err) {
-        
+        console.error('Erro ao buscar profissionais:', err);
         res.status(500).json('erro servidor');
     }
 });
@@ -45,13 +37,13 @@ app.post('/cadastro-paciente', async(req, res) => {
 
     try {
 
-        const Idade = '2007-12-28';
         const {
             Nome_completo,
             cpf,
             Email,
             Senha,
-            Telefone
+            Telefone,
+            Idade
         } = req.body;
 
         const [rows] = await pool.query('INSERT INTO pacientes (nome, data_nascimento, cpf, email, telefone, senha) VALUES (?, ?, ?, ?, ?, ?)', [
@@ -81,24 +73,33 @@ app.post('/cadastro-profissional', async(req, res) => {
 
     try {
 
-        const Idade = '2007-12-28';
         const {
-            Nome_completo,
+            nome,
             cpf,
-            Email,
-            Senha,
-            Telefone,
+            email,
+            senha,
+            telefone,
             crp,
-            areaAtendimento
+            especializacao,
+            abordagem,
+            data_nascimento
         } = req.body;
 
-        const [rows] = await pool.query('INSERT INTO profissional (Nome_completo, data_nascimento, cpf, Email, Telefone, Senha, CRP, ) VALUES (?, ?, ?, ?, ?, ?)', [
-            Nome_completo,
-            Idade,
+        const foto = '../assets/icon-profile.svg';
+        const email_profissional = '@futuremind.com.br'
+
+        const [rows] = await pool.query('INSERT INTO profissionais (nome, cpf, email, senha, telefone, crp, especializacao, abordagem, foto, data_nascimento, email_profissional) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+            nome,
             cpf,
-            Email,
-            Telefone,
-            Senha
+            email,
+            senha,
+            telefone,
+            crp,
+            especializacao,
+            abordagem,
+            foto,
+            data_nascimento,
+            email_profissional
         ]);
 
         if (rows.affectedRows > 0) {
@@ -113,6 +114,53 @@ app.post('/cadastro-profissional', async(req, res) => {
         res.status(500).json('Servidor crashou');
         console.log(error);
     }
-})
+});
+
+app.get('/login', async(req, res) => {
+
+    try {
+        
+        const { email, senha } = req.body;
+
+        if (email.includes('@futuremind.com.br')) {
+
+            const [rows] = await pool.query(`SELECT * FROM profissionais WHERE email_profissional=${email}`);
+
+            if (rows.ok) {
+
+                if (rows.senha === senha) {
+
+                    res.status(200).json(rows);
+                } else {
+
+                    res.status(400).json('Senha incorreta');
+                }
+            } else {
+
+                res.status(404).json('Profissional não encontrado');
+            }
+        } else {
+
+            const [rows] = await pool.query(`SELECT * FROM pacientes WHERE email=${email}`);
+
+            if (rows.ok) {
+
+                if (rows.senha === senha) {
+
+                    res.status(200).json(rows);
+                } else {
+
+                    res.status(400).json('Senha incorreta');
+                }
+            } else {
+
+                res.status(404).json('Paciente não encontrado');
+            }
+        }
+    } catch (err) {
+        
+        res.status(500).json('Erro no servidor', err);
+    }
+});
 
 app.listen(4242, () => console.log ('Servidor servindo'));

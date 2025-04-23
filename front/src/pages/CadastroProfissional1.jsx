@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
+import { GlobalContext } from '../Context/GlobalContext';
 import logo from '../assets/logoCadastro2.svg';
 import imagem from '../assets/FotoCadastro.svg';
 import './CSS/Cadastros.css';
@@ -6,19 +8,39 @@ import { useState } from 'react';
 
 function CadastroProfissional1() {
   const navigate = useNavigate();
-
-  const [nome, setNome] = useState('');
+  
+  const { profissional, setProfissional } = useContext(GlobalContext);
+  const [nome, setNome] = useState(profissional.nome);
   const [nomeValido, setNomeValido] = useState(false);
-  const [valorCRP, setValorCRP] = useState('');
+  const [valorCRP, setValorCRP] = useState(profissional.crp);
   const [crpValido, setCrpValido] = useState(false);
-  const [telefone, setTelefone] = useState('');
+  const [telefone, setTelefone] = useState(profissional.telefone);
   const [telefoneValido, setTelefoneValido] = useState(false);
-  const [dataNascimento, setDataNascimento] = useState('');
+  const [dataNascimento, setDataNascimento] = useState(profissional.data_nascimento);
   const [dataNascimentoValido, setDataNascimentoValido] = useState(false);
-  const [cpf, setCpf] = useState('');
+  const [cpf, setCpf] = useState(profissional.cpf);
   const [cpfValido, setCpfValido] = useState(false);
-  const [valorConsulta, setValorConsulta] = useState('');
+  const [valorConsulta, setValorConsulta] = useState(profissional.valor_consulta);
   const [valorConsultaValido, setValorConsultaValido] = useState(false);
+
+  const converterParaFormatoBanco = (data) => {
+    if (!data || data.split('/').length !== 3) return '';
+    const [dia, mes, ano] = data.split('/');
+    return `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
+  };
+  
+
+  useEffect(() => {
+    setProfissional({
+      nome,
+      crp: valorCRP,
+      telefone,
+      data_nascimento: converterParaFormatoBanco(dataNascimento),
+      cpf,
+      valor_consulta: valorConsulta
+    });
+  }, [nome, valorCRP, telefone, dataNascimento, cpf, valorConsulta]);
+  
 
   const formatarCPF = (value) => {
     value = value.replace(/\D/g, '');

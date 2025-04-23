@@ -14,35 +14,54 @@ function CadastroPaciente() {
   const [dataNascimento, setDataNascimento] = useState('');
   const [valorEmail, setValorEmail] = useState('');
   const [valorSenha, setValorSenha] = useState('');
+  const [paciente, setPaciente] = useState({});
+
+  const converterParaFormatoBanco = (data) => {
+    if (!data || data.split('/').length !== 3) return ''; // Verificação de segurança
+    const [dia, mes, ano] = data.split('/');
+    return `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
+  };
+  
 
   const handleFinish = async () => {
 
     try {
       
-      const paciente = {
+      const pacienteAux = {
         Nome_completo: nome,
         cpf: cpf,
-        Idade: dataNascimento,
+        Idade: converterParaFormatoBanco(dataNascimento),
         Telefone: telefone,
         Email: valorEmail,
         Senha: valorSenha
       }
+
+      setPaciente(pacienteAux);
+
       const response = await fetch('http://localhost:4242/cadastro-paciente', {
 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(paciente)
+        body: JSON.stringify(pacienteAux)
       });
 
       if (response.ok) {
 
+        setPaciente({
+          Nome_completo: '',
+          cpf: '',
+          Idade: '',
+          Telefone: '',
+          Email: '',
+          Senha: ''
+        })
         navigate('/login');
       }
-    } catch (cavalo) {
+    } catch (err) {
       
-      console.log({cavalo: 'Erro no servidor'});
+      console.log({err: 'Erro no servidor'});
     }
   }
 
@@ -90,7 +109,9 @@ function CadastroPaciente() {
     return value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '');
   };
 
-  const handleCadastro = () => {
+  const handleCadastro = (e) => {
+
+    if (e) e.preventDefault(); // <-- ISSO AQUI É IMPORTANTE
     let validacoes = true;
 
     // Nome
@@ -167,7 +188,7 @@ function CadastroPaciente() {
 
     // Se tudo estiver válido, redireciona
     if (validacoes) {
-      navigate('/login');
+      handleFinish();
     }
   };
 
@@ -254,7 +275,7 @@ function CadastroPaciente() {
           <label className='termos-styles'>Aceitar os</label> <a className='termos-a' href="termos">termos</a> <label className='de_uso'>de uso</label>
         </div>
 
-        <button className='botao-cadastro' onClick={handleFinish}>Finalizar Cadastro</button>
+        <button className='botao-cadastro' onClick={(e) => handleCadastro(e)}>Finalizar Cadastro</button>
         <p className='login-texto'>Já possui uma conta no nosso site? <a href='/login'>Aperte aqui</a></p>
       </div>
 

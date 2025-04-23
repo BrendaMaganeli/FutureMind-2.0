@@ -20,11 +20,21 @@ function Inicio() {
 
   const buscaProfissionais = async() => {
 
-    const response = await fetch('http://localhost:4242');
+    try {
 
-    const data = await response.json();
+      const response = await fetch('http://localhost:4242');
+      
+      if (response.ok) {
 
-    setProfissionais(data);
+        const data = await response.json();
+        
+        setProfissionais(data);
+        console.log(Array.isArray(data));
+      }
+    } catch (err) {
+
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -163,13 +173,13 @@ function Inicio() {
             pagination={{ clickable: true }}
             className='swiper-profi'
             >
-            {profissionais.length > 0 && profissionais.map((item, index) => (
+            {(Array.isArray(profissionais) && profissionais.length > 0) && profissionais?.map((item, index) => (
               <SwiperSlide key={index}>
                 <div className="card">
                   <div className='foto-perfilInicio'>
                     <img src={foto} alt="" />
                     <div className='perfil-nomeValor'>
-                      <h2>{item.Nome_completo}</h2>
+                      <h2>{item.nome}</h2>
                       <p>R$ 50/60 min</p>
                     </div>
                   </div>
@@ -191,7 +201,7 @@ function Inicio() {
                       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore, voluptates ducimus consectetur praesentium temporibus ut 
                     </div>
                     <div className='crp-inicio'>
-                      CRP {item.CRP}
+                      CRP {item.crp}
                     </div>
                   </div>
                 </div>

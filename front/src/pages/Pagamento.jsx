@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import './CSS/pagamento.css'
-import Seta from '../assets/caret-down-solid.svg'
+import './CSS/Pagamento.css';
+import Seta from '../assets/caret-down-solid.svg';
+import mulher from '../assets/image 8.png';
 
 export default function PagamentoConsulta() {
   const [pacienteSelecionado, setPacienteSelecionado] = useState("");
@@ -15,6 +16,18 @@ export default function PagamentoConsulta() {
   const [erroNome, setErroNome] = useState(false);
   const [erroValidade, setErroValidade] = useState(false);
   const [erroCvv, setErroCvv] = useState(false);
+
+  const [cupom, setCupom] = useState("");
+  const [desconto, setDesconto] = useState(0);
+  const valorOriginal = 165;
+
+  const aplicarCupom = () => {
+    if (cupom.trim().toLowerCase() === "desconto10") {
+      setDesconto(valorOriginal * 0.10);
+    } else {
+      setDesconto(0);
+    }
+  };
 
   const handleFinalizar = () => {
     if (metodoSelecionado === "cartao") {
@@ -38,7 +51,7 @@ export default function PagamentoConsulta() {
   };
 
   return (
-    <div style={{ maxWidth: "1300px", margin: "0 auto", padding: "16px", display: "grid", gridTemplateColumns: "2fr 1fr", gap: "24px" }}>
+    <div style={{ maxWidth: "1300px", margin: "0 auto", padding: "40px", display: "grid", gridTemplateColumns: "2fr 1fr", gap: "24px" }}>
       <div>
         <h2 style={{ fontSize: "24px", fontWeight: "600", marginBottom: "16px" }}>Finalize seu agendamento</h2>
 
@@ -82,31 +95,98 @@ export default function PagamentoConsulta() {
               </div>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "8px" }}>
-              <input type="checkbox" id="padrao" />
-              <label htmlFor="padrao" style={{ fontSize: "14px" }}>Definir esse cartão como método de pagamento padrão</label>
             </div>
           </div>
         )}
 
         {metodoSelecionado === "boleto" && (
           <div style={{ border: "1px solid #ddd", padding: "16px", borderRadius: "8px", marginBottom: "24px" }}>
-            <p style={{ fontWeight: "500", marginBottom: "8px" }}>O boleto será gerado após o agendamento e enviado para seu e-mail cadastrado.</p>
+          <h3 style={{ fontWeight: "500" }}>Adicionar novo cartão</h3>
+          <div className="floating-input">
+            <input type="text" placeholder=" " required />
+            <label>CPF</label>
           </div>
+          <div className="floating-input">
+            <input type="text" placeholder=" " required />
+            <label>Endereço</label>
+          </div>
+          <div className="floating-input">
+            <input type="text" placeholder=" " required />
+            <label>Nome Completo</label>
+          </div>
+          <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+            <div className="floating-input-2">
+              <input type="text" placeholder=" " required />
+              <label>Estado</label>
+            </div>
+            <div className="floating-input-2">
+              <input type="text" placeholder=" " required />
+              <label>Cidade</label>
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "8px" }}>
+          </div>
+        </div>
         )}
 
         {metodoSelecionado === "pix" && (
           <div style={{ border: "1px solid #ddd", padding: "16px", borderRadius: "8px", marginBottom: "24px" }}>
-            <p style={{ fontWeight: "500", marginBottom: "8px" }}>O QR Code do Pix será gerado após o agendamento.</p>
+          <h3 style={{ fontWeight: "500" }}>Adicionar novo cartão</h3>
+          <div className="floating-input">
+            <input type="text" placeholder=" " required />
+            <label>CPF</label>
           </div>
+          <div className="floating-input">
+            <input type="text" placeholder=" " required />
+            <label>Endereço</label>
+          </div>
+          <div className="floating-input">
+            <input type="text" placeholder=" " required />
+            <label>Nome Completo</label>
+          </div>
+          <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+            <div className="floating-input-2">
+              <input type="text" placeholder=" " required />
+              <label>Estado</label>
+            </div>
+            <div className="floating-input-2">
+              <input type="text" placeholder=" " required />
+              <label>Cidade</label>
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "8px" }}>
+          </div>
+        </div>
         )}
 
         <p style={{ fontWeight: "500", marginBottom: "8px" }}>Tem um cupom de desconto?</p>
         <div style={{ display: "flex", gap: "8px", marginBottom: "24px", width: "100%" }}>
           <div className="cupom">
-            <input type="text" placeholder=" " required />
+            <input
+              type="text"
+              placeholder=" "
+              value={cupom}
+              onChange={(e) => setCupom(e.target.value)}
+              required
+            />
             <label>Inserir código de desconto</label>
           </div>
-          <button style={{ backgroundColor: "#013a63", color: "white", padding: " 8px 16px", border: "none", borderRadius: "4px", width: "20%", height: "50px", marginTop: "3%", cursor: "pointer" }}>Aplicar</button>
+          <button
+            onClick={aplicarCupom}
+            style={{
+              backgroundColor: "#013a63",
+              color: "white",
+              padding: "8px 16px",
+              border: "none",
+              borderRadius: "4px",
+              width: "20%",
+              height: "50px",
+              marginTop: "3%",
+              cursor: "pointer"
+            }}
+          >
+            Aplicar
+          </button>
         </div>
 
         <div style={{ border: "1px solid #ddd", padding: "16px", borderRadius: "8px" }}>
@@ -118,8 +198,21 @@ export default function PagamentoConsulta() {
               setPacienteSelecionado(value);
               if (value === "novo") setMostrarModal(true);
             }}
-          style={{ width: "100%", height: "45px", padding: "8px", marginTop: "8px", backgroundColor: "rgba(247, 249, 251)", border: "0.5px solid rgba(231, 234, 244)", borderRadius: "4px", cursor: "pointer", paddingRight: "36px", backgroundPosition: "right 10px center", backgroundRepeat: "no-repeat", appearance: "none", backgroundImage: {Seta}
-          }}
+            style={{
+              width: "100%",
+              height: "45px",
+              padding: "8px",
+              marginTop: "8px",
+              backgroundColor: "rgba(247, 249, 251)",
+              border: "0.5px solid rgba(231, 234, 244)",
+              borderRadius: "4px",
+              cursor: "pointer",
+              paddingRight: "36px",
+              backgroundPosition: "right 10px center",
+              backgroundRepeat: "no-repeat",
+              appearance: "none",
+              backgroundImage: `url(${Seta})`
+            }}
           >
             <option value="evelyn">Evelyn Lohanny Santos Da Silva</option>
             <option value="novo">Cadastrar novo dependente</option>
@@ -160,40 +253,45 @@ export default function PagamentoConsulta() {
         </button>
       </div>
 
-      {/* COLUNA DIREITA (RESUMO + AGENDAMENTO) */}
       <div>
-        <div style={{ border: "1px solid #ddd", padding: "30px", borderRadius: "8px" }}>
-          <p style={{ fontWeight: "600" }}>Resumo</p>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+        <div style={{ border: "1px solid #ddd", padding: "30px", borderRadius: "8px", width: "110%" }}>
+          <p style={{ fontWeight: "700", marginTop: "5%", fontSize: "20px" }}>Resumo</p>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px", marginTop: "5%" }}>
             <span>Consultas</span>
-            <span>R$165</span>
+            <span>R${valorOriginal.toFixed(2)}</span>
           </div>
-          <div style={{ borderTop: "1px solid #eee", margin: "8px 0" }}></div>
-          <div style={{ fontWeight: "700", textAlign: "right", fontSize: "18px" }}>
-            Valor a ser pago <br />
-            <span style={{ fontSize: "22px" }}>R$165</span>
+          {desconto > 0 && (
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+              <span style={{ color: "green" }}>Desconto aplicado</span>
+              <span style={{ color: "green" }}>-R${desconto.toFixed(2)}</span>
+            </div>
+          )}
+          <div style={{ borderTop: "1.5px solid #ddd", margin: "8px 0" }}></div>
+          <div style={{ fontWeight: "500", textAlign: "right", fontSize: "18px", display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+            <p style={{ fontSize: "14px", marginRight: "4%" }}>Valor a ser pago </p>
+            <span style={{ fontSize: "22px" }}>R${(valorOriginal - desconto).toFixed(2)}</span>
           </div>
 
           <div style={{ marginTop: "24px" }}>
-          <p style={{ fontWeight: "600", marginTop: "16px" }}>Agendamentos</p>
-          <div style={{ display: "flex", alignItems: "center", gap: "25px", marginTop: "12px" }}>
-            <img src="https://via.placeholder.com/40" alt="Foto profissional" style={{ borderRadius: "9999px", width: "40px", height: "40px" }} />
-            <div>
-              <p style={{ fontWeight: "500" }}>Jeciana Botelho</p>
-              <p style={{ fontSize: "14px", color: "#888" }}>CRP 03/10307</p>
-              <p style={{ fontSize: "14px" }}>Atendimento Online</p>
+            <p style={{ fontWeight: "500", marginTop: "16px", fontSize: "20px" }}>Agendamentos</p>
+            <div style={{ display: "flex", alignItems: "center", gap: "25px", marginTop: "12px" }}>
+              <img src={mulher} alt="Foto profissional" style={{ borderRadius: "9999px", width: "60px", height: "60px" }} />
+              <div>
+                <p style={{ fontWeight: "500", fontSize: "16px" }}>Jeciana Botelho</p>
+                <p style={{ fontSize: "16px", color: "#888" }}>CRP 03/10307</p>
+                <p style={{ fontSize: "16px" }}>Atendimento Online</p>
+              </div>
             </div>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "8px" }}>
-            <div style={{ fontSize: "14px" }}>
-              <p><strong>Data</strong> 12/04/25</p>
-              <p><strong>Horário</strong> 10:00</p>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "10%", borderTop: "1.5px solid #ddd" }}>
+              <div style={{ fontSize: "15px", display: "flex", marginTop: "5%", gap: "16px" }}>
+                <p><strong>Data</strong> 12/04/25</p>
+                <p><strong>Horário</strong> 10:00</p>
+              </div>
+              <div style={{ display: "flex", gap: "8px", marginTop: "5%" }}>
+                <button style={{ backgroundColor: "#013a63", color: "white", padding: "12px 20px", border: "none", borderRadius: "4px", fontSize: "16px" }}>Alterar</button>
+                <button onClick={handleRemoverAgendamento} style={{ padding: "8px 16px", border: "2px solid #ddd", borderRadius: "4px", backgroundColor: "transparent" }}>Remover</button>
+              </div>
             </div>
-            <div style={{ display: "flex", gap: "8px" }}>
-              <button style={{ backgroundColor: "#ff6b00", color: "white", padding: "8px 16px", border: "none", borderRadius: "4px" }}>Alterar</button>
-              <button onClick={handleRemoverAgendamento} style={{ padding: "8px 16px", border: "1px solid #ddd", borderRadius: "4px" }}>Remover</button>
-            </div>
-          </div>
           </div>
         </div>
       </div>

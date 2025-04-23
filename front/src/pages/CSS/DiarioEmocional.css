@@ -44,24 +44,7 @@
     font-weight: 600;
 }
 
-.botaonovanota{
-    color: #013a63;
-    font-weight: 600;
-    width: 35%;
-    height: 60%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1em;
-    background-color: #C1DFF4;
-    border-radius: 10px;
-    border: none;
-}
 
-.botaonovanota img{
-    width: 20%;
-    padding-right: 5%;
-}
 
 .lado-direitoDiario{
     width: 71%;
@@ -69,12 +52,17 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    
 }
 
 .arvoredefundodiario{
     height: 100vh;
     width: 100%;
     position: relative;
+    background-size: cover;  /* Garantir que a imagem cubra toda a área */
+    background-position: center;  /* Centralizar a imagem */
+    transition: background-size 0.5s ease-in-out;  /* Suavizar transição do fundo */
+ 
 }
 
 .cabecalhonota{
@@ -114,8 +102,8 @@
     background-color: #a74343;
     color: #fff;
     width: 20%;
-    height: 20%;
-    padding: 1.5%;
+    height: 10%;
+    padding: 0.8%;
     border: none;
     border-radius: 5px;
     display: flex;
@@ -237,8 +225,7 @@
     z-index: 1000;
     display: flex;
     flex-direction: column;
-    align-items: center;
-
+    align-items: center; 
 }
 
 .fullscreen .lado-esquerdoDiario,
@@ -256,6 +243,7 @@
     font-size: 1.5em; 
     color: #013a63;
     background-color: rgba(84, 120, 159, 0.397);;
+    transition: all 0.3s ease;
 }
 
 .fullscreen .cabecalhonota {
@@ -299,21 +287,6 @@
     transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
 }
 
-.botaonovanota:active {
-    background-color: #A0CBE8;
-}
-
-.botaoapagar:active {
-    background-color: #8a2e2e;
-}
-
-.botaocomp:active {
-    background-color: #f0f0f0;
-}
-
-.botaoaumentar:active {
-    background-color: #f0f0f0;
-}
 
 .modal-compartilhar {
     position: fixed;
@@ -379,6 +352,79 @@
     color: white;
     border-radius: 5px;
   }
+
+
+
+  .animando {
+    animation: playLottie 1s forwards;
+  }
+  
+
+  .botaonovanota {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #C1DFF4;
+    color: #013a63;
+    font-weight: 600;
+    font-size: 1em;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 9px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease-in-out;
+    cursor: pointer;
+}
+
+.botaonovanota:hover {
+    background-color: #A0CBE8;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.botaonovanota:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.botaonovanota p {
+    margin: 0;
+    font-size: 1em;
+}
+
+.botaonovanota .lottie-animation {
+    width: 24px;
+    height: 24px;
+}
+
+
+.botaoapagar:hover {
+    background-color:#9c3535;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.botaoapagar:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.botaoapagar p {
+    margin: 0;
+    font-size: 1em;
+}
+
+
+.lottie-animation{
+    width: 27px;
+    height: 27px;
+}
+
+.lottie-animation-clock{
+    width: 27px;
+    height: 27px;
+}
+
+
 
 
 

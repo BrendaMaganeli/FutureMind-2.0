@@ -76,9 +76,9 @@
 
 .div-filtro{
   display: flex;
-  width: 100%; 
+  width: 50%; 
   justify-content: end;
-  
+  gap: 2%;
 }
 
 .filtros-profissionais .inpt-filtro {
@@ -474,4 +474,107 @@
   .swiper-button-next-custom {
     right: 50px;
   }
-  
+
+  .select-filtro {
+    position: relative;
+    width: 100%;
+    display: flex;
+}
+
+/* Ajuste no Select */
+.custom-select .select__control {
+  width: 12.5em;
+  padding: 7px;
+  border: 2px solid #5A789F !important;
+  border-radius: 5px;
+  font-size: 1.1em;
+  background-color: #cad7ebe0;
+  box-shadow: none;
+  min-height: 45px;
+  max-height: 55px; /* altura máxima antes de scroll */
+  padding-bottom: 25px !important; /* cria espaço pra seta */
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* .custom-select .select__control:hover {
+  border-color: #7ba6dd !important;
+} */
+
+.custom-select .select__control--is-focused {
+  box-shadow: 0 0 3px rgba(90, 120, 159, 0.5);
+  border-color: #7ba6dd !important;
+}
+
+/* Ajuste para manter o tamanho das opções */
+.custom-select .select__multi-value {
+  background-color: #5A789F;
+  color: white;
+  border-radius: 4px;
+  padding: 3px 8px;
+  max-width: 115px;
+  white-space: nowrap;
+}
+
+.custom-select .select__multi-value__label {
+  color: white;
+}
+
+.custom-select .select__multi-value__remove {
+  color: white;
+}
+
+.custom-select .select__multi-value__remove:hover {
+  background-color: #466484;
+}
+
+.custom-select .select__value-container {
+  max-height: 45px;
+  flex-wrap: wrap; /* permite quebrar linha */
+  align-items: center;
+  gap: 4px; /* espaçamento entre os itens */
+  padding: 2px 8px;
+}
+
+.custom-select .select__indicators {
+  position: absolute;
+  right: -3px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.custom-select .select__placeholder {
+  color: #013A63; /* Cor do texto quando nada está selecionado */
+  opacity: 1; /* Garante visibilidade */
+  transition: color 0.3s ease;
+}
+
+/* Cor do placeholder quando o select está em foco */
+.custom-select .select__control--is-focused .select__placeholder {
+  color: #7ba6dd; /* Altere para a cor que quiser no focus */
+}
+
+.custom-select .select__dropdown-indicator svg {
+  color: #013A63; /* Altere para a cor que quiser */
+  transition: color 0.3s ease;
+}
+
+.custom-select .select__dropdown-indicator:hover svg,
+.custom-select .select__control--is-focused .select__dropdown-indicator svg {
+  color: #7ba6dd; /* cor ao passar o mouse ou ao focar */
+}
+
+
+
+.custom-select .select__indicators::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20px; /* altura da linha pequena */
+  width: 1.1px;
+  background-color: #5A789F;
+}

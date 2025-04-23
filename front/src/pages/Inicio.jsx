@@ -12,6 +12,7 @@ import foto from '../assets/fotoInicio.svg';
 import Lottie from 'react-lottie';
 import animationData from '../assets/wired-flat-112-book-morph-open.json';
 import { useEffect, useState } from 'react';
+import Select from 'react-select';
 
 function Inicio() {
 
@@ -21,7 +22,7 @@ function Inicio() {
 
     const response = await fetch('http://localhost:4242');
 
-    const data = response.json();
+    const data = await response.json();
 
     setProfissionais(data);
   };
@@ -34,13 +35,30 @@ function Inicio() {
   const [isHovered, setIsHovered] = useState(false);
 
   const [animationOptions, setAnimationOptions] = useState({
-    loop: true,
-    autoplay: true, 
+    loop: false,
+    autoplay: false, 
     animationData: animationData,
     rendererSettings: {
       preserveAspectRatio: 'xMidYMid slice'
     }
   });
+
+  const opcoesEspecializacao = [
+    { value: 'psicologia-clinica', label: 'Psicologia Clínica' },
+    { value: 'psicopedagogia', label: 'Psicopedagogia' },
+    { value: 'neuropsicologia', label: 'Neuropsicologia' },
+  ];
+  
+  const opcoesAbordagens = [
+    { value: 'cognitivo-comportamental', label: 'Cognitivo-Comportamental' },
+    { value: 'psicanalise', label: 'Psicanálise' },
+    { value: 'humanista', label: 'Humanista' },
+  ];
+
+  const [especializacoes, setEspecializacoes] = useState([]);
+  const [abordagens, setAbordagens] = useState([]);
+  const [especializacaoValida, setEspecializacaoValida] = useState(true);
+  const [abordagemValida, setAbordagemValida] = useState(true);
 
   return (
     <div className='container-inicio'>
@@ -61,24 +79,43 @@ function Inicio() {
                 <img src='search.png' alt="" />
                 <input type='text' placeholder='Buscar profissional...' />
               </div>
-              <div className='div-filtro'>
-                <div className="especialidade-filtro">
-                  <select>
-                    <option value="">Especialidade</option>
-                    <option value="">b</option>
-                    <option value="">c</option>
-                    <option value="">d</option>
-                  </select>
-                </div>
-                <div className="abordagem-filtro">
-                  <select>
-                    <option value="">Abordagem</option>
-                    <option value="">b</option>
-                    <option value="">c</option>
-                    <option value="">d</option>
-                  </select>
-                </div>
-              </div>
+          <div className='div-filtro'>
+          <div className='select-filtro'>
+            <Select
+              placeholder="Especialização"
+              className="custom-select"
+              classNamePrefix="select"
+              options={opcoesEspecializacao}
+              isMulti
+              onChange={(selectedOptions) => {
+                const opcoes = selectedOptions || [];
+                setEspecializacoes(opcoes);
+                setEspecializacaoValida(opcoes.length > 0);
+              }}
+              value={especializacoes}
+              menuPortalTarget={document.body}
+              styles={{ menuPortal: base => ({ ...base, zIndex: 9999}) }}
+            />
+          </div>
+          <div className='select-filtro'>
+            <Select
+              placeholder="Abordagem"
+              className="custom-select"
+              classNamePrefix="select"
+              options={opcoesAbordagens}
+              isMulti
+              onChange={(selectedOptions) => {
+                const opcoes = selectedOptions || [];
+                setAbordagens(opcoes);
+                setAbordagemValida(opcoes.length > 0);
+              }}
+              value={abordagens}
+              menuPortalTarget={document.body}
+              styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+            />
+          </div>
+
+          </div>
             </div>
 
             <div className="filter-profissionais-baixo">
@@ -126,15 +163,14 @@ function Inicio() {
             pagination={{ clickable: true }}
             className='swiper-profi'
             >
-            {profissionais.map((item, index) => (
+            {profissionais.length > 0 && profissionais.map((item, index) => (
               <SwiperSlide key={index}>
                 <div className="card">
-                  {item}
                   <div className='foto-perfilInicio'>
                     <img src={foto} alt="" />
                     <div className='perfil-nomeValor'>
-                      <h2>João Pedro Garcia</h2>
-                      <p>R$ 50/60 min </p>
+                      <h2>{item.Nome_completo}</h2>
+                      <p>R$ 50/60 min</p>
                     </div>
                   </div>
                   <div className='div-especializacao'>
@@ -155,7 +191,7 @@ function Inicio() {
                       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore, voluptates ducimus consectetur praesentium temporibus ut 
                     </div>
                     <div className='crp-inicio'>
-                      CRP 98/12345
+                      CRP {item.CRP}
                     </div>
                   </div>
                 </div>
@@ -176,7 +212,6 @@ function Inicio() {
             options={animationOptions} 
             height={60} 
             width={60} 
-            isStopped={false} 
             isPaused={false}
             speed={0.4} // Tente diminuir mais a velocidade aqui
             isStopped={!isHovered}  // A animação só acontece quando está "hovering"

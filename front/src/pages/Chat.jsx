@@ -4,6 +4,7 @@ import help from '../assets/help 1.svg';
 import mulher from '../assets/image 8.png';
 import lupa from '../assets/search 1.svg';
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import close from '../assets/close-2.svg';
 import cam from '../assets/cam-recorder (1) 1.svg';
 import block from '../assets/blocked 1.svg';
@@ -41,6 +42,7 @@ function Chat() {
     ]);
 
     const [chatSelected, setChatSelected] = useState();
+    const [isChatSelected, setIsChatSelected] = useState('chat-not-selected');
     const [busca, setBusca] = useState('');
     const [result, setResult] = useState([]);
     const [useResult, setUseResult] = useState(false);
@@ -58,6 +60,7 @@ function Chat() {
     const messagesEndRef = useRef(null);
     const [inptvalue, setInptvalue] = useState('');
     const [name, setName] = useState('');
+    const navigate = useNavigate();
 
     const toggleTheme = () => {
         setTheme(theme === 'light' ? 'dark' : 'light');
@@ -151,12 +154,17 @@ function Chat() {
         socket.emit("sendMessage", JSON.stringify(newMessage));
     };
 
+    const handleVoltar = () => {
+
+        navigate(-1);
+    }
+
     return (
         <div className={`container-chats ${theme} ${fontSize}`}>
             <div className="barra-lateral-chat">
                 <div className="barra-cima">
-                    <img className='voltar-btn' src={voltar} alt="" />
-                    <img onClick={() => setVisibleSettings(!visibleSettings)} src={config} alt="" />
+                    <img className='voltar-btn' onClick={handleVoltar} src={voltar} alt="" />
+                    <img className='config-btn' onClick={() => setVisibleSettings(!visibleSettings)} src={config} alt="" />
                     {
                         visibleSettings &&
                         <div className="settings" ref={settingsRef}>
@@ -169,7 +177,7 @@ function Chat() {
                     <img src={help} alt="" />
                 </div>
             </div>
-            <div className="chats">
+            <div className={`chats ${isChatSelected}`}>
                 <div className="cabecalho-chats">
                     <p>Chats</p>
                 </div>
@@ -191,7 +199,7 @@ function Chat() {
                 <div className="conversas">
                     {
                         (useResult ? result : chats).map((item, index) => (
-                            <div key={index} className="chat-barra" onClick={() => setChatSelected(item)}>
+                            <div key={index} className="chat-barra" onClick={() => {setChatSelected(item), setIsChatSelected('chat-selected')}}>
                                 <img src={item.foto} alt="" />
                                 <div className="nome">
                                     <p>{item.nome}</p>
@@ -214,7 +222,7 @@ function Chat() {
             </div>
             {
                 chatSelected ?
-                <div className="chat">
+                <div className={`chat ${isChatSelected}`}>
                     <div className="barra-top">
                         <div className="img-foto">
                             <img src={chatSelected.foto} alt="" />
@@ -227,7 +235,7 @@ function Chat() {
                                 <img src={cam} className='icon-chat-p-1' alt="" />  
                                 <img src={block} className='icon-chat-p-2' alt="" />
                             </div>
-                            <img onClick={() => setChatSelected('')} src={close} className='icon-chat-p-3' alt="" />
+                            <img onClick={() => {setChatSelected(''), setIsChatSelected('chat-not-selected')}} src={close} className='icon-chat-p-3' alt="" />
                         </div>
                     </div>
                     <div style={{height: '83%', overflowY: 'auto'}}>

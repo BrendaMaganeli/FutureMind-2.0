@@ -69,6 +69,7 @@ function Inicio() {
   const [abordagens, setAbordagens] = useState([]);
   const [especializacaoValida, setEspecializacaoValida] = useState(true);
   const [abordagemValida, setAbordagemValida] = useState(true);
+  
 
   return (
     <div className='container-inicio'>
@@ -86,8 +87,8 @@ function Inicio() {
           <div className="filter-profissionais-container">
             <div className="filtros-profissionais">
               <div className="inpt-filtro">               
-                <img src='search.png' alt="" />
                 <input type='text' placeholder='Buscar profissional...' />
+                <img src='search.png' alt="" />
               </div>
           <div className='div-filtro'>
           <div className='select-filtro'>

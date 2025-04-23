@@ -25,7 +25,7 @@ function CadastroProfissional1() {
     value = value.replace(/^(\d{3})(\d)/, "$1.$2");
     value = value.replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3");
     value = value.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3-$4");
-    return value.slice(0, 14);
+    return value.slice(0, 14); 
   };
 
   const formatarCRP = (value) => {

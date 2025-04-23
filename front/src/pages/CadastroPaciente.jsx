@@ -14,6 +14,35 @@ function CadastroPaciente() {
   const [valorEmail, setValorEmail] = useState('');
   const [valorSenha, setValorSenha] = useState('');
 
+  const hand = async () => {
+    try {
+      const paciente = {
+        Nome_completo: nome,
+        cpf: cpf,
+        Idade: dataNascimento,
+        Email: valorEmail,
+        Telefone: telefone,
+        Senha: valorSenha
+      }
+      const response = await fetch('https://localhost:4242/cadastro-paciente',{
+
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify(paciente)
+      })
+
+      if(response.ok){
+
+        navigate('/login');
+      
+      }
+    } catch (err) {
+       console.log({err: 'erro servidor'})
+    }
+  }
+
   const [nomeValido, setNomeValido] = useState(false);
   const [cpfValido, setCpfValido] = useState(false);
   const [telefoneValido, setTelefoneValido] = useState(false);
@@ -241,7 +270,7 @@ function CadastroPaciente() {
           <label className='termos-styles'>Aceitar os</label> <a className='termos-a' href="termos">termos</a> <label className='de_uso'>de uso</label>
         </div>
 
-        <button className='botao-cadastro' onClick={handleCadastro}>Finalizar Cadastro</button>
+        <button className='botao-cadastro' onClick={hand}>Finalizar Cadastro</button>
         <p className='login-texto'>Já possui uma conta no nosso site? <a href='/login'>Aperte aqui</a></p>
       </div>
 

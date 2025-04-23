@@ -4,6 +4,7 @@ const app = express ();
 
 app.use(express.static('public'));
 
+app.use(express.json())
 const pool = mysql.createPool({
    
     host:'localhost',
@@ -32,6 +33,38 @@ app.get('/', async(req, res) => {
     } catch (err) {
         
         res.status(500).json('erro servidor');
+    }
+})
+
+app.post('/cadastro-paciente', async(req, res) => {
+
+    try {
+        const id = 1;
+        const {
+            
+               Nome_completo, 
+               cpf, 
+               Email,
+               Senha,
+               Idade, 
+               Telefone     
+               } = req.body
+
+               const [rows] = await pool.query('INSERT INTO paciente VALUES (?, ?, ?, ?, ?, ?, ?)' , [id, Nome_completo, Idade, cpf, Email, Telefone, Senha])
+               
+               if (rows.length > 0) {
+                
+                  res.status(201).json(rows)
+               } else {
+                 
+                res.status(400).json(rows)
+               }
+
+            } catch (error) {
+         
+                 res.status(500).json('servi de bosta')
+                 console.error(error)
+        
     }
 })
 

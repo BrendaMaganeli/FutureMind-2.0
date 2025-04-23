@@ -81,39 +81,54 @@
   gap: 2%;
 }
 
-.filtros-profissionais .inpt-filtro {
+.inpt-filtro {
 
-    padding: 0 0 0 20px;
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    border: none;
-    background-color: #5a7da0da;
-    border-radius: 12px;
-    padding: 0 2% 0 2%;
-    height: 18%;
-    width: 70%;
-    color: white;
-    gap: 10px;
+  background-color: #cad7ebe0;
+  border: 2px solid #5A789F !important;
+  border-radius: 5px;
+  height: 45px;
+  padding: 0 12px;
+  width: 70%;
+  display: flex;
+  align-items: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.inpt-filtro:hover {
+  box-shadow: 0 4px 12px rgba(70, 130, 169, 0.3); /* sombra suave */
 }
 
 .filtros-profissionais .inpt-filtro img {
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
+  filter: brightness(0) saturate(100%) invert(23%) sepia(14%) saturate(1399%) hue-rotate(172deg) brightness(93%) contrast(87%);
 
-    width: 4%;
 }
 
 .filtros-profissionais .inpt-filtro input {
-
-    border: none;
-    background-color: transparent;
-    color: white;
-    height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  font-size: 1em;
+  color: #2C4969; /* azul profundo */
 }
 
 .filtros-profissionais .inpt-filtro input::placeholder {
+  color: #013A63; /* Cor do texto quando nada está selecionado */
+  opacity: 1; /* Garante visibilidade */
+  transition: color 0.3s ease;
+}
 
-    color: white;
-    opacity: 85%;
+.inpt-filtro:focus-within{
+  box-shadow: 0 0 3px rgba(90, 120, 159, 0.5);
+  border-color: #7ba6dd !important;
+}
+
+.filtros-profissionais .inpt-filtro input:focus::placeholder {
+  color: #7ba6dd; /* Altere para a cor que quiser no focus */
 }
 
 .filtros-profissionais .especialidade-filtro, .filtros-profissionais .abordagem-filtro {
@@ -484,22 +499,23 @@
 /* Ajuste no Select */
 .custom-select .select__control {
   width: 12.5em;
-  padding: 7px;
+  padding: 4px;
   border: 2px solid #5A789F !important;
   border-radius: 5px;
   font-size: 1.1em;
   background-color: #cad7ebe0;
   box-shadow: none;
   min-height: 45px;
-  max-height: 55px; /* altura máxima antes de scroll */
+  max-height: 45px; /* altura máxima antes de scroll */
   padding-bottom: 25px !important; /* cria espaço pra seta */
   position: relative;
-  overflow-x: hidden;
+  transition: box-shadow 0.3s ease;
 }
 
-/* .custom-select .select__control:hover {
-  border-color: #7ba6dd !important;
-} */
+.custom-select .select__control:hover{
+
+  box-shadow: 0 4px 12px rgba(70, 130, 169, 0.3); /* sombra suave */
+}
 
 .custom-select .select__control--is-focused {
   box-shadow: 0 0 3px rgba(90, 120, 159, 0.5);
@@ -511,7 +527,7 @@
   background-color: #5A789F;
   color: white;
   border-radius: 4px;
-  padding: 3px 8px;
+  padding: 1px 6px;
   max-width: 115px;
   white-space: nowrap;
 }
@@ -529,20 +545,46 @@
 }
 
 .custom-select .select__value-container {
-  max-height: 45px;
+  max-height: 37px;
   flex-wrap: wrap; /* permite quebrar linha */
   align-items: center;
   gap: 4px; /* espaçamento entre os itens */
   padding: 2px 8px;
+  overflow-y: hidden;
+}
+
+.custom-select .select__value-container::-webkit-scrollbar {
+  width: 6px; /* largura da barra de rolagem */
+  height: 6px;
+}
+
+.custom-select .select__value-container::-webkit-scrollbar-track {
+  background: transparent; /* fundo da track */
+}
+
+.custom-select .select__value-container::-webkit-scrollbar-thumb {
+  background-color: #5A789F; /* cor do scroll */
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box; /* faz parecer mais fino */
+}
+
+.custom-select .select__value-container::-webkit-scrollbar-thumb:hover {
+  background-color: #466484; /* cor ao passar o mouse */
+}
+
+
+.custom-select .select__value-container:hover{
+  overflow-y: auto;
 }
 
 .custom-select .select__indicators {
   position: absolute;
-  right: -3px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 1;
-  pointer-events: none;
+  z-index: 2;
+  pointer-events: auto; /* permite clique na seta */
 }
 
 .custom-select .select__placeholder {
@@ -561,20 +603,9 @@
   transition: color 0.3s ease;
 }
 
-.custom-select .select__dropdown-indicator:hover svg,
 .custom-select .select__control--is-focused .select__dropdown-indicator svg {
   color: #7ba6dd; /* cor ao passar o mouse ou ao focar */
 }
 
 
 
-.custom-select .select__indicators::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 20px; /* altura da linha pequena */
-  width: 1.1px;
-  background-color: #5A789F;
-}

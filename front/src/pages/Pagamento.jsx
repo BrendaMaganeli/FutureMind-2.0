@@ -8,19 +8,35 @@ export default function PagamentoConsulta() {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [metodoSelecionado, setMetodoSelecionado] = useState("cartao");
 
-  const [numeroCartao, setNumeroCartao] = useState("");
-  const [nomeCartao, setNomeCartao] = useState("");
-  const [validadeCartao, setValidadeCartao] = useState("");
-  const [cvvCartao, setCvvCartao] = useState("");
-  const [erroNumero, setErroNumero] = useState(false);
-  const [erroNome, setErroNome] = useState(false);
-  const [erroValidade, setErroValidade] = useState(false);
-  const [erroCvv, setErroCvv] = useState(false);
+  const [numeroCartao] = useState("");
+  const [nomeCartao] = useState("");
+  const [validadeCartao] = useState("");
+  const [cvvCartao] = useState("");
+  const [setErroNumero] = useState(false);
+  const [setErroNome] = useState(false);
+  const [setErroValidade] = useState(false);
+  const [setErroCvv] = useState(false);
 
   const [cupom, setCupom] = useState("");
   const [desconto, setDesconto] = useState(0);
   const valorOriginal = 165;
 
+  const [mostrarAgenda, setMostrarAgenda] = useState(false);
+  const [dataSelecionada, setDataSelecionada] = useState("2025-04-12");
+  const [horaSelecionada, setHoraSelecionada] = useState("14:00");
+
+  const [mostrarModalRemover, setMostrarModalRemover] = useState(false);
+
+  const [nomeDependente, setNomeDependente] = useState("");
+  const [nascimentoDependente, setNascimentoDependente] = useState("");
+  const [generoDependente, setGeneroDependente] = useState("");
+
+  const [dependentes, setDependentes] = useState([
+    { value: "evelyn", label: "Evelyn Lohanny Santos Da Silva" }
+  ]);
+
+  const [nomeValido, setNomeValido] = useState(false);
+  
   const aplicarCupom = () => {
     if (cupom.trim().toLowerCase() === "desconto10") {
       setDesconto(valorOriginal * 0.10);
@@ -43,11 +59,32 @@ export default function PagamentoConsulta() {
     alert("Agendamento finalizado com sucesso!");
   };
 
-  const handleRemoverAgendamento = () => {
-    const confirmacao = window.confirm("Tem certeza que deseja remover este agendamento?");
-    if (confirmacao) {
-      alert("Agendamento removido.");
+  const handleAlterarAgendamento = () => {
+    setMostrarAgenda(true);
+  };
+
+  const handleCadastrarDependente = () => {
+    if (nomeDependente && nascimentoDependente && generoDependente) {
+      const novoId = `dep-${Date.now()}`;
+      const novoDependente = {
+        value: novoId,
+        label: nomeDependente
+      };
+  
+      setDependentes((prev) => [...prev, novoDependente]);
+      setPacienteSelecionado(novoId);
+      setMostrarModal(false);
+      setNomeDependente("");
+      setNascimentoDependente("");
+      setGeneroDependente("");
+    } else {
+      alert("Preencha todos os campos do dependente.");
     }
+  };
+  
+
+  const formatarNome = (value) => {
+    return value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '');
   };
 
   return (
@@ -72,103 +109,33 @@ export default function PagamentoConsulta() {
         {metodoSelecionado === "cartao" && (
           <div style={{ border: "1px solid #ddd", padding: "16px", borderRadius: "8px", marginBottom: "24px" }}>
             <h3 style={{ fontWeight: "500" }}>Adicionar novo cartão</h3>
-            <div className="floating-input">
-              <input type="text" placeholder=" " required />
-              <label>Banco</label>
-            </div>
-            <div className="floating-input">
-              <input type="text" placeholder=" " required />
-              <label>Número do Cartão</label>
-            </div>
-            <div className="floating-input">
-              <input type="text" placeholder=" " required />
-              <label>Nome como aparece no cartão</label>
-            </div>
+            <div className="floating-input"><input type="text" placeholder=" " required /><label>Banco</label></div>
+            <div className="floating-input"><input type="text" placeholder=" " required /><label>Número do Cartão</label></div>
+            <div className="floating-input"><input type="text" placeholder=" " required /><label>Nome como aparece no cartão</label></div>
             <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
-              <div className="floating-input-2">
-                <input type="text" placeholder=" " required />
-                <label>Validade</label>
-              </div>
-              <div className="floating-input-2">
-                <input type="text" placeholder=" " required />
-                <label>CVV</label>
-              </div>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "8px" }}>
+              <div className="floating-input-2"><input type="text" placeholder=" " required /><label>Validade</label></div>
+              <div className="floating-input-2"><input type="text" placeholder=" " required /><label>CVV</label></div>
             </div>
           </div>
         )}
 
-        {metodoSelecionado === "boleto" && (
+        {(metodoSelecionado === "boleto" || metodoSelecionado === "pix") && (
           <div style={{ border: "1px solid #ddd", padding: "16px", borderRadius: "8px", marginBottom: "24px" }}>
-          <h3 style={{ fontWeight: "500" }}>Adicionar novo cartão</h3>
-          <div className="floating-input">
-            <input type="text" placeholder=" " required />
-            <label>CPF</label>
-          </div>
-          <div className="floating-input">
-            <input type="text" placeholder=" " required />
-            <label>Endereço</label>
-          </div>
-          <div className="floating-input">
-            <input type="text" placeholder=" " required />
-            <label>Nome Completo</label>
-          </div>
-          <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
-            <div className="floating-input-2">
-              <input type="text" placeholder=" " required />
-              <label>Estado</label>
-            </div>
-            <div className="floating-input-2">
-              <input type="text" placeholder=" " required />
-              <label>Cidade</label>
+            <h3 style={{ fontWeight: "500" }}>Informações do Pagamento</h3>
+            <div className="floating-input"><input type="text" placeholder=" " required /><label>CPF</label></div>
+            <div className="floating-input"><input type="text" placeholder=" " required /><label>Endereço</label></div>
+            <div className="floating-input"><input type="text" placeholder=" " required  /><label>Nome Completo</label></div>
+            <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+              <div className="floating-input-2"><input type="text" placeholder=" " required /><label>Estado</label></div>
+              <div className="floating-input-2"><input type="text" placeholder=" " required /><label>Cidade</label></div>
             </div>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "8px" }}>
-          </div>
-        </div>
-        )}
-
-        {metodoSelecionado === "pix" && (
-          <div style={{ border: "1px solid #ddd", padding: "16px", borderRadius: "8px", marginBottom: "24px" }}>
-          <h3 style={{ fontWeight: "500" }}>Adicionar novo cartão</h3>
-          <div className="floating-input">
-            <input type="text" placeholder=" " required />
-            <label>CPF</label>
-          </div>
-          <div className="floating-input">
-            <input type="text" placeholder=" " required />
-            <label>Endereço</label>
-          </div>
-          <div className="floating-input">
-            <input type="text" placeholder=" " required />
-            <label>Nome Completo</label>
-          </div>
-          <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
-            <div className="floating-input-2">
-              <input type="text" placeholder=" " required />
-              <label>Estado</label>
-            </div>
-            <div className="floating-input-2">
-              <input type="text" placeholder=" " required />
-              <label>Cidade</label>
-            </div>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "8px" }}>
-          </div>
-        </div>
         )}
 
         <p style={{ fontWeight: "500", marginBottom: "8px" }}>Tem um cupom de desconto?</p>
-        <div style={{ display: "flex", gap: "8px", marginBottom: "24px", width: "100%" }}>
+        <div style={{ display: "flex", gap: "8px", marginBottom: "24px", width: "100%", alignItems: "center" }}>
           <div className="cupom">
-            <input
-              type="text"
-              placeholder=" "
-              value={cupom}
-              onChange={(e) => setCupom(e.target.value)}
-              required
-            />
+            <input type="text" placeholder=" " value={cupom} onChange={(e) => setCupom(e.target.value)} required />
             <label>Inserir código de desconto</label>
           </div>
           <button
@@ -176,12 +143,12 @@ export default function PagamentoConsulta() {
             style={{
               backgroundColor: "#013a63",
               color: "white",
-              padding: "8px 16px",
+              padding: "8px 13px",
               border: "none",
-              borderRadius: "4px",
+              borderRadius: "6px",
               width: "20%",
-              height: "50px",
-              marginTop: "3%",
+              height: "45px",
+              marginTop: "2.6%",
               cursor: "pointer"
             }}
           >
@@ -193,6 +160,7 @@ export default function PagamentoConsulta() {
           <p style={{ fontWeight: "600" }}>Quem será atendido?</p>
           <label style={{ fontSize: "14px" }}>Paciente</label>
           <select
+            value={pacienteSelecionado}
             onChange={(e) => {
               const value = e.target.value;
               setPacienteSelecionado(value);
@@ -214,41 +182,15 @@ export default function PagamentoConsulta() {
               backgroundImage: `url(${Seta})`
             }}
           >
-            <option value="evelyn">Evelyn Lohanny Santos Da Silva</option>
+            {dependentes.map((dep) => (
+              <option key={dep.value} value={dep.value}>
+                {dep.label}
+              </option>
+            ))}
             <option value="novo">Cadastrar novo dependente</option>
           </select>
         </div>
-
-        {mostrarModal && (
-          <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <div style={{ backgroundColor: "white", padding: "24px", borderRadius: "8px", width: "30%" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <h3 style={{ fontSize: "18px", fontWeight: "600" }}>Cadastre um novo dependente!</h3>
-                <button onClick={() => setMostrarModal(false)} style={{ border: "none", background: "none", fontSize: "20px" }}>×</button>
-              </div>
-              <div className="floating-input-3">
-                <input type="text" placeholder=" " required />
-                <label>Nome Completo</label>
-              </div>
-              <div className="floating-input-3">
-                <input type="date" placeholder=" " required />
-                <label>Data de Nascimento</label>
-              </div>
-              <div className="floating-select">
-                <select required>
-                  <option value="" disabled selected hidden></option>
-                  <option value="masculino">Masculino</option>
-                  <option value="feminino">Feminino</option>
-                  <option value="outro">Outro</option>
-                </select>
-                <label>Gênero</label>
-              </div>
-              <button style={{ width: "100%", marginTop: "16px", backgroundColor: "#013a63", color: "white", padding: "15px", border: "none", borderRadius: "4px", fontWeight: "600", fontSize: "1em" }}>Cadastrar</button>
-            </div>
-          </div>
-        )}
-
-        <button onClick={handleFinalizar} style={{ width: "100%", marginTop: "24px", backgroundColor: "#013a63", color: "white", padding: "12px", border: "none", borderRadius: "4px", fontWeight: "600" }}>
+        <button onClick={handleFinalizar} style={{ width: "100%", marginTop: "24px", backgroundColor: "#013a63", color: "white", padding: "15px", border: "none", borderRadius: "6px", fontWeight: "600" }}>
           Finalizar agendamento
         </button>
       </div>
@@ -284,17 +226,123 @@ export default function PagamentoConsulta() {
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "10%", borderTop: "1.5px solid #ddd" }}>
               <div style={{ fontSize: "15px", display: "flex", marginTop: "5%", gap: "16px" }}>
-                <p><strong>Data</strong> 12/04/25</p>
-                <p><strong>Horário</strong> 10:00</p>
+                <p><strong>Data</strong> {dataSelecionada.split("-").reverse().join("/")}</p>
+                <p><strong>Horário</strong> {horaSelecionada}</p>
               </div>
               <div style={{ display: "flex", gap: "8px", marginTop: "5%" }}>
-                <button style={{ backgroundColor: "#013a63", color: "white", padding: "12px 20px", border: "none", borderRadius: "4px", fontSize: "16px" }}>Alterar</button>
-                <button onClick={handleRemoverAgendamento} style={{ padding: "8px 16px", border: "2px solid #ddd", borderRadius: "4px", backgroundColor: "transparent" }}>Remover</button>
+                <button onClick={handleAlterarAgendamento} style={{ backgroundColor: "#013a63", color: "white", padding: "12px 20px", border: "none", borderRadius: "4px", fontSize: "16px" }}>Alterar</button>
+                <button onClick={() => setMostrarModalRemover(true)} style={{ padding: "8px 16px", border: "2px solid #ddd", borderRadius: "4px", backgroundColor: "transparent" }}>Remover</button>
               </div>
             </div>
           </div>
+
+          {mostrarAgenda && (
+            <div style={{ marginTop: "16px" }}>
+              <div className="floating-input-4">
+                <input type="date" value={dataSelecionada} onChange={(e) => setDataSelecionada(e.target.value)} required />
+                <label>Nova data</label>
+              </div>
+              <div className="floating-input-4" style={{ marginTop: "8px" }}>
+                <input type="time" value={horaSelecionada} onChange={(e) => setHoraSelecionada(e.target.value)} required />
+                <label>Novo horário</label>
+              </div>
+              <button onClick={() => setMostrarAgenda(false)} style={{ width: "100%", marginTop: "16px", backgroundColor: "#013a63", color: "white", padding: "12px", border: "none", borderRadius: "4px", fontWeight: "600" }}>
+                Confirmar alteração
+              </button>
+            </div>
+          )}
         </div>
       </div>
+
+      {mostrarModal && (
+        <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <div style={{ backgroundColor: "white", padding: "24px", borderRadius: "8px", width: "30%" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h3 style={{ fontSize: "18px", fontWeight: "600" }}>Cadastre um novo dependente!</h3>
+              <button onClick={() => setMostrarModal(false)} style={{ border: "none", background: "none", fontSize: "20px" }}>×</button>
+            </div>
+            <div className="floating-input-3">
+              <input
+                type="text"
+                placeholder=" "
+                required
+                value={nomeDependente}
+                onChange={(e) => setNomeDependente(e.target.value)}
+              />
+              <label>Nome Completo</label>
+            </div>
+            <div className="floating-input-3">
+              <input
+                type="date"
+                placeholder=" "
+                required
+                value={nascimentoDependente}
+                onChange={(e) => setNascimentoDependente(e.target.value)}
+              />
+              <label>Data de Nascimento</label>
+            </div>
+            <div className="floating-select">
+              <select
+                required
+                value={generoDependente}
+                onChange={(e) => setGeneroDependente(e.target.value)}
+              >
+                <option value="" disabled hidden>Selecione</option>
+                <option value="masculino">Masculino</option>
+                <option value="feminino">Feminino</option>
+                <option value="outro">Outro</option>
+              </select>
+              <label>Gênero</label>
+            </div>
+            <button
+              onClick={handleCadastrarDependente}
+              style={{ width: "100%", marginTop: "16px", backgroundColor: "#013a63", color: "white", padding: "15px", border: "none", borderRadius: "4px", fontWeight: "600", fontSize: "1em" }}
+            >
+              Cadastrar
+            </button>
+          </div>
+        </div>
+      )}
+
+
+      {mostrarModalRemover && (
+  <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <div style={{ backgroundColor: "white", padding: "24px", borderRadius: "8px", width: "90%", maxWidth: "400px" }}>
+      <h3 style={{ fontSize: "18px", fontWeight: "600", marginBottom: "16px" }}>Tem certeza que deseja remover este agendamento?</h3>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: "16px" }}>
+        <button
+          onClick={() => {
+            window.location.href = "/";
+          }}
+          style={{
+            flex: 1,
+            padding: "12px",
+            backgroundColor: "#013a63",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            fontWeight: "600"
+          }}
+        >
+          Sim
+        </button>
+        <button
+          onClick={() => setMostrarModalRemover(false)}
+          style={{
+            flex: 1,
+            padding: "12px",
+            border: "1px solid #ddd",
+            borderRadius: "4px",
+            backgroundColor: "white",
+            fontWeight: "600"
+          }}
+        >
+          Não
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }

@@ -71,7 +71,7 @@ function Landing_page() {
             <div className='cilindro_dois_emocional'></div>
             <div className='cilindro_tres_emocional'></div>
             <div className='cilindro_quatro_emocional'></div>
-            <img className='imagem_emocional' src="imagem_emocional.svg" alt="" />
+            <img className='imagem_emocional' src="Group 239264.svg" alt="" />
           </div>
         </div>
         <div className='container_info_emocional_direita'> 
@@ -96,7 +96,7 @@ function Landing_page() {
              </div>
           </div>
           <div className='container-geral_funcionamento_direita'>
-             <img className='imagem_funcional' src="imagem_funcional.svg" alt="" />
+             <img className='imagem_funcional' src="imagem_emocional.svg" alt="" />
           </div>
       </div>
        <div className='container_text_bem-estar' data-aos="fade-up" data-aos-delay="600">

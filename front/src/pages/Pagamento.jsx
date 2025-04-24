@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import './CSS/Pagamento.css';
 import Seta from '../assets/caret-down-solid.svg';
 import mulher from '../assets/image 8.png';
@@ -8,14 +8,15 @@ export default function PagamentoConsulta() {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [metodoSelecionado, setMetodoSelecionado] = useState("cartao");
 
-  const [numeroCartao] = useState("");
-  const [nomeCartao] = useState("");
-  const [validadeCartao] = useState("");
-  const [cvvCartao] = useState("");
-  const [setErroNumero] = useState(false);
-  const [setErroNome] = useState(false);
-  const [setErroValidade] = useState(false);
-  const [setErroCvv] = useState(false);
+  const [numeroCartao, setNumeroCartao] = useState("");
+  const [nomeCartao, setNomeCartao] = useState("");
+  const [validadeCartao, setValidadeCartao] = useState("");
+  const [cvvCartao, setCvvCartao] = useState("");
+
+  const [erroNumero, setErroNumero] = useState(false);
+  const [erroNome, setErroNome] = useState(false);
+  const [erroValidade, setErroValidade] = useState(false);
+  const [erroCvv, setErroCvv] = useState(false);
 
   const [cupom, setCupom] = useState("");
   const [desconto, setDesconto] = useState(0);
@@ -35,8 +36,19 @@ export default function PagamentoConsulta() {
     { value: "evelyn", label: "Evelyn Lohanny Santos Da Silva" }
   ]);
 
-  const [nomeValido, setNomeValido] = useState(false);
+  const formatarNumeroCartao = (valor) => {
+    return valor.replace(/\D/g, "").replace(/(.{4})/g, "$1 ").trim().slice(0, 19);
+  };
   
+  const formatarValidade = (valor) => {
+    return valor.replace(/\D/g, "").replace(/^(\d{2})(\d{0,2})/, "$1/$2").slice(0, 5);
+  };
+  
+  const formatarCVV = (valor) => {
+    return valor.replace(/\D/g, "").slice(0, 3);
+  };
+  
+
   const aplicarCupom = () => {
     if (cupom.trim().toLowerCase() === "desconto10") {
       setDesconto(valorOriginal * 0.10);
@@ -46,18 +58,21 @@ export default function PagamentoConsulta() {
   };
 
   const handleFinalizar = () => {
-    if (metodoSelecionado === "cartao") {
-      setErroNumero(!numeroCartao);
-      setErroNome(!nomeCartao);
-      setErroValidade(!validadeCartao);
-      setErroCvv(!cvvCartao);
-
-      if (!numeroCartao || !nomeCartao || !validadeCartao || !cvvCartao) {
-        return;
-      }
-    }
+    const numeroValido = numeroCartao.replace(/\s/g, "").length === 16;
+    const nomeValido = nomeCartao.trim().length > 0;
+    const validadeValida = /^\d{2}\/\d{2}$/.test(validadeCartao);
+    const cvvValido = cvvCartao.length === 3;
+  
+    setErroNumero(!numeroValido);
+    setErroNome(!nomeValido);
+    setErroValidade(!validadeValida);
+    setErroCvv(!cvvValido);
+  
+    if (!numeroValido || !nomeValido || !validadeValida || !cvvValido) return;
+  
     alert("Agendamento finalizado com sucesso!");
   };
+  
 
   const handleAlterarAgendamento = () => {
     setMostrarAgenda(true);
@@ -70,7 +85,6 @@ export default function PagamentoConsulta() {
         value: novoId,
         label: nomeDependente
       };
-  
       setDependentes((prev) => [...prev, novoDependente]);
       setPacienteSelecionado(novoId);
       setMostrarModal(false);
@@ -80,11 +94,6 @@ export default function PagamentoConsulta() {
     } else {
       alert("Preencha todos os campos do dependente.");
     }
-  };
-  
-
-  const formatarNome = (value) => {
-    return value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '');
   };
 
   return (
@@ -107,17 +116,63 @@ export default function PagamentoConsulta() {
         </div>
 
         {metodoSelecionado === "cartao" && (
-          <div style={{ border: "1px solid #ddd", padding: "16px", borderRadius: "8px", marginBottom: "24px" }}>
-            <h3 style={{ fontWeight: "500" }}>Adicionar novo cartão</h3>
-            <div className="floating-input"><input type="text" placeholder=" " required /><label>Banco</label></div>
-            <div className="floating-input"><input type="text" placeholder=" " required /><label>Número do Cartão</label></div>
-            <div className="floating-input"><input type="text" placeholder=" " required /><label>Nome como aparece no cartão</label></div>
-            <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
-              <div className="floating-input-2"><input type="text" placeholder=" " required /><label>Validade</label></div>
-              <div className="floating-input-2"><input type="text" placeholder=" " required /><label>CVV</label></div>
+          <div style={{ border: "1px solid #ddd", padding: "16px", borderRadius: "8px", marginBottom: "7px" }}>
+            <h3 style={{ fontWeight: "500" }}>Informações do Pagamento</h3>
+            <div className="floating-select-2">
+              <select
+                required
+                value={generoDependente}
+                onChange={(e) => setGeneroDependente(e.target.value)}
+              >
+                <option value="" disabled hidden>Selecione</option>
+                <option value="masculino">C6 bank</option>
+                <option value="feminino">Inter</option>
+                <option value="outro">Nubank</option>
+                <option value="outro">Itaú</option>
+                <option value="outro">Bradesco</option>
+              </select>
+              <label>Banco</label>
             </div>
+            <p className={`error-text ${erroValidade ? 'show' : ''}`}>
+                Validade é obrigatória.
+              </p>
+            <div className="floating-input">
+              <input type="text" placeholder=" " value={numeroCartao}  onChange={(e) => {setNumeroCartao(formatarNumeroCartao(e.target.value));setErroNumero(false);}} required />
+              <label>Número do Cartão</label>
+            </div>
+            <p className={`error-text ${erroValidade ? 'show' : ''}`}>
+                Validade é obrigatória.
+              </p>
+            <div className="floating-input">
+              <input type="text" placeholder=" " value={nomeCartao}  onChange={(e) => {setNomeCartao(e.target.value);setErroNome(false);}} required />
+              <label>Nome como aparece no cartão</label>
+            </div>
+            <p className={`error-text ${erroValidade ? 'show' : ''}`}>
+              Validade é obrigatória.
+            </p>
+            <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+            <div style={{ flex: 1 }}>
+              <div className="floating-input-2">
+                <input type="text" placeholder=" " value={validadeCartao}onChange={(e) => {setValidadeCartao(formatarValidade(e.target.value));setErroValidade(false);}} required />
+                <label>Validade</label>
+              </div>
+              <p className={`error-text ${erroValidade ? 'show' : ''}`}>
+            Validade é obrigatória.
+            </p>
+              </div>
+              <div style={{ flex: 1 }}>
+            <div className="floating-input-2">
+              <input type="text" placeholder=" " value={cvvCartao}   onChange={(e) => {setCvvCartao(formatarCVV(e.target.value));setErroCvv(false);}} required />
+              <label>CVV</label>
+            </div>
+            <p className={`error-text ${erroValidade ? 'show' : ''}`}>
+          Validade é obrigatória.
+        </p>
+          </div>
+          </div>
           </div>
         )}
+
 
         {(metodoSelecionado === "boleto" || metodoSelecionado === "pix") && (
           <div style={{ border: "1px solid #ddd", padding: "16px", borderRadius: "8px", marginBottom: "24px" }}>
@@ -132,7 +187,7 @@ export default function PagamentoConsulta() {
           </div>
         )}
 
-        <p style={{ fontWeight: "500", marginBottom: "8px" }}>Tem um cupom de desconto?</p>
+        <p style={{ fontWeight: "500" }}>Tem um cupom de desconto?</p>
         <div style={{ display: "flex", gap: "8px", marginBottom: "24px", width: "100%", alignItems: "center" }}>
           <div className="cupom">
             <input type="text" placeholder=" " value={cupom} onChange={(e) => setCupom(e.target.value)} required />

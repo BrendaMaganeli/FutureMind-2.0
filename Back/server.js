@@ -4,7 +4,7 @@ const app = express ();
 const cors = require('cors');
 
 app.use(cors({
-    origin: 'http://localhost:5173'
+    origin: '*'
 }));
 
 app.use(express.static('public'));
@@ -27,7 +27,7 @@ app.get('/', async(req, res) => {
     try {
         const [rows] = await pool.query('SELECT * FROM profissionais');
 
-        res.status(200).json(rows); // Sempre retorna 200, mesmo se estiver vazio
+        res.status(200).json(rows);
     } catch (err) {
         console.error('Erro ao buscar profissionais:', err);
         res.status(500).json('erro servidor');

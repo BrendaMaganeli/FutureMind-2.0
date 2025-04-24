@@ -15,7 +15,7 @@ const [profissional, setProfissional] =  useState({
     foto: '../assets/icon-profile.svg',
     abordagem: [],
     email: '',
-    email_profissional: '@futuremind.com',
+    email_profissional: '',
     crp:'',
     valor_consulta: 0.00
 });

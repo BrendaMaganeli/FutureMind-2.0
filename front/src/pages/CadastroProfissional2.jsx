@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useLayoutEffect, useRef } from 'react';
 import { GlobalContext } from '../Context/GlobalContext';
 import Select from 'react-select';
 import { useState } from 'react';
@@ -32,6 +32,42 @@ function CadastroProfissional2() {
   const [valorSenha, setValorSenha] =  useState(profissional.senha);
   const [tipoInput, setTipoInput] = useState("password");
   const [tipoIconSenha, setTipoIconSenha] = useState('icon_nao_ver.png');
+  const [prefixoEmailProfissional, setPrefixoEmailProfissional] = useState(profissional.email_profissional);
+  const [prefixoEmailProfissionalValido, setPrefixoEmailProfissionalValido] = useState();
+  const inputRef = useRef(null);
+  const [caretPos, setCaretPos] = useState(null);
+  const DOMINIO = '@futuremind.com.br';
+
+  // Sincroniza com o ctx
+  useEffect(() => {
+    setProfissional(prev => ({
+      ...prev,
+      email_profissional: `${prefixoEmailProfissional}${DOMINIO}`
+    }));
+  }, [prefixoEmailProfissional]);
+
+  // Depois de cada re-render, reposiciona o cursor
+  useLayoutEffect(() => {
+    if (inputRef.current != null && caretPos !== null) {
+      inputRef.current.setSelectionRange(caretPos, caretPos);
+    }
+  }, [prefixoEmailProfissional, caretPos]);
+
+  // onChange customizado
+  const handlePrefixoChange = (e) => {
+    let val = e.target.value;
+    // remove qualquer domínio “colado”
+    if (val.endsWith(DOMINIO)) {
+      val = val.slice(0, -DOMINIO.length);
+    }
+    // bloqueia o “@”
+    if (val.includes('@')) return;
+
+    // guarda onde tava o cursor
+    setCaretPos(e.target.selectionStart);
+    setPrefixoEmailProfissional(val);
+  };
+  
 
   useEffect(() => {
 
@@ -55,8 +91,8 @@ function CadastroProfissional2() {
 
   const handleCadastro = () => {
    
-    let erro = false; // <- ADICIONA ISSO!
-
+    let erro = false;
+    
     if (especializacoes.length === 0) {
       setEspecializacaoValida(false);
       erro = true;
@@ -79,13 +115,21 @@ function CadastroProfissional2() {
       setEmailValido(false)
       
     }
+
+    if (!prefixoEmailProfissional.includes('.') || prefixoEmailProfissional.includes('@')) {
+      setPrefixoEmailProfissionalValido(true);
+      erro = true;
+    } else {
+      setPrefixoEmailProfissionalValido(false);
+    }
+    
+
     if (!valorSenha || valorSenha.trim().length < 8) {
       setSenhaValido(true);
       erro = true
     }else{
 
       setSenhaValido(false)
-      
     }
 
     if (!erro) {
@@ -248,6 +292,15 @@ function CadastroProfissional2() {
               onClick={alternarTipo} 
             />
           </div>
+          </div>
+          <div className="cadastro-input">
+            <input type="text" value={prefixoEmailProfissional ? `${prefixoEmailProfissional}${DOMINIO}` : ''} 
+      onChange={handlePrefixoChange} 
+      ref={inputRef}
+      placeholder=' '
+      required />
+            <label>Usuário</label>
+            <span className={`erro ${prefixoEmailProfissionalValido ? 'visivel' : ''}`}>Seu usuário deve ter um "." e não deve conter "@"</span>
           </div>
         </div>
         <button className='botao-cadastro' onClick={handleCadastro}>Prosseguir com cadastro</button>

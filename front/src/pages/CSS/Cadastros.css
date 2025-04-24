@@ -226,11 +226,6 @@
     gap: 25px;
 }
 
-.input-lados{
-    display: flex;
-    gap: 5%;
-    width: 100%;
-}
 
 .botao-login {
     width: 100%;
@@ -262,7 +257,7 @@
 }
 
 .container_styles-check{
-
+    
     width: 3%;
     
 }
@@ -279,7 +274,7 @@
 }
 
 .de_uso{
-
+    
     width: 20%;
     padding-left: 1%;
 }
@@ -309,7 +304,7 @@
     width: fit-content;
     width: 13%;
     padding-left: 1%;
-  
+    
 }
 
 .termos-a {
@@ -341,7 +336,7 @@
 
 /* Ajuste no Select */
 .custom-react-select .select__control {
-    width: 36.3em;
+    width: 45em;
     padding: 7px;
     border: 2px solid #ccc !important;
     border-radius: 5px;
@@ -384,22 +379,22 @@
 
 
 .imagem_olho{
-  position: absolute;
-  width: 7%;
-  margin-left: 90%;
-  margin-top: 4%;
+    position: absolute;
+    width: 7%;
+    margin-left: 90%;
+    margin-top: 4%;
 }
 
 .container_alerta_nulo{
-
+    
     color: white;
     padding-top: 2%;
 }
 
 .container_geral_mostra{
-
-     color: #8faaaf;
-     padding-top: 2%;
+    
+    color: #8faaaf;
+    padding-top: 2%;
 }
 
 
@@ -413,14 +408,23 @@
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.3s ease;
-  }
-  
-  .erro.visivel {
+}
+
+.erro.visivel {
     visibility: visible;
     opacity: 1;
-  }
-  
+}
 
+
+.input-lados{
+    display: flex;
+    gap: 5%;
+    width: 100%;
+}
+
+.input-lados .cadastro-input input{
+    width: 100%;
+}
 
 
 .cadastro-input {
@@ -430,7 +434,7 @@
   }
   
   .cadastro-input input {
-    width: 24.4em;
+    width: 50%;
     padding: 16px 12px 8px;
     font-size: 16px;
     border: 2px solid #ccc;
@@ -528,7 +532,3 @@
     font-size: 13px;
     color: #013a63;
   }
-
-
-
-  

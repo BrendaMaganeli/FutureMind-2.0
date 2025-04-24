@@ -274,12 +274,8 @@ function Chat() {
                             <input type="text" placeholder='Enter a message...' value={inptvalue} onChange={(e) => setInptvalue(e.target.value)} />
                         </div>
                         <div className="icons-chat-inpt">
-                            <div className="icons-inpt-a">
-                                <img src={figurinhaIcon} alt="" />
-                                <img src={microfone} alt="" />
-                            </div>
                             <button type='submit'>
-                                <img src={handClick} className='hand-click' alt="" />
+                                <img src='message (1).png' className='hand-click' alt="" />
                             </button>
                         </div>
                     </form>

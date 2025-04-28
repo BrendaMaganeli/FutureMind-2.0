@@ -13,7 +13,7 @@ function Footer() {
       </div>
       <div className='container-geral_info'>
         <div className='container-direitos'>
-           <p>©2022 - FutureMind</p>
+           <p>©2025 - FutureMind</p>
            <p>Todos os direitos reservados.</p>
         </div>
         <div className='container-redes'>

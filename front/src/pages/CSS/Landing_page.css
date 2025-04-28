@@ -794,9 +794,9 @@
   
   /* Diferentes delays para um efeito natural */
   .cilindro_empresa_um { animation: stretchAnimation 3s ease-in-out infinite; transform-origin: bottom; animation-delay: 0s; }
-  .cilindro_empresa_dois { animation: stretchAnimation 3s ease-in-out infinite; transform-origin: bottom; animation-delay: 1.3s; }
-  .cilindro_empresa_tres { animation: stretchAnimation 3s ease-in-out infinite; transform-origin: bottom; animation-delay: 2.6s; }
-  .cilindro_empresa_quatro { animation: stretchAnimation 3s ease-in-out infinite; transform-origin: bottom; animation-delay: 3.9s; }
+  .cilindro_empresa_dois { animation: stretchAnimation 3s ease-in-out infinite; transform-origin: bottom; animation-delay: 1s; }
+  .cilindro_empresa_tres { animation: stretchAnimation 3s ease-in-out infinite; transform-origin: bottom; animation-delay: 2s; }
+  .cilindro_empresa_quatro { animation: stretchAnimation 3s ease-in-out infinite; transform-origin: bottom; animation-delay: 3s; }
 
   @keyframes slideAnimation {
     0% { width: 50%; }
@@ -806,9 +806,9 @@
   
   /* Diferentes delays para um efeito mais natural */
   .cilindro_um_emocional { animation: slideAnimation 7s ease-in-out infinite; animation-delay: 0s; }
-  .cilindro_tres_emocional { animation: slideAnimation 7s ease-in-out infinite; animation-delay: 2.6s; }
-  .cilindro_quatro_emocional { animation: slideAnimation 7s ease-in-out infinite; animation-delay: 3.9s; }
-  .cilindro_dois_emocional { animation: slideAnimation 7s ease-in-out infinite; animation-delay: 1.3s; }
+  .cilindro_tres_emocional { animation: slideAnimation 7s ease-in-out infinite; animation-delay: 2s; }
+  .cilindro_quatro_emocional { animation: slideAnimation 7s ease-in-out infinite; animation-delay: 3s; }
+  .cilindro_dois_emocional { animation: slideAnimation 7s ease-in-out infinite; animation-delay: 1s; }
 
   @keyframes sAnimation {
     0% { width: 50%; }
@@ -818,7 +818,7 @@
   
   /* Diferentes delays para um efeito mais natural */
   .cilindro_um_equilibrio { animation: sAnimation 7s ease-in-out infinite; animation-delay: 0s; }
-  .cilindro_tres_equilibrio { animation: sAnimation 7s ease-in-out infinite; animation-delay: 2.6s; }
-  .cilindro_quatro_equilibrio { animation: sAnimation 7s ease-in-out infinite; animation-delay: 3.9s; }
-  .cilindro_dois_equilibrio { animation: sAnimation 7s ease-in-out infinite; animation-delay: 1.3s; }
+  .cilindro_tres_equilibrio { animation: sAnimation 7s ease-in-out infinite; animation-delay: 1s; }
+  .cilindro_quatro_equilibrio { animation: sAnimation 7s ease-in-out infinite; animation-delay: 1.5s; }
+  .cilindro_dois_equilibrio { animation: sAnimation 7s ease-in-out infinite; animation-delay: 2s; }
   

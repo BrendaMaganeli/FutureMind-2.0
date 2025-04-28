@@ -17,6 +17,7 @@ import CadastroPaciente from '../pages/CadastroPaciente.jsx'
 import CadastroProfissional2 from '../pages/CadastroProfissional2.jsx'
 import Politica from '../pages/Politica.jsx'
 import Termos from '../pages/Termos.jsx'
+import Consulta from '../pages/Consulta.jsx'
 
 
 const router = createBrowserRouter([
@@ -49,14 +50,6 @@ const router = createBrowserRouter([
     path: '/planoSaude',
     element: <Plano_saude/>
 },
-// {
-//     path: '/footer',
-//     element: <Footer/>
-// },
-// {
-//     path: '/nav',
-//     element: <Navbar />
-// },
 {
     path: '/',
     element: <Landing_page/>
@@ -92,6 +85,10 @@ const router = createBrowserRouter([
 {
     path: 'politica',
     element: <Politica />
+},
+{
+    path: 'consulta',
+    element: <Consulta />
 },
 
 

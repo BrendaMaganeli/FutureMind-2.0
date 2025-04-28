@@ -384,3 +384,261 @@
     flex-direction: column;
   }
 
+
+
+  .container-planos {
+    padding: 4rem 2rem;
+    text-align: center;
+    color: #013A63;
+  }
+  
+  .titulo-planos {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+  }
+  
+  .planos-cards {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    color: #013A63;
+  }
+  
+  .card-plano {
+    width: 400px;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align:start;
+  }
+  
+  .imagem-plano {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .card-plano h2 {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+  }
+  
+  .card-plano h3 {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+  }
+  
+  .card-plano p {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .btn-cadastro {
+    margin-top: 1rem;
+    background: #013A63;
+    color: white;
+    padding: 0.5rem 2rem;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 15px;
+  }
+  .btn-cadastro:hover{
+    background-color:cadetblue;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-in-out;
+    z-index: 1000;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .modal-content {
+    background: #fff;
+    padding: 2.5rem;
+    border-radius: 20px;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.4s ease;
+  }
+  
+  @keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
+  .modal-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #5a789f;
+  }
+  
+  .modal-section {
+    margin-top: 1.5rem;
+  }
+  
+  .psicologos-grid {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .card-psicologo {
+    background: #f4f7fa;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    width: 120px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .card-psicologo.selected {
+    border-color: #5a789f;
+    background-color: #e0ebf8;
+  }
+  
+  .card-psicologo img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+  }
+  
+  .input-data {
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+  
+  .modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+  }
+  
+  .btn-confirmar, .btn-cancelar {
+    flex: 1;
+    margin: 0 0.5rem;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .btn-confirmar {
+    background-color:#013A63;
+    color: #fff;
+  }
+  
+  .btn-cancelar {
+    background-color: #ccc;
+  }
+  
+  .btn-confirmar:hover {
+    background-color:cadetblue;
+  }
+  
+  .btn-cancelar:hover {
+    background-color: #aaa;
+  }
+
+  .modal-label {
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .modal-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+
+  .input-container {
+    position: relative;
+    margin-bottom: 35px;
+  }
+  
+  .input-container input {
+    width: 100%;
+    padding: 16px 12px 8px 12px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+  }
+
+  .input-container input:focus {
+    border: 2px solid #013A63;
+  }
+  
+  /* Deixa o label subir também, como você já tinha */
+  .input-container input:focus + label,
+  .input-container input:not(:placeholder-shown) + label {
+    top: -8px;
+    left: 8px;
+    font-size: 12px;
+    color: #013A63;
+  }
+  
+  
+  .input-container label {
+    position: absolute;
+    left: 12px;
+    top: 16px;
+    color: #888;
+    font-size: 16px;
+    pointer-events: none;
+    transition: 0.2s ease all;
+    background: white;
+    padding: 0 4px;
+  }
+
+  .input-container input:focus + label,
+  .input-container input:not(:placeholder-shown) + label {
+    top: -8px;
+    left: 8px;
+    font-size: 12px;
+    color:#013A63;
+  }
+  
+
+.mensagem-erro {
+  color:#0056b3;
+  font-size: 11px;
+  position: absolute;
+  top: 100%;
+  left: 4px;
+  margin-top: 2px;
+}
+
+  
+  .card-plano:hover{
+    background-color: white;
+    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+  }

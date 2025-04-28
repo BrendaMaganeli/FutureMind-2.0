@@ -84,7 +84,6 @@
     outline: none;
     color: #013a63;
     font-size: 1.1em;
-
 }
 
 .botao-cadastro {
@@ -140,7 +139,7 @@
 }
 
 .lado-direitoProfissional {
-    width: 45%;
+    width: 50%;
     display: flex;
     justify-content: center;
     align-items: center;

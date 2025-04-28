@@ -83,11 +83,11 @@ app.post('/cadastro-profissional', async(req, res) => {
             crp,
             especializacao,
             abordagem,
-            data_nascimento
+            data_nascimento,
+            email_profissional
         } = req.body;
 
         const foto = '../assets/icon-profile.svg';
-        const email_profissional = '@futuremind.com.br'
 
         const [rows] = await pool.query('INSERT INTO profissionais (nome, cpf, email, senha, telefone, crp, especializacao, abordagem, foto, data_nascimento, email_profissional) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
             nome,

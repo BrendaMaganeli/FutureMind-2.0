@@ -160,9 +160,9 @@
         justify-content: center;
         align-items: start;
     }
-
+    
     .boxs-pesquisa .box-pesquisa {
-
+        
         background-color: #5a7da0a2;
         border: none;
         border-radius: 0 10px 10px 10px;
@@ -173,9 +173,9 @@
         text-align: center;
         font-size: 14px;
     }
-
+    
     .box-pesquisa-checked {
-
+        
         background-color: #063ca0da;
         border: none;
         border-radius: 0 10px 10px 10px;
@@ -186,9 +186,9 @@
         text-align: center;
         font-size: 14px;
     }
-
+    
     .box-pesquisa-checked:hover {
-
+        
         background-color: #063ca0;
         cursor: pointer;
         transition: 0.5s;

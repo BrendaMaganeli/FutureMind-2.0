@@ -29,8 +29,6 @@
 .other-video {
   width: 100%;
   height: 100vh;
-  background-image: url('/public/background.svg');
-  background-repeat: no-repeat;
 }
 
 /* .chat-live {
@@ -120,8 +118,20 @@
   left: 10%;
 }
 
+.arvore-chat {
+
+  position: absolute;
+  left: 8%;
+  top: 20%;
+}
+
+.arvore-chat img {
+
+  width: 90%;
+}
+
 /* Barra superior (com ícone) */
-.barra-cima-v {
+.barra-top {
   display: flex;
   align-items: center;
   padding: 12px 16px;
@@ -131,12 +141,12 @@
   gap: 25px;
 }
 
-.barra-cima-v img {
+.barra-top img {
 
   width: 10%;
 }
 
-.barra-cima-v p {
+.barra-top p {
 
   font-size: 18px;
 }
@@ -150,14 +160,14 @@
 }
 
 /* Barra inferior (input + botão) */
-.barra-baixo-v {
+.barra-bottom {
   display: flex;
   padding: 10px;
   background: #f5f5f5;
   border-top: 1px solid #e0e0e0;
 }
 
-.barra-baixo-v input {
+.barra-bottom input {
   flex: 1;
   padding: 12px 16px;
   border: 1px solid #ddd;
@@ -166,7 +176,7 @@
   font-size: 14px;
 }
 
-.barra-baixo-v button {
+.barra-bottom button {
   margin-left: 10px;
   padding: 0 10% 0 10%;
   background: #5a7da0;
@@ -177,6 +187,21 @@
   font-weight: 500;
 }
 
-.barra-baixo-v button:hover {
+.barra-bottom button:hover {
   background: #013a63;
+}
+
+.barra-bottom img {
+
+  width: 5%;
+}
+
+.mirror {
+  transform: scaleX(-1);
+}
+
+.resposta.carre {
+
+  width: 100%;
+  height: 100%;
 }

@@ -27,17 +27,36 @@ function login() {
     }
   };
 
+  const handleLogin = async () => {
+
+    const credentials = {email: valorEmail, senha: valorSenha}
+    try {
+
+      const response = await fetch('https://localhost/4242/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(credentials)
+      });
+
+      if (response.ok) {
+
+        navigate('/inicio');
+      } else {
+
+        const message = 'usuario ou senha incorretos';
+      }
+    } catch(err) {
+
+      console.log('Erro no servidor', err);
+    }
+  }
+
   const handleCadastro = () => {
     let validacoes = true;
 
     // Email
-    if (!valorEmail?.trim().endsWith("@gmail.com") && !valorEmail?.trim().endsWith("@hotmail.com")) {
-      setEmailValido(true);
-      validacoes = false;
-    } else {
-      setEmailValido(false);
-    }
-
     // Senha
     if (!valorSenha || valorSenha.trim().length < 8) {
       setSenhaValido(true);
@@ -48,7 +67,8 @@ function login() {
 
     // Se tudo estiver válido, redireciona
     if (validacoes) {
-      navigate('/cadastroprofissional2');
+
+      handleLogin();
     }
   };
 

@@ -317,17 +317,19 @@
   }
 
   .error-text {
-    color: rgb(93, 118, 231);
+    color: #013a63;
     font-size: 14px;
     visibility: hidden;
     height: 25px;
     display: flex;
     align-items: end;
-  
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
   
   .error-text.show {
     visibility: visible;
+    opacity: 1;
   }
 
   
@@ -339,6 +341,7 @@
   }
  
   .floating-select-2 select {
+
     width: 247%;
     padding: 16px 12px 8px;
     font-size: 16px;
@@ -349,6 +352,8 @@
     outline: none;
     transition: border-color 0.3s;
   }
+   
+ 
   
   .floating-select-2 select:focus {
     border-color: #013a63;
@@ -372,4 +377,7 @@
     left: 10px;
     font-size: 13px;
     color: #013a63;
+
+
   }
+  

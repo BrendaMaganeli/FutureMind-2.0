@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import NavBar from '../Components/Navbar';
 import './CSS/Plano_saude.css';
 import Footer from '../Components/Footer.jsx';
 import Foto from '../assets/Pic.svg';
-import mulher from '../assets/image 8.png';
+
 import mensal from '../assets/Mensal.svg';
 import trimestral from '../assets/Trimestral.svg';
 import empresarial from '../assets/empresarial.svg';
+import { useNavigate } from 'react-router-dom';
+
 
 function Plano_saude() {
   const [modalAberto, setModalAberto] = useState(false);
@@ -14,6 +16,17 @@ function Plano_saude() {
   const [senhaEmpresa, setSenhaEmpresa] = useState('');
   const [erroEmail, setErroEmail] = useState('');
   const [erroSenha, setErroSenha] = useState('');
+  const [modalPrataAberto, setModalPrataAberto] = useState(false);
+  const [modalOuroAberto, setModalOuroAberto] = useState(false);
+  const navigate = useNavigate();
+  const [carregandoPlano, setCarregandoPlano] = useState(false);
+
+
+  const abrirModalPrata = () => setModalPrataAberto(true);
+  const fecharModalPrata = () => setModalPrataAberto(false);
+
+  const abrirModalOuro = () => setModalOuroAberto(true);
+  const fecharModalOuro = () => setModalOuroAberto(false);
 
 
   const abrirModal = () => {
@@ -33,8 +46,8 @@ function Plano_saude() {
     if (!emailEmpresa) {
       setErroEmail('Por favor, preencha o e-mail.');
       temErro = true;
-    } else if (!emailEmpresa.endsWith('@empresa.com')) {
-      setErroEmail('O e-mail deve terminar com "@empresa.com".');
+    } else if (!emailEmpresa.endsWith('@sofplan.com')) {
+      setErroEmail('O e-mail deve terminar com ex:"@empresa.com".');
       temErro = true;
     }
   
@@ -53,6 +66,31 @@ function Plano_saude() {
     fecharModal();
   };
   
+  const confirmarPlano = () => {
+    setCarregandoPlano(true);
+    setTimeout(() => {
+      setCarregandoPlano(false);
+      fecharModalPrata(); 
+      navigate('/pagamento'); 
+    }, 1500); 
+  };
+  
+  useEffect(() => {  
+    if (emailEmpresa.length > 0) {
+      setErroEmail(false)
+    }
+  },[emailEmpresa])
+
+  useEffect(() => {  
+    if (senhaEmpresa.length > 0) {
+      setErroSenha(false)
+    }
+  },[senhaEmpresa])
+
+  const navega = () => {
+      navigate('/agendamento'); // rota que leva à tela de agendamento
+    
+  };
 
   return (
     <div className="container-planoSaude">
@@ -71,7 +109,7 @@ function Plano_saude() {
               <p>Os psicólogos da FutureMind vão além dos sintomas para tratar a causa raiz do seu problema.</p>
             </div>
             <div className='info_div_button'>
-              <button className='button_info' onClick={abrirModal}>
+              <button className='button_info' onClick={navega}>
                 AGENDE SUA CONSULTA
               </button>
             </div>
@@ -122,7 +160,7 @@ function Plano_saude() {
             <h3>R$ 189,99</h3>
             <p>Mensal</p>
             <p>Ideal para quem busca flexibilidade e acesso completo mês a mês.</p>
-            <button className="btn-cadastro">Cadastre-se</button>
+            <button className="btn-cadastro" onClick={abrirModalPrata}>Cadastre-se</button>
           </div>
           <div className='card-plano'>
             <img src={trimestral} alt="Plano 2" className="imagem-plano" />
@@ -130,7 +168,7 @@ function Plano_saude() {
             <h3>R$ 459,99</h3>
             <p>Trimestral</p>
             <p>Garanta três meses de acompanhamento psicológico contínuo.</p>
-            <button className="btn-cadastro">Cadastre-se</button>
+            <button className="btn-cadastro"onClick={abrirModalOuro}>Cadastre-se</button>
           </div>
           <div className='card-plano'>
             <img src={empresarial} alt="Plano 3" className="imagem-plano" />
@@ -142,54 +180,113 @@ function Plano_saude() {
           </div>
         </div>
       </div>
-
-      {/* Modal de Cadastro Empresarial */}
       {modalAberto && (
         <div className="modal-overlay">
           <div className="modal-content">
             <h2 className="modal-title">Cadastro Empresarial</h2>
             
             <section className="modal-section">
-  <div className="input-container">
-    <input 
-      type="text" 
-      id="emailEmpresarial" 
-      required 
-      className="modal-input"
-      value={emailEmpresa}
-      onChange={(e) => setEmailEmpresa(e.target.value)}
-    />
-    <label>E-mail Empresarial</label>
-    {erroEmail && <p className="mensagem-erro">{erroEmail}</p>}
-  </div>
+        <div className="input-container">
+          <input 
+            type="text" 
+            id="emailEmpresarial" 
+            required 
+            className="modal-input"
+            value={emailEmpresa}
+            onChange={(e) => setEmailEmpresa(e.target.value)}
+          />
+          <label>E-mail Empresarial</label>
+          {erroEmail && <p className="mensagem-erro">{erroEmail}</p>}
+        </div>
 
-  <div className="input-container">
-    <input 
-      type="password" 
-      id="senhaEmpresarial" 
-      required 
-      className="modal-input"
-      value={senhaEmpresa}
-      onChange={(e) => setSenhaEmpresa(e.target.value)}
-    />
-    <label>Senha Empresarial</label>
-    {erroSenha && <p className="mensagem-erro">{erroSenha}</p>}
-  </div>
-</section>
-
-
+        <div className="input-container">
+          <input 
+            type="password" 
+            id="senhaEmpresarial" 
+            required 
+            className="modal-input"
+            value={senhaEmpresa}
+            onChange={(e) => setSenhaEmpresa(e.target.value)}
+          />
+          <label>Senha Empresarial</label>
+          {erroSenha && <p className="mensagem-erro">{erroSenha}</p>}
+        </div>
+      </section>
             <div className="modal-buttons">
-              <button className="btn-confirmar" onClick={confirmarCadastro}>
-                Confirmar
-              </button>
               <button className="btn-cancelar" onClick={fecharModal}>
                 Cancelar
+              </button>
+              <button className="btn-confirmar" onClick={confirmarCadastro}>
+                Confirmar
               </button>
             </div>
           </div>
         </div>
       )}
 
+      {modalPrataAberto && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2 className="modal-title">Assinatura Prata</h2>
+            <section className="modal-section">
+            <ul className="modal-lista">
+          <li>4 consultas individuais (1 por semana durante 1 mês);</li>
+          <li>Liberdade de consultar com vários profissionais;</li>
+          <li>Ideal para quem está começando o acompanhamento psicológico;</li>
+          <li>Após um mês renovar cadastro de plano.</li>
+        </ul>
+        <p className="modal-destaque">
+          Recomendado para quem deseja um progresso emocional consistente e profundo.
+        </p>
+            </section>
+            {carregandoPlano ? (
+        <p className="modal-destaque">Carregando ...</p>
+      ) : (
+        <div className="modal-buttons">
+          <button className="btn-cancelar" onClick={fecharModalPrata}>
+            Cancelar
+          </button>
+          <button className="btn-confirmar" onClick={confirmarPlano}>
+            Confirmar
+          </button>
+        </div>
+      )}
+          </div>
+        </div>
+      )}
+
+      {/* Modal Plano Ouro */}
+      {modalOuroAberto && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2 className="modal-title">Assinatura Ouro</h2>
+            <section className="modal-section">
+            <ul className="modal-lista">
+          <li>12 consultas individuais (1 por semana durante 3 meses);</li>
+          <li>Liberdade de consultar com vários profissionais;</li>
+          <li>Acompanhamento psicológico contínuo;</li>
+          <li>Após três meses renovar cadastro de plano.</li>
+        </ul>
+        <p className="modal-destaque">
+          Recomendado para quem deseja um progresso emocional consistente e profundo.
+        </p>
+            </section>
+            {carregandoPlano ? (
+        <p className="modal-destaque">Carregando ...</p>
+      ) : (
+        <div className="modal-buttons">
+          <button className="btn-cancelar" onClick={fecharModalOuro}>
+            Cancelar
+          </button>
+          <button className="btn-confirmar" onClick={confirmarPlano}>
+            Confirmar
+          </button>
+        </div>
+      )}
+          </div>
+        </div>
+      )}
+      
       <Footer />
     </div>
   );

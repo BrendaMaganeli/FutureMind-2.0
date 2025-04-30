@@ -32,9 +32,7 @@ function Politica() {
   return (
     <div className='body-politica'>
       {/* Navbar fixa no topo da página */}
-      <Navbar />
       <ScrollToTop />
-
       {/* Botões para navegação entre Política de Privacidade e Termos de Uso */}
       <div className='divBotoes'>
         <Link to='/politica' className='botaodecisaoo'>Política de Privacidade</Link>

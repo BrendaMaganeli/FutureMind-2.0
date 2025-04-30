@@ -26,11 +26,11 @@
 .titulo-logo {
     display: flex;
     align-items: center;
-    gap: 13%;
-    margin-bottom: 30px;
+    gap: 8%;
+    margin-bottom: 10px;
     width: 70em;
     justify-content: center;
-    padding-left: 7%;
+    padding-left: 8%;
 }
 
 .logo-paraCadastro{
@@ -95,7 +95,7 @@
     font-size: 1.3em;
     border: none;
     border-radius: 5px;
-    margin-top: 30px;
+ 
     cursor: pointer;
     text-align: center;
     font-weight: bold;
@@ -157,7 +157,6 @@
     width: 100%;
     max-width: 800px;
     justify-content: center;
-    margin-bottom: 5%;
 }
 /* 
   .input-cadastro {
@@ -172,7 +171,6 @@
     color: red;
     font-size: 0.85em;
     min-height: 18px; /* Reserva espaço fixo para a mensagem de erro */
-    margin-top: 3px;
     display: block; /* Sempre mantém o espaço mesmo sem erro */
   }
   
@@ -222,7 +220,7 @@
     max-width: 800px;
     justify-content: center;
     margin-bottom: 5%;
-    gap: 25px;
+    gap: 12px;
 }
 
 
@@ -253,6 +251,7 @@
     color: #5A789F;
     width: 100%;
     justify-content: start;
+    margin-bottom: 5%;
 }
 
 .container_styles-check{
@@ -335,7 +334,7 @@
 
 /* Ajuste no Select */
 .custom-react-select .select__control {
-    width: 45em;
+    width: 36em;
     padding: 7px;
     border: 2px solid #ccc !important;
     border-radius: 5px;

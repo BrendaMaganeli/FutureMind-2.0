@@ -27,7 +27,6 @@ function Termos() {
   return (
     <div className='body-termos'>
       {/* Barra de navegação */}
-      <Navbar />
       <ScrollToTop />
       {/* Botões para navegação entre Política de Privacidade e Termos de Uso */}
       <div className='divBotoes'>

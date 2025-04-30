@@ -1,13 +1,15 @@
 import icon from '../assets/icon-profile.svg';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 
 import './CSS/NavBar.css';
+import { GlobalContext } from '../Context/GlobalContext';
 
 function Navbar({ cor }) {
   const location = useLocation();
   const [underlineStyle, setUnderlineStyle] = useState({});
   const linksRef = useRef([]);
+  const { userLogado } = useContext(GlobalContext);
 
   useEffect(() => {
     const activeLink = linksRef.current.find(link => link?.classList.contains('active'));
@@ -23,7 +25,7 @@ function Navbar({ cor }) {
     <div className='container-nav' style={{ backgroundColor: cor }}>
       <div className='container_logo'>
         <Link to='/'>
-          <img src="Logo_sa_arvore.svg" alt="Logo" />
+          <img src="logo oficial.svg" alt="Logo" />
         </Link>
       </div>
       <div className='container-links'>
@@ -35,7 +37,9 @@ function Navbar({ cor }) {
         </NavLink>
       </div>
       <div className='container-icon'>
-        <img src={icon} alt="Perfil" />
+        <Link to={userLogado ? '/editarprofissional' : '/login'}>
+          <img src={icon} alt="Perfil" />
+        </Link>
       </div>
     </div>
   );

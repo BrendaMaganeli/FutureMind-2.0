@@ -117,24 +117,26 @@ app.post('/cadastro-profissional', async(req, res) => {
     }
 });
 
-app.get('/login', async(req, res) => {
+app.post('/login', async(req, res) => {
 
     try {
         
+        console.log(req.body);
         const { email, senha } = req.body;
+        const DOMINIO = '@futuremind.com.br';
 
-        if (email.includes('@futuremind.com.br')) {
+        if (email.includes(DOMINIO)) {
 
-            const [rows] = await pool.query(`SELECT * FROM profissionais WHERE email_profissional=${email}`);
+            const [rows] = await pool.query('SELECT * FROM profissionais WHERE email_profissional=?', [email]);
 
-            if (rows.ok) {
+            if (rows.length > 0) {
 
-                if (rows.senha === senha) {
+                if (rows[0].senha === senha) {
 
                     res.status(200).json(rows);
                 } else {
 
-                    res.status(400).json('Senha incorreta');
+                    res.status(404).json('Senha incorreta');
                 }
             } else {
 
@@ -142,11 +144,11 @@ app.get('/login', async(req, res) => {
             }
         } else {
 
-            const [rows] = await pool.query(`SELECT * FROM pacientes WHERE email=${email}`);
+            const [rows] = await pool.query(`SELECT * FROM pacientes WHERE email=?`, [email]);
 
-            if (rows.ok) {
+            if (rows.length > 0) {
 
-                if (rows.senha === senha) {
+                if (rows[0].senha === senha) {
 
                     res.status(200).json(rows);
                 } else {
@@ -160,7 +162,7 @@ app.get('/login', async(req, res) => {
         }
     } catch (err) {
         
-        res.status(500).json('Erro no servidor', err);
+        res.status(500).json(err);
     }
 });
 

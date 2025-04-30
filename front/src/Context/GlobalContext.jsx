@@ -31,21 +31,21 @@ const [paciente, setPaciente] = useState({
     email: ''
 });
 
-    const [user, setUser] = useState(() => {
+    const [userLogado, setUserLogado] = useState(() => {
     
-        return JSON.parse(localStorage.getItem('User-Profile')) || null;
+        return JSON.parse(localStorage.getItem('User Logado')) || null;
     });
     
     useEffect(() => {
 
-        if (user) {
+        if (userLogado) {
 
-            localStorage.setItem('User-Profile', JSON.stringify(user));
+            localStorage.setItem('User Logado', JSON.stringify(userLogado));
         } else {
 
-            localStorage.removeItem('User-Profile');
+            localStorage.removeItem('User Logado');
         }
-    }, [user]);
+    }, [userLogado]);
 
     const [id, setId] = useState(() => {
     // Recupera o valor de ID do localStorage, se existir
@@ -94,8 +94,25 @@ const [paciente, setPaciente] = useState({
     const [erros_passar, setErros_passar] = useState("");
     const [checkbox_cheked, setcheckbox_cheked] = useState(false);
 
+    const [user, setUser] = useState(() => {
+    
+        return JSON.parse(localStorage.getItem('User-Profile')) || null;
+    });
+    
+    useEffect(() => {
+
+        if (user) {
+
+            localStorage.setItem('User-Profile', JSON.stringify(user));
+        } else {
+
+            localStorage.removeItem('User-Profile');
+        }
+    }, [user]);
+
     return(
         <GlobalContext.Provider value={{
+        userLogado, setUserLogado,
         profissional, setProfissional, paciente, setPaciente, 
         user, setUser,
         id, setId,

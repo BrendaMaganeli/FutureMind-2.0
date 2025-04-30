@@ -2,9 +2,12 @@ import { useNavigate} from 'react-router-dom';
 import logo from '../assets/logoCadastro2.svg';
 import imagem from '../assets/FotoCadastro.svg';
 import './CSS/Cadastros.css';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { GlobalContext } from '../Context/GlobalContext';
 
 function login() {
+
+  const {setUserLogado} = useContext(GlobalContext);
   const navigate = useNavigate(); // Hook para navegação
 
 
@@ -32,7 +35,7 @@ function login() {
     const credentials = {email: valorEmail, senha: valorSenha}
     try {
 
-      const response = await fetch('https://localhost/4242/login', {
+      const response = await fetch('http://localhost:4242/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -42,6 +45,7 @@ function login() {
 
       if (response.ok) {
 
+        setUserLogado(true);
         navigate('/inicio');
       } else {
 

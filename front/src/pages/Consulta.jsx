@@ -77,24 +77,23 @@ export default function AgendaConsultas() {
     handleClose();
   };
 
-  // const extractDayAndMonth = (str) => {
-  //   const [dayStr, monthStr] = str.split(" ");
-  //   const day = parseInt(dayStr);
-  //   const monthMap = {
-  //     jan: 0, fev: 1, mar: 2, abr: 3, mai: 4, jun: 5,
-  //     jul: 6, ago: 7, set: 8, out: 9, nov: 10, dez: 11
-  //   };
-  //   const month = monthMap[monthStr.toLowerCase()];
-  //   return { day, month };
-  // };
-  
-
   const handleConfirmUpdate = () => {
     const oldKey = `${currentYear}-${currentMonthIndex}-${selected.day}`;
   
-    const { day: newDay, month: newMonth } = newDate
-      ? extractDayAndMonth(newDate)
-      : { day: selected.day, month: currentMonthIndex };
+    let newDay = selected.day;
+    let newMonth = currentMonthIndex;
+    let newYear = currentYear;
+  
+    if (selectedDate) {
+      const [dayStr, monthStr] = selectedDate.split(" ");
+      const day = parseInt(dayStr);
+      const monthMap = {
+        jan: 0, fev: 1, mar: 2, abr: 3, mai: 4, jun: 5,
+        jul: 6, ago: 7, set: 8, out: 9, nov: 10, dez: 11
+      };
+      newDay = day;
+      newMonth = monthMap[monthStr.toLowerCase()];
+    }
   
     const finalTime = newTime || selectedTime;
   
@@ -102,21 +101,17 @@ export default function AgendaConsultas() {
   
     setAppointments((prev) => {
       const updated = { ...prev };
-      // Remove do antigo
       delete updated[oldKey];
-      // Adiciona no novo
       updated[newKey] = [{ ...prev[oldKey][0], time: finalTime }];
       return updated;
     });
   
-    // Atualiza a seleção
+    // Atualiza seleção
     setSelected({ day: newDay, time: finalTime });
-  
-    // Força calendário a mostrar novo mês
     setCurrentMonthIndex(newMonth);
-    setCurrentYear(currentYear); // mantém mesmo ano, ou você pode adaptar caso queira suportar mudança de ano também
+    setCurrentYear(newYear);
   
-    // Limpa modais e estados
+    // Limpa estados
     setIsEditing(false);
     setNewTime("");
     setNewDate("");
@@ -125,9 +120,15 @@ export default function AgendaConsultas() {
     setShowRescheduleModal(false);
   
     setConfirmationMessage(
-      `Consulta reagendada para ${newDay} de ${months[newMonth].name} às ${finalTime}`
+      `Consulta reagendada para ${newDay} de ${getMonthName(newMonth)} às ${finalTime}`
     );
   };
+  
+  // Função auxiliar para nome do mês por extenso (em português)
+  const getMonthName = (monthIndex) => {
+    return new Date(2025, monthIndex).toLocaleString("pt-BR", { month: "long" });
+  };
+  
   
   const extractDayAndMonth = (str) => {
     const [dayStr, monthStr] = str.split(" ");

@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, ArrowLeft, X } from "lucide-react";
 import "./CSS/Consulta.css";
 import imgConsulta from '../assets/Group 239294.svg';
 import mulher from '../assets/image 8.png';
+import '../Components/CSS/ExibirConsulta.css';
 
 const getMonthData = (year) => {
   const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
@@ -226,8 +227,14 @@ export default function AgendaConsultas() {
       </div>
 
       <div className="divimg-c">
-        <h1>Agenda de Consultas</h1>
-        <img src={imgConsulta} alt="" />
+        <h1 className="agenda0104">Agenda de Consultas</h1>
+        {
+          !selected.day && !selected.timw ?
+          <img src={imgConsulta} alt="" />
+          :
+          <div className="disabledimage">
+          </div>
+        }
       </div>
 
       {selected.day && selected.time && (

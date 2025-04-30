@@ -206,97 +206,135 @@
   }
   
   .schedule-c {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     width: 100%;
-    max-width: 789px;
+    max-width:400px;
     height: 500px;
+    font-family: 'Segoe UI', sans-serif;
     position: relative;
-    color: #013A63;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-right: 52%;
-    background-color: #fff;
+    position: absolute;
+    left: 15%;
   }
   
+  .close-button-c {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
   .resumo-card-c {
+
     display: flex;
     flex-direction: column;
-    gap: 20px;
   }
   
   .resumo-card-c h2 {
-    margin-bottom: 10px;
-    color: #083859;
-    font-size: 3em;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #1f2937;
   }
   
   .agendamento-info-c {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 16px;
   }
   
   .profissional-c {
     display: flex;
     align-items: center;
-    gap: 12px;
-    width: 90%;
+    gap: 16px;
   }
   
   .foto-profissional-c {
-    width: 80px;
-    height: 80px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     object-fit: cover;
   }
   
   .profissional-c h3 {
-    margin: 0;
-    font-size: 1.5em;
-    color: #083859;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
   }
   
   .profissional-c p {
-    margin: 0;
-    font-size: 1.2em;
-    color: #666;
+    font-size: 14px;
+    color: #6b7280;
   }
   
   .detalhes-c {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    font-size: 1.2em;
-    color: #333;
+    font-size: 14px;
+    color: #374151;
+  }
+  
+  .valor-consulta-c {
+    font-weight: 600;
+    color: #1f2937;
   }
   
   .botoes-c {
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    gap: 8px;
   }
   
-  .alterar-c, .remover-c {
-    padding: 13px 150px;
+  .select-data-c,
+  .select-horario-c {
+    padding: 8px;
+    border: 1px solid #d1d5db;
     border-radius: 8px;
-    font-weight: bold;
+    font-size: 14px;
+  }
+  
+  .confirmar-c,
+  .alterar-c,
+  .remover-c {
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
     cursor: pointer;
-    font-size: 1em;
+    transition: all 0.2s ease-in-out;
   }
   
   .alterar-c {
-    background-color: #083859;
+    background-color: #1e3a8a;
     color: white;
     border: none;
   }
   
+  .alterar-c:hover {
+    background-color: #1c357a;
+  }
+  
   .remover-c {
     background-color: white;
-    color: #083859;
-    border: 2px solid #083859;
+    color: #1e3a8a;
+    border: 1px solid #1e3a8a;
   }
+  
+  .remover-c:hover {
+    background-color: #f0f4ff;
+  }
+  
+  .confirmar-c {
+    background-color: #16a34a;
+    color: white;
+    border: none;
+  }
+  
+  .confirmar-c:hover {
+    background-color: #15803d;
+  }
+  
   
   .valor-consulta-c {
     margin-top: 8px;
@@ -428,6 +466,10 @@
     border: none;
     color: #013A63;
     margin-top: 0.5%;
+  } 
+
+  .disabledimage {
+
+    width: 100%;
+    height: 100%;
   }
-  
-  

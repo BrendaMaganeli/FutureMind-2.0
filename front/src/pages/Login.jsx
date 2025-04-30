@@ -116,7 +116,8 @@ function login() {
           </div>
         </div>
         <button className='botao-login' onClick={handleCadastro}>Realizar Login</button>
-        <p className='login-texto'>Ainda não possui cadastro?<a href='/cadastroprofissional1'>Aperte aqui</a></p>
+            <p className='login-texto'>Ainda não possui cadastro?<a href='/cadastroprofissional1' style={{ marginLeft: '8px', marginRight: '8px' }}>Profissional</a> ou 
+            <a href='/cadastroPaciente' style={{ marginLeft: '8px', marginRight: '8px' }}>Paciente</a></p>
       </div>
       <div className='lado-direitoProfissional'>
         <img src={imagem} alt='Cadastro Profissional' className='imagem-cadastro' />

@@ -433,7 +433,7 @@
   }
   
   .cadastro-input input {
-    width: 50%;
+    width: 100%;
     padding: 16px 12px 8px;
     font-size: 16px;
     border: 2px solid #ccc;
@@ -470,7 +470,7 @@
   
   .icone-senha {
     position: absolute;
-    top: 37%;
+    top: 30%;
     right: 10px;
     transform: translateY(-50%);
     cursor: pointer;
@@ -498,7 +498,7 @@
   }
   
   .login-input input {
-    width: 45em;
+    width: 40em;
     padding: 16px 12px 8px;
     font-size: 16px;
     border: 2px solid #ccc;

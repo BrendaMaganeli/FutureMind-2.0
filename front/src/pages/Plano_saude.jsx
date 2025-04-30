@@ -204,6 +204,7 @@ function Plano_saude() {
             type="password" 
             id="senhaEmpresarial" 
             required 
+            maxLength={8}
             className="modal-input"
             value={senhaEmpresa}
             onChange={(e) => setSenhaEmpresa(e.target.value)}

@@ -227,7 +227,6 @@ function CadastroPaciente() {
             <label>Telefone</label>
             <span className={`erro ${telefoneValido ? 'visivel' : ''}`}>Telefone inválido</span>
           </div>
-
           <div className="cadastro-input">
             <input type="text" value={dataNascimento} onChange={(e) => {
               setDataNascimento(formatarData(e.target.value));
@@ -254,7 +253,7 @@ function CadastroPaciente() {
                 setValorSenha(e.target.value);
                 setSenhaValido(false);
               }} 
-              placeholder=" " 
+              placeholder="" 
               required 
             />
             <label>Senha</label>

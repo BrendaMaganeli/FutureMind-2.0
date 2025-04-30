@@ -1,431 +1,139 @@
-.container-diarioemocional{
+
+.notes-app {
     display: flex;
-    margin: 0;
-}
-
-
-.seta-diario{
-    width: 80%;}
-
-.buttondiario{
-    background-color: transparent;
-    border: none;
-    padding-top: 10%;
-}
-
-.buttondiario img{
-    width: 80%;
-}
-
-.lado-esquerdoDiario{
-    width: 30%;
     height: 100vh;
-}
-
-.div-cabecalhodiario{
-    width: 100%;
-    height: 10%;
-    background-color: #F1F2F3;
-    border-right: 1px solid #524b4b36;
-    color: #013a63;
-}
-
-.cacecalhomenor{
-    display: flex;
-    justify-content: space-between;
-    height: 70%;
-    align-items: center;
-    padding-left: 2%;
-    padding-right: 2%;
-}
-
-.quantidadenotas{
-    padding-left: 2%;
-    font-weight: 600;
-}
-
-
-
-.lado-direitoDiario{
-    width: 71%;
-    background-color: #F1F2F3;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    
-}
-
-.arvoredefundodiario{
-    height: 100vh;
-    width: 100%;
-    position: relative;
-    background-size: cover;  /* Garantir que a imagem cubra toda a área */
-    background-position: center;  /* Centralizar a imagem */
-    transition: background-size 0.5s ease-in-out;  /* Suavizar transição do fundo */
- 
-}
-
-.cabecalhonota{
-    position: absolute;
-    display: flex;
-    background-color: #fff;
-    width: 60%;
-    height: 6%;
-    border-radius: 20px;
-    margin-top: 2%;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.div-buts{
-    display: flex;
-    width: 70%;
-    justify-content: end;
-    padding-right: 2%;
-    gap: 2%;
-}
-
-.relogio{
+  }
+  
+  .folders-sidebar {
     width: 25%;
-    padding-left: 4%;
-}
-
-.datadiario{
+    border-right: 1px solid #ddd;
+    padding: 16px;
+    background-color: #f7fafc;
+  }
+  
+  .header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    color: #013a63;
-    padding-left: 2%;
-}
-
-.botaoapagar{
-    background-color: #a74343;
-    color: #fff;
-    width: 20%;
-    height: 10%;
-    padding: 0.8%;
-    border: none;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-evenly;
     align-items: center;
-}
-
-.botaocomp{
-    background-color: #ffffff;
-    color: #000;
-    width: 20%;
-    height: 36px;
-    padding: 1%;
-    border: solid 1px #898989;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-.setabaixo{
-    width: 22%;
-    border-left: solid 1px #898989;
-    padding-left: 6%;
-}
-
-.botaoaumentar{
-    background-color: #ffffff;
-    color: #000;
-    width: 6%;
-    padding: 1%;
-    border: solid 1px #898989;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;  
-}
-
-.botaoaumentar img{
-    width: 75%;
-}
-
-.area-digitacao {
-    width: 60%;
-    height: 70%;
-    background-color: rgba(84, 120, 159, 0.397); 
+    margin-bottom: 16px;
+  }
+  
+  .title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #013A63;
+  }
+  
+  .btn {
+    padding: 5px;
     color: white;
-    position: absolute;
-    top: 55%; 
-    left: 65%; 
-    transform: translate(-50%, -50%); 
-    padding: 20px;
-    border-radius: 10px;
-    color: #013a63;
-    font-size: 1.3em;
-    font-weight: 600;
-    padding: 2%;
+    border-radius: 4px;
     border: none;
-    resize: none;
-}
-
-.area-digitacao:focus{
-    border: 0 none;
-    outline: 0;
-}
-
-.lista-de-notas {
-    padding: 10px;
+    width: 10%;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-height: calc(100vh - 120px);
-    overflow-y: auto; 
-    border-right: 1px solid #524b4b36;
-}
-
-.nota-item {
-    background-color: #C1DFF4;
-    padding: 10px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .add-folder, .add-note {
+    background-color: #2B4A60;
+  }
+  
+  .folders-list, .notes-list {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .folder-item, .note-item {
+    cursor: pointer;
+    padding: 8px;
     border-radius: 8px;
-    color: #013a63;
+    margin-bottom: 8px;
+  }
+  
+  .folder-item:hover, .note-item:hover {
+    background-color: #f1f5f9;
+  }
+  
+  .folder-item.selected, .note-item.selected {
+    background-color: #C1DFF4;
+  }
+  
+  /* Note Detail Styles */
+  .note-details {
+    flex-grow: 1;
+    padding: 16px;
+  }
+  
+  .note-title-input {
+    width: 100%;
+    padding: 8px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 16px;
+  }
+  
+  .custom-tabs-slider {
+    position: relative;
+    display: flex;
+    background-color: #f1f5f9;
+    border-radius: 4px;
+    overflow: hidden;
+    width: 150px; /* ajustável conforme conteúdo */
+    height: 30px;
+    margin-bottom: 16px;
+  }
+  
+  .tab-button {
+    flex: 1;
+    border: none;
+    background: none;
+    z-index: 1;
+    color: #64748b;
     font-weight: 500;
     cursor: pointer;
-    transition: 0.3s;
-}
-
-.nota-item:hover {
-    background-color: #A0CBE8;
-}
-
-.nota-item.ativa {
-    background-color: #74b2df;
-    color: white;
-}
-
-.nota-titulo {
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #013a63;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 120px;
-}
-
-
-.nota-data {
-    font-size: 0.8em;
-    color: #666;
-}
-
-.fullscreen .lado-direitoDiario {
-    width: 100%;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: #F1F2F3;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-}
-
-.fullscreen .lado-esquerdoDiario,
-.fullscreen .mini-lado-esquerdoDiario {
-    display: none;
-}
-
-.fullscreen .area-digitacao {
-    width: 70%;  
-    height: 70%; 
-    top: 20%; 
-    left: 50%; 
-    transform: translateX(-50%);
-    padding: 5%; 
-    font-size: 1.5em; 
-    color: #013a63;
-    background-color: rgba(84, 120, 159, 0.397);;
-    transition: all 0.3s ease;
-}
-
-.fullscreen .cabecalhonota {
-    position: absolute;
-    display: flex;
-    background-color: #fff;
-    width: 70%;
-    height: 6%;
-    border-radius: 20px;
-    margin-top: 2%;
-    justify-content: space-between;
-    align-items: center;
-}
-
-::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
-}
-
-::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: #3f78a0;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background-color: #105c92;
-}
-
-.buttondiario:active,
-.botaonovanota:active,
-.botaoapagar:active,
-.botaocomp:active,
-.botaoaumentar:active {
-    transform: scale(0.98);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
-}
-
-
-.modal-compartilhar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    transition: color 0.2s ease;
   }
   
-  .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 400px;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  }
-  
-  .modal-content h2 {
-    margin-bottom: 15px;
-    font-size: 18px;
-    color: #333;
-  }
-  
-  .input-email {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .botao-copiar,
-  .botao-enviar,
-  .botao-fechar {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .botao-copiar {
-    background: #f0f0f0;
-    color: #333;
-    border-radius: 5px;
-  }
-  
-  .botao-enviar {
-    background: #4483b1;
-    color: white;
-    border-radius: 5px;
-  }
-  
-  .botao-fechar {
-    background: #8a2e2e;
-    color: white;
-    border-radius: 5px;
-  }
-
-
-
-  .animando {
-    animation: playLottie 1s forwards;
-  }
-  
-
-  .botaonovanota {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background-color: #C1DFF4;
-    color: #013a63;
+  .tab-button.active {
+    color: black;
     font-weight: 600;
-    font-size: 1em;
-    padding: 10px 16px;
-    border: none;
-    border-radius: 9px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease-in-out;
-    cursor: pointer;
-}
-
-.botaonovanota:hover {
-    background-color: #A0CBE8;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.botaonovanota:active {
-    transform: scale(0.97);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.botaonovanota p {
-    margin: 0;
-    font-size: 1em;
-}
-
-.botaonovanota .lottie-animation {
-    width: 24px;
-    height: 24px;
-}
-
-
-.botaoapagar:hover {
-    background-color:#9c3535;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.botaoapagar:active {
-    transform: scale(0.97);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.botaoapagar p {
-    margin: 0;
-    font-size: 1em;
-}
-
-
-.lottie-animation{
-    width: 27px;
-    height: 27px;
-}
-
-.lottie-animation-clock{
-    width: 27px;
-    height: 27px;
-}
-
-
-
-
-
+  }
+  
+  .slider-c {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    background-color: white;
+    border-radius: 4px;
+    transition: left 0.3s ease;
+    z-index: 0;
+  }
+  
+  
+  
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+  }
+  
+  .input-item, .textarea-note {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+  }
+  
+  .btn.add-item {
+    background-color: #2B4A60;
+    color: white;
+    padding: 4px;
+    border-radius: 4px;
+    margin-top: 8px;
+  }
   

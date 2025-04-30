@@ -46,6 +46,12 @@
     border: none;
     color: #013A63;
   }
+
+  .setaD-c, .setaE-c {
+    background-color: transparent;
+    border: none;
+    color: #013A63;
+  }
   
   .weekdays-c {
     display: grid;
@@ -289,7 +295,7 @@
   .remover-c {
     background-color: white;
     color: #083859;
-    border: 1px solid #083859;
+    border: 2px solid #083859;
   }
   
   .valor-consulta-c {
@@ -298,6 +304,130 @@
     color: #083859;
     font-weight: bold;
   }
+
+  .reschedule-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
   
+  .reschedule-modal {
+    background: #fff;
+    border-radius: 10px;
+    padding: 2rem;
+    max-width: 700px;
+    width: 90%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+  }
+
+  .reschedule-modal h2{
+    color: #013A63;
+  }
+  
+  .modal-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .calendar-title {
+    color: #013A63;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+    margin-top: 2%;
+  }
+  
+  .calendar-scroll {
+    overflow-x: auto;
+  }
+  
+  .calendar-grid {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* ou 1fr se preferir dividir igualmente */
+    gap: 1rem;
+    min-width: 600px;
+    justify-content: center;
+  }
+  
+  .calendar-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .calendar-day strong {
+    color: #aaa;
+  }
+  
+  .calendar-day span {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .hour-btn {
+    width: 100%;
+    margin: 0.2rem 0;
+    background-color: rgb(181, 216, 218);
+    border: none;
+    border-radius: 6px;
+    padding: 0.3rem 0.7rem;
+    color: #356567;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .hour-btn.selected {
+    background-color: cadetblue;
+    color: white;
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+  }
+  
+  .btn-back {
+    background: transparent;
+    border: 2px solid #083859;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .btn-confirm {
+    background-color: #083859;
+    border: none;
+    color: white;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+  
+  .btn-confirm:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .setaD-c, .setaE-c {
+    background-color: transparent;
+    border: none;
+    color: #013A63;
+    margin-top: 0.5%;
+  }
   
   

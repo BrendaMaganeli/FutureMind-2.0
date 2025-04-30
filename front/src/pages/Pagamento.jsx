@@ -37,55 +37,7 @@ export default function PagamentoConsulta() {
   const [valida_cartao, setValida_cartao] = useState(false)
   const [valida_cvv, setValida_cvv] = useState(false)
 
-  useEffect(() => {
-    if (generoDependente.length > 1) {
-      setValida_banco(false);
-    } 
-  }, [generoDependente]); 
-  
-  useEffect(() => {
-    if (numeroCartao.length === 19) {
-      setValida_numero_cartao(false);
-    } else if (toque_input_numero) { // Só mostra o erro se o campo foi tocado
-      setValida_numero_cartao(true);
-    }
-  }, [numeroCartao, toque_input_numero]); // Dependência no número do cartão e no estado de toque
-  
-  useEffect(() => {
-
-    if(nomeCartao.length > 0){
-
-      setValida_nome(false)
-    }
-  })
-
-  useEffect(() => {
-
-    if(validadeCartao.length == 5){
-
-      setValida_cartao(false)
-    }else if (toque_input_validade){
-
-      if(validadeCartao.length < 5){
-
-        setValida_cartao(true)
-      }
-    }
-  }, [validadeCartao , toque_input_validade])
-
-  useEffect(() => {
-     
-    if(cvvCartao.length == 3){
-
-      setValida_cvv(false)
-
-    }else if(toque_input_cvv){
-      
-      setValida_cvv(true)
-    }
-    
-  }, [valida_cvv , toque_input_cvv])
-  
+ 
 
   const [dependentes, setDependentes] = useState([
     { value: "evelyn", label: "Evelyn Lohanny Santos Da Silva" }
@@ -108,11 +60,8 @@ export default function PagamentoConsulta() {
   
     return formatado;
   };
-  const formatarCVV = (valor) => {
-    return valor.replace(/\D/g, "").slice(0, 3);
-  };
   
-
+  
   const aplicarCupom = () => {
     if (cupom.trim().toLowerCase() === "desconto10") {
       setDesconto(valorOriginal * 0.10);
@@ -123,7 +72,7 @@ export default function PagamentoConsulta() {
 
   const handleFinalizar = () => {
      
-    if(generoDependente.length > 1 && numeroCartao.length == 19 && nomeCartao.length > 0 && validadeCartao == 5){
+    if(generoDependente.length > 1 && numeroCartao.length == 19 && nomeCartao.length > 0 && validadeCartao.length == 5 && cvvCartao.length == 3){
 
        navigate('/inicio')
     }
@@ -144,6 +93,11 @@ export default function PagamentoConsulta() {
     if(validadeCartao.length < 5){
 
       setValida_cartao(true)
+    }
+
+    if(cvvCartao.length < 3){
+
+      setValida_cvv(true)
     }
   };
   
@@ -171,11 +125,41 @@ export default function PagamentoConsulta() {
   };
 
   const handleNumeroCartaoChange = (e) => {
+    
     setNumeroCartao(formatarNumeroCartao(e.target.value));
     if (!toque_input_numero) setToque_input_numero(true);
   };
 
+  useEffect(() => {
+    if (generoDependente.length > 0) {
+      setValida_banco(false);
+    }
+  }, [generoDependente]);
   
+  useEffect(() => {
+    if (numeroCartao.length > 0) {
+      setValida_numero_cartao(false);
+    }
+  }, [numeroCartao]);
+
+  useEffect(() => {
+    if (nomeCartao.length > 0) {
+      setValida_nome(false);
+    }
+  }, [nomeCartao]);
+
+  useEffect(() => {
+    if (validadeCartao.length > 0) {
+      setValida_cartao(false);
+    }
+  }, [validadeCartao]);
+
+  useEffect(() => {
+    if (cvvCartao.length > 0) {
+      setValida_cvv(false);
+    }
+  }, [cvvCartao]);
+
   const handleNomeCartao = (e) => {
     const apenasLetras = e.target.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '');
     setNomeCartao(apenasLetras)
@@ -189,9 +173,11 @@ export default function PagamentoConsulta() {
 
   const handleCvv = (e) =>{
 
-    setCvvCartao(formatarCVV(e.target.value))
+    setCvvCartao(e.target.value)
     if (!toque_input_cvv) setToque_input_cvv(true);
   }
+
+
   return (
     <div style={{ maxWidth: "1300px", margin: "0 auto", padding: "40px", display: "grid", gridTemplateColumns: "2fr 1fr", gap: "24px" }}>
       <div>
@@ -258,7 +244,7 @@ export default function PagamentoConsulta() {
               </div>
               <div style={{ flex: 1 }}>
             <div className="floating-input-2">
-              <input type="text" placeholder=" " value={cvvCartao}   onChange={handleCvv} required />
+              <input maxLength={3} type="text" placeholder=" " value={cvvCartao}   onChange={handleCvv} required />
               <label>CVV</label>
             </div>
             <p className={`error-text ${valida_cvv ? 'show' : ''}`}>

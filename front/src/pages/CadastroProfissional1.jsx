@@ -5,6 +5,7 @@ import logo from '../assets/logoCadastro2.svg';
 import imagem from '../assets/FotoCadastro.svg';
 import './CSS/Cadastros.css';
 import { useState } from 'react';
+import voltar from '../assets/seta-principal.svg';
 
 function CadastroProfissional1() {
   const navigate = useNavigate();
@@ -158,6 +159,9 @@ function CadastroProfissional1() {
     <div className='container-profissional'>
       <div className='lado-esquerdoProfissional'>
         <div className='titulo-logo'>
+        <button className="back-button-pt" >
+      <img src={voltar} alt="" style={{width: '3em'}} />
+      </button>
           <p className='titulo-cadastro'>Cadastro Profissional</p>
           <img src={logo} alt='Future Mind Logo' className='logo-paraCadastro' />
         </div>

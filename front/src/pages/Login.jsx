@@ -4,6 +4,7 @@ import imagem from '../assets/FotoCadastro.svg';
 import './CSS/Cadastros.css';
 import { useContext, useState } from 'react';
 import { GlobalContext } from '../Context/GlobalContext';
+import voltar from '../assets/seta-principal.svg';
 
 function login() {
 
@@ -80,6 +81,9 @@ function login() {
     <div className='container-profissional'>
       <div className='lado-esquerdoProfissional'>
         <div className='titulo-logo'>
+        <button className="back-button-pt" >
+      <img src={voltar} alt="" style={{width: '3em'}} />
+      </button>
           <p className='titulo-cadastro'>Bem vindo de volta!</p>
           <img src={logo} alt='Future Mind Logo' className='logo-paraCadastro' />
         </div>

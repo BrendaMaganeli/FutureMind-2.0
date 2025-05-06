@@ -1,4 +1,4 @@
-import voltar from '../assets/voltar 2.svg';
+import voltar from '../assets/seta-principal.svg';
 import config from '../assets/settings.svg';
 import help from '../assets/help 1.svg';
 import mulher from '../assets/image 8.png';
@@ -163,7 +163,7 @@ function Chat() {
         <div className={`container-chats ${theme} ${fontSize}`}>
             <div className="barra-lateral-chat">
                 <div className="barra-cima">
-                    <img className='voltar-btn' onClick={handleVoltar} src={voltar} alt="" />
+                    <img className='voltar-btn' onClick={handleVoltar} src={voltar} alt="" style={{width: '2.5em'}}/>
                     <img className='config-btn' onClick={() => setVisibleSettings(!visibleSettings)} src={config} alt="" />
                     {
                         visibleSettings &&

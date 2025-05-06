@@ -15,6 +15,7 @@ import identificacao from '../assets/identificacao.svg';
 import seguranca from '../assets/seguranca.svg';
 import iconeChaves from '../assets/icone_chaves.svg';
 import iconeBanco from '../assets/icone_banco.svg'
+import voltar from '../assets/seta-principal.svg';
 
 // Função para rolar para o topo ao mudar de rota
 function ScrollToTop() {
@@ -32,6 +33,9 @@ function Politica() {
   return (
     <div className='body-politica'>
       {/* Navbar fixa no topo da página */}
+      <button className="back-button-pt" >
+      <img src={voltar} alt="" style={{width: '4em'}} />
+      </button>
       <ScrollToTop />
       {/* Botões para navegação entre Política de Privacidade e Termos de Uso */}
       <div className='divBotoes'>

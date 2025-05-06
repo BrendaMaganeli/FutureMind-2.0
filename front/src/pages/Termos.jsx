@@ -9,6 +9,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import voltar from '../assets/seta-principal.svg';
 
 
 // Componente para rolar a página até o topo sempre que a rota mudar
@@ -27,6 +28,9 @@ function Termos() {
   return (
     <div className='body-termos'>
       {/* Barra de navegação */}
+      <button className="back-button-pt" >
+      <img src={voltar} alt="" style={{width: '4em'}} />
+      </button>
       <ScrollToTop />
       {/* Botões para navegação entre Política de Privacidade e Termos de Uso */}
       <div className='divBotoes'>

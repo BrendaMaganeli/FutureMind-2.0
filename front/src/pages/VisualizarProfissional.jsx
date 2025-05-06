@@ -5,7 +5,7 @@ import icon_dois from '../assets/cam-recorder (1) 11.svg';
 import icon_tres from '../assets/icons8-bate-papo-48 2.svg';
 import icon_quatro from '../assets/icons8-pagamento-50 (1) 2.svg';
 import logo from '../assets/Logo_SA_2FASE.png';
-import voltar from '../assets/voltar 2.svg';
+import voltar from '../assets/seta-principal.svg';
 import anotar from '../assets/bloco-de-anotacoes.png';
 
 function VisualizarProfissional() {

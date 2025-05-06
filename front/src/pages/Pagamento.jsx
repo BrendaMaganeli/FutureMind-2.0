@@ -3,6 +3,7 @@ import './CSS/Pagamento.css';
 import Seta from '../assets/caret-down-solid.svg';
 import mulher from '../assets/image 8.png';
 import { useNavigate } from 'react-router-dom';
+import voltar from '../assets/seta-principal.svg';
 
 export default function PagamentoConsulta() {
   const navigate = useNavigate();
@@ -181,6 +182,9 @@ export default function PagamentoConsulta() {
   return (
     <div style={{ maxWidth: "1300px", margin: "0 auto", padding: "40px", display: "grid", gridTemplateColumns: "2fr 1fr", gap: "24px" }}>
       <div>
+      <button className="back-button-pt" >
+      <img src={voltar} alt="" style={{width: '3em'}} />
+      </button>
         <h2 style={{ fontSize: "24px", fontWeight: "600", marginBottom: "16px" }}>Finalize seu agendamento</h2>
 
         <p style={{ fontWeight: "500", marginBottom: "8px" }}>Forma de pagamento</p>

@@ -5,6 +5,8 @@ import icon_tres from '../assets/icons8-bate-papo-48 2.svg';
 import Arvore from '../assets/Group 239274.svg';
 import './CSS/EditarProfissional.css';
 import logo from '../assets/Logo_SA_2FASE.png';
+import voltar from '../assets/seta-principal.svg';
+
 
 function EditarProfissional() {
 
@@ -69,15 +71,14 @@ function EditarProfissional() {
         <div className="arvore-profissional">
              <img src={Arvore} alt="" />
          </div>
-     
-         {/* <div className="botoes-maior-p">
-           <div className="botoes-p">
-             <img src={voltar} alt="" />
-           </div>
-         </div> */}
-         <div className="loguinho-p">
-           <img src={logo} alt="" />
-         </div>
+         <div className="botoes-maior-p">
+      <div className="botoes-p">
+        <img src={voltar} alt="" />
+      </div>
+    </div>
+    <div className="loguinho-p">
+      <img src={logo} alt="" />
+    </div>
      
          <div className="editar-profissional">
              <div className="floating-input-pac">

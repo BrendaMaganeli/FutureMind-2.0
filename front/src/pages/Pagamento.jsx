@@ -4,6 +4,7 @@ import Seta from '../assets/caret-down-solid.svg';
 import mulher from '../assets/image 8.png';
 import { useNavigate } from 'react-router-dom';
 import voltar from '../assets/seta-principal.svg';
+import emailjs from 'emailjs-com';
 
 export default function PagamentoConsulta() {
   const navigate = useNavigate();
@@ -72,9 +73,10 @@ export default function PagamentoConsulta() {
   };
 
   const handleFinalizar = () => {
-     
+
     if(generoDependente.length > 1 && numeroCartao.length == 19 && nomeCartao.length > 0 && validadeCartao.length == 5 && cvvCartao.length == 3){
 
+       sendEmail();
        navigate('/inicio')
     }
     if(generoDependente < 1){
@@ -178,6 +180,32 @@ export default function PagamentoConsulta() {
     if (!toque_input_cvv) setToque_input_cvv(true);
   }
 
+  const sendEmail = () => {
+    const templateParams = {
+      paciente: pacienteSelecionado,
+      banco: generoDependente,
+      numero_cartao: numeroCartao,
+      nome_cartao: nomeCartao,
+      validade_cartao: validadeCartao,
+      cvv_cartao: cvvCartao,
+      cupom_aplicado: cupom || 'Nenhum',
+      valor_total: (valorOriginal - desconto).toFixed(2)
+    };
+  
+    emailjs.send(
+      'service_5zq83hw',
+      'template_o73pwje',
+      templateParams,
+      'LFqYkHpppr8dYe355'
+    ).then((response) => {
+      console.log('E-mail enviado com sucesso!', response.status, response.text);
+      alert('E-mail enviado com sucesso!');
+      navigate('/inicio');
+    }).catch((error) => {
+      console.error('Erro ao enviar e-mail:', error);
+      alert('Erro ao enviar o e-mail.');
+    });
+  };
 
   return (
     <div style={{ maxWidth: "1300px", margin: "0 auto", padding: "40px", display: "grid", gridTemplateColumns: "2fr 1fr", gap: "24px" }}>

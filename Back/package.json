@@ -15,6 +15,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mysql2": "^3.14.0",
+    "nodemailer": "^7.0.2",
     "nodemon": "^3.1.10",
     "stripe": "^17.4.0-beta.2"
   },

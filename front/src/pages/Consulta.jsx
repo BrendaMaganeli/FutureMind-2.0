@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import "./CSS/Consulta.css";
 import imgConsulta from "../assets/Group 239294.svg";
 import mulher from "../assets/image 8.png";
+import voltar from "../assets/voltar 2.svg"
 import "./CSS/Consulta.css";
 import voltar from '../assets/seta-principal.svg';
 

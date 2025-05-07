@@ -271,7 +271,7 @@ function CadastroPaciente() {
           <div className='container_styles-check'>
             <input className='styles-check' type="checkbox" />
           </div>
-          <label className='termos-styles'>Aceitar os</label> <a className='termos-a' href="termos">termos</a> <label className='de_uso'>de uso</label>
+          <label className='termos-styles'>Aceitar os</label> <a className='termos-a' href="/termos">termos</a> <label className='de_uso'>de uso</label>
         </div>
 
         <button className='botao-cadastro' onClick={(e) => handleCadastro(e)}>Finalizar Cadastro</button>

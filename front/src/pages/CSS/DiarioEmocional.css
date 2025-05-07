@@ -63,6 +63,7 @@
   .note-details {
     flex-grow: 1;
     padding: 16px;
+    background-color: #f7fafc;
   }
   
   .note-title-input {
@@ -73,6 +74,7 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     margin-bottom: 16px;
+    background-color: #f7fafc;
   }
   
   .custom-tabs-slider {
@@ -81,9 +83,10 @@
     background-color: #f1f5f9;
     border-radius: 4px;
     overflow: hidden;
-    width: 150px; /* ajustável conforme conteúdo */
+    width: 30%; /* ajustável conforme conteúdo */
     height: 30px;
     margin-bottom: 16px;
+    border: 1.5px solid #f1f5f9;
   }
   
   .tab-button {
@@ -91,8 +94,6 @@
     border: none;
     background: none;
     z-index: 1;
-    color: #64748b;
-    font-weight: 500;
     cursor: pointer;
     transition: color 0.2s ease;
   }
@@ -113,20 +114,37 @@
     z-index: 0;
   }
   
-  
-  
   .checklist-item {
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 8px;
   }
+
+  .check-c {
+    appearance: none;
+    width: 1.5%;
+    height: 15px;
+    border: 2px solid #5A789F;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  }
+
+  .check-c:checked {
+      background-color: #5A789F;
+      border: 2px solid #5A789F;
+  }
   
-  .input-item, .textarea-note {
+  .textarea-note {
     width: 100%;
+    height: 620px;
     padding: 8px;
     border-radius: 8px;
     border: 1px solid #ddd;
+    resize: none;
+    background-color: #f7fafc ;
   }
   
   .btn.add-item {
@@ -136,4 +154,156 @@
     border-radius: 4px;
     margin-top: 8px;
   }
+
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    width: 100%;
+  }
+  
+  .input-item {
+    flex: 1;
+    padding-right: 24px; /* espaço para o ícone */
+    padding-left: 8px;
+    height: 32px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .delete-btn {
+    position: absolute;
+    right: 4px;
+    top: 55%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: hsl(0, 0%, 80%);
+    transition: color 0.3s ease;
+  }
+  
+  .delete-btn:hover {
+    color: hsl(0, 0%, 20%);
+  }
+
+  .folder-item, .note-item {
+    position: relative;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .delete-btnn {
+    opacity: 0;
+    transition: opacity 0.3s ease, color 0.3s ease;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #555;
+    transform: translateY(10%); /* Centraliza verticalmente */
+  }
+  
+  .folder-item:hover .delete-btnn,
+  .note-item:hover .delete-btnn {
+    opacity: 1;
+  }
+  
+  .delete-btnn:hover {
+    color: #000;
+  }
+
+  .folder-name-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    padding: 4px;
+    outline: none;
+  }
+  
+  .edit-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #555;
+    opacity: 0;
+    transition: opacity 0.3s ease, color 0.3s ease;
+  }  
+  
+  .edit-btn:hover {
+    color: #000;
+  }
+
+  .folder-item:hover .edit-btn {
+    opacity: 1;
+  }
+  
+  .tit-pasta{
+    width: 20%;
+  }
+
+  .edit-nome-pasta{
+    width: 72%;
+    padding-top: 1%;
+    display: flex;
+    justify-content: end;
+  }
+
+  .excluir-pasta{
+    width: 8%;
+    display: flex;
+    justify-content: end;
+  }
+
+  .folders-list,
+  .notes-list {
+    max-height: 200px;
+    overflow-y: hidden; /* esconde a barra inicialmente */
+  }
+  
+  .folders-list:hover,
+  .notes-list:hover {
+    overflow-y: auto; /* mostra a barra ao passar o mouse */
+  }
+  
+  /* Scrollbar customizada */
+  .folders-list::-webkit-scrollbar,
+  .notes-list::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .folders-list::-webkit-scrollbar-track,
+  .notes-list::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .folders-list::-webkit-scrollbar-thumb,
+  .notes-list::-webkit-scrollbar-thumb {
+    background-color: #5A789F;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  
+  .folders-list::-webkit-scrollbar-thumb:hover,
+  .notes-list::-webkit-scrollbar-thumb:hover {
+    background-color: #466484;
+  }
+
+  .empty-message {
+    padding: 8px;
+    text-align: center;
+    color: #555;
+    font-style: italic;
+    background-color: rgba(0, 0, 0, 0.03); /* fundo com leve transparência */
+    border-radius: 8px;
+    margin: 8px;
+  }
+  
   

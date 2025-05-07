@@ -17,7 +17,7 @@ function Footer() {
            <p>Todos os direitos reservados.</p>
         </div>
         <div className='container-redes'>
-           <Link><img src={Instagram} alt="" /></Link>
+           <Link to={'https://www.instagram.com/futuremind.tech/'}><img src={Instagram} alt="" /></Link>
            <Link><img src={Facebook} alt="" /></Link>
            <Link to={'https://www.youtube.com/'}><img src={Youtube} alt="" /></Link>
         </div>

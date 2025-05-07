@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Plus } from "lucide-react";
-import './CSS/DiarioEmocional.css'; // Importando o arquivo CSS
+import { Plus, X } from "lucide-react";
+import "./CSS/DiarioEmocional.css";
+import { Pencil } from "lucide-react";
 
 const initialData = [
   {
@@ -10,29 +11,26 @@ const initialData = [
       {
         id: 1,
         title: "Nota 1",
-        checklist: [
-        ]
-      }
-    ]
-  }
+        checklist: [],
+      },
+    ],
+  },
 ];
 
 export default function NotesApp() {
   const [folders, setFolders] = useState(initialData);
-  const [selectedFolder, setSelectedFolder] = useState(folders[0]);
-  const [selectedNote, setSelectedNote] = useState(folders[0].notes[0]);
+  const [selectedFolder, setSelectedFolder] = useState(
+    folders.length > 0 ? folders[0] : null
+  );
+  const [selectedNote, setSelectedNote] = useState(
+    folders.length > 0 && folders[0].notes.length > 0 ? folders[0].notes[0] : null
+  );  
   const [activeTab, setActiveTab] = useState("checklist");
 
   const handleCheck = (type, index) => {
     const updatedNote = { ...selectedNote };
     updatedNote[type][index].done = !updatedNote[type][index].done;
-    const updatedFolder = {
-      ...selectedFolder,
-      notes: selectedFolder.notes.map(n => n.id === updatedNote.id ? updatedNote : n)
-    };
-    setFolders(folders.map(f => f.name === selectedFolder.name ? updatedFolder : f));
-    setSelectedFolder(updatedFolder);
-    setSelectedNote(updatedNote);
+    updateNoteState(updatedNote);
   };
 
   const handleAddItem = (type) => {
@@ -40,13 +38,7 @@ export default function NotesApp() {
       ...selectedNote,
       [type]: [...selectedNote[type], { text: "", done: false }],
     };
-    setSelectedNote(updated);
-    const updatedFolder = {
-      ...selectedFolder,
-      notes: selectedFolder.notes.map((n) => (n.id === updated.id ? updated : n)),
-    };
-    setFolders(folders.map((f) => (f.name === selectedFolder.name ? updatedFolder : f)));
-    setSelectedFolder(updatedFolder);
+    updateNoteState(updated);
   };
 
   const handleNewNote = () => {
@@ -54,28 +46,67 @@ export default function NotesApp() {
       id: Date.now(),
       title: "New Note",
       checklist: [],
-      imageNote: ""
+      imageNote: "",
     };
     const updatedFolder = {
       ...selectedFolder,
-      notes: [newNote, ...selectedFolder.notes]
+      notes: [newNote, ...selectedFolder.notes],
     };
-    setFolders(folders.map(f => f.name === selectedFolder.name ? updatedFolder : f));
-    setSelectedFolder(updatedFolder);
+    updateFolderState(updatedFolder);
     setSelectedNote(newNote);
   };
 
   const handleNewFolder = () => {
-    const newFolder = { id: Date.now(), name: `Folder ${folders.length + 1}`, notes: [] };
+    const newFolder = {
+      id: Date.now(),
+      name: `Folder ${folders.length + 1}`,
+      notes: [],
+    };
     setFolders([newFolder, ...folders]);
     setSelectedFolder(newFolder);
     setSelectedNote(null);
   };
 
+  const handleDeleteFolder = (folderId) => {
+    const updatedFolders = folders.filter((f) => f.id !== folderId);
+    setFolders(updatedFolders);
+    if (selectedFolder?.id === folderId) {
+      setSelectedFolder(updatedFolders[0] || null);
+      setSelectedNote(updatedFolders[0]?.notes[0] || null);
+    }
+  };
+
+  const handleDeleteNote = (noteId) => {
+    const updatedNotes = selectedFolder.notes.filter((n) => n.id !== noteId);
+    const updatedFolder = { ...selectedFolder, notes: updatedNotes };
+    updateFolderState(updatedFolder);
+    setSelectedNote(updatedNotes[0] || null);
+  };
+
+  const updateNoteState = (updatedNote) => {
+    const updatedFolder = {
+      ...selectedFolder,
+      notes: selectedFolder.notes.map((n) =>
+        n.id === updatedNote.id ? updatedNote : n
+      ),
+    };
+    updateFolderState(updatedFolder);
+    setSelectedNote(updatedNote);
+  };
+
+  const updateFolderState = (updatedFolder) => {
+    setFolders(
+      folders.map((f) => (f.id === updatedFolder.id ? updatedFolder : f))
+    );
+    setSelectedFolder(updatedFolder);
+  };
+
   const tabs = [
     { value: "checklist", label: "Lista" },
-    { value: "imageNote", label: "Nota" }
+    { value: "imageNote", label: "Nota" },
   ];
+
+  const [editingFolderId, setEditingFolderId] = useState(null);
 
   return (
     <div className="notes-app">
@@ -87,18 +118,68 @@ export default function NotesApp() {
           </button>
         </div>
         <div className="folders-list">
-          {folders.map((folder) => (
-            <div
-              key={folder.id}
-              onClick={() => {
-                setSelectedFolder(folder);
-                setSelectedNote(folder.notes[0] || null);
-              }}
-              className={`folder-item ${folder.id === selectedFolder.id ? "selected" : ""}`}
-            >
-              {folder.name}
-            </div>
-          ))}
+          {folders.length > 0 ? (
+            folders.map((folder) => (
+              <div
+                key={folder.id}
+                className={`folder-item ${
+                  folder.id === selectedFolder?.id ? "selected" : ""
+                }`}
+                onClick={() => {
+                  setSelectedFolder(folder);
+                  setSelectedNote(folder.notes[0] || null);
+                }}
+              >
+                {editingFolderId === folder.id ? (
+                  <input
+                    className="folder-name-input"
+                    value={folder.name}
+                    onChange={(e) => {
+                      const updatedFolders = folders.map((f) =>
+                        f.id === folder.id ? { ...f, name: e.target.value } : f
+                      );
+                      setFolders(updatedFolders);
+                    }}
+                    onBlur={() => setEditingFolderId(null)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") setEditingFolderId(null);
+                    }}
+                    autoFocus
+                  />
+                ) : (
+                  <>
+                    <div className="tit-pasta">
+                      <span>{folder.name}</span>
+                    </div>
+                    <div className="edit-nome-pasta">
+                      <button
+                        className="edit-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEditingFolderId(folder.id);
+                        }}
+                      >
+                        <Pencil size={14} />
+                      </button>
+                    </div>
+                  </>
+                )}
+                <div className="excluir-pasta">
+                  <button
+                    className="delete-btnn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteFolder(folder.id);
+                    }}
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="empty-message">Sem pastas</div>
+          )}
         </div>
 
         <div className="header">
@@ -108,17 +189,30 @@ export default function NotesApp() {
           </button>
         </div>
         <div className="notes-list">
-          {selectedFolder.notes.map((note) => (
-            <div
-              key={note.id}
-              onClick={() => setSelectedNote(note)}
-              className={`note-item ${selectedNote && selectedNote.id === note.id ? "selected" : ""}`}
-            >
-              <div className="note-title">
-                <p className="note-text">{note.title}</p>
+          {selectedFolder?.notes?.length > 0 ? (
+            selectedFolder.notes.map((note) => (
+              <div
+                key={note.id}
+                className={`note-item ${
+                  selectedNote?.id === note.id ? "selected" : ""
+                }`}
+                onClick={() => setSelectedNote(note)}
+              >
+                <span className="note-text">{note.title}</span>
+                <button
+                  className="delete-btnn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteNote(note.id);
+                  }}
+                >
+                  <X size={14} />
+                </button>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <div className="empty-message">Sem notas</div>
+          )}
         </div>
       </div>
 
@@ -130,32 +224,31 @@ export default function NotesApp() {
               value={selectedNote.title}
               onChange={(e) => {
                 const updated = { ...selectedNote, title: e.target.value };
-                setSelectedNote(updated);
-                const updatedFolder = {
-                  ...selectedFolder,
-                  notes: selectedFolder.notes.map(n => n.id === updated.id ? updated : n)
-                };
-                setFolders(folders.map(f => f.name === selectedFolder.name ? updatedFolder : f));
-                setSelectedFolder(updatedFolder);
+                updateNoteState(updated);
               }}
             />
 
             <div className="custom-tabs-slider">
               <div
                 className="slider-c"
-                style={{ left: `${tabs.findIndex(tab => tab.value === activeTab) * 50}%` }}
+                style={{
+                  left: `${
+                    tabs.findIndex((tab) => tab.value === activeTab) * 50
+                  }%`,
+                }}
               />
               {tabs.map((tab) => (
                 <button
                   key={tab.value}
                   onClick={() => setActiveTab(tab.value)}
-                  className={`tab-button ${activeTab === tab.value ? "active" : ""}`}
+                  className={`tab-button ${
+                    activeTab === tab.value ? "active" : ""
+                  }`}
                 >
                   {tab.label}
                 </button>
               ))}
             </div>
-
 
             {activeTab === "checklist" && (
               <div>
@@ -164,26 +257,38 @@ export default function NotesApp() {
                     <input
                       type="checkbox"
                       checked={item.done}
+                      className="check-c"
                       onChange={() => handleCheck("checklist", i)}
                     />
-                    <input
-                      value={item.text}
-                      onChange={(e) => {
-                        const updated = { ...selectedNote };
-                        updated.checklist[i].text = e.target.value;
-                        setSelectedNote(updated);
-                        const updatedFolder = {
-                          ...selectedFolder,
-                          notes: selectedFolder.notes.map(n => n.id === updated.id ? updated : n)
-                        };
-                        setFolders(folders.map(f => f.name === selectedFolder.name ? updatedFolder : f));
-                        setSelectedFolder(updatedFolder);
-                      }}
-                      className="input-item"
-                    />
+                    <div className="input-wrapper">
+                      <input
+                        value={item.text}
+                        onChange={(e) => {
+                          const updated = { ...selectedNote };
+                          updated.checklist[i].text = e.target.value;
+                          updateNoteState(updated);
+                        }}
+                        className="input-item"
+                      />
+                      <button
+                        className="delete-btn"
+                        onClick={() => {
+                          const updated = { ...selectedNote };
+                          updated.checklist.splice(i, 1);
+                          updateNoteState(updated);
+                        }}
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
                   </div>
                 ))}
-                <button onClick={() => handleAddItem("checklist")} className="btn add-item">Add Item</button>
+                <button
+                  onClick={() => handleAddItem("checklist")}
+                  className="btn add-item"
+                >
+                  Add Item
+                </button>
               </div>
             )}
 
@@ -192,14 +297,11 @@ export default function NotesApp() {
                 <textarea
                   value={selectedNote.imageNote}
                   onChange={(e) => {
-                    const updated = { ...selectedNote, imageNote: e.target.value };
-                    setSelectedNote(updated);
-                    const updatedFolder = {
-                      ...selectedFolder,
-                      notes: selectedFolder.notes.map(n => n.id === updated.id ? updated : n)
+                    const updated = {
+                      ...selectedNote,
+                      imageNote: e.target.value,
                     };
-                    setFolders(folders.map(f => f.name === selectedFolder.name ? updatedFolder : f));
-                    setSelectedFolder(updatedFolder);
+                    updateNoteState(updated);
                   }}
                   className="textarea-note"
                 />

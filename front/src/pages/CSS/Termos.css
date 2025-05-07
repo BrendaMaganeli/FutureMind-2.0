@@ -4,7 +4,7 @@
     background-color: #ffffff;
 }
 
-div::-webkit-scrollbar-track{
+/* div::-webkit-scrollbar-track{
 
     background: #ffffff;
     border-radius: 3px;
@@ -21,7 +21,7 @@ div::-webkit-scrollbar{
 
 
     width: 12px;
-}
+} */
 
 .botaodecisao{
 

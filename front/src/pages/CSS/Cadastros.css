@@ -283,18 +283,6 @@
     border: 2px solid #5A789F;
 }
 
-/* Ícone de check */
-.styles-check:checked::after {
-    content: "✔";
-    font-size: 14px;
-    color: white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-weight: bold;
-}
-
 /* Texto e link */
 .termos-styles {
     color: #5A789F;

@@ -3,6 +3,7 @@
 }
 
 .editar-profissional-maior {
+<<<<<<< HEAD
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,6 +25,28 @@
   align-items: start;
   justify-content: start;
   margin: 12% 0 0 0;
+=======
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    width: 75%;
+    height: 80%;
+}
+
+.editar-profissional {
+    background-color: transparent;
+    border-radius: 10px;
+    width: 80%;
+    height: 40%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    position: relative;
+    align-items: start;
+    justify-content: start;
+>>>>>>> e457da2bbc5d810dfb705faf925f5151e808dd59
 }
 
 .inpt-div {
@@ -52,6 +75,7 @@
 }
 
 .BTN-SALVAR {
+<<<<<<< HEAD
   padding: 2%;
   position: relative;
   height: 5%;
@@ -74,6 +98,34 @@
   text-align: center;
   justify-self: end;
   padding: 2%;
+=======
+
+    padding: 2%;
+    position: relative;
+    height: 5%;
+    width: 43%;
+    display: flex;
+    justify-content: end;
+    align-items: start;
+    margin: 6.5% 0 0 30%;
+    margin-left: 40%;
+}
+
+.salvar-btn {
+    
+    position: relative;
+    width: 50%;
+    font-size: 15px;
+    background-color: #5A789F;
+    color: white;
+    border: 1px solid #5a7da0;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    justify-self: end;
+    padding: 2%;
+    margin-top: 24%;
+>>>>>>> e457da2bbc5d810dfb705faf925f5151e808dd59
 
   &:hover {
     background-color: white;
@@ -133,6 +185,7 @@
 }
 
 .floating-input-pro {
+<<<<<<< HEAD
   position: relative;
   margin-top: 20px;
   width: 100%;
@@ -172,3 +225,59 @@
   font-size: 13px;
   color: #013a63;
 }
+=======
+    position: relative;
+    margin-top: 20px;
+    width: 100%;
+  }
+  
+  .floating-input-pro input {
+    width: 100%;
+    padding: 16px 12px 8px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  
+  .floating-input-pro input:focus {
+    border-color: #013a63;
+  }
+  
+  .floating-input-pro label {
+    position: absolute;
+    left: 12px;
+    top: 14px;
+    background: white;
+    padding: 0 4px;
+    color: #999;
+    font-size: 16px;
+    pointer-events: none;
+    transition: 0.2s ease all;
+  }
+  
+  /* Quando o input está focado ou tem conteúdo */
+  .floating-input-pro input:focus + label,
+  .floating-input-pro input:not(:placeholder-shown) + label {
+    top: -8px;
+    left: 10px;
+    font-size: 13px;
+    color: #013a63;
+  }
+
+
+  .botoes-p img {
+    width: 3em; /* ajuste como quiser */
+    height: auto; /* mantém a proporção */
+  }
+
+  .botoes-p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* width, height e outras propriedades aqui */
+  }
+  
+  
+>>>>>>> e457da2bbc5d810dfb705faf925f5151e808dd59

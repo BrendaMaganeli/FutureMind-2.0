@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { GlobalContext } from "../Context/GlobalContext";
@@ -5,6 +6,16 @@ import logo from "../assets/logoCadastro2.svg";
 import imagem from "../assets/FotoCadastro.svg";
 import "./CSS/Cadastros.css";
 import { useState } from "react";
+=======
+import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
+import { GlobalContext } from '../Context/GlobalContext';
+import logo from '../assets/logoCadastro2.svg';
+import imagem from '../assets/FotoCadastro.svg';
+import './CSS/Cadastros.css';
+import { useState } from 'react';
+import voltar from '../assets/seta-principal.svg';
+>>>>>>> e457da2bbc5d810dfb705faf925f5151e808dd59
 
 function CadastroProfissional1() {
   const navigate = useNavigate();
@@ -160,6 +171,7 @@ function CadastroProfissional1() {
   };
 
   return (
+<<<<<<< HEAD
     <div className="container-profissional">
       <div className="lado-esquerdoProfissional">
         <div className="titulo-logo">
@@ -168,6 +180,37 @@ function CadastroProfissional1() {
             src={logo}
             alt="Future Mind Logo"
             className="logo-paraCadastro"
+=======
+    <div className='container-profissional'>
+      <div className='lado-esquerdoProfissional'>
+        <div className='titulo-logo'>
+        <button className="back-button-pt" >
+      <img src={voltar} alt="" style={{width: '3em'}} />
+      </button>
+          <p className='titulo-cadastro'>Cadastro Profissional</p>
+          <img src={logo} alt='Future Mind Logo' className='logo-paraCadastro' />
+        </div>
+        <div className='inputs-cadastro-div'>
+          <div className="cadastro-input">
+            <input type="text" value={nome} onChange={(e) => {
+              setNome(formatarNome(e.target.value));
+              setNomeValido(false);
+            }} placeholder=" " required />
+            <label>Nome Completo</label>
+            <span className={`erro ${nomeValido ? 'visivel' : ''}`}>Nome obrigatório</span>
+          </div>
+
+          <div className="cadastro-input">
+          <input
+            type="text"
+            value={valorCRP}
+            onChange={(e) => {
+              setValorCRP(formatarCRP(e.target.value));
+              setCrpValido(false);
+            }}
+            placeholder=" "
+            required
+>>>>>>> e457da2bbc5d810dfb705faf925f5151e808dd59
           />
         </div>
         <div className="inputs-cadastro-div">

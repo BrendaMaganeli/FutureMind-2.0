@@ -1,7 +1,12 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, ArrowLeft, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import "./CSS/TelaAgendamento.css";
+<<<<<<< HEAD
 import imgConsulta from "../assets/Group 239294.svg";
+=======
+import imgConsulta from '../assets/Group 239294.svg';
+import voltar from '../assets/seta-principal.svg';
+>>>>>>> e457da2bbc5d810dfb705faf925f5151e808dd59
 
 const getMonthData = (year) => {
   const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
@@ -126,8 +131,8 @@ export default function AgendaConsultas() {
           </button>
         </div>
       )}
-      <button className="back-button" onClick={() => window.history.back()}>
-        <ArrowLeft size={24} />
+      <button className="back-button-c" >
+      <img src={voltar} alt="" />
       </button>
 
       <div className="calendar">

@@ -218,7 +218,27 @@ div::-webkit-scrollbar {
   border: 2px solid #61a5c2;
 }
 
+<<<<<<< HEAD
 .css-1umw9bq-MuiSvgIcon-root {
   font-size: 4rem !important;
   color: #5a789f;
 }
+=======
+
+.css-1umw9bq-MuiSvgIcon-root{
+
+    font-size: 4rem !important;
+    color: #5a789f ;
+
+}
+
+
+.back-button-pt{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: transparent;
+    border: none;
+    color: #013A63;
+}
+>>>>>>> e457da2bbc5d810dfb705faf925f5151e808dd59

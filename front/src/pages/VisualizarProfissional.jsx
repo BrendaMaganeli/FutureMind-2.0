@@ -1,4 +1,5 @@
 import "./CSS/VisualizarProfissional.css";
+<<<<<<< HEAD
 import mulher from "../assets/image 8.png";
 import icon_um from "../assets/agenda 2.svg";
 import icon_dois from "../assets/cam-recorder (1) 11.svg";
@@ -7,6 +8,16 @@ import icon_quatro from "../assets/icons8-pagamento-50 (1) 2.svg";
 import logo from "../assets/Logo_SA_2FASE.png";
 import voltar from "../assets/voltar 2.svg";
 import anotar from "../assets/bloco-de-anotacoes.png";
+=======
+import mulher from '../assets/image 8.png';
+import icon_um from '../assets/agenda 2.svg';
+import icon_dois from '../assets/cam-recorder (1) 11.svg';
+import icon_tres from '../assets/icons8-bate-papo-48 2.svg';
+import icon_quatro from '../assets/icons8-pagamento-50 (1) 2.svg';
+import logo from '../assets/Logo_SA_2FASE.png';
+import voltar from '../assets/seta-principal.svg';
+import anotar from '../assets/bloco-de-anotacoes.png';
+>>>>>>> e457da2bbc5d810dfb705faf925f5151e808dd59
 
 function VisualizarProfissional() {
   return (

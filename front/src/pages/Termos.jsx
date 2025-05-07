@@ -1,4 +1,5 @@
 // Importações de bibliotecas e componentes necessários
+<<<<<<< HEAD
 import { Link } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
@@ -9,6 +10,20 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+=======
+import { Link } from 'react-router-dom';
+import Navbar from '../Components/Navbar';
+import Footer from '../Components/Footer';
+import './CSS/Termos.css';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import voltar from '../assets/seta-principal.svg';
+
+>>>>>>> e457da2bbc5d810dfb705faf925f5151e808dd59
 
 // Componente para rolar a página até o topo sempre que a rota mudar
 function ScrollToTop() {
@@ -26,6 +41,9 @@ function Termos() {
   return (
     <div className="body-termos">
       {/* Barra de navegação */}
+      <button className="back-button-pt" >
+      <img src={voltar} alt="" style={{width: '4em'}} />
+      </button>
       <ScrollToTop />
       {/* Botões para navegação entre Política de Privacidade e Termos de Uso */}
       <div className="divBotoes">

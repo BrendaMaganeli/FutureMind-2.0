@@ -1,17 +1,8 @@
-<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logoCadastro2.svg";
 import imagem from "../assets/FotoCadastro.svg";
 import "./CSS/Cadastros.css";
 import { useState } from "react";
-=======
-import { useNavigate } from 'react-router-dom';
-import logo from '../assets/logoCadastro2.svg';
-import imagem from '../assets/FotoCadastro.svg';
-import './CSS/Cadastros.css';
-import { useState } from 'react';
-import voltar from '../assets/seta-principal.svg';
->>>>>>> e457da2bbc5d810dfb705faf925f5151e808dd59
 
 function CadastroPaciente() {
   const navigate = useNavigate();
@@ -199,7 +190,6 @@ function CadastroPaciente() {
   };
 
   return (
-<<<<<<< HEAD
     <div className="container-profissional">
       <div className="lado-esquerdoProfissional">
         <div className="titulo-logo">
@@ -209,16 +199,6 @@ function CadastroPaciente() {
             alt="Future Mind Logo"
             className="logo-paraCadastro"
           />
-=======
-    <div className='container-profissional'>
-      <div className='lado-esquerdoProfissional'>
-        <div className='titulo-logo'>
-        <button className="back-button-pt" >
-      <img src={voltar} alt="" style={{width: '3em'}} />
-      </button>
-          <p className='titulo-cadastro'>Cadastro Paciente</p>
-          <img src={logo} alt='Future Mind Logo' className='logo-paraCadastro' />
->>>>>>> e457da2bbc5d810dfb705faf925f5151e808dd59
         </div>
 
         <div className="inputs-cadastro-div">

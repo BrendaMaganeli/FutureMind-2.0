@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import Navbar from "../Components/Navbar";
 import { Link } from "react-router-dom";
 import "./CSS/Politica.css";
@@ -16,26 +15,6 @@ import identificacao from "../assets/identificacao.svg";
 import seguranca from "../assets/seguranca.svg";
 import iconeChaves from "../assets/icone_chaves.svg";
 import iconeBanco from "../assets/icone_banco.svg";
-=======
-import Navbar from '../Components/Navbar';
-import { Link } from 'react-router-dom';
-import './CSS/Politica.css';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Footer from '../Components/Footer';
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import bolona from '../assets/bolona.png';
-import bolona2 from '../assets/bolona2.png';
-import bolonaEsquerda from '../assets/bolonaEsquerda.png';
-import identificacao from '../assets/identificacao.svg';
-import seguranca from '../assets/seguranca.svg';
-import iconeChaves from '../assets/icone_chaves.svg';
-import iconeBanco from '../assets/icone_banco.svg'
-import voltar from '../assets/seta-principal.svg';
->>>>>>> e457da2bbc5d810dfb705faf925f5151e808dd59
 
 // Função para rolar para o topo ao mudar de rota
 function ScrollToTop() {

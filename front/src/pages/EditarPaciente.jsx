@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import mulher from "../assets/image 8.png";
 import icon_um from "../assets/agenda 2.svg";
 import icon_dois from "../assets/cam-recorder (1) 11.svg";
@@ -8,17 +7,6 @@ import voltar from "../assets/voltar 2.svg";
 import "./CSS/EditarPaciente.css";
 import Arvore from "../assets/Group 239274.svg";
 import { useState } from "react";
-=======
-import mulher from '../assets/image 8.png';
-import icon_um from '../assets/agenda 2.svg';
-import icon_dois from '../assets/cam-recorder (1) 11.svg';
-import icon_tres from '../assets/icons8-bate-papo-48 2.svg';
-import logo from '../assets/Logo_SA_2FASE.png';
-import voltar from '../assets/seta-principal.svg';
-import './CSS/EditarPaciente.css';
-import Arvore from '../assets/Group 239274.svg';
-import { useState } from 'react';
->>>>>>> e457da2bbc5d810dfb705faf925f5151e808dd59
 
 function EditarPaciente() {
   const [isVisible, setIsVisible] = useState(false);

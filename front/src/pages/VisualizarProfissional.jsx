@@ -4,8 +4,8 @@ import icon_um from "../assets/agenda 2.svg";
 import icon_dois from "../assets/cam-recorder (1) 11.svg";
 import icon_tres from "../assets/icons8-bate-papo-48 2.svg";
 import icon_quatro from "../assets/icons8-pagamento-50 (1) 2.svg";
-import logo from "../assets/Logo_SA_2FASE.png";
-import voltar from "../assets/voltar 2.svg";
+import logo from "../assets/logo-prin.png";
+import voltar from "../assets/seta-principal.svg";
 import anotar from "../assets/bloco-de-anotacoes.png";
 
 function VisualizarProfissional() {
@@ -94,11 +94,7 @@ function VisualizarProfissional() {
               </div>
               <div className="corpo-informacao">
                 <p>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industrys
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book.
+                  
                 </p>
               </div>
             </div>
@@ -108,9 +104,7 @@ function VisualizarProfissional() {
               </div>
               <div className="corpo-informacao">
                 <p>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industrys
-                  standard dummy text ever since the 1500s.
+                 
                 </p>
               </div>
             </div>
@@ -122,10 +116,7 @@ function VisualizarProfissional() {
             </div>
             <div className="corpo-sobre-mim">
               <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industrys standard dummy text
-                ever since the 1500s, when an unknown printer took a galley of
-                type and scrambled it to make a type specimen book.
+               
               </p>
             </div>
           </div>

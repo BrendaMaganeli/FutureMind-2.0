@@ -1,106 +1,108 @@
 .container-agenda-c {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    padding: 16px;
-    background-color: #f3f4f6;
-    min-height: 100vh;
-    position: relative;
-    flex-direction: row-reverse;
-    font-family: 'DM Sans', sans-serif;
-  }
-  
-  .back-button-c {
-    position: absolute;
-    top: 16px;
-    left: 16px;
-    background-color: transparent;
-    border: none;
-    color: #013A63;
-  }
-  
-  .calendar-c {
-    width: 50%;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 3%;
-    position: absolute;
-    margin-left: 45%;
-  }
-  
-  .calendar-header-c {
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    margin-bottom: 8px;
-    text-transform: capitalize;
-  }
-  
-  .calendar-header-c h2{
-    color: #013A63;
-  }
-  
-  .setadireita-c, .setaEsquerda-c {
-    background-color: transparent;
-    border: none;
-    color: #013A63;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 16px;
+  background-color: #f3f4f6;
+  min-height: 100vh;
+  position: relative;
+  flex-direction: row-reverse;
+  font-family: "DM Sans", sans-serif;
+}
 
-  .setaD-c, .setaE-c {
-    background-color: transparent;
-    border: none;
-    color: #013A63;
-  }
-  
-  .weekdays-c {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    text-align: start;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #013A63;
-    font-size: 0.8em;
-    text-transform: capitalize;
-  }
-  
-  .days-grid-c {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-    height: 60vh;
-  }
-  
-  .day-c {
-    height: 10vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    position: relative;
-    background-color: #9AADC4;
-  }
-  
-  .day-c span {
-    position: absolute;
-    top: 4px;
-    left: 4px;
-  }
-  
-  .sunday-c {
-    background: #013A63;
-    color: white;
-    height: 10vh;
-  }
-  
-  .unavailable-c {
-    background: #DEE4EC;
-    color: #d1d5db;
-  }
+.back-button-c {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background-color: transparent;
+  border: none;
+  color: #013a63;
+}
+
+.calendar-c {
+  width: 50%;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 3%;
+  position: absolute;
+  margin-left: 45%;
+}
+
+.calendar-header-c {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  margin-bottom: 8px;
+  text-transform: capitalize;
+}
+
+.calendar-header-c h2 {
+  color: #013a63;
+}
+
+.setadireita-c,
+.setaEsquerda-c {
+  background-color: transparent;
+  border: none;
+  color: #013a63;
+}
+
+.setaD-c,
+.setaE-c {
+  background-color: transparent;
+  border: none;
+  color: #013a63;
+}
+
+.weekdays-c {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: start;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #013a63;
+  font-size: 0.8em;
+  text-transform: capitalize;
+}
+
+.days-grid-c {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  height: 60vh;
+}
+
+.day-c {
+  height: 10vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  background-color: #9aadc4;
+}
+
+.day-c span {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+}
+
+.sunday-c {
+  background: #013a63;
+  color: white;
+  height: 10vh;
+}
+
+.unavailable-c {
+  background: #dee4ec;
+  color: #d1d5db;
+}
 /*   
   .schedule-c {
     width: 45%;
@@ -125,18 +127,18 @@
   .schedule-c h3{
     padding-top: 5%;
   } */
-  
-  .close-button-c {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background-color: transparent;
-    border: none;
-    color: #013A63;
-    font-weight: 600;
-  }
-  
-  /* .schedule-c select {
+
+.close-button-c {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background-color: transparent;
+  border: none;
+  color: #013a63;
+  font-weight: 600;
+}
+
+/* .schedule-c select {
     width: 100%;
     padding: 12px;
     border-radius: 8px;
@@ -144,332 +146,333 @@
     color: #5A789F;
     font-weight: 500;
   } */
-  
-  .divimg-c{
-    width: 40%;
-    height: 79vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: start;
-    color: #011f4b;
-    position: absolute;
-    margin-right: 50%;
-  }
-  
-  .divimg-c img{
-    margin: auto;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
-  
-  .confirmation-message-c {
-    position: fixed;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #CCE6EA;
-    color: #00434E;
-    padding: 10px 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease-in-out;
-  }
-  
-  .close-confirmation-c {
-    background: none;
-    border: none;
-    color: #00434E;
-    cursor: pointer;
-    font-size: 16px;
-    display: flex;
-  }
-  
-  .appointment-detail-c {
-    background-color: #3E6D8F; /* Verde para indicar agendamento */
-    color: white;
-    font-size: 12px;
-    padding: 2px 4px;
-    border-radius: 10px;
-    display: block;
-    text-align: center;
-    margin-top: 15%;
-    font-weight: bold;
-    white-space: nowrap;
-    width: 100%;
-  }
-  
-  .schedule-c {
-    background-color: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    padding: 24px;
-    width: 100%;
-    max-width:400px;
-    height: 500px;
-    font-family: 'Segoe UI', sans-serif;
-    position: relative;
-    position: absolute;
-    left: 15%;
-  }
-  
-  .close-button-c {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
 
-  .resumo-card-c {
+.divimg-c {
+  width: 40%;
+  height: 79vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  color: #011f4b;
+  position: absolute;
+  margin-right: 50%;
+}
 
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .resumo-card-c h2 {
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 16px;
-    color: #1f2937;
-  }
-  
-  .agendamento-info-c {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  .profissional-c {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  
-  .foto-profissional-c {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  .profissional-c h3 {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1f2937;
-  }
-  
-  .profissional-c p {
-    font-size: 14px;
-    color: #6b7280;
-  }
-  
-  .detalhes-c {
-    font-size: 14px;
-    color: #374151;
-  }
-  
-  .valor-consulta-c {
-    font-weight: 600;
-    color: #1f2937;
-  }
-  
-  .botoes-c {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .select-data-c,
-  .select-horario-c {
-    padding: 8px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 14px;
-  }
-  
-  .confirmar-c,
-  .alterar-c,
-  .remover-c {
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-  }
-  
-  .alterar-c {
-    background-color: #1e3a8a;
-    color: white;
-    border: none;
-  }
-  
-  .alterar-c:hover {
-    background-color: #1c357a;
-  }
-  
-  .remover-c {
-    background-color: white;
-    color: #1e3a8a;
-    border: 1px solid #1e3a8a;
-  }
-  
-  .remover-c:hover {
-    background-color: #f0f4ff;
-  }
-  
-  .confirmar-c {
-    background-color: #16a34a;
-    color: white;
-    border: none;
-  }
-  
-  .confirmar-c:hover {
-    background-color: #15803d;
-  }
-  
-  
-  .valor-consulta-c {
-    margin-top: 8px;
-    font-size: 1em;
-    color: #083859;
-    font-weight: bold;
-  }
+.divimg-c img {
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
 
-  .reschedule-modal-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  .reschedule-modal {
-    background: #fff;
-    border-radius: 10px;
-    padding: 2rem;
-    max-width: 700px;
-    width: 90%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-  }
+.confirmation-message-c {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #cce6ea;
+  color: #00434e;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
 
-  .reschedule-modal h2{
-    color: #013A63;
-  }
-  
-  .modal-close-btn {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .calendar-title {
-    color: #013A63;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    margin-bottom: 1rem;
-    margin-top: 2%;
-  }
-  
-  .calendar-scroll {
-    overflow-x: auto;
-  }
-  
-  .calendar-grid {
-    display: flex;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* ou 1fr se preferir dividir igualmente */
-    gap: 1rem;
-    min-width: 600px;
-    justify-content: center;
-  }
-  
-  .calendar-day {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .calendar-day strong {
-    color: #aaa;
-  }
-  
-  .calendar-day span {
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-  }
-  
-  .hour-btn {
-    width: 100%;
-    margin: 0.2rem 0;
-    background-color: rgb(181, 216, 218);
-    border: none;
-    border-radius: 6px;
-    padding: 0.3rem 0.7rem;
-    color: #356567;
-    cursor: pointer;
-    font-weight: 500;
-  }
-  
-  .hour-btn.selected {
-    background-color: cadetblue;
-    color: white;
-  }
-  
-  .modal-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
-  }
-  
-  .btn-back {
-    background: transparent;
-    border: 2px solid #083859;
-    padding: 0.5rem 1.2rem;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  
-  .btn-confirm {
-    background-color: #083859;
-    border: none;
-    color: white;
-    padding: 0.5rem 1.2rem;
-    border-radius: 8px;
-    cursor: pointer;
-    opacity: 1;
-    transition: opacity 0.3s ease;
-  }
-  
-  .btn-confirm:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+.close-confirmation-c {
+  background: none;
+  border: none;
+  color: #00434e;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+}
 
-  .setaD-c, .setaE-c {
-    background-color: transparent;
-    border: none;
-    color: #013A63;
-    margin-top: 0.5%;
-  } 
+.appointment-detail-c {
+  background-color: #3e6d8f; /* Verde para indicar agendamento */
+  color: white;
+  font-size: 12px;
+  padding: 2px 4px;
+  border-radius: 10px;
+  display: block;
+  text-align: center;
+  margin-top: 15%;
+  font-weight: bold;
+  white-space: nowrap;
+  width: 100%;
+}
 
-  .disabledimage {
+.schedule-c {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  width: 100%;
+  max-width: 400px;
+  height: 500px;
+  font-family: "Segoe UI", sans-serif;
+  position: relative;
+  position: absolute;
+  left: 15%;
+}
 
-    width: 100%;
-    height: 100%;
-  }
+.close-button-c {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.resumo-card-c {
+  display: flex;
+  flex-direction: column;
+}
+
+.resumo-card-c h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #1f2937;
+}
+
+.agendamento-info-c {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profissional-c {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.foto-profissional-c {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profissional-c h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.profissional-c p {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.detalhes-c {
+  font-size: 14px;
+  color: #374151;
+}
+
+.valor-consulta-c {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.botoes-c {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.select-data-c,
+.select-horario-c {
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.confirmar-c,
+.alterar-c,
+.remover-c {
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.alterar-c {
+  background-color: #1e3a8a;
+  color: white;
+  border: none;
+}
+
+.alterar-c:hover {
+  background-color: #1c357a;
+}
+
+.remover-c {
+  background-color: white;
+  color: #1e3a8a;
+  border: 1px solid #1e3a8a;
+}
+
+.remover-c:hover {
+  background-color: #f0f4ff;
+}
+
+.confirmar-c {
+  background-color: #16a34a;
+  color: white;
+  border: none;
+}
+
+.confirmar-c:hover {
+  background-color: #15803d;
+}
+
+.valor-consulta-c {
+  margin-top: 8px;
+  font-size: 1em;
+  color: #083859;
+  font-weight: bold;
+}
+
+.reschedule-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.reschedule-modal {
+  background: #fff;
+  border-radius: 10px;
+  padding: 2rem;
+  max-width: 700px;
+  width: 90%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.reschedule-modal h2 {
+  color: #013a63;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.calendar-title {
+  color: #013a63;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  margin-top: 2%;
+}
+
+.calendar-scroll {
+  overflow-x: auto;
+}
+
+.calendar-grid {
+  display: flex;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(120px, 1fr)
+  ); /* ou 1fr se preferir dividir igualmente */
+  gap: 1rem;
+  min-width: 600px;
+  justify-content: center;
+}
+
+.calendar-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.calendar-day strong {
+  color: #aaa;
+}
+
+.calendar-day span {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.hour-btn {
+  width: 100%;
+  margin: 0.2rem 0;
+  background-color: rgb(181, 216, 218);
+  border: none;
+  border-radius: 6px;
+  padding: 0.3rem 0.7rem;
+  color: #356567;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.hour-btn.selected {
+  background-color: cadetblue;
+  color: white;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.btn-back {
+  background: transparent;
+  border: 2px solid #083859;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-confirm {
+  background-color: #083859;
+  border: none;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.btn-confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.setaD-c,
+.setaE-c {
+  background-color: transparent;
+  border: none;
+  color: #013a63;
+  margin-top: 0.5%;
+}
+
+.disabledimage {
+  width: 100%;
+  height: 100%;
+}

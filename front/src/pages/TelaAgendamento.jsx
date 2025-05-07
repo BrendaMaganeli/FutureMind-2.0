@@ -1,11 +1,24 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, ArrowLeft, X } from "lucide-react";
 import "./CSS/TelaAgendamento.css";
-import imgConsulta from '../assets/Group 239294.svg';
+import imgConsulta from "../assets/Group 239294.svg";
 
 const getMonthData = (year) => {
   const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
-  const daysInMonth = [31, isLeapYear ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const daysInMonth = [
+    31,
+    isLeapYear ? 29 : 28,
+    31,
+    30,
+    31,
+    30,
+    31,
+    31,
+    30,
+    31,
+    30,
+    31,
+  ];
   return daysInMonth.map((days, index) => ({
     name: new Date(year, index).toLocaleString("default", { month: "long" }),
     days,
@@ -17,7 +30,11 @@ export default function AgendaConsultas() {
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonthIndex, setCurrentMonthIndex] = useState(today.getMonth());
-  const [selected, setSelected] = useState({ day: null, time: null, message: "" });
+  const [selected, setSelected] = useState({
+    day: null,
+    time: null,
+    message: "",
+  });
   const [confirmationMessage, setConfirmationMessage] = useState("");
   const [appointments, setAppointments] = useState({});
 
@@ -41,19 +58,19 @@ export default function AgendaConsultas() {
 
   const handleDayClick = (day) => {
     if (day.isCurrentMonth && !day.isUnavailable) {
-      setSelected({ day: day.date, time: null});
+      setSelected({ day: day.date, time: null });
     }
   };
 
   const handleTimeClick = (time) => {
     const key = `${currentYear}-${currentMonthIndex}-${selected.day}`;
     if (!appointments[key]) {
-      setSelected((prev) => ({ ...prev, time}));
+      setSelected((prev) => ({ ...prev, time }));
     }
   };
 
   const handleClose = () => {
-    setSelected({ day: null, time: null});
+    setSelected({ day: null, time: null });
   };
 
   const handleConfirm = () => {
@@ -61,7 +78,9 @@ export default function AgendaConsultas() {
       const key = `${currentYear}-${currentMonthIndex}-${selected.day}`;
       if (!appointments[key]) {
         setAppointments((prev) => ({ ...prev, [key]: [selected.time] }));
-        setConfirmationMessage(`Consulta agendada para ${selected.day} de ${months[currentMonthIndex].name} às ${selected.time}`);
+        setConfirmationMessage(
+          `Consulta agendada para ${selected.day} de ${months[currentMonthIndex].name} às ${selected.time}`,
+        );
       }
     }
   };
@@ -78,7 +97,7 @@ export default function AgendaConsultas() {
     let isCurrentMonth = true;
     let isUnavailable = false;
     let appointmentsForDay = [];
-    
+
     if (i < month.start) {
       date = prevMonth.days - (month.start - i - 1);
       isCurrentMonth = false;
@@ -113,10 +132,15 @@ export default function AgendaConsultas() {
 
       <div className="calendar">
         <div className="calendar-header">
-          <button onClick={() => handleChangeMonth(-1)} className="setaEsquerda">
+          <button
+            onClick={() => handleChangeMonth(-1)}
+            className="setaEsquerda"
+          >
             <ChevronLeft />
           </button>
-          <h2>{month.name} {currentYear}</h2>
+          <h2>
+            {month.name} {currentYear}
+          </h2>
           <button onClick={() => handleChangeMonth(1)} className="setadireita">
             <ChevronRight />
           </button>
@@ -137,8 +161,10 @@ export default function AgendaConsultas() {
             >
               <span>{day.date}</span>
               {day.appointmentsForDay.map((appt, index) => (
-                    <div key={index} className="appointment-detail">{appt}</div>
-                  ))}
+                <div key={index} className="appointment-detail">
+                  {appt}
+                </div>
+              ))}
             </div>
           ))}
         </div>
@@ -154,7 +180,9 @@ export default function AgendaConsultas() {
           <button className="close-button" onClick={handleClose}>
             <X size={24} />
           </button>
-          <h1>Horários disponíveis para {selected.day} de {month.name}</h1>
+          <h1>
+            Horários disponíveis para {selected.day} de {month.name}
+          </h1>
 
           <div className="form-group">
             <label>Convênio</label>
@@ -172,12 +200,32 @@ export default function AgendaConsultas() {
 
           <h3>Horários</h3>
           <div className="times">
-            {["14:30", "17:30", "13:00", "16:10", "11:00", "19:20", "13:30"].map((time) => (
-              <button key={time} className={`time-button ${selected.time === time ? "selected-time" : ""}`} onClick={() => handleTimeClick(time)}>{time}</button>
+            {[
+              "14:30",
+              "17:30",
+              "13:00",
+              "16:10",
+              "11:00",
+              "19:20",
+              "13:30",
+            ].map((time) => (
+              <button
+                key={time}
+                className={`time-button ${selected.time === time ? "selected-time" : ""}`}
+                onClick={() => handleTimeClick(time)}
+              >
+                {time}
+              </button>
             ))}
           </div>
 
-          <button className="confirm-button" onClick={handleConfirm} disabled={!selected.time}>Confirmar agendamento</button>
+          <button
+            className="confirm-button"
+            onClick={handleConfirm}
+            disabled={!selected.time}
+          >
+            Confirmar agendamento
+          </button>
         </div>
       )}
     </div>

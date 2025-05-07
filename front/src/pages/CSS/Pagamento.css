@@ -1,382 +1,350 @@
 .floating-input {
-    position: relative;
-    margin-top: 20px;
-    width: 100%;
-    max-width: 320px;
-  }
-  
-  .floating-input input {
-    width: 49.5em;
-    padding: 16px 12px 8px;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    outline: none;
-    transition: border-color 0.3s;
-  }
-  
-  .floating-input input:focus {
-    border-color: #013a63;
-  }
-  
-  .floating-input label {
-    position: absolute;
-    left: 12px;
-    top: 14px;
-    background: white;
-    padding: 0 4px;
-    color: #999;
-    font-size: 16px;
-    pointer-events: none;
-    transition: 0.2s ease all;
-  }
-  
-  /* Quando o input está focado ou tem conteúdo */
-  .floating-input input:focus + label,
-  .floating-input input:not(:placeholder-shown) + label {
-    top: -8px;
-    left: 10px;
-    font-size: 13px;
-    color: #013a63;
-  }
-  
+  position: relative;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 320px;
+}
 
+.floating-input input {
+  width: 49.5em;
+  padding: 16px 12px 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.floating-input input:focus {
+  border-color: #013a63;
+}
+
+.floating-input label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  background: white;
+  padding: 0 4px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+
+/* Quando o input está focado ou tem conteúdo */
+.floating-input input:focus + label,
+.floating-input input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 13px;
+  color: #013a63;
+}
 
 .floating-input-2 {
-    position: relative;
-    margin-top: 20px;
-    width: 100%;
-  }
-  
-  .floating-input-2 input {
-    width: 24.4em;
-    padding: 16px 12px 8px;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    outline: none;
-    transition: border-color 0.3s;
-  }
-  
-  .floating-input-2 input:focus {
-    border-color: #013a63;
-  }
-  
-  .floating-input-2 label {
-    position: absolute;
-    left: 12px;
-    top: 14px;
-    background: white;
-    padding: 0 4px;
-    color: #999;
-    font-size: 16px;
-    pointer-events: none;
-    transition: 0.2s ease all;
-  }
-  
-  /* Quando o input está focado ou tem conteúdo */
-  .floating-input-2 input:focus + label,
-  .floating-input-2 input:not(:placeholder-shown) + label {
-    top: -8px;
-    left: 10px;
-    font-size: 13px;
-    color: #013a63;
-  }
+  position: relative;
+  margin-top: 20px;
+  width: 100%;
+}
 
+.floating-input-2 input {
+  width: 24.4em;
+  padding: 16px 12px 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+}
 
-  
+.floating-input-2 input:focus {
+  border-color: #013a63;
+}
 
+.floating-input-2 label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  background: white;
+  padding: 0 4px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
 
+/* Quando o input está focado ou tem conteúdo */
+.floating-input-2 input:focus + label,
+.floating-input-2 input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 13px;
+  color: #013a63;
+}
 
+.cupom {
+  position: relative;
+  margin-top: 20px;
+  width: 80%;
+  display: flex;
+}
 
+.cupom input {
+  width: 100%;
+  padding: 16px 12px 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+}
 
+.cupom input:focus {
+  border-color: #013a63;
+}
 
+.cupom label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  background: white;
+  padding: 0 4px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
 
-  .cupom{
-    position: relative;
-    margin-top: 20px;
-    width: 80%;
-    display: flex;
-  }
-  
-  .cupom input {
-    width: 100%;
-    padding: 16px 12px 8px;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    outline: none;
-    transition: border-color 0.3s;
-  }
-  
-  .cupom input:focus {
-    border-color: #013a63;
-  }
-  
-  .cupom label {
-    position: absolute;
-    left: 12px;
-    top: 14px;
-    background: white;
-    padding: 0 4px;
-    color: #999;
-    font-size: 16px;
-    pointer-events: none;
-    transition: 0.2s ease all;
-  }
-  
-  /* Quando o input está focado ou tem conteúdo */
-  .cupom input:focus + label,
-  .cupom input:not(:placeholder-shown) + label {
-    top: -8px;
-    left: 10px;
-    font-size: 13px;
-    color: #013a63;
-  }
+/* Quando o input está focado ou tem conteúdo */
+.cupom input:focus + label,
+.cupom input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 13px;
+  color: #013a63;
+}
 
+.floating-select {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin-top: 20px;
+}
 
+.floating-select select {
+  width: 165%;
+  padding: 16px 12px 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  appearance: none;
+  background-color: white;
+  outline: none;
+  transition: border-color 0.3s;
+}
 
-  .floating-select {
-    position: relative;
-    width: 100%;
-    max-width: 320px;
-    margin-top: 20px;
-  }
-  
-  .floating-select select {
-    width: 165%;
-    padding: 16px 12px 8px;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    appearance: none;
-    background-color: white;
-    outline: none;
-    transition: border-color 0.3s;
-  }
-  
-  .floating-select select:focus {
-    border-color: #013a63;
-  }
-  
-  .floating-select label {
-    position: absolute;
-    left: 12px;
-    top: 14px;
-    background: white;
-    padding: 0 4px;
-    color: #999;
-    font-size: 16px;
-    pointer-events: none;
-    transition: 0.2s ease all;
-  }
-  
-  .floating-select select:focus + label,
-  .floating-select select:not([value=""]) + label {
-    top: -8px;
-    left: 10px;
-    font-size: 13px;
-    color: #013a63;
-  }
+.floating-select select:focus {
+  border-color: #013a63;
+}
 
+.floating-select label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  background: white;
+  padding: 0 4px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
 
+.floating-select select:focus + label,
+.floating-select select:not([value=""]) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 13px;
+  color: #013a63;
+}
 
+.floating-input-3 {
+  position: relative;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 320px;
+}
 
+.floating-input-3 input {
+  width: 165%;
+  padding: 16px 12px 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+}
 
-  
-  .floating-input-3 {
-    position: relative;
-    margin-top: 20px;
-    width: 100%;
-    max-width: 320px;
-  }
-  
-  .floating-input-3 input {
-    width: 165%;
-    padding: 16px 12px 8px;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    outline: none;
-    transition: border-color 0.3s;
-  }
-  
-  .floating-input-3 input:focus {
-    border-color: #013a63;
-  }
-  
-  .floating-input-3 label {
-    position: absolute;
-    left: 12px;
-    top: 14px;
-    background: white;
-    padding: 0 4px;
-    color: #999;
-    font-size: 16px;
-    pointer-events: none;
-    transition: 0.2s ease all;
-  }
-  
-  /* Quando o input está focado ou tem conteúdo */
-  .floating-input-3 input:focus + label,
-  .floating-input-3 input:not(:placeholder-shown) + label {
-    top: -8px;
-    left: 10px;
-    font-size: 13px;
-    color: #013a63;
-  }
+.floating-input-3 input:focus {
+  border-color: #013a63;
+}
 
+.floating-input-3 label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  background: white;
+  padding: 0 4px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
 
+/* Quando o input está focado ou tem conteúdo */
+.floating-input-3 input:focus + label,
+.floating-input-3 input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 13px;
+  color: #013a63;
+}
 
+.tabs-container {
+  position: relative;
+  display: flex;
+  width: 50%;
+  background-color: #f1f5f9;
+  border-radius: 8px;
+  padding: 2px;
+  overflow: hidden;
+  margin-bottom: 2%;
+}
 
+.tab {
+  flex: 1;
+  z-index: 1;
+  background: none;
+  border: none;
+  padding: 12px 0;
+  font-weight: 500;
+  color: #64748b;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
 
-  .tabs-container {
-    position: relative;
-    display: flex;
-    width: 50%;
-    background-color: #f1f5f9;
-    border-radius: 8px;
-    padding: 2px;
-    overflow: hidden;
-    margin-bottom:2%;
-  }
-  
-  .tab {
-    flex: 1;
-    z-index: 1;
-    background: none;
-    border: none;
-    padding: 12px 0;
-    font-weight: 500;
-    color: #64748b;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .tab.active {
-    color: #000;
-    font-weight: 600;
-  }
-  
-  .slider {
-    position: absolute;
-    top: 2px;
-    bottom: 2px;
-    width: 33%;
-    background-color: white;
-    border-radius: 6px;
-    transition: left 0.3s ease;
-    z-index: 0;
-  
-  }
-  
-  
+.tab.active {
+  color: #000;
+  font-weight: 600;
+}
 
-  
-  .floating-input-4 {
-    position: relative;
-    margin-top: 20px;
-    width: 100%;
-    max-width: 320px;
-  }
-  
-  .floating-input-4 input {
-    width: 118%;
-    padding: 16px 12px 8px;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    outline: none;
-    transition: border-color 0.3s;
-  }
-  
-  .floating-input-4 input:focus {
-    border-color: #013a63;
-  }
-  
-  .floating-input-4 label {
-    position: absolute;
-    left: 12px;
-    top: 14px;
-    background: white;
-    padding: 0 4px;
-    color: #999;
-    font-size: 16px;
-    pointer-events: none;
-    transition: 0.2s ease all;
-  }
-  
-  /* Quando o input está focado ou tem conteúdo */
-  .floating-input-4 input:focus + label,
-  .floating-input-4 input:not(:placeholder-shown) + label {
-    top: -8px;
-    left: 10px;
-    font-size: 13px;
-    color: #013a63;
-  }
+.slider {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  width: 33%;
+  background-color: white;
+  border-radius: 6px;
+  transition: left 0.3s ease;
+  z-index: 0;
+}
 
-  .error-text {
-    color: #013a63;
-    font-size: 14px;
-    visibility: hidden;
-    height: 25px;
-    display: flex;
-    align-items: end;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  
-  .error-text.show {
-    visibility: visible;
-    opacity: 1;
-  }
-  
-  .floating-select-2{
-    position: relative;
-    width: 100%;
-    max-width: 320px;
-    margin-top: 20px;
-  }
- 
-  .floating-select-2 select {
+.floating-input-4 {
+  position: relative;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 320px;
+}
 
-    width: 247%;
-    padding: 16px 12px 8px;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    appearance: none;
-    background-color: white;
-    outline: none;
-    transition: border-color 0.3s;
-  }
-   
- 
-  
-  .floating-select-2 select:focus {
-    border-color: #013a63;
-  }
-  
-  .floating-select-2 label {
-    position: absolute;
-    left: 12px;
-    top: 14px;
-    background: white;
-    padding: 0 4px;
-    color: #999;
-    font-size: 16px;
-    pointer-events: none;
-    transition: 0.2s ease all;
-  }
-  
-  .floating-select-2 select:focus + label,
-  .floating-select-2 select:not([value=""]) + label {
-    top: -8px;
-    left: 10px;
-    font-size: 13px;
-    color: #013a63;
+.floating-input-4 input {
+  width: 118%;
+  padding: 16px 12px 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+}
 
+.floating-input-4 input:focus {
+  border-color: #013a63;
+}
 
-  }
-  
+.floating-input-4 label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  background: white;
+  padding: 0 4px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+
+/* Quando o input está focado ou tem conteúdo */
+.floating-input-4 input:focus + label,
+.floating-input-4 input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 13px;
+  color: #013a63;
+}
+
+.error-text {
+  color: #013a63;
+  font-size: 14px;
+  visibility: hidden;
+  height: 25px;
+  display: flex;
+  align-items: end;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.error-text.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.floating-select-2 {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin-top: 20px;
+}
+
+.floating-select-2 select {
+  width: 247%;
+  padding: 16px 12px 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  appearance: none;
+  background-color: white;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.floating-select-2 select:focus {
+  border-color: #013a63;
+}
+
+.floating-select-2 label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  background: white;
+  padding: 0 4px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+
+.floating-select-2 select:focus + label,
+.floating-select-2 select:not([value=""]) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 13px;
+  color: #013a63;
+}

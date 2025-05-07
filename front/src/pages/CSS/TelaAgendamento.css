@@ -7,7 +7,7 @@
   min-height: 100vh;
   position: relative;
   flex-direction: row-reverse;
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
 }
 
 .back-button {
@@ -16,7 +16,7 @@
   left: 16px;
   background-color: transparent;
   border: none;
-  color: #013A63;
+  color: #013a63;
 }
 
 .calendar {
@@ -37,14 +37,15 @@
   text-transform: capitalize;
 }
 
-.calendar-header h2{
-  color: #013A63;
+.calendar-header h2 {
+  color: #013a63;
 }
 
-.setadireita, .setaEsquerda {
+.setadireita,
+.setaEsquerda {
   background-color: transparent;
   border: none;
-  color: #013A63;
+  color: #013a63;
 }
 
 .weekdays {
@@ -53,7 +54,7 @@
   text-align: start;
   font-weight: 600;
   margin-bottom: 8px;
-  color: #013A63;
+  color: #013a63;
   font-size: 0.8em;
   text-transform: capitalize;
 }
@@ -76,7 +77,7 @@
   border-radius: 8px;
   cursor: pointer;
   position: relative;
-  background-color: #9AADC4;
+  background-color: #9aadc4;
 }
 
 .day span {
@@ -86,13 +87,13 @@
 }
 
 .sunday {
-  background: #013A63;
+  background: #013a63;
   color: white;
   height: 10vh;
 }
 
 .unavailable {
-  background: #DEE4EC;
+  background: #dee4ec;
   color: #d1d5db;
 }
 
@@ -101,8 +102,8 @@
   padding: 24px;
   border-radius: 16px;
   position: relative;
-  color: #013A63;
-  height:  80vh;
+  color: #013a63;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -110,13 +111,13 @@
   background-color: #f3f4f6;
 }
 
-.schedule h1{
-  color: #013A63;
+.schedule h1 {
+  color: #013a63;
   font-size: 1.6em;
   margin-bottom: 10%;
 }
 
-.schedule h3{
+.schedule h3 {
   padding-top: 5%;
 }
 
@@ -126,7 +127,7 @@
   right: 16px;
   background-color: transparent;
   border: none;
-  color: #013A63;
+  color: #013a63;
   font-weight: 600;
 }
 
@@ -144,7 +145,7 @@
   padding: 12px;
   border-radius: 8px;
   border: none;
-  color: #5A789F;
+  color: #5a789f;
   font-weight: 500;
 }
 
@@ -162,22 +163,22 @@
   border: none;
   cursor: pointer;
   transition: background 0.3s;
-  color: #5A789F;
+  color: #5a789f;
   font-weight: 600;
 }
 
 .time-button:hover {
-  background: #C1DFF4;
+  background: #c1dff4;
 }
 
 .selected-time {
-  background: #3E6D8F;
+  background: #3e6d8f;
   color: white;
   font-weight: 600;
 }
 
 .confirm-button {
-  background: #013A63;
+  background: #013a63;
   color: white;
   padding: 15px;
   border-radius: 8px;
@@ -197,7 +198,7 @@
   background: #011f4b;
 }
 
-.divimg{
+.divimg {
   width: 40%;
   height: 79vh;
   display: flex;
@@ -209,7 +210,7 @@
   margin-right: 50%;
 }
 
-.divimg img{
+.divimg img {
   margin: auto;
   justify-content: center;
   align-items: center;
@@ -221,8 +222,8 @@
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
-  background: #CCE6EA;
-  color: #00434E;
+  background: #cce6ea;
+  color: #00434e;
   padding: 10px 20px;
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -237,14 +238,14 @@
 .close-confirmation {
   background: none;
   border: none;
-  color: #00434E;
+  color: #00434e;
   cursor: pointer;
   font-size: 16px;
   display: flex;
 }
 
 .appointment-detail {
-  background-color: #3E6D8F; /* Verde para indicar agendamento */
+  background-color: #3e6d8f; /* Verde para indicar agendamento */
   color: white;
   font-size: 12px;
   padding: 2px 4px;
@@ -256,4 +257,3 @@
   white-space: nowrap;
   width: 100%;
 }
-

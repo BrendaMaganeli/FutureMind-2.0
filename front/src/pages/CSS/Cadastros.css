@@ -1,11 +1,11 @@
 .container-profissional {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    padding: 5% 5%;
-    gap: 5%;
-    background-color: white !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 5% 5%;
+  gap: 5%;
+  background-color: white !important;
 }
 
 /* .lado-esquerdoProfissional {
@@ -24,24 +24,24 @@
 } */
 
 .titulo-logo {
-    display: flex;
-    align-items: center;
-    gap: 8%;
-    margin-bottom: 10px;
-    width: 70em;
-    justify-content: center;
-    padding-left: 8%;
+  display: flex;
+  align-items: center;
+  gap: 8%;
+  margin-bottom: 10px;
+  width: 70em;
+  justify-content: center;
+  padding-left: 8%;
 }
 
-.logo-paraCadastro{
-    width: 25%;
-    margin-top: 2%;
+.logo-paraCadastro {
+  width: 25%;
+  margin-top: 2%;
 }
 
 .titulo-cadastro {
-    font-size: 2.5em;
-    color: #5A789F;
-    text-align: center;
+  font-size: 2.5em;
+  color: #5a789f;
+  text-align: center;
 }
 
 /* .inputs-cadastro-div {
@@ -54,71 +54,69 @@
     margin-bottom: 5%;
 } */
 
-
-
 .input-cadastro label {
-    position: absolute;
-    top: -12px;
-    left: 12px;
-    background: white;
-    padding: 0 5px;
-    font-size: 1em;
-    color: #5A789F;
+  position: absolute;
+  top: -12px;
+  left: 12px;
+  background: white;
+  padding: 0 5px;
+  font-size: 1em;
+  color: #5a789f;
 }
 
 .input-cadastro input {
-    width: 100%;
-    padding: 14px;
-    border: 1.9px solid #5A789F;
-    border-radius: 5px;
-    outline: none;
-    color: #013a63;
-    font-size: 1.1em;
+  width: 100%;
+  padding: 14px;
+  border: 1.9px solid #5a789f;
+  border-radius: 5px;
+  outline: none;
+  color: #013a63;
+  font-size: 1.1em;
 }
 
 .input-cadastro select {
-    width: 100%;
-    padding: 14px;
-    border: 1.9px solid #5A789F;
-    border-radius: 5px;
-    outline: none;
-    color: #013a63;
-    font-size: 1.1em;
+  width: 100%;
+  padding: 14px;
+  border: 1.9px solid #5a789f;
+  border-radius: 5px;
+  outline: none;
+  color: #013a63;
+  font-size: 1.1em;
 }
 
 .botao-cadastro {
-    width: 100%;
-    max-width: 700px;
-    padding: 14px;
-    background-color: #5A789F;
-    color: white;
-    font-size: 1.3em;
-    border: none;
-    border-radius: 5px;
- 
-    cursor: pointer;
-    text-align: center;
-    font-weight: bold;
+  width: 100%;
+  max-width: 700px;
+  padding: 14px;
+  background-color: #5a789f;
+  color: white;
+  font-size: 1.3em;
+  border: none;
+  border-radius: 5px;
+
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
 }
 
 .botao-cadastro:hover {
-    background-color: #466484;
+  background-color: #466484;
 }
 
 .login-texto {
-    margin-top: 15px;
-    font-size: 1.1em;
-    color: #5A789F;
-    text-align: center;
-    justify-content: start;
-    display: flex;
-    width: 100%;
+  margin-top: 15px;
+  font-size: 1.1em;
+  color: #5a789f;
+  text-align: center;
+  justify-content: start;
+  display: flex;
+  width: 100%;
 }
 
 .login-texto a {
-    color: #013a63;
-    text-decoration: none;
-    font-weight: bold;
+  color: #013a63;
+  text-decoration: none;
+  font-weight: bold;
 }
 
 /* .imagem-cadastro {
@@ -126,37 +124,34 @@
     max-width: 550px;
 } */
 
-
-
-
 .lado-esquerdoProfissional {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2%;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2%;
 }
 
 .lado-direitoProfissional {
-    width: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .imagem-cadastro {
-    width: 100%;
-    max-width: 650px;
+  width: 100%;
+  max-width: 650px;
 }
 
 .inputs-cadastro-div {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    width: 100%;
-    max-width: 800px;
-    justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  width: 100%;
+  max-width: 800px;
+  justify-content: center;
 }
 /* 
   .input-cadastro {
@@ -166,367 +161,349 @@
     flex-direction: column;
     align-items: flex-start;
   } */
-  
-  .erro {
-    color: red;
-    font-size: 0.85em;
-    min-height: 18px; /* Reserva espaço fixo para a mensagem de erro */
-    display: block; /* Sempre mantém o espaço mesmo sem erro */
-  }
-  
-  
-  .inputs-login-div {
-    gap: 30px;
-    width: 100%;
-    max-width: 800px;
-    justify-content: center;
-    margin-bottom: 5%;
+
+.erro {
+  color: red;
+  font-size: 0.85em;
+  min-height: 18px; /* Reserva espaço fixo para a mensagem de erro */
+  display: block; /* Sempre mantém o espaço mesmo sem erro */
+}
+
+.inputs-login-div {
+  gap: 30px;
+  width: 100%;
+  max-width: 800px;
+  justify-content: center;
+  margin-bottom: 5%;
 }
 
 .input-login input {
-    width: 100%;
-    padding: 14px;
-    border: 1.9px solid #5A789F;
-    border-radius: 5px;
-    outline: none;
-    color: #013a63;
-    font-size: 1.1em;
-    margin-bottom: 5%;
+  width: 100%;
+  padding: 14px;
+  border: 1.9px solid #5a789f;
+  border-radius: 5px;
+  outline: none;
+  color: #013a63;
+  font-size: 1.1em;
+  margin-bottom: 5%;
 }
 
 .input-login {
-    position: relative;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 
-  .input-login label {
-    position: absolute;
-    top: -12px;
-    left: 12px;
-    background: white;
-    padding: 0 5px;
-    font-size: 1em;
-    color: #5A789F;
+.input-login label {
+  position: absolute;
+  top: -12px;
+  left: 12px;
+  background: white;
+  padding: 0 5px;
+  font-size: 1em;
+  color: #5a789f;
 }
 
 .inputs-cadastro-divP {
-
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 800px;
-    justify-content: center;
-    margin-bottom: 5%;
-    gap: 12px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  justify-content: center;
+  margin-bottom: 5%;
+  gap: 12px;
 }
 
-
 .botao-login {
-    width: 100%;
-    max-width: 700px;
-    padding: 14px;
-    background-color: #5A789F;
-    color: white;
-    font-size: 1.3em;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
-    font-weight: bold;
+  width: 100%;
+  max-width: 700px;
+  padding: 14px;
+  background-color: #5a789f;
+  color: white;
+  font-size: 1.3em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
 }
 
 .botao-login:hover {
-    background-color: #466484;
+  background-color: #466484;
 }
-
 
 /* css da chackbox */
 .div-check {
-    display: flex;
-    align-items: center;
-    font-size: 1em;
-    color: #5A789F;
-    width: 100%;
-    justify-content: start;
-    margin-bottom: 5%;
+  display: flex;
+  align-items: center;
+  font-size: 1em;
+  color: #5a789f;
+  width: 100%;
+  justify-content: start;
+  margin-bottom: 5%;
 }
 
-.container_styles-check{
-    
-    width: 3%;
-    
+.container_styles-check {
+  width: 3%;
 }
 
 .styles-check {
-    appearance: none; /* Remove o estilo padrão do navegador */
-    width: 100%;
-    height: 18px;
-    border: 2px solid #5A789F;
-    border-radius: 4px;
-    background-color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  appearance: none; /* Remove o estilo padrão do navegador */
+  width: 100%;
+  height: 18px;
+  border: 2px solid #5a789f;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease-in-out,
+    border-color 0.3s ease-in-out;
 }
 
-.de_uso{
-    
-    width: 20%;
-    padding-left: 1%;
+.de_uso {
+  width: 20%;
+  padding-left: 1%;
 }
 
 /* Quando estiver marcada */
 .styles-check:checked {
-    background-color: #5A789F;
-    border: 2px solid #5A789F;
+  background-color: #5a789f;
+  border: 2px solid #5a789f;
 }
 
 /* Ícone de check */
 .styles-check:checked::after {
-    content: "✔";
-    font-size: 14px;
-    color: white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-weight: bold;
+  content: "✔";
+  font-size: 14px;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
 }
 
 /* Texto e link */
 .termos-styles {
-    color: #5A789F;
-    font-size: 1em;
-    width: fit-content;
-    width: 13%;
-    padding-left: 1%;
-    
+  color: #5a789f;
+  font-size: 1em;
+  width: fit-content;
+  width: 13%;
+  padding-left: 1%;
 }
 
 .termos-a {
-    color: #013a63;
-    text-decoration: none;
-    font-weight: bold;
-    padding-left: 1%;
+  color: #013a63;
+  text-decoration: none;
+  font-weight: bold;
+  padding-left: 1%;
 }
 
 .input-cadastro {
-    position: relative;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 /* Estilo do label */
 .label-input {
-    font-size: 1em;
-    color: #5A789F;
-    background: white;
-    padding: 0 5px;
-    position: absolute;
-    top: -10px;
-    left: 12px;
-    z-index: 10;
+  font-size: 1em;
+  color: #5a789f;
+  background: white;
+  padding: 0 5px;
+  position: absolute;
+  top: -10px;
+  left: 12px;
+  z-index: 10;
 }
 
 /* Ajuste no Select */
 .custom-react-select .select__control {
-    width: 36em;
-    padding: 7px;
-    border: 2px solid #ccc !important;
-    border-radius: 5px;
-    outline: none;
-    font-size: 1.1em;
-    color: #013a63;
-    background-color: white;
-    box-shadow: none;
+  width: 36em;
+  padding: 7px;
+  border: 2px solid #ccc !important;
+  border-radius: 5px;
+  outline: none;
+  font-size: 1.1em;
+  color: #013a63;
+  background-color: white;
+  box-shadow: none;
 }
 
 .custom-react-select .select__control:hover {
-    border-color: #466484 !important;
+  border-color: #466484 !important;
 }
 
 .custom-react-select .select__control--is-focused {
-    box-shadow: 0 0 3px rgba(90, 120, 159, 0.5);
-    border-color: #5A789F !important;
+  box-shadow: 0 0 3px rgba(90, 120, 159, 0.5);
+  border-color: #5a789f !important;
 }
 
 /* Ajuste para manter o tamanho das opções */
 .custom-react-select .select__multi-value {
-    background-color: #5A789F;
-    color: white;
-    border-radius: 4px;
-    padding: 3px 8px;
+  background-color: #5a789f;
+  color: white;
+  border-radius: 4px;
+  padding: 3px 8px;
 }
 
 .custom-react-select .select__multi-value__label {
-    color: white;
+  color: white;
 }
 
 .custom-react-select .select__multi-value__remove {
-    color: white;
+  color: white;
 }
 
 .custom-react-select .select__multi-value__remove:hover {
-    background-color: #466484;
+  background-color: #466484;
 }
 
-
-
-.imagem_olho{
-    position: absolute;
-    width: 7%;
-    margin-left: 90%;
-    margin-top: 4%;
+.imagem_olho {
+  position: absolute;
+  width: 7%;
+  margin-left: 90%;
+  margin-top: 4%;
 }
 
-.container_alerta_nulo{
-    
-    color: white;
-    padding-top: 2%;
+.container_alerta_nulo {
+  color: white;
+  padding-top: 2%;
 }
 
-.container_geral_mostra{
-    
-    color: #8faaaf;
-    padding-top: 2%;
+.container_geral_mostra {
+  color: #8faaaf;
+  padding-top: 2%;
 }
-
-
 
 .erro {
-    color: #d9534f;
-    font-size: 0.9em;
-    margin-top: 4px;
-    padding-left: 5px;
-    min-height: 18px;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+  color: #d9534f;
+  font-size: 0.9em;
+  margin-top: 4px;
+  padding-left: 5px;
+  min-height: 18px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .erro.visivel {
-    visibility: visible;
-    opacity: 1;
+  visibility: visible;
+  opacity: 1;
 }
 
-
-.input-lados{
-    display: flex;
-    gap: 5%;
-    width: 100%;
+.input-lados {
+  display: flex;
+  gap: 5%;
+  width: 100%;
 }
 
-.input-lados .cadastro-input input{
-    width: 100%;
+.input-lados .cadastro-input input {
+  width: 100%;
 }
-
 
 .cadastro-input {
-    position: relative;
-    width: 100%;
-    position: relative;
-  }
-  
-  .cadastro-input input {
-    width: 100%;
-    padding: 16px 12px 8px;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    outline: none;
-    transition: border-color 0.3s;
-  }
-  
-  .cadastro-input input:focus {
-    border-color: #013a63;
-  }
-  
-  .cadastro-input label {
-    position: absolute;
-    left: 12px;
-    top: 14px;
-    background: white;
-    padding: 0 4px;
-    color: #999;
-    font-size: 16px;
-    pointer-events: none;
-    transition: 0.2s ease all;
-  }
-  
-  /* Quando o input está focado ou tem conteúdo */
-  .cadastro-input input:focus + label,
-  .cadastro-input input:not(:placeholder-shown) + label {
-    top: -8px;
-    left: 10px;
-    font-size: 13px;
-    color: #013a63;
-  }
+  position: relative;
+  width: 100%;
+  position: relative;
+}
 
-  
-  .icone-senha {
-    position: absolute;
-    top: 30%;
-    right: 10px;
-    transform: translateY(-50%);
-    cursor: pointer;
-    width: 25px; /* Ajuste o tamanho do ícone conforme necessário */
-    height: auto;
-    
-  }
-  
-  .icone-senha-login {
-    position: absolute;
-    top: 37%;
-    right: 90px;
-    transform: translateY(-50%);
-    cursor: pointer;
-    width: 25px; /* Ajuste o tamanho do ícone conforme necessário */
-    height: auto;
-    
-  }
-  
+.cadastro-input input {
+  width: 100%;
+  padding: 16px 12px 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+}
 
-  .login-input {
-    position: relative;
-    width: 100%;
-    position: relative;
-  }
-  
-  .login-input input {
-    width: 40em;
-    padding: 16px 12px 8px;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    outline: none;
-    transition: border-color 0.3s;
-  }
-  
-  .login-input input:focus {
-    border-color: #013a63;
-  }
-  
-  .login-input label {
-    position: absolute;
-    left: 12px;
-    top: 14px;
-    background: white;
-    padding: 0 4px;
-    color: #999;
-    font-size: 16px;
-    pointer-events: none;
-    transition: 0.2s ease all;
-  }
-  
-  /* Quando o input está focado ou tem conteúdo */
-  .login-input input:focus + label,
-  .login-input input:not(:placeholder-shown) + label {
-    top: -8px;
-    left: 10px;
-    font-size: 13px;
-    color: #013a63;
-  }
+.cadastro-input input:focus {
+  border-color: #013a63;
+}
+
+.cadastro-input label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  background: white;
+  padding: 0 4px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+
+/* Quando o input está focado ou tem conteúdo */
+.cadastro-input input:focus + label,
+.cadastro-input input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 13px;
+  color: #013a63;
+}
+
+.icone-senha {
+  position: absolute;
+  top: 30%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  width: 25px; /* Ajuste o tamanho do ícone conforme necessário */
+  height: auto;
+}
+
+.icone-senha-login {
+  position: absolute;
+  top: 37%;
+  right: 90px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  width: 25px; /* Ajuste o tamanho do ícone conforme necessário */
+  height: auto;
+}
+
+.login-input {
+  position: relative;
+  width: 100%;
+  position: relative;
+}
+
+.login-input input {
+  width: 40em;
+  padding: 16px 12px 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.login-input input:focus {
+  border-color: #013a63;
+}
+
+.login-input label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  background: white;
+  padding: 0 4px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+
+/* Quando o input está focado ou tem conteúdo */
+.login-input input:focus + label,
+.login-input input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 13px;
+  color: #013a63;
+}

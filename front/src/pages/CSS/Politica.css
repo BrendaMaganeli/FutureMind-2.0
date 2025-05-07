@@ -1,196 +1,169 @@
 .body-politica {
-
-    width: 100%;
-    height: 100vh;
-    background-color: #ffffff;
+  width: 100%;
+  height: 100vh;
+  background-color: #ffffff;
 }
 
-
-
-
-.H1_recursos{
-
-    padding: 5%;
-    color:#5a789f;
-    width: 30%;
-    flex-wrap: wrap;
-    font-size: 45px;
+.H1_recursos {
+  padding: 5%;
+  color: #5a789f;
+  width: 30%;
+  flex-wrap: wrap;
+  font-size: 45px;
 }
 
-div::-webkit-scrollbar-track{
-
-    background: #ffffff;
-    border-radius: 3px;
+div::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 3px;
 }
 
-div::-webkit-scrollbar-thumb{
-
-
-    background-color: var(--cor-1);
-    border-radius: 3px;
+div::-webkit-scrollbar-thumb {
+  background-color: var(--cor-1);
+  border-radius: 3px;
 }
 
-div::-webkit-scrollbar{
-
-
-    width: 12px;
+div::-webkit-scrollbar {
+  width: 12px;
 }
 
-.Container-recursos{
-
-    display: flex;
-    width: 100%;
-    background-color: #ffffff;
-    padding-bottom: 10%;
+.Container-recursos {
+  display: flex;
+  width: 100%;
+  background-color: #ffffff;
+  padding-bottom: 10%;
 }
 
-.div_tres_recursos img{
-
-    width: 55%;
-    margin: auto;
-    display: flex;
-
+.div_tres_recursos img {
+  width: 55%;
+  margin: auto;
+  display: flex;
 }
 
-.div_quatro_recursos img{
-
-    width: 60%;
-    margin: auto;
-    display: flex;
-  
+.div_quatro_recursos img {
+  width: 60%;
+  margin: auto;
+  display: flex;
 }
 
-.div_dois_recursos img{
-
-    width: 60%;
-    margin: auto;
-    display: flex;
+.div_dois_recursos img {
+  width: 60%;
+  margin: auto;
+  display: flex;
 }
 
-.div_um_recursos img{
-
-    width: 50%;
-    margin: auto;
-    display: flex;
-
+.div_um_recursos img {
+  width: 50%;
+  margin: auto;
+  display: flex;
 }
 
-.div_imagem_rec{
-
-    margin: auto;
-    display: flex;
-    border-radius: 10px;
-    background-color: #ffffff;
-    width: 60%;
-    height: 55%;
+.div_imagem_rec {
+  margin: auto;
+  display: flex;
+  border-radius: 10px;
+  background-color: #ffffff;
+  width: 60%;
+  height: 55%;
 }
 
-.div_um_recursos{
-    
-    width: 15%;
-    background-color: #5a789f;
-    margin-left: 5%;
-    color: white;
-    font-size: 100%;
-    text-align: center;
-    padding-top: 3.5%;
-    margin-bottom: 1%;
-    border-radius: 10px;
-    flex-wrap: wrap;
+.div_um_recursos {
+  width: 15%;
+  background-color: #5a789f;
+  margin-left: 5%;
+  color: white;
+  font-size: 100%;
+  text-align: center;
+  padding-top: 3.5%;
+  margin-bottom: 1%;
+  border-radius: 10px;
+  flex-wrap: wrap;
 }
 
-.div_dois_recursos{
-
-    width: 15%;
-    background-color: #5a789f;
-    margin-left: 5%;
-    color: white;
-    font-size: 100%;
-    text-align: center;
-    padding-top: 2.3%;
-    padding-bottom: 2%;
-    margin-bottom: 1%;
-    border-radius: 10px;
+.div_dois_recursos {
+  width: 15%;
+  background-color: #5a789f;
+  margin-left: 5%;
+  color: white;
+  font-size: 100%;
+  text-align: center;
+  padding-top: 2.3%;
+  padding-bottom: 2%;
+  margin-bottom: 1%;
+  border-radius: 10px;
 }
 
-.div_tres_recursos{
-
-    width: 15%;
-    background-color: #5a789f;
-    margin-left: 5%;
-    color: white;
-    font-size: 100%;
-    text-align: center;
-    padding-top: 3%;
-    padding-bottom: 2%;
-    margin-bottom: 1%;
-    border-radius: 10px;
+.div_tres_recursos {
+  width: 15%;
+  background-color: #5a789f;
+  margin-left: 5%;
+  color: white;
+  font-size: 100%;
+  text-align: center;
+  padding-top: 3%;
+  padding-bottom: 2%;
+  margin-bottom: 1%;
+  border-radius: 10px;
 }
 
-.div_quatro_recursos{
-
-    width: 15%;
-    background-color: #5a789f;
-    margin-left: 5%;
-    color: white;
-    font-size: 100%;
-    text-align: center;
-    padding-top: 3%;
-    padding-bottom: 2%;
-    margin-bottom: 1%;
-    border-radius: 10px;
-
+.div_quatro_recursos {
+  width: 15%;
+  background-color: #5a789f;
+  margin-left: 5%;
+  color: white;
+  font-size: 100%;
+  text-align: center;
+  padding-top: 3%;
+  padding-bottom: 2%;
+  margin-bottom: 1%;
+  border-radius: 10px;
 }
 
-.div_um_recursos h2{
-    padding-top: 3.5%;
+.div_um_recursos h2 {
+  padding-top: 3.5%;
 }
 
-.div_tres_recursos h2{
-    padding-top: 3.5%;
+.div_tres_recursos h2 {
+  padding-top: 3.5%;
 }
 
-.div_quatro_recursos h2{
-    padding-top: 3.5%;
+.div_quatro_recursos h2 {
+  padding-top: 3.5%;
 }
 
-.botaodecisaoo{
-
-    width: 170%;
-    font-size: 140%;
-    border-top-left-radius: 100px;
-    border-bottom-left-radius: 100px;
-    border: none;
-    transition: 1s;
-    background-color: #5a789f;
-    color: #ffff;
-    padding: 5%;
-    text-align: center;
-    text-decoration: none;
+.botaodecisaoo {
+  width: 170%;
+  font-size: 140%;
+  border-top-left-radius: 100px;
+  border-bottom-left-radius: 100px;
+  border: none;
+  transition: 1s;
+  background-color: #5a789f;
+  color: #ffff;
+  padding: 5%;
+  text-align: center;
+  text-decoration: none;
 }
 
-.botaodecisaodoiss{
-    
-    width: 150%;
-    font-size: 140%;
-    border-top-right-radius: 100px;
-    border-bottom-right-radius: 100px;
-    border: none;
-    background-color: #cad7eb;
-    color: #5a789f;
-    padding: 5%;
-    text-align: center;
-    text-decoration: none;
+.botaodecisaodoiss {
+  width: 150%;
+  font-size: 140%;
+  border-top-right-radius: 100px;
+  border-bottom-right-radius: 100px;
+  border: none;
+  background-color: #cad7eb;
+  color: #5a789f;
+  padding: 5%;
+  text-align: center;
+  text-decoration: none;
 }
 
-
-.div-h1{
-    width: 100%;
-    height: 40%;
-    background-color: #ffffff;
-    margin-top: -2%;
+.div-h1 {
+  width: 100%;
+  height: 40%;
+  background-color: #ffffff;
+  margin-top: -2%;
 }
 
-.css-jineix-MuiButtonBase-root-MuiAccordionSummary-root{
-    background-color: #f0f1f5 !important;
+.css-jineix-MuiButtonBase-root-MuiAccordionSummary-root {
+  background-color: #f0f1f5 !important;
 }

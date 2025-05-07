@@ -1,14 +1,14 @@
-import  { useState, useEffect } from "react";
-import './CSS/Pagamento.css';
-import Seta from '../assets/caret-down-solid.svg';
-import mulher from '../assets/image 8.png';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import "./CSS/Pagamento.css";
+import Seta from "../assets/caret-down-solid.svg";
+import mulher from "../assets/image 8.png";
+import { useNavigate } from "react-router-dom";
 
 export default function PagamentoConsulta() {
   const navigate = useNavigate();
   const [toque_input_numero, setToque_input_numero] = useState(false);
-  const [toque_input_validade, setToque_input_validade] = useState(false)
-  const [toque_input_cvv, setToque_input_cvv] = useState(false)
+  const [toque_input_validade, setToque_input_validade] = useState(false);
+  const [toque_input_cvv, setToque_input_cvv] = useState(false);
   const [pacienteSelecionado, setPacienteSelecionado] = useState("");
   const [mostrarModal, setMostrarModal] = useState(false);
   const [metodoSelecionado, setMetodoSelecionado] = useState("cartao");
@@ -31,76 +31,76 @@ export default function PagamentoConsulta() {
   const [nomeDependente, setNomeDependente] = useState("");
   const [nascimentoDependente, setNascimentoDependente] = useState("");
   const [generoDependente, setGeneroDependente] = useState("");
-  const [valida_banco, setValida_banco] = useState(false)
-  const [valida_numero_cartao, setValida_numero_cartao] = useState(false)
-  const [valida_nome, setValida_nome] = useState(false)
-  const [valida_cartao, setValida_cartao] = useState(false)
-  const [valida_cvv, setValida_cvv] = useState(false)
-
- 
+  const [valida_banco, setValida_banco] = useState(false);
+  const [valida_numero_cartao, setValida_numero_cartao] = useState(false);
+  const [valida_nome, setValida_nome] = useState(false);
+  const [valida_cartao, setValida_cartao] = useState(false);
+  const [valida_cvv, setValida_cvv] = useState(false);
 
   const [dependentes, setDependentes] = useState([
-    { value: "evelyn", label: "Evelyn Lohanny Santos Da Silva" }
+    { value: "evelyn", label: "Evelyn Lohanny Santos Da Silva" },
   ]);
 
   const formatarNumeroCartao = (valor) => {
-    return valor.replace(/\D/g, "").replace(/(.{4})/g, "$1 ").trim().slice(0, 19);
+    return valor
+      .replace(/\D/g, "")
+      .replace(/(.{4})/g, "$1 ")
+      .trim()
+      .slice(0, 19);
   };
-  
+
   const formatarValidade = (valor) => {
-    const somenteNumeros = valor.replace(/\D/g, '');
-  
-    let formatado = '';
-  
+    const somenteNumeros = valor.replace(/\D/g, "");
+
+    let formatado = "";
+
     if (somenteNumeros.length <= 2) {
       formatado = somenteNumeros;
     } else {
-      formatado = somenteNumeros.substring(0, 2) + '/' + somenteNumeros.substring(2, 4);
+      formatado =
+        somenteNumeros.substring(0, 2) + "/" + somenteNumeros.substring(2, 4);
     }
-  
+
     return formatado;
   };
-  
-  
+
   const aplicarCupom = () => {
     if (cupom.trim().toLowerCase() === "desconto10") {
-      setDesconto(valorOriginal * 0.10);
+      setDesconto(valorOriginal * 0.1);
     } else {
       setDesconto(0);
     }
   };
 
   const handleFinalizar = () => {
-     
-    if(generoDependente.length > 1 && numeroCartao.length == 19 && nomeCartao.length > 0 && validadeCartao.length == 5 && cvvCartao.length == 3){
-
-       navigate('/inicio')
+    if (
+      generoDependente.length > 1 &&
+      numeroCartao.length == 19 &&
+      nomeCartao.length > 0 &&
+      validadeCartao.length == 5 &&
+      cvvCartao.length == 3
+    ) {
+      navigate("/inicio");
     }
-    if(generoDependente < 1){
-
-       setValida_banco(true)
+    if (generoDependente < 1) {
+      setValida_banco(true);
     }
-    if(numeroCartao.length <  19){
-
-       setValida_numero_cartao(true)
-    }
-
-    if(nomeCartao.length == 0){
-
-      setValida_nome(true)
+    if (numeroCartao.length < 19) {
+      setValida_numero_cartao(true);
     }
 
-    if(validadeCartao.length < 5){
-
-      setValida_cartao(true)
+    if (nomeCartao.length == 0) {
+      setValida_nome(true);
     }
 
-    if(cvvCartao.length < 3){
+    if (validadeCartao.length < 5) {
+      setValida_cartao(true);
+    }
 
-      setValida_cvv(true)
+    if (cvvCartao.length < 3) {
+      setValida_cvv(true);
     }
   };
-  
 
   const handleAlterarAgendamento = () => {
     setMostrarAgenda(true);
@@ -111,7 +111,7 @@ export default function PagamentoConsulta() {
       const novoId = `dep-${Date.now()}`;
       const novoDependente = {
         value: novoId,
-        label: nomeDependente
+        label: nomeDependente,
       };
       setDependentes((prev) => [...prev, novoDependente]);
       setPacienteSelecionado(novoId);
@@ -125,7 +125,6 @@ export default function PagamentoConsulta() {
   };
 
   const handleNumeroCartaoChange = (e) => {
-    
     setNumeroCartao(formatarNumeroCartao(e.target.value));
     if (!toque_input_numero) setToque_input_numero(true);
   };
@@ -135,7 +134,7 @@ export default function PagamentoConsulta() {
       setValida_banco(false);
     }
   }, [generoDependente]);
-  
+
   useEffect(() => {
     if (numeroCartao.length > 0) {
       setValida_numero_cartao(false);
@@ -161,36 +160,57 @@ export default function PagamentoConsulta() {
   }, [cvvCartao]);
 
   const handleNomeCartao = (e) => {
-    const apenasLetras = e.target.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '');
-    setNomeCartao(apenasLetras)
-  }
-  
+    const apenasLetras = e.target.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, "");
+    setNomeCartao(apenasLetras);
+  };
+
   const handleValidade = (e) => {
-
-    setValidadeCartao(formatarValidade(e.target.value))
+    setValidadeCartao(formatarValidade(e.target.value));
     if (!toque_input_validade) setToque_input_validade(true);
-  }
+  };
 
-  const handleCvv = (e) =>{
-
-    setCvvCartao(e.target.value)
+  const handleCvv = (e) => {
+    setCvvCartao(e.target.value);
     if (!toque_input_cvv) setToque_input_cvv(true);
-  }
-
+  };
 
   return (
-    <div style={{ maxWidth: "1300px", margin: "0 auto", padding: "40px", display: "grid", gridTemplateColumns: "2fr 1fr", gap: "24px" }}>
+    <div
+      style={{
+        maxWidth: "1300px",
+        margin: "0 auto",
+        padding: "40px",
+        display: "grid",
+        gridTemplateColumns: "2fr 1fr",
+        gap: "24px",
+      }}
+    >
       <div>
-        <h2 style={{ fontSize: "24px", fontWeight: "600", marginBottom: "16px" }}>Finalize seu agendamento</h2>
+        <h2
+          style={{ fontSize: "24px", fontWeight: "600", marginBottom: "16px" }}
+        >
+          Finalize seu agendamento
+        </h2>
 
-        <p style={{ fontWeight: "500", marginBottom: "8px" }}>Forma de pagamento</p>
+        <p style={{ fontWeight: "500", marginBottom: "8px" }}>
+          Forma de pagamento
+        </p>
         <div className="tabs-container">
-          <div className="slider" style={{ left: `${['cartao', 'boleto', 'pix'].indexOf(metodoSelecionado) * 33.333}%` }} />
-          {[{ value: "cartao", label: "Cartão de crédito" }, { value: "boleto", label: "Boleto bancário" }, { value: "pix", label: "Pix" }].map((metodo) => (
+          <div
+            className="slider"
+            style={{
+              left: `${["cartao", "boleto", "pix"].indexOf(metodoSelecionado) * 33.333}%`,
+            }}
+          />
+          {[
+            { value: "cartao", label: "Cartão de crédito" },
+            { value: "boleto", label: "Boleto bancário" },
+            { value: "pix", label: "Pix" },
+          ].map((metodo) => (
             <button
               key={metodo.value}
               onClick={() => setMetodoSelecionado(metodo.value)}
-              className={`tab ${metodoSelecionado === metodo.value ? 'active' : ''}`}
+              className={`tab ${metodoSelecionado === metodo.value ? "active" : ""}`}
             >
               {metodo.label}
             </button>
@@ -198,7 +218,14 @@ export default function PagamentoConsulta() {
         </div>
 
         {metodoSelecionado === "cartao" && (
-          <div style={{ border: "1px solid #ddd", padding: "16px", borderRadius: "8px", marginBottom: "7px" }}>
+          <div
+            style={{
+              border: "1px solid #ddd",
+              padding: "16px",
+              borderRadius: "8px",
+              marginBottom: "7px",
+            }}
+          >
             <h3 style={{ fontWeight: "500" }}>Informações do Pagamento</h3>
             <div className="floating-select-2">
               <select
@@ -206,7 +233,9 @@ export default function PagamentoConsulta() {
                 value={generoDependente}
                 onChange={(e) => setGeneroDependente(e.target.value)}
               >
-                <option value="" disabled hidden>Selecione</option>
+                <option value="" disabled hidden>
+                  Selecione
+                </option>
                 <option value="masculino">C6 bank</option>
                 <option value="feminino">Inter</option>
                 <option value="outro">Nubank</option>
@@ -215,64 +244,124 @@ export default function PagamentoConsulta() {
               </select>
               <label>Banco</label>
             </div>
-            <p className={`error-text ${valida_banco ? 'show' : ''}`}>
+            <p className={`error-text ${valida_banco ? "show" : ""}`}>
               Selecione um banco.
             </p>
             <div className="floating-input">
-              <input type="text" placeholder=" " value={numeroCartao}  onChange={handleNumeroCartaoChange} required />
+              <input
+                type="text"
+                placeholder=" "
+                value={numeroCartao}
+                onChange={handleNumeroCartaoChange}
+                required
+              />
               <label>Número do Cartão</label>
             </div>
-            <p className={`error-text ${valida_numero_cartao ? 'show' : ''}`}>
-                Numero do cartão invalido.
-              </p>
+            <p className={`error-text ${valida_numero_cartao ? "show" : ""}`}>
+              Numero do cartão invalido.
+            </p>
             <div className="floating-input">
-              <input type="text" placeholder=" " value={nomeCartao}  onChange={handleNomeCartao} required />
+              <input
+                type="text"
+                placeholder=" "
+                value={nomeCartao}
+                onChange={handleNomeCartao}
+                required
+              />
               <label>Nome como aparece no cartão</label>
             </div>
-            <p className={`error-text ${valida_nome ? 'show' : ''}`}>
+            <p className={`error-text ${valida_nome ? "show" : ""}`}>
               Nome obrigatorio!
             </p>
             <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
-            <div style={{ flex: 1 }}>
-              <div className="floating-input-2">
-                <input type="text" placeholder=" " value={validadeCartao}onChange={handleValidade} required />
-                <label>Validade</label>
-              </div>
-              <p className={`error-text ${valida_cartao ? 'show' : ''}`}>
+              <div style={{ flex: 1 }}>
+                <div className="floating-input-2">
+                  <input
+                    type="text"
+                    placeholder=" "
+                    value={validadeCartao}
+                    onChange={handleValidade}
+                    required
+                  />
+                  <label>Validade</label>
+                </div>
+                <p className={`error-text ${valida_cartao ? "show" : ""}`}>
                   validade incorreta
-              </p>
+                </p>
               </div>
               <div style={{ flex: 1 }}>
-            <div className="floating-input-2">
-              <input maxLength={3} type="text" placeholder=" " value={cvvCartao}   onChange={handleCvv} required />
-              <label>CVV</label>
+                <div className="floating-input-2">
+                  <input
+                    maxLength={3}
+                    type="text"
+                    placeholder=" "
+                    value={cvvCartao}
+                    onChange={handleCvv}
+                    required
+                  />
+                  <label>CVV</label>
+                </div>
+                <p className={`error-text ${valida_cvv ? "show" : ""}`}>
+                  CVV invalido!
+                </p>
+              </div>
             </div>
-            <p className={`error-text ${valida_cvv ? 'show' : ''}`}>
-               CVV invalido!
-            </p>
-          </div>
-          </div>
           </div>
         )}
 
-
         {(metodoSelecionado === "boleto" || metodoSelecionado === "pix") && (
-          <div style={{ border: "1px solid #ddd", padding: "16px", borderRadius: "8px", marginBottom: "24px" }}>
+          <div
+            style={{
+              border: "1px solid #ddd",
+              padding: "16px",
+              borderRadius: "8px",
+              marginBottom: "24px",
+            }}
+          >
             <h3 style={{ fontWeight: "500" }}>Informações do Pagamento</h3>
-            <div className="floating-input"><input type="text" placeholder=" " required /><label>CPF</label></div>
-            <div className="floating-input"><input type="text" placeholder=" " required /><label>Endereço</label></div>
-            <div className="floating-input"><input type="text" placeholder=" " required  /><label>Nome Completo</label></div>
+            <div className="floating-input">
+              <input type="text" placeholder=" " required />
+              <label>CPF</label>
+            </div>
+            <div className="floating-input">
+              <input type="text" placeholder=" " required />
+              <label>Endereço</label>
+            </div>
+            <div className="floating-input">
+              <input type="text" placeholder=" " required />
+              <label>Nome Completo</label>
+            </div>
             <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
-              <div className="floating-input-2"><input type="text" placeholder=" " required /><label>Estado</label></div>
-              <div className="floating-input-2"><input type="text" placeholder=" " required /><label>Cidade</label></div>
+              <div className="floating-input-2">
+                <input type="text" placeholder=" " required />
+                <label>Estado</label>
+              </div>
+              <div className="floating-input-2">
+                <input type="text" placeholder=" " required />
+                <label>Cidade</label>
+              </div>
             </div>
           </div>
         )}
 
         <p style={{ fontWeight: "500" }}>Tem um cupom de desconto?</p>
-        <div style={{ display: "flex", gap: "8px", marginBottom: "24px", width: "100%", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "8px",
+            marginBottom: "24px",
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
           <div className="cupom">
-            <input type="text" placeholder=" " value={cupom} onChange={(e) => setCupom(e.target.value)} required />
+            <input
+              type="text"
+              placeholder=" "
+              value={cupom}
+              onChange={(e) => setCupom(e.target.value)}
+              required
+            />
             <label>Inserir código de desconto</label>
           </div>
           <button
@@ -286,14 +375,20 @@ export default function PagamentoConsulta() {
               width: "20%",
               height: "45px",
               marginTop: "2.6%",
-              cursor: "pointer"
+              cursor: "pointer",
             }}
           >
             Aplicar
           </button>
         </div>
 
-        <div style={{ border: "1px solid #ddd", padding: "16px", borderRadius: "8px" }}>
+        <div
+          style={{
+            border: "1px solid #ddd",
+            padding: "16px",
+            borderRadius: "8px",
+          }}
+        >
           <p style={{ fontWeight: "600" }}>Quem será atendido?</p>
           <label style={{ fontSize: "14px" }}>Paciente</label>
           <select
@@ -316,7 +411,7 @@ export default function PagamentoConsulta() {
               backgroundPosition: "right 10px center",
               backgroundRepeat: "no-repeat",
               appearance: "none",
-              backgroundImage: `url(${Seta})`
+              backgroundImage: `url(${Seta})`,
             }}
           >
             {dependentes.map((dep) => (
@@ -327,48 +422,158 @@ export default function PagamentoConsulta() {
             <option value="novo">Cadastrar novo dependente</option>
           </select>
         </div>
-        <button onClick={handleFinalizar} style={{ width: "100%", marginTop: "24px", backgroundColor: "#013a63", color: "white", padding: "15px", border: "none", borderRadius: "6px", fontWeight: "600" }}>
+        <button
+          onClick={handleFinalizar}
+          style={{
+            width: "100%",
+            marginTop: "24px",
+            backgroundColor: "#013a63",
+            color: "white",
+            padding: "15px",
+            border: "none",
+            borderRadius: "6px",
+            fontWeight: "600",
+          }}
+        >
           Finalizar agendamento
         </button>
       </div>
 
       <div>
-        <div style={{ border: "1px solid #ddd", padding: "30px", borderRadius: "8px", width: "110%" }}>
-          <p style={{ fontWeight: "700", marginTop: "5%", fontSize: "20px" }}>Resumo</p>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px", marginTop: "5%" }}>
+        <div
+          style={{
+            border: "1px solid #ddd",
+            padding: "30px",
+            borderRadius: "8px",
+            width: "110%",
+          }}
+        >
+          <p style={{ fontWeight: "700", marginTop: "5%", fontSize: "20px" }}>
+            Resumo
+          </p>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: "8px",
+              marginTop: "5%",
+            }}
+          >
             <span>Consultas</span>
             <span>R${valorOriginal.toFixed(2)}</span>
           </div>
           {desconto > 0 && (
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "8px",
+              }}
+            >
               <span style={{ color: "green" }}>Desconto aplicado</span>
               <span style={{ color: "green" }}>-R${desconto.toFixed(2)}</span>
             </div>
           )}
           <div style={{ borderTop: "1.5px solid #ddd", margin: "8px 0" }}></div>
-          <div style={{ fontWeight: "500", textAlign: "right", fontSize: "18px", display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-            <p style={{ fontSize: "14px", marginRight: "4%" }}>Valor a ser pago </p>
-            <span style={{ fontSize: "22px" }}>R${(valorOriginal - desconto).toFixed(2)}</span>
+          <div
+            style={{
+              fontWeight: "500",
+              textAlign: "right",
+              fontSize: "18px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+            }}
+          >
+            <p style={{ fontSize: "14px", marginRight: "4%" }}>
+              Valor a ser pago{" "}
+            </p>
+            <span style={{ fontSize: "22px" }}>
+              R${(valorOriginal - desconto).toFixed(2)}
+            </span>
           </div>
 
           <div style={{ marginTop: "24px" }}>
-            <p style={{ fontWeight: "500", marginTop: "16px", fontSize: "20px" }}>Agendamentos</p>
-            <div style={{ display: "flex", alignItems: "center", gap: "25px", marginTop: "12px" }}>
-              <img src={mulher} alt="Foto profissional" style={{ borderRadius: "9999px", width: "60px", height: "60px" }} />
+            <p
+              style={{ fontWeight: "500", marginTop: "16px", fontSize: "20px" }}
+            >
+              Agendamentos
+            </p>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "25px",
+                marginTop: "12px",
+              }}
+            >
+              <img
+                src={mulher}
+                alt="Foto profissional"
+                style={{
+                  borderRadius: "9999px",
+                  width: "60px",
+                  height: "60px",
+                }}
+              />
               <div>
-                <p style={{ fontWeight: "500", fontSize: "16px" }}>Jeciana Botelho</p>
+                <p style={{ fontWeight: "500", fontSize: "16px" }}>
+                  Jeciana Botelho
+                </p>
                 <p style={{ fontSize: "16px", color: "#888" }}>CRP 03/10307</p>
                 <p style={{ fontSize: "16px" }}>Atendimento Online</p>
               </div>
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "10%", borderTop: "1.5px solid #ddd" }}>
-              <div style={{ fontSize: "15px", display: "flex", marginTop: "5%", gap: "16px" }}>
-                <p><strong>Data</strong> {dataSelecionada.split("-").reverse().join("/")}</p>
-                <p><strong>Horário</strong> {horaSelecionada}</p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: "10%",
+                borderTop: "1.5px solid #ddd",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "15px",
+                  display: "flex",
+                  marginTop: "5%",
+                  gap: "16px",
+                }}
+              >
+                <p>
+                  <strong>Data</strong>{" "}
+                  {dataSelecionada.split("-").reverse().join("/")}
+                </p>
+                <p>
+                  <strong>Horário</strong> {horaSelecionada}
+                </p>
               </div>
               <div style={{ display: "flex", gap: "8px", marginTop: "5%" }}>
-                <button onClick={handleAlterarAgendamento} style={{ backgroundColor: "#013a63", color: "white", padding: "12px 20px", border: "none", borderRadius: "4px", fontSize: "16px" }}>Alterar</button>
-                <button onClick={() => setMostrarModalRemover(true)} style={{ padding: "8px 16px", border: "2px solid #ddd", borderRadius: "4px", backgroundColor: "transparent" }}>Remover</button>
+                <button
+                  onClick={handleAlterarAgendamento}
+                  style={{
+                    backgroundColor: "#013a63",
+                    color: "white",
+                    padding: "12px 20px",
+                    border: "none",
+                    borderRadius: "4px",
+                    fontSize: "16px",
+                  }}
+                >
+                  Alterar
+                </button>
+                <button
+                  onClick={() => setMostrarModalRemover(true)}
+                  style={{
+                    padding: "8px 16px",
+                    border: "2px solid #ddd",
+                    borderRadius: "4px",
+                    backgroundColor: "transparent",
+                  }}
+                >
+                  Remover
+                </button>
               </div>
             </div>
           </div>
@@ -376,14 +581,36 @@ export default function PagamentoConsulta() {
           {mostrarAgenda && (
             <div style={{ marginTop: "16px" }}>
               <div className="floating-input-4">
-                <input type="date" value={dataSelecionada} onChange={(e) => setDataSelecionada(e.target.value)} required />
+                <input
+                  type="date"
+                  value={dataSelecionada}
+                  onChange={(e) => setDataSelecionada(e.target.value)}
+                  required
+                />
                 <label>Nova data</label>
               </div>
               <div className="floating-input-4" style={{ marginTop: "8px" }}>
-                <input type="time" value={horaSelecionada} onChange={(e) => setHoraSelecionada(e.target.value)} required />
+                <input
+                  type="time"
+                  value={horaSelecionada}
+                  onChange={(e) => setHoraSelecionada(e.target.value)}
+                  required
+                />
                 <label>Novo horário</label>
               </div>
-              <button onClick={() => setMostrarAgenda(false)} style={{ width: "100%", marginTop: "16px", backgroundColor: "#013a63", color: "white", padding: "12px", border: "none", borderRadius: "4px", fontWeight: "600" }}>
+              <button
+                onClick={() => setMostrarAgenda(false)}
+                style={{
+                  width: "100%",
+                  marginTop: "16px",
+                  backgroundColor: "#013a63",
+                  color: "white",
+                  padding: "12px",
+                  border: "none",
+                  borderRadius: "4px",
+                  fontWeight: "600",
+                }}
+              >
                 Confirmar alteração
               </button>
             </div>
@@ -392,11 +619,43 @@ export default function PagamentoConsulta() {
       </div>
 
       {mostrarModal && (
-        <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <div style={{ backgroundColor: "white", padding: "24px", borderRadius: "8px", width: "30%" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <h3 style={{ fontSize: "18px", fontWeight: "600" }}>Cadastre um novo dependente!</h3>
-              <button onClick={() => setMostrarModal(false)} style={{ border: "none", background: "none", fontSize: "20px" }}>×</button>
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "24px",
+              borderRadius: "8px",
+              width: "30%",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <h3 style={{ fontSize: "18px", fontWeight: "600" }}>
+                Cadastre um novo dependente!
+              </h3>
+              <button
+                onClick={() => setMostrarModal(false)}
+                style={{ border: "none", background: "none", fontSize: "20px" }}
+              >
+                ×
+              </button>
             </div>
             <div className="floating-input-3">
               <input
@@ -424,7 +683,9 @@ export default function PagamentoConsulta() {
                 value={generoDependente}
                 onChange={(e) => setGeneroDependente(e.target.value)}
               >
-                <option value="" disabled hidden>Selecione</option>
+                <option value="" disabled hidden>
+                  Selecione
+                </option>
                 <option value="masculino">Masculino</option>
                 <option value="feminino">Feminino</option>
                 <option value="outro">Outro</option>
@@ -433,7 +694,17 @@ export default function PagamentoConsulta() {
             </div>
             <button
               onClick={handleCadastrarDependente}
-              style={{ width: "100%", marginTop: "16px", backgroundColor: "#013a63", color: "white", padding: "15px", border: "none", borderRadius: "4px", fontWeight: "600", fontSize: "1em" }}
+              style={{
+                width: "100%",
+                marginTop: "16px",
+                backgroundColor: "#013a63",
+                color: "white",
+                padding: "15px",
+                border: "none",
+                borderRadius: "4px",
+                fontWeight: "600",
+                fontSize: "1em",
+              }}
             >
               Cadastrar
             </button>
@@ -441,45 +712,78 @@ export default function PagamentoConsulta() {
         </div>
       )}
 
-
       {mostrarModalRemover && (
-  <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center" }}>
-    <div style={{ backgroundColor: "white", padding: "24px", borderRadius: "8px", width: "90%", maxWidth: "400px" }}>
-      <h3 style={{ fontSize: "18px", fontWeight: "600", marginBottom: "16px" }}>Tem certeza que deseja remover este agendamento?</h3>
-      <div style={{ display: "flex", justifyContent: "space-between", gap: "16px" }}>
-        <button
-          onClick={() => {
-            window.location.href = "/";
-          }}
+        <div
           style={{
-            flex: 1,
-            padding: "12px",
-            backgroundColor: "#013a63",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            fontWeight: "600"
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          Sim
-        </button>
-        <button
-          onClick={() => setMostrarModalRemover(false)}
-          style={{
-            flex: 1,
-            padding: "12px",
-            border: "1px solid #ddd",
-            borderRadius: "4px",
-            backgroundColor: "white",
-            fontWeight: "600"
-          }}
-        >
-          Não
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "24px",
+              borderRadius: "8px",
+              width: "90%",
+              maxWidth: "400px",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "18px",
+                fontWeight: "600",
+                marginBottom: "16px",
+              }}
+            >
+              Tem certeza que deseja remover este agendamento?
+            </h3>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "16px",
+              }}
+            >
+              <button
+                onClick={() => {
+                  window.location.href = "/";
+                }}
+                style={{
+                  flex: 1,
+                  padding: "12px",
+                  backgroundColor: "#013a63",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  fontWeight: "600",
+                }}
+              >
+                Sim
+              </button>
+              <button
+                onClick={() => setMostrarModalRemover(false)}
+                style={{
+                  flex: 1,
+                  padding: "12px",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  backgroundColor: "white",
+                  fontWeight: "600",
+                }}
+              >
+                Não
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

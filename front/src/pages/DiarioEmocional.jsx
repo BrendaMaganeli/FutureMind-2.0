@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import './CSS/DiarioEmocional.css'; // Importando o arquivo CSS
+import "./CSS/DiarioEmocional.css"; // Importando o arquivo CSS
 
 const initialData = [
   {
@@ -10,11 +10,10 @@ const initialData = [
       {
         id: 1,
         title: "Nota 1",
-        checklist: [
-        ]
-      }
-    ]
-  }
+        checklist: [],
+      },
+    ],
+  },
 ];
 
 export default function NotesApp() {
@@ -28,9 +27,13 @@ export default function NotesApp() {
     updatedNote[type][index].done = !updatedNote[type][index].done;
     const updatedFolder = {
       ...selectedFolder,
-      notes: selectedFolder.notes.map(n => n.id === updatedNote.id ? updatedNote : n)
+      notes: selectedFolder.notes.map((n) =>
+        n.id === updatedNote.id ? updatedNote : n,
+      ),
     };
-    setFolders(folders.map(f => f.name === selectedFolder.name ? updatedFolder : f));
+    setFolders(
+      folders.map((f) => (f.name === selectedFolder.name ? updatedFolder : f)),
+    );
     setSelectedFolder(updatedFolder);
     setSelectedNote(updatedNote);
   };
@@ -43,9 +46,13 @@ export default function NotesApp() {
     setSelectedNote(updated);
     const updatedFolder = {
       ...selectedFolder,
-      notes: selectedFolder.notes.map((n) => (n.id === updated.id ? updated : n)),
+      notes: selectedFolder.notes.map((n) =>
+        n.id === updated.id ? updated : n,
+      ),
     };
-    setFolders(folders.map((f) => (f.name === selectedFolder.name ? updatedFolder : f)));
+    setFolders(
+      folders.map((f) => (f.name === selectedFolder.name ? updatedFolder : f)),
+    );
     setSelectedFolder(updatedFolder);
   };
 
@@ -54,19 +61,25 @@ export default function NotesApp() {
       id: Date.now(),
       title: "New Note",
       checklist: [],
-      imageNote: ""
+      imageNote: "",
     };
     const updatedFolder = {
       ...selectedFolder,
-      notes: [newNote, ...selectedFolder.notes]
+      notes: [newNote, ...selectedFolder.notes],
     };
-    setFolders(folders.map(f => f.name === selectedFolder.name ? updatedFolder : f));
+    setFolders(
+      folders.map((f) => (f.name === selectedFolder.name ? updatedFolder : f)),
+    );
     setSelectedFolder(updatedFolder);
     setSelectedNote(newNote);
   };
 
   const handleNewFolder = () => {
-    const newFolder = { id: Date.now(), name: `Folder ${folders.length + 1}`, notes: [] };
+    const newFolder = {
+      id: Date.now(),
+      name: `Folder ${folders.length + 1}`,
+      notes: [],
+    };
     setFolders([newFolder, ...folders]);
     setSelectedFolder(newFolder);
     setSelectedNote(null);
@@ -74,7 +87,7 @@ export default function NotesApp() {
 
   const tabs = [
     { value: "checklist", label: "Lista" },
-    { value: "imageNote", label: "Nota" }
+    { value: "imageNote", label: "Nota" },
   ];
 
   return (
@@ -133,9 +146,15 @@ export default function NotesApp() {
                 setSelectedNote(updated);
                 const updatedFolder = {
                   ...selectedFolder,
-                  notes: selectedFolder.notes.map(n => n.id === updated.id ? updated : n)
+                  notes: selectedFolder.notes.map((n) =>
+                    n.id === updated.id ? updated : n,
+                  ),
                 };
-                setFolders(folders.map(f => f.name === selectedFolder.name ? updatedFolder : f));
+                setFolders(
+                  folders.map((f) =>
+                    f.name === selectedFolder.name ? updatedFolder : f,
+                  ),
+                );
                 setSelectedFolder(updatedFolder);
               }}
             />
@@ -143,7 +162,9 @@ export default function NotesApp() {
             <div className="custom-tabs-slider">
               <div
                 className="slider-c"
-                style={{ left: `${tabs.findIndex(tab => tab.value === activeTab) * 50}%` }}
+                style={{
+                  left: `${tabs.findIndex((tab) => tab.value === activeTab) * 50}%`,
+                }}
               />
               {tabs.map((tab) => (
                 <button
@@ -155,7 +176,6 @@ export default function NotesApp() {
                 </button>
               ))}
             </div>
-
 
             {activeTab === "checklist" && (
               <div>
@@ -174,16 +194,27 @@ export default function NotesApp() {
                         setSelectedNote(updated);
                         const updatedFolder = {
                           ...selectedFolder,
-                          notes: selectedFolder.notes.map(n => n.id === updated.id ? updated : n)
+                          notes: selectedFolder.notes.map((n) =>
+                            n.id === updated.id ? updated : n,
+                          ),
                         };
-                        setFolders(folders.map(f => f.name === selectedFolder.name ? updatedFolder : f));
+                        setFolders(
+                          folders.map((f) =>
+                            f.name === selectedFolder.name ? updatedFolder : f,
+                          ),
+                        );
                         setSelectedFolder(updatedFolder);
                       }}
                       className="input-item"
                     />
                   </div>
                 ))}
-                <button onClick={() => handleAddItem("checklist")} className="btn add-item">Add Item</button>
+                <button
+                  onClick={() => handleAddItem("checklist")}
+                  className="btn add-item"
+                >
+                  Add Item
+                </button>
               </div>
             )}
 
@@ -192,13 +223,22 @@ export default function NotesApp() {
                 <textarea
                   value={selectedNote.imageNote}
                   onChange={(e) => {
-                    const updated = { ...selectedNote, imageNote: e.target.value };
+                    const updated = {
+                      ...selectedNote,
+                      imageNote: e.target.value,
+                    };
                     setSelectedNote(updated);
                     const updatedFolder = {
                       ...selectedFolder,
-                      notes: selectedFolder.notes.map(n => n.id === updated.id ? updated : n)
+                      notes: selectedFolder.notes.map((n) =>
+                        n.id === updated.id ? updated : n,
+                      ),
                     };
-                    setFolders(folders.map(f => f.name === selectedFolder.name ? updatedFolder : f));
+                    setFolders(
+                      folders.map((f) =>
+                        f.name === selectedFolder.name ? updatedFolder : f,
+                      ),
+                    );
                     setSelectedFolder(updatedFolder);
                   }}
                   className="textarea-note"

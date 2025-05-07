@@ -1,13 +1,27 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, ArrowLeft, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import "./CSS/Consulta.css";
-import imgConsulta from '../assets/Group 239294.svg';
-import mulher from '../assets/image 8.png';
-import './CSS/Consulta.css';
+import imgConsulta from "../assets/Group 239294.svg";
+import mulher from "../assets/image 8.png";
+import voltar from "../assets/voltar 2.svg"
+import "./CSS/Consulta.css";
 
 const getMonthData = (year) => {
   const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
-  const daysInMonth = [31, isLeapYear ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const daysInMonth = [
+    31,
+    isLeapYear ? 29 : 28,
+    31,
+    30,
+    31,
+    30,
+    31,
+    31,
+    30,
+    31,
+    30,
+    31,
+  ];
   return daysInMonth.map((days, index) => ({
     name: new Date(year, index).toLocaleString("default", { month: "long" }),
     days,
@@ -26,11 +40,13 @@ export default function AgendaConsultas() {
   const [newDate, setNewDate] = useState("");
 
   const initialAppointments = {
-    [`${today.getFullYear()}-${today.getMonth()}-15`]: [{
-      time: "14:00",
-      paciente: "João Silva",
-      motivo: "Consulta de rotina"
-    }],
+    [`${today.getFullYear()}-${today.getMonth()}-15`]: [
+      {
+        time: "14:00",
+        paciente: "João Silva",
+        motivo: "Consulta de rotina",
+      },
+    ],
   };
   const [appointments, setAppointments] = useState(initialAppointments);
 
@@ -53,7 +69,11 @@ export default function AgendaConsultas() {
   };
 
   const handleDayClick = (day) => {
-    if (day.isCurrentMonth && !day.isUnavailable && day.appointmentsForDay.length > 0) {
+    if (
+      day.isCurrentMonth &&
+      !day.isUnavailable &&
+      day.appointmentsForDay.length > 0
+    ) {
       setSelected({ day: day.date, time: day.appointmentsForDay[0].time });
       setIsEditing(false);
       setNewTime("");
@@ -80,38 +100,48 @@ export default function AgendaConsultas() {
 
   const handleConfirmUpdate = () => {
     const oldKey = `${currentYear}-${currentMonthIndex}-${selected.day}`;
-  
+
     let newDay = selected.day;
     let newMonth = currentMonthIndex;
     let newYear = currentYear;
-  
+
     if (selectedDate) {
       const [dayStr, monthStr] = selectedDate.split(" ");
       const day = parseInt(dayStr);
       const monthMap = {
-        jan: 0, fev: 1, mar: 2, abr: 3, mai: 4, jun: 5,
-        jul: 6, ago: 7, set: 8, out: 9, nov: 10, dez: 11
+        jan: 0,
+        fev: 1,
+        mar: 2,
+        abr: 3,
+        mai: 4,
+        jun: 5,
+        jul: 6,
+        ago: 7,
+        set: 8,
+        out: 9,
+        nov: 10,
+        dez: 11,
       };
       newDay = day;
       newMonth = monthMap[monthStr.toLowerCase()];
     }
-  
+
     const finalTime = newTime || selectedTime;
-  
+
     const newKey = `${currentYear}-${newMonth}-${newDay}`;
-  
+
     setAppointments((prev) => {
       const updated = { ...prev };
       delete updated[oldKey];
       updated[newKey] = [{ ...prev[oldKey][0], time: finalTime }];
       return updated;
     });
-  
+
     // Atualiza seleção
     setSelected({ day: newDay, time: finalTime });
     setCurrentMonthIndex(newMonth);
     setCurrentYear(newYear);
-  
+
     // Limpa estados
     setIsEditing(false);
     setNewTime("");
@@ -119,24 +149,35 @@ export default function AgendaConsultas() {
     setSelectedDate(null);
     setSelectedTime(null);
     setShowRescheduleModal(false);
-  
+
     setConfirmationMessage(
-      `Consulta reagendada para ${newDay} de ${getMonthName(newMonth)} às ${finalTime}`
+      `Consulta reagendada para ${newDay} de ${getMonthName(newMonth)} às ${finalTime}`,
     );
   };
-  
+
   // Função auxiliar para nome do mês por extenso (em português)
   const getMonthName = (monthIndex) => {
-    return new Date(2025, monthIndex).toLocaleString("pt-BR", { month: "long" });
+    return new Date(2025, monthIndex).toLocaleString("pt-BR", {
+      month: "long",
+    });
   };
-  
-  
+
   const extractDayAndMonth = (str) => {
     const [dayStr, monthStr] = str.split(" ");
     const day = parseInt(dayStr);
     const monthMap = {
-      jan: 0, fev: 1, mar: 2, abr: 3, mai: 4, jun: 5,
-      jul: 6, ago: 7, set: 8, out: 9, nov: 10, dez: 11
+      jan: 0,
+      fev: 1,
+      mar: 2,
+      abr: 3,
+      mai: 4,
+      jun: 5,
+      jul: 6,
+      ago: 7,
+      set: 8,
+      out: 9,
+      nov: 10,
+      dez: 11,
     };
     const month = monthMap[monthStr.toLowerCase()];
     return { day, month };
@@ -176,7 +217,9 @@ export default function AgendaConsultas() {
   const [showRescheduleModal, setShowRescheduleModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
-  const [rescheduleMonthIndex, setRescheduleMonthIndex] = useState(today.getMonth());
+  const [rescheduleMonthIndex, setRescheduleMonthIndex] = useState(
+    today.getMonth(),
+  );
   const [rescheduleYear, setRescheduleYear] = useState(today.getFullYear());
 
   return (
@@ -189,17 +232,25 @@ export default function AgendaConsultas() {
           </button>
         </div>
       )}
-      <button className="back-button-c" onClick={() => window.history.back()}>
-        <ArrowLeft size={24} />
+      <button className="back-button-c" >
+      <img src={voltar} alt="" />
       </button>
 
       <div className="calendar-c">
         <div className="calendar-header-c">
-          <button onClick={() => handleChangeMonth(-1)} className="setaEsquerda-c">
+          <button
+            onClick={() => handleChangeMonth(-1)}
+            className="setaEsquerda-c"
+          >
             <ChevronLeft />
           </button>
-          <h2>{month.name} {currentYear}</h2>
-          <button onClick={() => handleChangeMonth(1)} className="setadireita-c">
+          <h2>
+            {month.name} {currentYear}
+          </h2>
+          <button
+            onClick={() => handleChangeMonth(1)}
+            className="setadireita-c"
+          >
             <ChevronRight />
           </button>
         </div>
@@ -219,7 +270,9 @@ export default function AgendaConsultas() {
             >
               <span>{day.date}</span>
               {day.appointmentsForDay.map((appt, index) => (
-                <div key={index} className="appointment-detail-c">{appt.time}</div>
+                <div key={index} className="appointment-detail-c">
+                  {appt.time}
+                </div>
               ))}
             </div>
           ))}
@@ -228,13 +281,11 @@ export default function AgendaConsultas() {
 
       <div className="divimg-c">
         <h1 className="agenda0104">Agenda de Consultas</h1>
-        {
-          !selected.day && !selected.timw ?
+        {!selected.day && !selected.timw ? (
           <img src={imgConsulta} alt="" />
-          :
-          <div className="disabledimage">
-          </div>
-        }
+        ) : (
+          <div className="disabledimage"></div>
+        )}
       </div>
 
       {selected.day && selected.time && (
@@ -248,7 +299,11 @@ export default function AgendaConsultas() {
 
             <div className="agendamento-info-c">
               <div className="profissional-c">
-                <img src={mulher} alt="Foto do Profissional" className="foto-profissional-c" />
+                <img
+                  src={mulher}
+                  alt="Foto do Profissional"
+                  className="foto-profissional-c"
+                />
                 <div>
                   <h3>Dra. Maria Souza</h3>
                   <p>CRP 03/12345</p>
@@ -257,22 +312,41 @@ export default function AgendaConsultas() {
               </div>
 
               <div className="detalhes-c">
-                <div><strong>Data:</strong> {selected.day}/{currentMonthIndex + 1}/{currentYear}</div>
-                <div><strong>Horário:</strong> {selected.time}</div>
-                <div className="valor-consulta-c"><strong>Valor:</strong> R$ 165,00</div>
+                <div>
+                  <strong>Data:</strong> {selected.day}/{currentMonthIndex + 1}/
+                  {currentYear}
+                </div>
+                <div>
+                  <strong>Horário:</strong> {selected.time}
+                </div>
+                <div className="valor-consulta-c">
+                  <strong>Valor:</strong> R$ 165,00
+                </div>
               </div>
 
               <div className="botoes-c">
                 {isEditing ? (
                   <>
-                    <select className="select-data-c" value={newDate} onChange={(e) => setNewDate(e.target.value)}>
+                    <select
+                      className="select-data-c"
+                      value={newDate}
+                      onChange={(e) => setNewDate(e.target.value)}
+                    >
                       <option value="">Selecione o dia</option>
-                      {days.filter((d) => d.isCurrentMonth && !d.isUnavailable).map((d) => (
-                        <option key={d.id} value={d.date}>{d.date}/{currentMonthIndex + 1}</option>
-                      ))}
+                      {days
+                        .filter((d) => d.isCurrentMonth && !d.isUnavailable)
+                        .map((d) => (
+                          <option key={d.id} value={d.date}>
+                            {d.date}/{currentMonthIndex + 1}
+                          </option>
+                        ))}
                     </select>
 
-                    <select className="select-horario-c" value={newTime} onChange={(e) => setNewTime(e.target.value)}>
+                    <select
+                      className="select-horario-c"
+                      value={newTime}
+                      onChange={(e) => setNewTime(e.target.value)}
+                    >
                       <option value="">Selecione um horário</option>
                       <option value="09:00">09:00</option>
                       <option value="10:00">10:00</option>
@@ -282,12 +356,27 @@ export default function AgendaConsultas() {
                       <option value="16:00">16:00</option>
                     </select>
 
-                    <button className="confirmar-c" onClick={handleConfirmUpdate}>Confirmar</button>
+                    <button
+                      className="confirmar-c"
+                      onClick={handleConfirmUpdate}
+                    >
+                      Confirmar
+                    </button>
                   </>
                 ) : (
                   <>
-                    <button className="alterar-c" onClick={() => setShowRescheduleModal(true)}>Alterar</button>
-                    <button className="remover-c" onClick={handleRemoveAppointment}>Remover</button>
+                    <button
+                      className="alterar-c"
+                      onClick={() => setShowRescheduleModal(true)}
+                    >
+                      Alterar
+                    </button>
+                    <button
+                      className="remover-c"
+                      onClick={handleRemoveAppointment}
+                    >
+                      Remover
+                    </button>
                   </>
                 )}
               </div>
@@ -299,7 +388,10 @@ export default function AgendaConsultas() {
       {showRescheduleModal && (
         <div className="reschedule-modal-overlay">
           <div className="reschedule-modal">
-            <button className="modal-close-btn" onClick={() => setShowRescheduleModal(false)}>
+            <button
+              className="modal-close-btn"
+              onClick={() => setShowRescheduleModal(false)}
+            >
               <X size={20} />
             </button>
             <h2>Reagendamento de consulta</h2>
@@ -307,40 +399,63 @@ export default function AgendaConsultas() {
 
             <div className="calendar-scroll">
               <div className="calendar-title">
-                <button onClick={() => {
-                  let newMonth = rescheduleMonthIndex - 1;
-                  let newYear = rescheduleYear;
-                  if (newMonth < 0) {
-                    newMonth = 11;
-                    newYear -= 1;
-                  }
-                  setRescheduleMonthIndex(newMonth);
-                  setRescheduleYear(newYear);
-                }} className="setaE-c"><ChevronLeft /></button>
+                <button
+                  onClick={() => {
+                    let newMonth = rescheduleMonthIndex - 1;
+                    let newYear = rescheduleYear;
+                    if (newMonth < 0) {
+                      newMonth = 11;
+                      newYear -= 1;
+                    }
+                    setRescheduleMonthIndex(newMonth);
+                    setRescheduleYear(newYear);
+                  }}
+                  className="setaE-c"
+                >
+                  <ChevronLeft />
+                </button>
 
-                <h3>{new Date(rescheduleYear, rescheduleMonthIndex).toLocaleString('pt-BR', { month: 'long', year: 'numeric' })}</h3>
+                <h3>
+                  {new Date(
+                    rescheduleYear,
+                    rescheduleMonthIndex,
+                  ).toLocaleString("pt-BR", { month: "long", year: "numeric" })}
+                </h3>
 
-                <button onClick={() => {
-                  let newMonth = rescheduleMonthIndex + 1;
-                  let newYear = rescheduleYear;
-                  if (newMonth > 11) {
-                    newMonth = 0;
-                    newYear += 1;
-                  }
-                  setRescheduleMonthIndex(newMonth);
-                  setRescheduleYear(newYear);
-                }} className="setaD-c"><ChevronRight /></button>
+                <button
+                  onClick={() => {
+                    let newMonth = rescheduleMonthIndex + 1;
+                    let newYear = rescheduleYear;
+                    if (newMonth > 11) {
+                      newMonth = 0;
+                      newYear += 1;
+                    }
+                    setRescheduleMonthIndex(newMonth);
+                    setRescheduleYear(newYear);
+                  }}
+                  className="setaD-c"
+                >
+                  <ChevronRight />
+                </button>
               </div>
 
               <div className="calendar-grid">
-                {[{ day: 'ter', date: '29 abr' }, { day: 'qua', date: '30 abr' }, { day: 'qui', date: '1 mai' }, { day: 'sex', date: '2 mai' }, { day: 'sáb', date: '3 mai' }, { day: 'dom', date: '4 mai' }, { day: 'seg', date: '5 mai' }].map(({ day, date }, i) => (
+                {[
+                  { day: "ter", date: "29 abr" },
+                  { day: "qua", date: "30 abr" },
+                  { day: "qui", date: "1 mai" },
+                  { day: "sex", date: "2 mai" },
+                  { day: "sáb", date: "3 mai" },
+                  { day: "dom", date: "4 mai" },
+                  { day: "seg", date: "5 mai" },
+                ].map(({ day, date }, i) => (
                   <div key={i} className="calendar-day">
                     <strong>{day}</strong>
                     <span>{date}</span>
-                    {['08:00', '09:00', '10:00', '11:00'].map((hour) => (
+                    {["08:00", "09:00", "10:00", "11:00"].map((hour) => (
                       <button
                         key={hour}
-                        className={`hour-btn ${selectedDate === date && selectedTime === hour ? 'selected' : ''}`}
+                        className={`hour-btn ${selectedDate === date && selectedTime === hour ? "selected" : ""}`}
                         onClick={() => {
                           setSelectedDate(date);
                           setSelectedTime(hour);
@@ -355,7 +470,12 @@ export default function AgendaConsultas() {
             </div>
 
             <div className="modal-actions">
-              <button className="btn-back" onClick={() => setShowRescheduleModal(false)}>Voltar</button>
+              <button
+                className="btn-back"
+                onClick={() => setShowRescheduleModal(false)}
+              >
+                Voltar
+              </button>
               <button
                 className="btn-confirm"
                 disabled={!selectedDate || !selectedTime}

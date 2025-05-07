@@ -1,9 +1,9 @@
-import icon from '../assets/icon-profile.svg';
-import { Link, NavLink, useLocation } from 'react-router-dom';
-import { useEffect, useState, useRef, useContext } from 'react';
+import icon from "../assets/icon-profile.svg";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { useEffect, useState, useRef, useContext } from "react";
 
-import './CSS/NavBar.css';
-import { GlobalContext } from '../Context/GlobalContext';
+import "./CSS/NavBar.css";
+import { GlobalContext } from "../Context/GlobalContext";
 
 function Navbar({ cor }) {
   const location = useLocation();
@@ -12,7 +12,9 @@ function Navbar({ cor }) {
   const { userLogado } = useContext(GlobalContext);
 
   useEffect(() => {
-    const activeLink = linksRef.current.find(link => link?.classList.contains('active'));
+    const activeLink = linksRef.current.find((link) =>
+      link?.classList.contains("active"),
+    );
     if (activeLink) {
       setUnderlineStyle({
         width: `${activeLink.offsetWidth}px`,
@@ -22,22 +24,33 @@ function Navbar({ cor }) {
   }, [location.pathname]); // Atualiza ao mudar de rota
 
   return (
-    <div className='container-nav' style={{ backgroundColor: cor }}>
-      <div className='container_logo'>
-        <Link to='/'>
+    <div className="container-nav" style={{ backgroundColor: cor }}>
+      <div className="container_logo">
+        <Link to="/">
           <img src="logo oficial.svg" alt="Logo" />
         </Link>
       </div>
-      <div className='container-links'>
+      <div className="container-links">
         <div className="underline" style={underlineStyle}></div>
+<<<<<<< HEAD
         <NavLink to="/inicio" end ref={el => linksRef.current[0] = el}>Profissionais</NavLink>
         <NavLink to="/planoSaude" ref={el => linksRef.current[2] = el}>Planos</NavLink>
         <NavLink to="/chats" ref={el => linksRef.current[3] = el}>
           Chats <img src="logo_chat.svg" alt="Chat" className='chatbalao' />
+=======
+        <NavLink to="/inicio" end ref={(el) => (linksRef.current[0] = el)}>
+          Início
+        </NavLink>
+        <NavLink to="/planoSaude" ref={(el) => (linksRef.current[2] = el)}>
+          Planos
+        </NavLink>
+        <NavLink to="/chats" ref={(el) => (linksRef.current[3] = el)}>
+          Chats <img src="logo_chat.svg" alt="Chat" className="chatbalao" />
+>>>>>>> 838539c4b6e0b27ad7d2975670a433f781c5b3fa
         </NavLink>
       </div>
-      <div className='container-icon'>
-        <Link to={userLogado ? '/editarprofissional' : '/login'}>
+      <div className="container-icon">
+        <Link to={userLogado ? "/editarprofissional" : "/login"}>
           <img src={icon} alt="Perfil" />
         </Link>
       </div>

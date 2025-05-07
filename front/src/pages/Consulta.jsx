@@ -4,6 +4,7 @@ import "./CSS/Consulta.css";
 import imgConsulta from "../assets/Group 239294.svg";
 import mulher from "../assets/image 8.png";
 import "./CSS/Consulta.css";
+import voltar from '../assets/seta-principal.svg';
 
 const getMonthData = (year) => {
   const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);

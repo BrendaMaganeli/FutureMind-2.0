@@ -15,6 +15,7 @@ import identificacao from "../assets/identificacao.svg";
 import seguranca from "../assets/seguranca.svg";
 import iconeChaves from "../assets/icone_chaves.svg";
 import iconeBanco from "../assets/icone_banco.svg";
+import voltar from '../assets/seta-principal.svg';
 
 // Função para rolar para o topo ao mudar de rota
 function ScrollToTop() {

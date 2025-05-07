@@ -4,7 +4,8 @@ import icon_dois from "../assets/cam-recorder (1) 11.svg";
 import icon_tres from "../assets/icons8-bate-papo-48 2.svg";
 import Arvore from "../assets/Group 239274.svg";
 import "./CSS/EditarProfissional.css";
-import logo from "../assets/Logo_SA_2FASE.png";
+import logo from "../assets/Logo-prin.png";
+import voltar from "../assets/seta-principal.svg";
 
 function EditarProfissional() {
   return (
@@ -26,17 +27,13 @@ function EditarProfissional() {
           </div>
           <div className="experiencia-perfil">
             <h3>Experiência</h3>
-            <div className="cartao-experiencia-p">
-              <div style={{ display: "flex", gap: "240px" }}>
-                <strong>Cargo</strong> <span className="ano">Ano</span>
-              </div>
-              <input maxLength="25" placeholder="Breve descrição" />
+            <div className="cartao-experiencia">
+              <strong>Cargo</strong> <span className="ano">Ano</span>
+              <p>Breve descrição.</p>
             </div>
-            <div className="cartao-experiencia-p">
-              <div style={{ display: "flex", gap: "240px" }}>
-                <strong>Cargo</strong> <span className="ano">Ano</span>
-              </div>
-              <input maxLength="25" placeholder="Breve descrição" />
+            <div className="cartao-experiencia">
+              <strong>Cargo</strong> <span className="ano">Ano</span>
+              <p>Breve descrição.</p>
             </div>
             <button className="botao-baixar">Baixar currículo</button>
           </div>
@@ -48,7 +45,7 @@ function EditarProfissional() {
             </div>
           </div>
 
-          <div className="funcionalidades">
+          <div className="funcionalidades-p">
             <div className="topicos">
               <img src={icon_um} alt="" />
               <p>Agende sua cosulta</p>
@@ -71,14 +68,14 @@ function EditarProfissional() {
           <img src={Arvore} alt="" />
         </div>
 
-        {/* <div className="botoes-maior-p">
-           <div className="botoes-p">
-             <img src={voltar} alt="" />
-           </div>
-         </div> */}
-        <div className="loguinho-p">
-          <img src={logo} alt="" />
-        </div>
+          <div className="botoes-maior-p">
+            <div className="botoes-p">
+              <img src={voltar} alt="" className="voltar-seta"/>
+            </div>
+          </div>
+          <div className="loguinho-p">
+            <img src={logo} alt="" />
+          </div>
 
         <div className="editar-profissional">
           <div className="floating-input-pac">

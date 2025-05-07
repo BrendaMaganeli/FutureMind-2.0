@@ -122,7 +122,7 @@
   display: flex;
   justify-content: start;
   align-items: center;
-  margin: 60px 0 60px 60px;
+  margin: 30px 0 13px 40px;
   gap: 20px;
   width: 90%;
 }
@@ -243,18 +243,18 @@
 
 .loguinho {
   position: absolute;
-  left: 85%;
-  top: -2%;
+  left: 83%;
+  top: 3%;
 }
 
 .loguinho img {
-  width: 115%;
+  width:70%;
   height: 100%;
 }
 
 .cartao-informacao-a .cabecalho-informacao,
 .cartao-informacao-e .cabecalho-informacao {
-  height: 30%;
+  height: 35%;
 }
 
 .cartao-sobremim {

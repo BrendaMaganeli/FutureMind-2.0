@@ -9,6 +9,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import voltar from '../assets/seta-principal.svg';
 
 // Componente para rolar a página até o topo sempre que a rota mudar
 function ScrollToTop() {

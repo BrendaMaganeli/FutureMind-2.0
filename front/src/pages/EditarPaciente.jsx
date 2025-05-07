@@ -2,11 +2,12 @@ import mulher from "../assets/image 8.png";
 import icon_um from "../assets/agenda 2.svg";
 import icon_dois from "../assets/cam-recorder (1) 11.svg";
 import icon_tres from "../assets/icons8-bate-papo-48 2.svg";
-import logo from "../assets/Logo_SA_2FASE.png";
-import voltar from "../assets/voltar 2.svg";
+import logo from "../assets/logo-prin.png";
+import voltar from "../assets/seta-principal.svg";
 import "./CSS/EditarPaciente.css";
 import Arvore from "../assets/Group 239274.svg";
 import { useState } from "react";
+import { Pointer } from "lucide-react";
 
 function EditarPaciente() {
   const [isVisible, setIsVisible] = useState(false);
@@ -40,7 +41,7 @@ function EditarPaciente() {
               alignItems: "center",
             }}
           >
-            <div className="cabecalho-perfil">
+            <div className="cabecalho-perfil-paciente">
               <img
                 src={mulher}
                 alt="Foto do perfil"
@@ -49,14 +50,14 @@ function EditarPaciente() {
               <h2 className="nome-perfil">José Carlos Azevedo</h2>
             </div>
           </div>
-          <div className="caixa-comandos-p">
+          <div className="caixa-comandos-paciente">
             <div className="cartao-informacao">
               <div className="cabecalho-informacao">
                 <h2>Funções</h2>
               </div>
             </div>
 
-            <div className="funcionalidades">
+            <div className="funcionalidades-paciente">
               <div className="topicos">
                 <img src={icon_um} alt="" />
                 <p>Agende sua cosulta</p>
@@ -81,7 +82,7 @@ function EditarPaciente() {
 
           <div className="botoes-maior-p">
             <div className="botoes-p">
-              <img src={voltar} alt="" />
+              <img src={voltar} alt="" style={{Pointer: 'cursor'}}/>
             </div>
           </div>
           <div className="loguinho-p">

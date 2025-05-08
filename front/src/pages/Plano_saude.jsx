@@ -8,6 +8,7 @@ import mensal from "../assets/Mensal.svg";
 import trimestral from "../assets/Trimestral.svg";
 import empresarial from "../assets/empresarial.svg";
 import { useNavigate } from "react-router-dom";
+import { Modal, Box } from "@mui/material";
 
 function Plano_saude() {
   const [modalAberto, setModalAberto] = useState(false);
@@ -190,8 +191,8 @@ function Plano_saude() {
           </div>
         </div>
       </div>
-      {modalAberto && (
-        <div className="modal-overlay">
+      <Modal open={modalAberto} >
+      <div className="modal-overlay">
           <div className="modal-content">
             <h2 className="modal-title">Cadastro Empresarial</h2>
 
@@ -233,10 +234,9 @@ function Plano_saude() {
             </div>
           </div>
         </div>
-      )}
-
-      {modalPrataAberto && (
-        <div className="modal-overlay">
+      </Modal>
+      <Modal open={modalPrataAberto} >
+      <div className="modal-overlay">
           <div className="modal-content">
             <h2 className="modal-title">Assinatura Prata</h2>
             <section className="modal-section">
@@ -267,11 +267,9 @@ function Plano_saude() {
             )}
           </div>
         </div>
-      )}
-
-      {/* Modal Plano Ouro */}
-      {modalOuroAberto && (
-        <div className="modal-overlay">
+      </Modal>
+      <Modal open={modalOuroAberto} >
+      <div className="modal-overlay">
           <div className="modal-content">
             <h2 className="modal-title">Assinatura Ouro</h2>
             <section className="modal-section">
@@ -302,7 +300,11 @@ function Plano_saude() {
             )}
           </div>
         </div>
-      )}
+      </Modal>
+      
+
+      
+      
 
       <Footer />
     </div>

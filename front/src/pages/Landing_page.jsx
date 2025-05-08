@@ -7,14 +7,13 @@ import Footer from "../Components/Footer.jsx";
 import { useNavigate } from 'react-router-dom';
 import { Modal, Box } from "@mui/material";
 
-
 const estiloCaixa = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 1000,
-  height: 550,
+  width: 1060,
+  height: 600,
   bgcolor: "background.paper",
   borderRadius: 2,
   boxShadow: 24,
@@ -34,7 +33,7 @@ function Landing_page() {
   const navigate = useNavigate();
 
   const irParaPaciente = () => {
-    navigate('/cadastroPaciente'); // Altere o caminho conforme sua rota real
+    navigate('/cadastroPaciente'); 
   };
 
   const irParaProfissional = () => {
@@ -50,6 +49,10 @@ function Landing_page() {
         <Modal open={aberto} onClose={fechar}>
           <Box sx={estiloCaixa}>
             <div className="container_modal">
+              <div className="container_text_voltar">
+               <button onClick={fechar} className="button_voltar">Sair</button>
+              </div>
+             <div className="container_modal_opcoes">
               <div className="esquerda_modal">
                 <div onClick={irParaProfissional}  className="container_img">
                    <img src="imagem_profissional.svg" alt="" />
@@ -66,6 +69,7 @@ function Landing_page() {
                    </div>
                 </div>
               </div>
+             </div>
             </div>
           </Box>
         </Modal>

@@ -4,9 +4,16 @@
   background-color: #ffffff;
 }
 
+<<<<<<< HEAD
+/* div::-webkit-scrollbar-track{
+
+    background: #ffffff;
+    border-radius: 3px;
+=======
 div::-webkit-scrollbar-track {
   background: #ffffff;
   border-radius: 3px;
+>>>>>>> 838539c4b6e0b27ad7d2975670a433f781c5b3fa
 }
 
 div::-webkit-scrollbar-thumb {
@@ -14,9 +21,17 @@ div::-webkit-scrollbar-thumb {
   border-radius: 3px;
 }
 
+<<<<<<< HEAD
+div::-webkit-scrollbar{
+
+
+    width: 12px;
+} */
+=======
 div::-webkit-scrollbar {
   width: 12px;
 }
+>>>>>>> 838539c4b6e0b27ad7d2975670a433f781c5b3fa
 
 .botaodecisao {
   width: 170%;

@@ -32,6 +32,12 @@ function Navbar({ cor }) {
       </div>
       <div className="container-links">
         <div className="underline" style={underlineStyle}></div>
+<<<<<<< HEAD
+        <NavLink to="/inicio" end ref={el => linksRef.current[0] = el}>Profissionais</NavLink>
+        <NavLink to="/planoSaude" ref={el => linksRef.current[2] = el}>Planos</NavLink>
+        <NavLink to="/chats" ref={el => linksRef.current[3] = el}>
+          Chats <img src="logo_chat.svg" alt="Chat" className='chatbalao' />
+=======
         <NavLink to="/inicio" end ref={(el) => (linksRef.current[0] = el)}>
           Início
         </NavLink>
@@ -40,6 +46,7 @@ function Navbar({ cor }) {
         </NavLink>
         <NavLink to="/chats" ref={(el) => (linksRef.current[3] = el)}>
           Chats <img src="logo_chat.svg" alt="Chat" className="chatbalao" />
+>>>>>>> 838539c4b6e0b27ad7d2975670a433f781c5b3fa
         </NavLink>
       </div>
       <div className="container-icon">

@@ -16,12 +16,6 @@ function Footer() {
           <p>©2025 - FutureMind</p>
           <p>Todos os direitos reservados.</p>
         </div>
-<<<<<<< HEAD
-        <div className='container-redes'>
-           <Link to={'https://www.instagram.com/futuremind.tech/'}><img src={Instagram} alt="" /></Link>
-           <Link><img src={Facebook} alt="" /></Link>
-           <Link to={'https://www.youtube.com/'}><img src={Youtube} alt="" /></Link>
-=======
         <div className="container-redes">
           <Link>
             <img src={Instagram} alt="" />
@@ -32,7 +26,6 @@ function Footer() {
           <Link to={"https://www.youtube.com/"}>
             <img src={Youtube} alt="" />
           </Link>
->>>>>>> 838539c4b6e0b27ad7d2975670a433f781c5b3fa
         </div>
       </div>
     </div>

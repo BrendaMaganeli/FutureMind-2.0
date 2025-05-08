@@ -68,9 +68,13 @@ function EditarProfissional() {
           <img src={Arvore} alt="" />
         </div>
 
-          <div className="botoes-maior-p">
-            <div className="botoes-p">
+          <div className="botoes-maior-pro">
+            <div className="botoes-pro">
               <img src={voltar} alt="" className="voltar-seta"/>
+            </div>
+            <div className="botoes-superiores-p">
+          <button className="botao-deletar">Deletar</button>
+          <button className="botao-sair">Sair</button>
             </div>
           </div>
           <div className="loguinho-p">

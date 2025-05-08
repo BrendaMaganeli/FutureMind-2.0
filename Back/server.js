@@ -166,4 +166,24 @@ app.post('/login', async(req, res) => {
     }
 });
 
-app.listen(4242, () => console.log ('Servidor servindo'));
+// app.delete('/editar-profissional', async(req, res) => {
+
+
+//     try {
+        
+//         const {id_profissional} = req.body;
+//         const [rows] = await pool.query("DELETE FROM profissionais WHERE id_profissional=?", [id_profissional]);
+
+//         if (rows.affectedRows > 0) {
+
+//             res.status(201).json('Profissional encontrado!');
+//         } else {
+
+//             res.status(404).json('')
+//         }
+//     } catch (error) {
+        
+//     }
+// });
+
+// app.listen(4242, () => console.log ('Servidor servindo'));

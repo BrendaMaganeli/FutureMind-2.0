@@ -84,6 +84,10 @@ function EditarPaciente() {
             <div className="botoes-p">
               <img src={voltar} alt="" style={{Pointer: 'cursor'}}/>
             </div>
+            <div className="botoes-superiores-p">
+          <button className="botao-deletar">Deletar</button>
+          <button className="botao-sair">Sair</button>
+      </div>
           </div>
           <div className="loguinho-p">
             <img src={logo} alt="" />

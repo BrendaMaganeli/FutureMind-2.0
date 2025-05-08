@@ -71,8 +71,9 @@
   margin-top: 5%;
   margin-right: 2%;
   opacity: 80%;
-  height:20%;
+  height: 18%;
   width: 90%;
+  gap: 120px;
 }
 
 .botoes-maior-p .botoes-p {
@@ -87,12 +88,8 @@
 
 .loguinho-p {
   position: absolute;
-  display: flex;
-  padding-left: 57%;
-  margin-right: 3%;
-  align-items: center;
-  justify-content: center;
-  margin-top: 3%;
+  left: 83%;
+  top: 3%;
 }
 
 .loguinho-p img {
@@ -367,4 +364,30 @@
   margin: 60px 0 60px 60px;
   gap: 20px;
   width: 90%;
+}
+
+.botoes-superiores-p {
+  display: flex;
+  gap: 10px;
+  height: 23%;
+}
+
+.botao-deletar,
+.botao-sair {
+  padding: 8px 18px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+}
+
+.botao-deletar {
+  background-color: white;
+  color: #5a7da0;
+  border: 1px solid #5a7da0;
+}
+
+.botao-sair {
+  background-color: #5a7da0;
+  color: white;
 }

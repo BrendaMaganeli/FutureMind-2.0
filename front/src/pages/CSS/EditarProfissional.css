@@ -186,3 +186,46 @@
   gap: 10px;
   margin: 0 0 0 5px;
 }
+
+.botoes-maior-pro {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 5%;
+  margin-right: 2%;
+  opacity: 80%;
+  height: 20%;
+  width: 90%;
+  gap: 45px;
+}
+
+.botoes-pro img {
+
+  width: 100%;
+  height: 22%;
+}
+
+.botoes-superiores-p {
+  display: flex;
+  gap: 10px;
+  height: 23%;
+}
+
+.botao-deletar,
+.botao-sair {
+  padding: 8px 18px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+}
+
+.botao-deletar {
+  background-color: white;
+  color: #5a7da0;
+  border: 1px solid #5a7da0;
+}
+
+.botao-sair {
+  background-color: #5a7da0;
+  color: white;
+}

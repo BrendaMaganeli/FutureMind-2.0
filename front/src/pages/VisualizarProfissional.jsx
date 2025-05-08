@@ -81,6 +81,10 @@ function VisualizarProfissional() {
           <div className="botoes">
             <img src={voltar} alt="" />
           </div>
+        <div className="botoes-superiores">
+          <button className="botao-deletar">Deletar</button>
+          <button className="botao-sair">Sair</button>
+      </div>
         </div>
         <div className="loguinho">
           <img src={logo} alt="" />

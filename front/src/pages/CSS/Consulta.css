@@ -211,7 +211,7 @@
   background-color: #ffffff;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  padding: 24px;
+  padding: 3%;
   width: 100%;
   max-width: 400px;
   height: 500px;
@@ -233,6 +233,7 @@
 .resumo-card-c {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .resumo-card-c h2 {
@@ -245,36 +246,38 @@
 .agendamento-info-c {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  height: 100%;
+  justify-content: start;
 }
 
 .profissional-c {
   display: flex;
   align-items: center;
   gap: 16px;
+  justify-content: start;
 }
 
 .foto-profissional-c {
-  width: 48px;
-  height: 48px;
+  width: 78px;
+  height: 78px;
   border-radius: 50%;
   object-fit: cover;
 }
 
 .profissional-c h3 {
-  font-size: 18px;
+  font-size: 23px;
   font-weight: 600;
   color: #1f2937;
 }
 
 .profissional-c p {
-  font-size: 14px;
+  font-size: 17px;
   color: #6b7280;
 }
 
 .detalhes-c {
-  font-size: 14px;
   color: #374151;
+  font-size: 18px;
 }
 
 .valor-consulta-c {
@@ -286,6 +289,8 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  height: 30%;
+  justify-content: end;
 }
 
 .select-data-c,
@@ -475,4 +480,13 @@
 .disabledimage {
   width: 100%;
   height: 100%;
+}
+
+.div-aux {
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 40px;
+  justify-content: end;
 }

@@ -296,8 +296,6 @@ export default function AgendaConsultas() {
           </button>
 
           <div className="resumo-card-c">
-            <h2>Resumo</h2>
-
             <div className="agendamento-info-c">
               <div className="profissional-c">
                 <img
@@ -311,6 +309,8 @@ export default function AgendaConsultas() {
                   <p>Consulta Presencial</p>
                 </div>
               </div>
+
+              <div className="div-aux">
 
               <div className="detalhes-c">
                 <div>
@@ -347,7 +347,7 @@ export default function AgendaConsultas() {
                       className="select-horario-c"
                       value={newTime}
                       onChange={(e) => setNewTime(e.target.value)}
-                    >
+                      >
                       <option value="">Selecione um horário</option>
                       <option value="09:00">09:00</option>
                       <option value="10:00">10:00</option>
@@ -360,7 +360,7 @@ export default function AgendaConsultas() {
                     <button
                       className="confirmar-c"
                       onClick={handleConfirmUpdate}
-                    >
+                      >
                       Confirmar
                     </button>
                   </>
@@ -369,17 +369,18 @@ export default function AgendaConsultas() {
                     <button
                       className="alterar-c"
                       onClick={() => setShowRescheduleModal(true)}
-                    >
+                      >
                       Alterar
                     </button>
                     <button
                       className="remover-c"
                       onClick={handleRemoveAppointment}
-                    >
+                      >
                       Remover
                     </button>
                   </>
                 )}
+              </div>
               </div>
             </div>
           </div>

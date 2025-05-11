@@ -4,7 +4,7 @@ import Seta from '../assets/caret-down-solid.svg';
 import mulher from '../assets/image 8.png';
 import { useNavigate } from 'react-router-dom';
 import voltar from '../assets/seta-principal.svg';
-import emailjs from 'emailjs-com';
+import emailjs from '@emailjs/browser';
 
 export default function PagamentoConsulta() {
   const navigate = useNavigate();

@@ -166,24 +166,24 @@ app.post('/login', async(req, res) => {
     }
 });
 
-// app.delete('/editar-profissional', async(req, res) => {
+app.delete('/editar-profissional', async(req, res) => {
 
-
-//     try {
+    try {
         
-//         const {id_profissional} = req.body;
-//         const [rows] = await pool.query("DELETE FROM profissionais WHERE id_profissional=?", [id_profissional]);
+        const {id_profissional} = req.body;
+        const [rows] = await pool.query("DELETE FROM profissionais WHERE id_profissional=?", [id_profissional]);
 
-//         if (rows.affectedRows > 0) {
+        if (rows.affectedRows > 0) {
 
-//             res.status(201).json('Profissional encontrado!');
-//         } else {
+            res.status(201).json('Registro de profissional deletado!');
+        } else {
 
-//             res.status(404).json('')
-//         }
-//     } catch (error) {
+            res.status(404).json('Profissional não encontrado!');
+        }
+    } catch (err) {
         
-//     }
-// });
+        res.status(500).json('Erro no servidor, erro:', err);
+    }
+});
 
-// app.listen(4242, () => console.log ('Servidor servindo'));
+app.listen(4242, () => console.log ('Servidor servindo'));

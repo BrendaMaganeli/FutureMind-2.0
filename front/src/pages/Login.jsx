@@ -6,8 +6,9 @@ import { useContext, useState } from "react";
 import { GlobalContext } from "../Context/GlobalContext";
 
 function login() {
-  const { setUserLogado } = useContext(GlobalContext);
-  const navigate = useNavigate(); // Hook para navegação
+
+  const { setUserLogado, setUser } = useContext(GlobalContext);
+  const navigate = useNavigate();
 
   const [valorEmail, setValorEmail] = useState("");
   const [valorSenha, setValorSenha] = useState("");
@@ -39,11 +40,12 @@ function login() {
         body: JSON.stringify(credentials),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
         setUserLogado(true);
+        setUser(data);
         navigate("/inicio");
-      } else {
-        const message = "usuario ou senha incorretos";
       }
     } catch (err) {
       console.log("Erro no servidor", err);

@@ -6,8 +6,46 @@ import Arvore from "../assets/Group 239274.svg";
 import "./CSS/EditarProfissional.css";
 import logo from "../assets/Logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
+import { useNavigate } from "react-router-dom";
 
 function EditarProfissional() {
+
+  const navigate = useNavigate();
+
+  const deletarProfissional = async() => {
+
+    const profissional = JSON.parse(localStorage.getItem('User-Profile'));
+
+    try {
+      
+      const response = await fetch('http://localhost:4242/editar-profissional',{
+
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(profissional.id_profissional)
+      });
+
+      if (response.ok) {
+
+        localStorage.setItem('User Logado', false);
+        localStorage.removeItem('User-Profile');
+        navigate('/');
+      }
+    } catch (err) {
+      
+      console.log('Falha na conexão: ', err);
+    }
+  };
+
+  const sairProfissional = () => {
+
+    localStorage.setItem('User Logado', false);
+    localStorage.removeItem('User-Profile');
+    navigate('/');
+  }
+
   return (
     <div className="container">
       <aside className="barra-lateral">
@@ -73,8 +111,8 @@ function EditarProfissional() {
               <img src={voltar} alt="" className="voltar-seta"/>
             </div>
             <div className="botoes-superiores-p">
-          <button className="botao-deletar">Deletar</button>
-          <button className="botao-sair">Sair</button>
+          <button onClick={deletarProfissional} className="botao-deletar">Deletar</button>
+          <button onClick={sairProfissional} className="botao-sair">Sair</button>
             </div>
           </div>
           <div className="loguinho-p">

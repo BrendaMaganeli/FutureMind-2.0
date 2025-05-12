@@ -14,16 +14,17 @@ import animationData from "../assets/wired-flat-112-book-morph-open.json";
 import { useContext, useEffect, useState } from "react";
 import Select from "react-select";
 import { GlobalContext } from "../Context/GlobalContext.jsx";
+import Footer from "../Components/Footer.jsx";
 
 function Inicio() {
   const [profissionais, setProfissionais] = useState([]);
-
+  const [valorBuscar, setValorBuscar] = useState('')
   const navigate = useNavigate();
   const { setId } = useContext(GlobalContext);
-
+  
   const buscaProfissionais = async () => {
     try {
-      const response = await fetch("http://localhost:4242");
+      const response = await fetch("https://futuremind-2-0-mw60.onrender.com");
 
       if (response.ok) {
         const data = await response.json();
@@ -74,6 +75,30 @@ function Inicio() {
       setId(id);
   };
 
+  const [filtrados, setFiltrados] = useState([])
+
+   const valor_input_buscar = (e) =>{
+    const valor = e.target.value
+    setValorBuscar(valor)
+    
+    if (valor === '') {
+      setFiltrados([]);
+    } else {
+      
+      const filtrados = profissionais.filter((nome) =>
+        nome.nome.toLowerCase().includes(valor.toLowerCase())
+      );
+      setFiltrados(filtrados);
+    }
+   }
+
+  const selecionarUsuario = (profi) => {
+    
+    setValorBuscar(profi.nome);
+    setFiltrados([]);
+    acessarPerfil(profi.id_profissional);
+  };
+
   return (
     <div className="container-inicio">
       <NavBar />
@@ -89,9 +114,39 @@ function Inicio() {
         <div className="filter-background">
           <div className="filter-profissionais-container">
             <div className="filtros-profissionais">
-              <div className="inpt-filtro">
-                <input type="text" placeholder="Buscar profissional..." />
-                <img src="search.png" alt="" />
+              <div className="inpt-filtro">              
+                  <input type="text" placeholder = "Buscar profissional..." onChange={(e) => valor_input_buscar(e)}/>
+                  <img src="search.png" alt="" />
+              </div>
+              <div>
+              {filtrados.length > 0 && (
+              <div
+              style={{
+                border: '1px solid #ccc',
+                position: 'absolute',
+                width: '100%',
+                background: 'white',
+                zIndex: 1000,
+                maxHeight: '150px',
+                overflowY: 'auto'
+              }}>
+               {filtrados.map((nome, index) => (
+                <div
+                  key={index}
+                  onClick={() => selecionarUsuario(nome)}
+                  style={{
+                    padding: '8px',
+                    cursor: 'pointer',
+                    borderBottom: '1px solid #eee'
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.background = '#eee')}
+                  onMouseOut={(e) => (e.currentTarget.style.background = 'white')}
+                >
+                {nome.nome}
+                </div>
+                 ))}
+                </div>
+                )}
               </div>
               <div className="div-filtro">
                 <div className="select-filtro">
@@ -104,14 +159,15 @@ function Inicio() {
                     onChange={(selectedOptions) => {
                       const opcoes = selectedOptions || [];
                       setEspecializacoes(opcoes);
-                      setEspecializacaoValida(opcoes.length > 0);
+                      setEspecializacaoValida(opcoes.length
+         > 0);
                     }}
                     value={especializacoes}
                     menuPortalTarget={document.body}
                     styles={{
                       menuPortal: (base) => ({ ...base, zIndex: 9999 }),
                     }}
-                  />
+                    />
                 </div>
                 <div className="select-filtro">
                   <Select
@@ -130,11 +186,10 @@ function Inicio() {
                     styles={{
                       menuPortal: (base) => ({ ...base, zIndex: 9999 }),
                     }}
-                  />
+                    />
                 </div>
               </div>
             </div>
-
             <div className="filter-profissionais-baixo">
               <div className="plano-saude-img">
                 <Link to="/planoSaude">
@@ -242,7 +297,12 @@ function Inicio() {
           />
         </Link>
       </div>
+      <div className="footer_inicio">
+
+      <Footer className = "footer_inicio"/>
+      </div>
     </div>
+   
   );
 }
 

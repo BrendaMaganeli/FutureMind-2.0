@@ -206,5 +206,40 @@ app.get('/profissional/:id', async(req, res) => {
         res.status(500).json({Erro: 'Erro no servidor, erro: ', err});
     };
 });
+  
+
+app.put('/paciente', async (req, res) => {
+    try {
+      const {
+        nome,
+        cpf,
+        email,
+        telefone,
+        data_nascimento,
+        senha,
+        id_paciente
+      } = req.body;
+  
+      const [result] = await pool.query(
+        `UPDATE pacientes SET nome=?, cpf=?, email=?, telefone=?, data_nascimento=?, senha=? WHERE id_paciente=?`,
+        [nome, cpf, email, telefone, data_nascimento, senha, id_paciente]
+      );
+  
+      if (result.affectedRows > 0) {
+        const [pacienteAtualizado] = await pool.query(
+            'SELECT * FROM pacientes WHERE id_paciente = ?',
+            [id_paciente]
+          );
+          
+          res.status(200).json(pacienteAtualizado[0]); 
+      } else {
+        res.status(404).json('Paciente não encontrado!');
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).json('Erro ao atualizar o paciente');
+    }
+  });
+  
 
 app.listen(4242, () => console.log ('Servidor servindo'));

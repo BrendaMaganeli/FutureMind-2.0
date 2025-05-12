@@ -180,7 +180,7 @@ function CadastroProfissional2() {
   const req = async () => {
     try {
       const response = await fetch(
-        "http://localhost:4242/cadastro-profissional",
+        "https://futuremind-2-0-mw60.onrender.com/cadastro-profissional",
         {
           method: "POST",
           headers: {

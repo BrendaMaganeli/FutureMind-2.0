@@ -24,7 +24,7 @@ function Inicio() {
 
   const buscaProfissionais = async () => {
     try {
-      const response = await fetch("http://localhost:4242");
+      const response = await fetch("https://futuremind-2-0-mw60.onrender.com");
 
       if (response.ok) {
         const data = await response.json();

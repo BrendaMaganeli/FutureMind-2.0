@@ -14,6 +14,7 @@ import animationData from "../assets/wired-flat-112-book-morph-open.json";
 import { useContext, useEffect, useState } from "react";
 import Select from "react-select";
 import { GlobalContext } from "../Context/GlobalContext.jsx";
+import Footer from "../Components/Footer.jsx";
 
 function Inicio() {
   const [profissionais, setProfissionais] = useState([]);
@@ -189,8 +190,11 @@ function Inicio() {
                       <div className="foto-perfilInicio">
                         <img src={item.foto} alt="" />
                         <div className="perfil-nomeValor">
-                          <h2 onClick={() => acessarPerfil(item.id_profissional)} >{item.nome}</h2>
-                          <p>R$ 50/60 min</p>
+                          <div className="container_nome_valor">
+                            <h2 onClick={() => acessarPerfil(item.id_profissional)} >{item.nome}</h2>
+                            <p>R$ 50/60 min</p>
+                          </div>
+                          
                         </div>
                       </div>
                       <div className="div-especializacao">
@@ -242,7 +246,12 @@ function Inicio() {
           />
         </Link>
       </div>
+      <div className="footer_inicio">
+
+      <Footer className = "footer_inicio"/>
+      </div>
     </div>
+   
   );
 }
 

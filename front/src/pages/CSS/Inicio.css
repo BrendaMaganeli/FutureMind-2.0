@@ -309,6 +309,18 @@
   flex-wrap: wrap;
 }
 
+.perfil-nomeValor{
+
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   height: 100px;
+   width: 60%;
+}
+
+
+
 .card .tag {
   background: #e3eaf2;
   color: #546e7a;
@@ -580,4 +592,14 @@
 
 .custom-select .select__control--is-focused .select__dropdown-indicator svg {
   color: #7ba6dd; /* cor ao passar o mouse ou ao focar */
+}
+
+
+.footer_inicio{
+  
+  top: 178.2%;
+  position: absolute;
+  z-index: 999;
+  width: 100%;
+  
 }

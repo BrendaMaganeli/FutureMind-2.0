@@ -4,7 +4,6 @@ import icon_dois from "../assets/cam-recorder (1) 11.svg";
 import icon_tres from "../assets/icons8-bate-papo-48 2.svg";
 import Arvore from "../assets/Group 239274.svg";
 import "./CSS/EditarProfissional.css";
-import logo from "../assets/Logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -128,9 +127,6 @@ function EditarProfissional() {
           <button onClick={handleDeletarClick} className="botao-deletar">Deletar</button>
           <button onClick={sairProfissional} className="botao-sair">Sair</button>
             </div>
-          </div>
-          <div className="loguinho-p">
-            <img src={logo} alt="" />
           </div>
 
         <div className="editar-profissional">

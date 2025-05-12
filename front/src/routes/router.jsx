@@ -18,7 +18,7 @@ import CadastroProfissional2 from "../pages/CadastroProfissional2.jsx";
 import Politica from "../pages/Politica.jsx";
 import Termos from "../pages/Termos.jsx";
 import Consulta from "../pages/Consulta.jsx";
-import Text_modal from "../pages/text_modal.jsx";
+import Text_modal from "../pages/Text_modal.jsx";
 
 const router = createBrowserRouter([
   {

@@ -22,7 +22,7 @@ import Text_modal from "../pages/text_modal.jsx";
 
 const router = createBrowserRouter([
   {
-    path: "/profissional",
+    path: "/profissional/:id",
     element: <VisualizarProfissional />,
   },
   {

@@ -708,4 +708,40 @@
   animation-delay: 2s;
 }
 
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: white;
+  animation: fadeOutContainer 0.5s ease-out 2s forwards;
+}
 
+.logo-animada {
+  width: 250px;
+  height: auto;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease-out forwards, fadeOut 0.5s ease-out 2s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes fadeOutContainer {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

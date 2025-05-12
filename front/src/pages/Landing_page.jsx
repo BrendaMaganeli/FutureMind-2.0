@@ -28,7 +28,16 @@ function Landing_page() {
     });
   }, []);
 
-  
+  const [mostrarLogo, setMostrarLogo] = useState(true);
+
+  useEffect(() => {
+    // Oculta a logo após 2.5 segundos
+    const timer = setTimeout(() => {
+      setMostrarLogo(false);
+    }, 2500); // tempo da animação + fadeOut
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const navigate = useNavigate();
 
@@ -44,6 +53,16 @@ function Landing_page() {
   const fechar = () => setAberto(false);
   return (
     <div>
+      {mostrarLogo && (
+        <div className="logo-container">
+          <img src="logo oficial.svg" alt="Logo" className="logo-animada" />
+        </div>
+      )}
+
+      {
+        !mostrarLogo && (
+          <>
+          
       <Navbar />
       <div>
         <Modal open={aberto} onClose={fechar}>
@@ -269,6 +288,10 @@ function Landing_page() {
         </div>
       </div>
       <Footer />
+      
+      </>
+        )
+      }
     </div>
   );
 }

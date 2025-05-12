@@ -7,8 +7,48 @@ import icon_quatro from "../assets/icons8-pagamento-50 (1) 2.svg";
 import logo from "../assets/logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
 import anotar from "../assets/bloco-de-anotacoes.png";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 function VisualizarProfissional() {
+
+  const [profissional, setProfissional] = useState({});
+
+  const { id } = useParams();
+
+  const renderizarPerfil = async() => {
+
+    try {
+      
+      const response = await fetch(`http://localhost:4242/profissional/${id}`, {
+
+        method: 'GET',       
+      });
+
+      if (response.ok) {
+
+        const data = await response.json();
+        const especializacoes = JSON.parse(data.especializacao || "[]");
+        const abordagens = JSON.parse(data.abordagem || "[]");
+  
+        setProfissional({
+          ...data,
+          especializacoes,
+          abordagens
+        });
+      }
+    } catch (err) {
+      
+      console.log('Erro no servidor, erro: ', err);
+    };
+  };
+  
+  useEffect(() => {
+
+    renderizarPerfil();
+  }, []);
+
+
   return (
     <div className="container">
       {/* <div className="acoes-perfil">
@@ -29,8 +69,8 @@ function VisualizarProfissional() {
           }}
         >
           <div className="cabecalho-perfil">
-            <img src={mulher} alt="Foto do perfil" className="imagem-perfil" />
-            <h2 className="nome-perfil">Nome do perfil</h2>
+            <img src={profissional.foto} alt="Foto do perfil" className="imagem-perfil" />
+            <h2 className="nome-perfil">{profissional?.nome}</h2>
           </div>
           <div className="experiencia-perfil">
             <h3>Experiência</h3>
@@ -81,10 +121,6 @@ function VisualizarProfissional() {
           <div className="botoes">
             <img src={voltar} alt="" />
           </div>
-        <div className="botoes-superiores">
-          <button className="botao-deletar">Deletar</button>
-          <button className="botao-sair">Sair</button>
-      </div>
         </div>
         <div className="loguinho">
           <img src={logo} alt="" />
@@ -97,9 +133,9 @@ function VisualizarProfissional() {
                 <h2>Especialização</h2>
               </div>
               <div className="corpo-informacao">
-                <p>
-                  
-                </p>
+              {profissional.especializacoes?.map((item, index) => (
+                <p className="abordagens-especializacoes" key={index}>{item.label}</p>
+              ))}
               </div>
             </div>
             <div className="cartao-informacao-a">
@@ -107,9 +143,9 @@ function VisualizarProfissional() {
                 <h2>Abordagem</h2>
               </div>
               <div className="corpo-informacao">
-                <p>
-                 
-                </p>
+              {profissional.abordagens?.map((item, index) => (
+                <p className="abordagens-especializacoes" key={index}>{item.label}</p>
+              ))}
               </div>
             </div>
           </div>
@@ -126,7 +162,7 @@ function VisualizarProfissional() {
           </div>
         </div>
         <div className="crp">
-          <p>CRP: 48/0903347</p>
+          <p>{profissional?.crp}</p>
         </div>
       </main>
     </div>

@@ -1,7 +1,7 @@
 import icon from "../assets/icon-profile.svg";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef, useContext } from "react";
-
+import ModalLogin from "./ModalLogin";
 import "./CSS/NavBar.css";
 import { GlobalContext } from "../Context/GlobalContext";
 
@@ -9,7 +9,10 @@ function Navbar({ cor }) {
   const location = useLocation();
   const [underlineStyle, setUnderlineStyle] = useState({});
   const linksRef = useRef([]);
-  const { userLogado } = useContext(GlobalContext);
+  const [mostrarModalLogin, setMostrarModalLogin] = useState(false);
+  const navigate = useNavigate();
+
+  const profissional = JSON.parse(localStorage.getItem('User-Profile'));
 
   useEffect(() => {
     const activeLink = linksRef.current.find((link) =>
@@ -23,6 +26,14 @@ function Navbar({ cor }) {
     }
   }, [location.pathname]); // Atualiza ao mudar de rota
 
+  const handleClick = () => {
+
+    if (!profissional) {
+
+      setMostrarModalLogin(true);
+    }
+  }
+
   return (
     <div className="container-nav" style={{ backgroundColor: cor }}>
       <div className="container_logo">
@@ -35,15 +46,18 @@ function Navbar({ cor }) {
         <NavLink to="/inicio" end ref={el => linksRef.current[0] = el}>Profissionais</NavLink>
         
         <NavLink to="/planoSaude" ref={el => linksRef.current[2] = el}>Planos</NavLink>
-        <NavLink to="/chats" ref={el => linksRef.current[3] = el}>
+        <a onClick={handleClick} href={profissional && '/chats'} ref={el => linksRef.current[3] = el}>
           Chats <img src="logo_chat.svg" alt="Chat" className='chatbalao' />
-        </NavLink>
+        </a>
       </div>
       <div className="container-icon">
-        <Link to={userLogado ? "/editarprofissional" : "/login"}>
+        <Link to={profissional ? "/editarprofissional" : "/login"}>
           <img src={icon} alt="Perfil" />
         </Link>
       </div>
+      {mostrarModalLogin && 
+        <ModalLogin setMostrarModalLogin={setMostrarModalLogin} />
+      }
     </div>
   );
 }

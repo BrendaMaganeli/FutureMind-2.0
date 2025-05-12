@@ -4,7 +4,7 @@ const app = express ();
 const cors = require('cors');
 
 app.use(cors({
-    origin: 'https://futuremindtech.vercel.app'
+    origin: '*'
 }));
 
 app.use(express.static('public'));
@@ -133,7 +133,7 @@ app.post('/login', async(req, res) => {
 
                 if (rows[0].senha === senha) {
 
-                    res.status(200).json(rows);
+                    res.status(200).json(rows[0]);
                 } else {
 
                     res.status(404).json('Senha incorreta');
@@ -150,7 +150,7 @@ app.post('/login', async(req, res) => {
 
                 if (rows[0].senha === senha) {
 
-                    res.status(200).json(rows);
+                    res.status(200).json(rows[0]);
                 } else {
 
                     res.status(400).json('Senha incorreta');
@@ -170,7 +170,7 @@ app.delete('/editar-profissional', async(req, res) => {
 
     try {
         
-        const {id_profissional} = req.body;
+        const { id_profissional } = req.body;
         const [rows] = await pool.query("DELETE FROM profissionais WHERE id_profissional=?", [id_profissional]);
 
         if (rows.affectedRows > 0) {
@@ -184,6 +184,27 @@ app.delete('/editar-profissional', async(req, res) => {
         
         res.status(500).json('Erro no servidor, erro:', err);
     }
+});
+
+app.get('/profissional/:id', async(req, res) => {
+
+    try {
+        
+        const { id } = req.params;
+        
+        const [rows] = await pool.query('SELECT * FROM profissionais WHERE id_profissional=?', [id]);
+
+        if (rows.length > 0) {
+
+            res.status(200).json(rows[0]);
+        } else {
+
+            res.status(404).json('Profissional não encontrado!');
+        }
+    } catch (err) {
+
+        res.status(500).json({Erro: 'Erro no servidor, erro: ', err});
+    };
 });
 
 app.listen(4242, () => console.log ('Servidor servindo'));

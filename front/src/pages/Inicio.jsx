@@ -1,7 +1,7 @@
 import NavBar from "../Components/Navbar.jsx";
 import fundo from "../assets/fundo inicio.svg";
 import "./CSS/Inicio.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -11,11 +11,15 @@ import { Navigation, Pagination } from "swiper/modules";
 import foto from "../assets/fotoInicio.svg";
 import Lottie from "react-lottie";
 import animationData from "../assets/wired-flat-112-book-morph-open.json";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Select from "react-select";
+import { GlobalContext } from "../Context/GlobalContext.jsx";
 
 function Inicio() {
   const [profissionais, setProfissionais] = useState([]);
+
+  const navigate = useNavigate();
+  const { setId } = useContext(GlobalContext);
 
   const buscaProfissionais = async () => {
     try {
@@ -63,6 +67,12 @@ function Inicio() {
   const [abordagens, setAbordagens] = useState([]);
   const [especializacaoValida, setEspecializacaoValida] = useState(true);
   const [abordagemValida, setAbordagemValida] = useState(true);
+
+  const acessarPerfil = (id) => {
+    
+      navigate(`/profissional/${id}`);
+      setId(id);
+  };
 
   return (
     <div className="container-inicio">
@@ -177,9 +187,9 @@ function Inicio() {
                   <SwiperSlide key={index}>
                     <div className="card">
                       <div className="foto-perfilInicio">
-                        <img src={foto} alt="" />
+                        <img src={item.foto} alt="" />
                         <div className="perfil-nomeValor">
-                          <h2>{item.nome}</h2>
+                          <h2 onClick={() => acessarPerfil(item.id_profissional)} >{item.nome}</h2>
                           <p>R$ 50/60 min</p>
                         </div>
                       </div>

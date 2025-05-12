@@ -9,6 +9,7 @@ import trimestral from "../assets/Trimestral.svg";
 import empresarial from "../assets/empresarial.svg";
 import { useNavigate } from "react-router-dom";
 import { Modal, Box } from "@mui/material";
+import ModalLogin from "../Components/ModalLogin.jsx";
 
 function Plano_saude() {
   const [modalAberto, setModalAberto] = useState(false);
@@ -20,6 +21,9 @@ function Plano_saude() {
   const [modalOuroAberto, setModalOuroAberto] = useState(false);
   const navigate = useNavigate();
   const [carregandoPlano, setCarregandoPlano] = useState(false);
+  const [mostrarModalLogin, setMostrarModalLogin] = useState(false);
+
+  const profissional = JSON.parse(localStorage.getItem('User-Profile'));
 
   const abrirModalPrata = () => setModalPrataAberto(true);
   const fecharModalPrata = () => setModalPrataAberto(false);
@@ -28,6 +32,7 @@ function Plano_saude() {
   const fecharModalOuro = () => setModalOuroAberto(false);
 
   const abrirModal = () => {
+    
     setModalAberto(true);
     setEmailEmpresa("");
     setSenhaEmpresa("");
@@ -36,41 +41,59 @@ function Plano_saude() {
   const fecharModal = () => setModalAberto(false);
 
   const confirmarCadastro = () => {
-    setErroEmail("");
-    setErroSenha("");
 
-    let temErro = false;
+    if (profissional) {
 
-    if (!emailEmpresa) {
-      setErroEmail("Por favor, preencha o e-mail.");
-      temErro = true;
-    } else if (!emailEmpresa.endsWith("@sofplan.com")) {
-      setErroEmail('O e-mail deve terminar com ex:"@empresa.com".');
-      temErro = true;
+      setErroEmail("");
+      setErroSenha("");
+      
+      let temErro = false;
+      
+      if (!emailEmpresa) {
+        setErroEmail("Por favor, preencha o e-mail.");
+        temErro = true;
+      } else if (!emailEmpresa.endsWith("@sofplan.com")) {
+        setErroEmail('O e-mail deve terminar com ex:"@empresa.com".');
+        temErro = true;
+      }
+      
+      if (!senhaEmpresa) {
+        setErroSenha("Por favor, preencha a senha.");
+        temErro = true;
+      } else if (senhaEmpresa.length !== 8) {
+        setErroSenha("A senha deve conter exatamente 8 dígitos.");
+        temErro = true;
+      }
+      
+      if (temErro) return;
+      
+      console.log("E-mail Empresarial:", emailEmpresa);
+      console.log("Senha Empresarial:", senhaEmpresa);
+      fecharModal();
+    } else {
+
+      setModalAberto(false);
+      setMostrarModalLogin(true);
     }
-
-    if (!senhaEmpresa) {
-      setErroSenha("Por favor, preencha a senha.");
-      temErro = true;
-    } else if (senhaEmpresa.length !== 8) {
-      setErroSenha("A senha deve conter exatamente 8 dígitos.");
-      temErro = true;
-    }
-
-    if (temErro) return;
-
-    console.log("E-mail Empresarial:", emailEmpresa);
-    console.log("Senha Empresarial:", senhaEmpresa);
-    fecharModal();
   };
 
   const confirmarPlano = () => {
-    setCarregandoPlano(true);
-    setTimeout(() => {
-      setCarregandoPlano(false);
-      fecharModalPrata();
-      navigate("/pagamento");
-    }, 1500);
+
+    if (profissional) {
+
+      setCarregandoPlano(true);
+      setTimeout(() => {
+        setCarregandoPlano(false);
+        fecharModalPrata();
+        navigate("/pagamento");
+      }, 1500);
+    } else {
+
+      setModalOuroAberto(false);
+      setModalPrataAberto(false);
+      setModalAberto(false);
+      setMostrarModalLogin(true);
+    }
   };
 
   useEffect(() => {
@@ -86,7 +109,14 @@ function Plano_saude() {
   }, [senhaEmpresa]);
 
   const navega = () => {
-    navigate("/agendamento"); // rota que leva à tela de agendamento
+
+    if (profissional) {
+
+      navigate("/agendamento"); // rota que leva à tela de agendamento
+    } else {
+
+      setMostrarModalLogin(true);
+    }
   };
 
   return (
@@ -113,6 +143,7 @@ function Plano_saude() {
                 AGENDE SUA CONSULTA
               </button>
             </div>
+            
           </div>
         </div>
       </div>
@@ -301,12 +332,11 @@ function Plano_saude() {
           </div>
         </div>
       </Modal>
-      
-
-      
-      
-
       <Footer />
+      {
+        mostrarModalLogin &&
+        <ModalLogin setMostrarModalLogin={setMostrarModalLogin} />
+      }
     </div>
   );
 }

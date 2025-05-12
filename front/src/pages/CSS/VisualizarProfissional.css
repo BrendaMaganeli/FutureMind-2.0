@@ -343,3 +343,22 @@
   background-color: #5a7da0;
   color: white;
 }
+
+.corpo-informacao {
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.abordagens-especializacoes {
+
+  border: 1px solid #5a7da0;
+  border-radius: 6px;
+  padding: 3.5%;
+  opacity: 70%;
+  width: fit-content;
+  height: fit-content;
+  /* text-align: center; */
+}

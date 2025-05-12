@@ -318,32 +318,6 @@
   color: white;
 }
 
-.botoes-superiores {
-  display: flex;
-  gap: 10px;
-  height: 25.5%;
-}
-
-.botao-deletar,
-.botao-sair {
-  padding: 8px 18px;
-  font-size: 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  border: none;
-}
-
-.botao-deletar {
-  background-color: white;
-  color: #5a7da0;
-  border: 1px solid #5a7da0;
-}
-
-.botao-sair {
-  background-color: #5a7da0;
-  color: white;
-}
-
 .corpo-informacao {
 
   display: flex;

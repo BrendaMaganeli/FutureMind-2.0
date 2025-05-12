@@ -111,6 +111,12 @@
     border-radius: 4px;
     transition: left 0.3s ease;
     z-index: 0;
+    overflow-x: auto;
+  }
+
+  .div-list{
+    max-height: 610px;
+    overflow-y: auto;
   }
   
   .checklist-item {

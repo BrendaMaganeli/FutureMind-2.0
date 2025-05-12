@@ -1,14 +1,13 @@
 import "./CSS/VisualizarProfissional.css";
-import mulher from "../assets/image 8.png";
 import icon_um from "../assets/agenda 2.svg";
 import icon_dois from "../assets/cam-recorder (1) 11.svg";
 import icon_tres from "../assets/icons8-bate-papo-48 2.svg";
-import icon_quatro from "../assets/icons8-pagamento-50 (1) 2.svg";
 import logo from "../assets/logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
 import anotar from "../assets/bloco-de-anotacoes.png";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Arvore from '../assets/Arvore-perfil.svg'
 
 function VisualizarProfissional() {
 
@@ -51,12 +50,6 @@ function VisualizarProfissional() {
 
   return (
     <div className="container">
-      {/* <div className="acoes-perfil">
-        <div className="item-acao">📅 Agende sua consulta</div>
-        <div className="item-acao">📹 Video chamada</div>
-        <div className="item-acao">💬 Chat</div>
-        <div className="item-acao">💳 Pagamentos</div>
-      </div> */}
       <aside className="barra-lateral">
         <div
           style={{
@@ -72,7 +65,7 @@ function VisualizarProfissional() {
             <img src={profissional.foto} alt="Foto do perfil" className="imagem-perfil" />
             <h2 className="nome-perfil">{profissional?.nome}</h2>
           </div>
-          <div className="experiencia-perfil">
+          {/* <div className="experiencia-perfil">
             <h3>Experiência</h3>
             <div className="cartao-experiencia">
               <strong>Cargo</strong> <span className="ano">Ano</span>
@@ -83,7 +76,7 @@ function VisualizarProfissional() {
               <p>Breve descrição.</p>
             </div>
             <button className="botao-baixar">Baixar currículo</button>
-          </div>
+          </div> */}
         </div>
         <div className="caixa-comandos">
           <div className="cartao-informacao">
@@ -114,7 +107,7 @@ function VisualizarProfissional() {
 
       <main className="conteudo">
         <div className="arvore">
-          <img src="Arvore Perfil.png" alt="" />
+          <img src={Arvore} alt="" />
         </div>
 
         <div className="botoes-maior">
@@ -155,9 +148,7 @@ function VisualizarProfissional() {
               <h2>Sobre mim</h2>
             </div>
             <div className="corpo-sobre-mim">
-              <p>
-               
-              </p>
+              <p>{profissional?.sobre_mim}</p>
             </div>
           </div>
         </div>

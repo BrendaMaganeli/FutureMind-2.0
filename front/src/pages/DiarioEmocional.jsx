@@ -251,7 +251,7 @@ export default function NotesApp() {
             </div>
 
             {activeTab === "checklist" && (
-              <div>
+              <div className="div-list">
                 {selectedNote.checklist.map((item, i) => (
                   <div key={i} className="checklist-item">
                     <input

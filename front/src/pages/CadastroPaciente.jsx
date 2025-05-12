@@ -34,7 +34,7 @@ function CadastroPaciente() {
 
       setPaciente(pacienteAux);
 
-      const response = await fetch("http://localhost:4242/cadastro-paciente", {
+      const response = await fetch("https://futuremind-2-0-mw60.onrender.com/cadastro-paciente", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

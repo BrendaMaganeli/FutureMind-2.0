@@ -309,18 +309,6 @@
   flex-wrap: wrap;
 }
 
-.perfil-nomeValor{
-
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
-   height: 100px;
-   width: 60%;
-}
-
-
-
 .card .tag {
   background: #e3eaf2;
   color: #546e7a;
@@ -601,5 +589,6 @@
   position: absolute;
   z-index: 999;
   width: 100%;
-  
+  background-color: rgba(101, 126, 158, 0.5);
+  height: 250px;
 }

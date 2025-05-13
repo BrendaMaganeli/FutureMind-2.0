@@ -8,12 +8,62 @@ import "./CSS/EditarPaciente.css";
 import Arvore from "../assets/Group 239274.svg";
 import { useEffect, useState } from "react";
 import { Pointer } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 
 function EditarPaciente() {
   const [isVisible, setIsVisible] = useState(false);
-
+  
   const toggleDiv = () => setIsVisible(true);
   const desativar_div = () => setIsVisible(false);
+  
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+
+  const deletarProfissional = async() => {
+
+    try {
+      
+      const response = await fetch('http://localhost:4242/editar-profissional',{
+
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(profissional)
+      });
+
+      if (response.ok) {
+
+        localStorage.setItem('User Logado', false);
+        localStorage.removeItem('User-Profile');
+        navigate('/');
+      }
+    } catch (err) {
+      
+      console.log('Falha na conexão: ', err);
+    }
+  };
+
+  const sairProfissional = () => {
+
+    localStorage.setItem('User Logado', false);
+    localStorage.removeItem('User-Profile');
+    navigate('/');
+  }
+
+  const handleDeletarClick = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleConfirmarDeletar = () => {
+    deletarProfissional();
+    setShowModal(false);
+  };
 
   const pacienteLocal = JSON.parse(localStorage.getItem('User-Profile'));
 
@@ -76,7 +126,8 @@ function EditarPaciente() {
   // Máscaras para CPF, Telefone e Data
   function aplicarMascaraCPF(valor) {
     return valor
-      .replace(/\D/g, '') // remove tudo que não é dígito
+      .replace(/\D/g, '') 
+      .slice(0, 11)  
       .replace(/(\d{3})(\d)/, '$1.$2') 
       .replace(/(\d{3})(\d)/, '$1.$2') 
       .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
@@ -87,7 +138,7 @@ function EditarPaciente() {
       .replace(/\D/g, '')
       .replace(/(\d{2})(\d)/, '($1) $2')
       .replace(/(\d{5})(\d)/, '$1-$2')
-      .replace(/(-\d{4})\d+?$/, '$1'); // evita digitar além do necessário
+      .replace(/(-\d{4})\d+?$/, '$1'); 
   }
 
   function aplicarMascaraData(valor) {
@@ -164,8 +215,8 @@ function EditarPaciente() {
               <img src={voltar} alt="" style={{Pointer: 'cursor'}}/>
             </div>
             <div className="botoes-superiores-p">
-              <button className="botao-deletar">Deletar</button>
-              <button className="botao-sair">Sair</button>
+            <button onClick={handleDeletarClick} className="botao-deletar">Deletar</button>
+            <button onClick={sairProfissional} className="botao-sair">Sair</button>
             </div>
           </div>
           <div className="loguinho-p">
@@ -294,6 +345,17 @@ function EditarPaciente() {
           </div>
         </div>
       )}
+      {showModal && (
+  <div className="modal">
+    <div className="modal-content">
+      <h3>Tem certeza de que deseja deletar sua conta?</h3>
+      <div className="buttons">
+        <button onClick={handleConfirmarDeletar} className="modal-btn-1">Sim</button>
+        <button onClick={handleCloseModal} className="modal-btn-1">Cancelar</button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }

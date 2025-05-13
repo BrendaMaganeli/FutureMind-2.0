@@ -7,6 +7,7 @@ import "./CSS/EditarProfissional.css";
 import voltar from "../assets/seta-principal.svg";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Select from "react-select";
 
 function EditarProfissional() {
 
@@ -14,11 +15,28 @@ function EditarProfissional() {
   const profissional = JSON.parse(localStorage.getItem('User-Profile'));
   const [showModal, setShowModal] = useState(false);
 
+  const opcoesEspecializacao = [
+    { value: "psicologia-clinica", label: "Psicologia Clínica" },
+    { value: "psicopedagogia", label: "Psicopedagogia" },
+    { value: "neuropsicologia", label: "Neuropsicologia" },
+  ];
+
+  const opcoesAbordagens = [
+    { value: "cognitivo-comportamental", label: "Cognitivo-Comportamental" },
+    { value: "psicanalise", label: "Psicanálise" },
+    { value: "humanista", label: "Humanista" },
+  ];
+
+  const [especializacoes, setEspecializacoes] = useState([]);
+  const [abordagens, setAbordagens] = useState([]);
+  const [especializacaoValida, setEspecializacaoValida] = useState(true);
+  const [abordagemValida, setAbordagemValida] = useState(true);
+
   const deletarProfissional = async() => {
 
     try {
       
-      const response = await fetch('http://localhost:4242/editar-profissional',{
+      const response = await fetch('http://localhost:4242/editarprofissional',{
 
         method: 'DELETE',
         headers: {
@@ -58,6 +76,94 @@ function EditarProfissional() {
     deletarProfissional();
     setShowModal(false);
   };
+
+  function formatarDataBrasileira(dataISO) {
+    const data = new Date(dataISO);
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    const ano = data.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+  }
+
+  function formatarDataParaEnvio(dataBR) {
+    if (!dataBR.includes('/')) return dataBR; // já está no formato certo
+    const [dia, mes, ano] = dataBR.split('/');
+    return `${ano}-${mes}-${dia}`;
+  }
+
+  const [profissionais, setProfissionais] = useState({
+    id_profissional: profissional.id_profissional,
+    nome: profissional.nome,
+    cpf: profissional.cpf,
+    telefone: profissional.telefone,
+    email: profissional.email,
+    data_nascimento: formatarDataBrasileira(profissional.data_nascimento),
+    senha: profissional.senha,
+    crp: profissional.crp,
+    abordagem: profissional.abordagem,
+    foto: profissional.foto,
+    valor_consulta: profissional.valor_consulta,
+    especializacao: profissional.especializacao,
+    email_profissional: profissional.email_profissional,
+    sobre_mim: profissional.sobre_mim
+  });
+
+  const salvarEdicao = async () => {
+    try {
+      const profissionalParaEnviar = {
+        ...profissional,
+        data_nascimento: formatarDataParaEnvio(profissional.data_nascimento)
+      };
+
+      const response = await fetch(`http://localhost:4242/editarprofissional`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profissionalParaEnviar),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('User-Profile', JSON.stringify({
+          ...profissional,
+          data_nascimento: profissionalParaEnviar.data_nascimento
+        }));
+        window.location.reload(); 
+      } else {
+        console.error('Erro ao salvar:', data);
+      }
+    } catch (err) {
+      console.error('Erro na requisição:', err);
+    }
+  };
+
+  // Máscaras para CPF, Telefone e Data
+  function aplicarMascaraCPF(valor) {
+    return valor
+      .replace(/\D/g, '') 
+      .slice(0, 11)  
+      .replace(/(\d{3})(\d)/, '$1.$2') 
+      .replace(/(\d{3})(\d)/, '$1.$2') 
+      .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+  }
+
+  function aplicarMascaraTelefone(valor) {
+    return valor
+      .replace(/\D/g, '')
+      .replace(/(\d{2})(\d)/, '($1) $2')
+      .replace(/(\d{5})(\d)/, '$1-$2')
+      .replace(/(-\d{4})\d+?$/, '$1'); 
+  }
+
+  function aplicarMascaraData(valor) {
+    return valor
+      .replace(/\D/g, '')
+      .replace(/(\d{2})(\d)/, '$1/$2')
+      .replace(/(\d{2})(\d)/, '$1/$2')
+      .replace(/(\/\d{4})\d+?$/, '$1');
+  }
 
   return (
     <div className="container">
@@ -130,53 +236,132 @@ function EditarProfissional() {
           </div>
 
         <div className="editar-profissional">
+        <div className="floating-input-pac">
+              <input 
+                type="text" 
+                placeholder=" " 
+                value={profissionais.nome}
+                required 
+                onChange={(e) => setProfissionais({ ...profissionais, nome: e.target.value })}
+              />
+              <label>Nome Completo</label>
+            </div>
+            <div className="floating-input-pac">
+              <input 
+                type="text" 
+                placeholder=" " 
+                value={profissionais.cpf}
+                required 
+                onChange={(e) => setProfissionais({ ...profissionais, cpf: aplicarMascaraCPF(e.target.value) })}
+              />
+              <label>CPF</label>
+            </div>
+            <div className="floating-input-pac">
+              <input 
+                type="text" 
+                placeholder=" " 
+                value={profissionais.telefone}
+                required 
+                onChange={(e) => setProfissionais({...profissionais, telefone: aplicarMascaraTelefone(e.target.value)})}
+              />
+              <label>Telefone</label>
+            </div>
           <div className="floating-input-pac">
-            <input value={profissional.nome} type="text" placeholder=" " required />
-            <label>Nome Completo</label>
-          </div>
+              <input 
+                type="text" 
+                placeholder=" " 
+                value={profissionais.email}
+                required 
+                onChange={(e) => setProfissionais ({...profissionais, email: e.target.value})}
+              />
+              <label>E-mail</label>
+            </div>
           <div className="floating-input-pac">
-            <input value={profissional.cpf} type="text" placeholder=" " required />
-            <label>CPF</label>
-          </div>
+              <input 
+                type="text" 
+                placeholder=" " 
+                value={profissionais.data_nascimento}
+                required 
+                onChange={(e) => setProfissionais ({...profissionais, data_nascimento: aplicarMascaraData(e.target.value) })}
+              />
+              <label>Data de Nascimento</label>
+            </div>
+            <div className="floating-input-pac">
+              <input 
+                type="password" 
+                placeholder=" " 
+                value={profissionais.senha}
+                required 
+                onChange={(e) => setProfissionais ({...profissionais, senha: e.target.value})}
+              />
+              <label>Senha</label>
+            </div>
           <div className="floating-input-pac">
-            <input value={profissional.telefone} type="text" placeholder=" " required />
-            <label>Telefone</label>
-          </div>
-          <div className="floating-input-pac">
-            <input value={profissional.email} type="text" placeholder=" " required />
-            <label>E-mail</label>
-          </div>
-          <div className="floating-input-pac">
-            <input value={profissional.data_nascimento} type="text" placeholder=" " required />
-            <label>Data de Nascimento</label>
-          </div>
-          <div className="floating-input-pac">
-            <input value={profissional.senha} type="text" placeholder=" " required />
-            <label>Senha</label>
-          </div>
-          <div className="floating-input-pac">
-            <input type="text" placeholder=" " required />
-            <label>Preferências</label>
-          </div>
-          <div className="floating-input-pac">
-            <input type="text" placeholder=" " required />
-            <label>Especialização</label>
-          </div>
-          <div className="floating-input-pac">
-            <input value={profissional.crp} type="text" placeholder=" " required />
+            <input 
+            type="text" 
+            placeholder=" " 
+            value={profissionais.crp} 
+            required 
+            onChange={(e) => setProfissionais ({...profissionais, crp: e.target.value})}
+            />
             <label>CRP</label>
           </div>
           <div className="floating-input-pac">
             <input type="text" placeholder=" " required />
             <label>Preço</label>
           </div>
+                <div className="select-filtro-prof">
+                  <Select
+                    placeholder="Especialização"
+                    className="custom-select-prof"
+                    classNamePrefix="select"
+                    options={opcoesEspecializacao}
+                    isMulti
+                    onChange={(selectedOptions) => {
+                      const opcoes = selectedOptions || [];
+                      setEspecializacoes(opcoes);
+                      setEspecializacaoValida(opcoes.length
+         > 0);
+                    }}
+                    value={especializacoes}
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                    }}
+                    />
+                </div>
+                <div className="select-filtro-prof">
+                  <Select
+                    placeholder="Abordagem"
+                    className="custom-select-prof"
+                    classNamePrefix="select"
+                    options={opcoesAbordagens}
+                    isMulti
+                    onChange={(selectedOptions) => {
+                      const opcoes = selectedOptions || [];
+                      setAbordagens(opcoes);
+                      setAbordagemValida(opcoes.length > 0);
+                    }}
+                    value={abordagens}
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                    }}
+                    />
+                </div>
           <div className="floating-input-pac">
-            <input type="text" placeholder=" " required />
-            <label>Abordagem</label>
-          </div>
+              <input 
+                type="text" 
+                placeholder=" " 
+                value={profissionais.email_profissional}
+                required 
+                onChange={(e) => setProfissionais ({...profissionais, email_profissional: e.target.value})}
+              />
+              <label>E-mail</label>
+            </div>
         </div>
         <div className="BTN-SALVAR">
-          <button className="salvar-btn">Salvar</button>
+          <button className="salvar-btn" onClick={salvarEdicao}>Salvar</button>
         </div>
       </div>
       {showModal && (

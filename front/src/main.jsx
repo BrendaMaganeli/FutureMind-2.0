@@ -1,11 +1,10 @@
-import { createRoot } from 'react-dom/client'
-import { RouterProvider } from 'react-router-dom'
-import router from './routes/router.jsx'
+import { createRoot } from "react-dom/client";
+import { RouterProvider } from "react-router-dom";
+import router from "./routes/router.jsx";
+import { GlobalContextProvider } from "./Context/GlobalContext.jsx";
 
-
-createRoot(document.getElementById('root')).render(
- 
-    <RouterProvider router={router}>
-    </RouterProvider>
-    
+createRoot(document.getElementById("root")).render(
+  <GlobalContextProvider>
+    <RouterProvider router={router}></RouterProvider>
+  </GlobalContextProvider>,
 );

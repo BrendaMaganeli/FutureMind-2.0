@@ -1,50 +1,50 @@
-.container-footer{
-    background-color: rgba(90,120,159, .5);
-    width: 100%;
-    height: 225px;
-    color: white;
-    padding: 2%;
+.container-footer {
+  background-color: rgba(90, 120, 159, 0.5);
+  width: 100%;
+  height: 225px;
+  color: white;
+  padding: 2%;
 }
 
-.container-titulo{
-    width: 100%;
-    display: flex;
-    height: 40%;
-    padding-left: 5%;
+.container-titulo {
+  width: 100%;
+  display: flex;
+  height: 40%;
+  padding-left: 5%;
 }
 
-.container-titulo p{
-    font-size: 2em;
+.container-titulo p {
+  font-size: 2em;
 }
 
-.container-geral_info{
-    width: 100%;
-    display: flex;
-    height: 60%;
+.container-geral_info {
+  width: 100%;
+  display: flex;
+  height: 60%;
 }
 
-.container-direitos{
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding-left: 5%;
+.container-direitos {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-left: 5%;
 }
 
-.container-direitos p{
-    padding-top: 1%;
+.container-direitos p {
+  padding-top: 1%;
 }
 
-.container-redes{
-    width: 50%;
-    display: flex;
-    height: 100%;
-    gap: 5%;
-    justify-content: end;
-    align-items: start;
-    padding-right: 5%;
+.container-redes {
+  width: 50%;
+  display: flex;
+  height: 100%;
+  gap: 5%;
+  justify-content: end;
+  align-items: start;
+  padding-right: 5%;
 }
 
-.container-redes Link{
-    width: 4%;
+.container-redes Link {
+  width: 4%;
 }

@@ -1,140 +1,350 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "DM Sans", serif;
+.floating-input {
+  position: relative;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 320px;
 }
 
-#root,body,html{
-    min-height: 100vh;
-    font-family: "DM Sans", serif;
+.floating-input input {
+  width: 49.5em;
+  padding: 16px 12px 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
 }
 
-.pagamento-container{
-    display: flex;
-    margin: 0;
+.floating-input input:focus {
+  border-color: #013a63;
 }
 
-.lado-esquerdo{
-    width: 30%;
-    height: 100vh;
-    margin: 0%;
-    background-color: #5a789fa4;
-    position: relative;
+.floating-input label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  background: white;
+  padding: 0 4px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
 }
 
-.lado-Direito{
-    width: 70%;
-    height: 100vh;
+/* Quando o input está focado ou tem conteúdo */
+.floating-input input:focus + label,
+.floating-input input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 13px;
+  color: #013a63;
 }
 
-.seta-pagamento{
-    width: 6%;
-    padding-right: 2%;
+.floating-input-2 {
+  position: relative;
+  margin-top: 20px;
+  width: 100%;
 }
 
-.pagamento-pSuperior{
-    display: flex;
-    padding-left: 1%;
-    margin: 3%;
-    justify-content: start;
-    align-items: center;
+.floating-input-2 input {
+  width: 24.4em;
+  padding: 16px 12px 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
 }
 
-.h3{
-    color: #011c30;
+.floating-input-2 input:focus {
+  border-color: #013a63;
 }
 
-.style-fraseM{
-    color: #173b57;
-    font-size: 1.4em;
+.floating-input-2 label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  background: white;
+  padding: 0 4px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
 }
 
-.frase-motivadora{
-    display: flex;
-    padding-left: 4%;
-    height: 200px;
-    align-items: center;
+/* Quando o input está focado ou tem conteúdo */
+.floating-input-2 input:focus + label,
+.floating-input-2 input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 13px;
+  color: #013a63;
 }
 
-.valor-de-pagamento{
-    display: flex;
-    flex-direction: column;
-    padding-left: 4%;
-    height: 100px;
-    justify-content: center;
+.cupom {
+  position: relative;
+  margin-top: 20px;
+  width: 80%;
+  display: flex;
 }
 
-.valor-DPagamento{
-    color:  #011c30;
-    font-size: 1.8em;
+.cupom input {
+  width: 100%;
+  padding: 16px 12px 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
 }
 
-.dados-de-consultaPag{
-    display: flex;
-    flex-direction: column;
-    padding-left: 4%;
-    height: 550px;
-    justify-content: center;
-    color:  #011c30;
+.cupom input:focus {
+  border-color: #013a63;
 }
 
-.sub-dadosPag{
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    padding-top: 4%;
+.cupom label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  background: white;
+  padding: 0 4px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
 }
 
-.style-dadosPag{
-    font-size: 1.8em;
+/* Quando o input está focado ou tem conteúdo */
+.cupom input:focus + label,
+.cupom input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 13px;
+  color: #013a63;
 }
 
-.style-linkPag{
-    color:#054c83;
-    text-decoration: none;
-}
-.linkPag-politica{
-    display: flex;
-    justify-content: center;
+.floating-select {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin-top: 20px;
 }
 
-.logoPag{
-    display: flex;
-    justify-content: end;
+.floating-select select {
+  width: 165%;
+  padding: 16px 12px 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  appearance: none;
+  background-color: white;
+  outline: none;
+  transition: border-color 0.3s;
 }
 
-.botoesPag{
-    display: flex;
-    justify-content: center;
-    gap: 5%;
+.floating-select select:focus {
+  border-color: #013a63;
 }
 
-.botoesPag-style{
-    width: 10%;
-    height: 65px;
-    border-radius: 7px;
-    background-color: transparent;
-    border: 2px solid #00000042;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    padding-left: 5px;
-    padding-top: 5px;
+.floating-select label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  background: white;
+  padding: 0 4px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
 }
 
-.botoesPag-style:hover{
-    border: 2px solid #000;
+.floating-select select:focus + label,
+.floating-select select:not([value=""]) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 13px;
+  color: #013a63;
 }
 
-.botoesPag-style.selected{
-    border: 2px solid #000;
+.floating-input-3 {
+  position: relative;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 320px;
 }
 
-.formPag{
-    width: 20%;
-    padding-bottom: 8px;
+.floating-input-3 input {
+  width: 165%;
+  padding: 16px 12px 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
 }
 
+.floating-input-3 input:focus {
+  border-color: #013a63;
+}
 
+.floating-input-3 label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  background: white;
+  padding: 0 4px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+
+/* Quando o input está focado ou tem conteúdo */
+.floating-input-3 input:focus + label,
+.floating-input-3 input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 13px;
+  color: #013a63;
+}
+
+.tabs-container {
+  position: relative;
+  display: flex;
+  width: 50%;
+  background-color: #f1f5f9;
+  border-radius: 8px;
+  padding: 2px;
+  overflow: hidden;
+  margin-bottom: 2%;
+}
+
+.tab {
+  flex: 1;
+  z-index: 1;
+  background: none;
+  border: none;
+  padding: 12px 0;
+  font-weight: 500;
+  color: #64748b;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab.active {
+  color: #000;
+  font-weight: 600;
+}
+
+.slider {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  width: 33%;
+  background-color: white;
+  border-radius: 6px;
+  transition: left 0.3s ease;
+  z-index: 0;
+}
+
+.floating-input-4 {
+  position: relative;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.floating-input-4 input {
+  width: 118%;
+  padding: 16px 12px 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.floating-input-4 input:focus {
+  border-color: #013a63;
+}
+
+.floating-input-4 label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  background: white;
+  padding: 0 4px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+
+/* Quando o input está focado ou tem conteúdo */
+.floating-input-4 input:focus + label,
+.floating-input-4 input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 13px;
+  color: #013a63;
+}
+
+.error-text {
+  color: #013a63;
+  font-size: 14px;
+  visibility: hidden;
+  height: 25px;
+  display: flex;
+  align-items: end;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.error-text.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.floating-select-2 {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin-top: 20px;
+}
+
+.floating-select-2 select {
+  width: 247%;
+  padding: 16px 12px 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  appearance: none;
+  background-color: white;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.floating-select-2 select:focus {
+  border-color: #013a63;
+}
+
+.floating-select-2 label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  background: white;
+  padding: 0 4px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+
+.floating-select-2 select:focus + label,
+.floating-select-2 select:not([value=""]) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 13px;
+  color: #013a63;
+}

@@ -1,145 +1,315 @@
-import { useState, useEffect } from 'react';
-import './CSS/DiarioEmocional.css';
-import seta from '../assets/reply-solid (1) 2.svg';
-import Nota from '../assets/file-pen-solid 1.svg';
-import Arvore from '../assets/Logo Para o Navegador do Google 4.svg';
-import Relógio from '../assets/clock-regular 1.svg';
-import Lixo from '../assets/Vector.svg';
-import Setas from '../assets/down-left-and-up-right-to-center-solid.svg';
-import SetaBaixo from '../assets/angle-down-solid.svg';
+import { useState } from "react";
+import { Plus, X } from "lucide-react";
+import "./CSS/DiarioEmocional.css";
+import { Pencil } from "lucide-react";
 
-function DiarioEmocional() {
-  const [notas, setNotas] = useState([]);
-  const [notaAtiva, setNotaAtiva] = useState(null);
-  const [textoDigitado, setTextoDigitado] = useState('');
-  const [telaCheia, setTelaCheia] = useState(false);
-  const [modalAberto, setModalAberto] = useState(false);
+const initialData = [
+  {
+    id: 1,
+    name: "Notes",
+    notes: [
+      {
+        id: 1,
+        title: "Nota 1",
+        checklist: [],
+      },
+    ],
+  },
+];
 
-  const adicionarNota = () => {
-    const novaNota = {
-      id: Date.now(),
-      titulo: "Nova Nota",
-      texto: "",
-      data: new Date().toLocaleDateString()
+export default function NotesApp() {
+  const [folders, setFolders] = useState(initialData);
+  const [selectedFolder, setSelectedFolder] = useState(
+    folders.length > 0 ? folders[0] : null
+  );
+  const [selectedNote, setSelectedNote] = useState(
+    folders.length > 0 && folders[0].notes.length > 0 ? folders[0].notes[0] : null
+  );  
+  const [activeTab, setActiveTab] = useState("checklist");
+
+  const handleCheck = (type, index) => {
+    const updatedNote = { ...selectedNote };
+    updatedNote[type][index].done = !updatedNote[type][index].done;
+    updateNoteState(updatedNote);
+  };
+
+  const handleAddItem = (type) => {
+    const updated = {
+      ...selectedNote,
+      [type]: [...selectedNote[type], { text: "", done: false }],
     };
-    setNotas([novaNota, ...notas]);
-    setNotaAtiva(novaNota);
-    setTextoDigitado(novaNota.texto);
+    updateNoteState(updated);
   };
 
-  const apagarNota = () => {
-    if (notaAtiva) {
-      const novasNotas = notas.filter(nota => nota.id !== notaAtiva.id);
-      setNotas(novasNotas);
-      if (novasNotas.length > 0) {
-        setNotaAtiva(novasNotas[0]);
-        setTextoDigitado(novasNotas[0].texto);
-      } else {
-        setNotaAtiva(null);
-        setTextoDigitado('');
-      }
+  const handleNewNote = () => {
+    const newNote = {
+      id: Date.now(),
+      title: "New Note",
+      checklist: [],
+      imageNote: "",
+    };
+    const updatedFolder = {
+      ...selectedFolder,
+      notes: [newNote, ...selectedFolder.notes],
+    };
+    updateFolderState(updatedFolder);
+    setSelectedNote(newNote);
+  };
+
+  const handleNewFolder = () => {
+    const newFolder = {
+      id: Date.now(),
+      name: `Folder ${folders.length + 1}`,
+      notes: [],
+    };
+    setFolders([newFolder, ...folders]);
+    setSelectedFolder(newFolder);
+    setSelectedNote(null);
+  };
+
+  const handleDeleteFolder = (folderId) => {
+    const updatedFolders = folders.filter((f) => f.id !== folderId);
+    setFolders(updatedFolders);
+    if (selectedFolder?.id === folderId) {
+      setSelectedFolder(updatedFolders[0] || null);
+      setSelectedNote(updatedFolders[0]?.notes[0] || null);
     }
   };
 
-  const selecionarNota = (nota) => {
-    setNotaAtiva(nota);
-    setTextoDigitado(nota.texto);
+  const handleDeleteNote = (noteId) => {
+    const updatedNotes = selectedFolder.notes.filter((n) => n.id !== noteId);
+    const updatedFolder = { ...selectedFolder, notes: updatedNotes };
+    updateFolderState(updatedFolder);
+    setSelectedNote(updatedNotes[0] || null);
   };
 
-  const atualizarTextoNota = (e) => {
-    const novoTexto = e.target.value;
-    setTextoDigitado(novoTexto);
-
-    if (notaAtiva) {
-      const tituloGerado = novoTexto.length > 10 
-        ? novoTexto.split(' ').slice(0, 4).join(' ').slice(0, 10) + "..." 
-        : novoTexto.split(' ').slice(0, 4).join(' ');
-
-      setNotaAtiva({ ...notaAtiva, texto: novoTexto, titulo: tituloGerado });
-      setNotas(notas.map(nota => (nota.id === notaAtiva.id ? { ...nota, texto: novoTexto, titulo: tituloGerado } : nota)));
-    }
+  const updateNoteState = (updatedNote) => {
+    const updatedFolder = {
+      ...selectedFolder,
+      notes: selectedFolder.notes.map((n) =>
+        n.id === updatedNote.id ? updatedNote : n
+      ),
+    };
+    updateFolderState(updatedFolder);
+    setSelectedNote(updatedNote);
   };
 
-  const alternarTelaCheia = () => {
-    setTelaCheia(!telaCheia);
+  const updateFolderState = (updatedFolder) => {
+    setFolders(
+      folders.map((f) => (f.id === updatedFolder.id ? updatedFolder : f))
+    );
+    setSelectedFolder(updatedFolder);
   };
 
-  useEffect(() => {
-    if (notas.length === 0 && !notaAtiva) {
-      adicionarNota();
-    }
-  }, [notas, notaAtiva]);
+  const tabs = [
+    { value: "checklist", label: "Lista" },
+    { value: "imageNote", label: "Nota" },
+  ];
+
+  const [editingFolderId, setEditingFolderId] = useState(null);
 
   return (
-    <div className={`container-diarioemocional ${telaCheia ? 'fullscreen' : ''}`}>
-      <div className='mini-lado-esquerdoDiario'>
-        <button className='buttondiario'>
-          <img src={seta} alt="" className='seta-diaraio'/>
-        </button>
+    <div className="notes-app">
+      <div className="folders-sidebar">
+        <div className="header">
+          <h2 className="title">Pastas</h2>
+          <button onClick={handleNewFolder} className="btn add-folder">
+            <Plus size={16} />
+          </button>
+        </div>
+        <div className="folders-list">
+          {folders.length > 0 ? (
+            folders.map((folder) => (
+              <div
+                key={folder.id}
+                className={`folder-item ${
+                  folder.id === selectedFolder?.id ? "selected" : ""
+                }`}
+                onClick={() => {
+                  setSelectedFolder(folder);
+                  setSelectedNote(folder.notes[0] || null);
+                }}
+              >
+                {editingFolderId === folder.id ? (
+                  <input
+                    className="folder-name-input"
+                    value={folder.name}
+                    onChange={(e) => {
+                      const updatedFolders = folders.map((f) =>
+                        f.id === folder.id ? { ...f, name: e.target.value } : f
+                      );
+                      setFolders(updatedFolders);
+                    }}
+                    onBlur={() => setEditingFolderId(null)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") setEditingFolderId(null);
+                    }}
+                    autoFocus
+                  />
+                ) : (
+                  <>
+                    <div className="tit-pasta">
+                      <span>{folder.name}</span>
+                    </div>
+                    <div className="edit-nome-pasta">
+                      <button
+                        className="edit-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEditingFolderId(folder.id);
+                        }}
+                      >
+                        <Pencil size={14} />
+                      </button>
+                    </div>
+                  </>
+                )}
+                <div className="excluir-pasta">
+                  <button
+                    className="delete-btnn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteFolder(folder.id);
+                    }}
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="empty-message">Sem pastas</div>
+          )}
+        </div>
+
+        <div className="header">
+          <h2 className="title">Notas</h2>
+          <button onClick={handleNewNote} className="btn add-note">
+            <Plus size={16} />
+          </button>
+        </div>
+        <div className="notes-list">
+          {selectedFolder?.notes?.length > 0 ? (
+            selectedFolder.notes.map((note) => (
+              <div
+                key={note.id}
+                className={`note-item ${
+                  selectedNote?.id === note.id ? "selected" : ""
+                }`}
+                onClick={() => setSelectedNote(note)}
+              >
+                <span className="note-text">{note.title}</span>
+                <button
+                  className="delete-btnn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteNote(note.id);
+                  }}
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            ))
+          ) : (
+            <div className="empty-message">Sem notas</div>
+          )}
+        </div>
       </div>
 
-      <div className='lado-esquerdoDiario'>
-        <div className='div-cabecalhodiario'>
-          <div className='cacecalhomenor'>
-            <h2>Diário Emocional</h2>
-            <button className='botaonovanota' onClick={adicionarNota}>
-              <img src={Nota} alt="" />Nova Nota
-            </button>
-          </div>
-          <p className='quantidadenotas'>{notas.length} notas</p>
-        </div>
-        
-        <div className='lista-de-notas'>
-          {notas.map((nota) => (
-            <div key={nota.id} className={`nota-item ${notaAtiva?.id === nota.id ? 'ativa' : ''}`} onClick={() => selecionarNota(nota)}>
-              <p className='nota-data'>{nota.data}</p>
-              <p className='nota-titulo'>{nota.titulo}</p>
+      <div className="note-details">
+        {selectedNote && (
+          <div>
+            <input
+              className="note-title-input"
+              value={selectedNote.title}
+              onChange={(e) => {
+                const updated = { ...selectedNote, title: e.target.value };
+                updateNoteState(updated);
+              }}
+            />
+
+            <div className="custom-tabs-slider">
+              <div
+                className="slider-c"
+                style={{
+                  left: `${
+                    tabs.findIndex((tab) => tab.value === activeTab) * 50
+                  }%`,
+                }}
+              />
+              {tabs.map((tab) => (
+                <button
+                  key={tab.value}
+                  onClick={() => setActiveTab(tab.value)}
+                  className={`tab-button ${
+                    activeTab === tab.value ? "active" : ""
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
-          ))}
-        </div>
+
+            {activeTab === "checklist" && (
+              <div className="div-list">
+                {selectedNote.checklist.map((item, i) => (
+                  <div key={i} className="checklist-item">
+                    <input
+                      type="checkbox"
+                      checked={item.done}
+                      className="check-c"
+                      onChange={() => handleCheck("checklist", i)}
+                    />
+                    <div className="input-wrapper">
+                      <input
+                        value={item.text}
+                        onChange={(e) => {
+                          const updated = { ...selectedNote };
+                          updated.checklist[i].text = e.target.value;
+                          updateNoteState(updated);
+                        }}
+                        className="input-item"
+                      />
+                      <button
+                        className="delete-btn"
+                        onClick={() => {
+                          const updated = { ...selectedNote };
+                          updated.checklist.splice(i, 1);
+                          updateNoteState(updated);
+                        }}
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                <button
+                  onClick={() => handleAddItem("checklist")}
+                  className="btn add-item"
+                >
+                  Add Item
+                </button>
+              </div>
+            )}
+
+            {activeTab === "imageNote" && (
+              <div>
+                <textarea
+                  value={selectedNote.imageNote}
+                  onChange={(e) => {
+                    const updated = {
+                      ...selectedNote,
+                      imageNote: e.target.value,
+                    };
+                    updateNoteState(updated);
+                  }}
+                  className="textarea-note"
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
-
-      <div className='lado-direitoDiario'>
-        <img src={Arvore} alt="" className='arvoredefundodiario'/>
-        <div className='cabecalhonota'>
-          <div className='datadiario'>
-            <img src={Relógio} alt="" className='relogio'/>
-            <p>{notaAtiva ? notaAtiva.data : "Selecione uma nota"}</p>
-          </div>
-          <div className='div-buts'>
-            <button className='botaoapagar' onClick={apagarNota}>
-              <img src={Lixo} alt="" />Apagar Nota
-            </button>
-            <button className='botaocomp' onClick={() => setModalAberto(true)}>
-              Compartilhar <img src={SetaBaixo} alt="" className='setabaixo'/>
-            </button>
-            <button className='botaoaumentar' onClick={alternarTelaCheia}>
-              <img src={Setas} alt="" />
-            </button>
-          </div>
-        </div>
-
-        <textarea 
-          className='area-digitacao' 
-          value={textoDigitado} 
-          onChange={atualizarTextoNota} 
-          placeholder="Digite aqui..."
-        />
-      </div>
-
-      {modalAberto && (
-        <div className='modal-compartilhar'>
-          <div className='modal-content'>
-            <h2>Compartilhar Nota</h2>
-            <input type='email' placeholder='Adicionar participante' className='input-email' />
-            <button className='botao-copiar'>Copiar Link</button>
-            <button className='botao-enviar'>Enviar</button>
-            <button className='botao-fechar' onClick={() => setModalAberto(false)}>Fechar</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
-
-export default DiarioEmocional;

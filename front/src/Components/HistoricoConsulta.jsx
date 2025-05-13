@@ -3,24 +3,108 @@ import { FaSearch } from "react-icons/fa"; // Ícone de lupa
 import "./CSS/HistoricoConsulta.css";
 
 const appointments = [
-  { date: "2025-02-10", time: "14:00", therapist: "Dr. Ana Souza", status: "Concluída" },
-  { date: "2025-02-15", time: "16:30", therapist: "Dr. Carlos Lima", status: "Pendente" },
-  { date: "2025-02-20", time: "10:00", therapist: "Dra. Beatriz Mendes", status: "Cancelada" },
-  { date: "2025-02-22", time: "15:00", therapist: "Dr. João Pereira", status: "Concluída" },
-  { date: "2025-02-25", time: "11:00", therapist: "Dra. Maria Silva", status: "Pendente" },
-  { date: "2025-03-01", time: "09:30", therapist: "Dr. Pedro Rocha", status: "Cancelada" },
-  { date: "2025-03-01", time: "09:30", therapist: "Dr. Pedro Rocha", status: "Cancelada" },
-  { date: "2025-03-01", time: "09:30", therapist: "Dr. Pedro Rocha", status: "Cancelada" },
-  { date: "2025-03-01", time: "09:30", therapist: "Dr. Pedro Rocha", status: "Cancelada" },
-  { date: "2025-03-01", time: "09:30", therapist: "Dr. Pedro Rocha", status: "Cancelada" },
-  { date: "2025-03-01", time: "09:30", therapist: "Dr. Pedro Rocha", status: "Cancelada" },
-  { date: "2025-03-01", time: "09:30", therapist: "Dr. Pedro Rocha", status: "Cancelada" },
-  { date: "2025-03-01", time: "09:30", therapist: "Dr. Pedro Rocha", status: "Cancelada" },
-  { date: "2025-03-01", time: "09:30", therapist: "Dr. Pedro Rocha", status: "Cancelada" },
-  { date: "2025-03-01", time: "09:30", therapist: "Dr. Pedro Rocha", status: "Cancelada" },
-  { date: "2025-03-01", time: "09:30", therapist: "Dr. Pedro Rocha", status: "Cancelada" },
-  { date: "2025-03-01", time: "09:30", therapist: "Dr. Pedro Rocha", status: "Cancelada" },
-
+  {
+    date: "2025-02-10",
+    time: "14:00",
+    therapist: "Dr. Ana Souza",
+    status: "Concluída",
+  },
+  {
+    date: "2025-02-15",
+    time: "16:30",
+    therapist: "Dr. Carlos Lima",
+    status: "Pendente",
+  },
+  {
+    date: "2025-02-20",
+    time: "10:00",
+    therapist: "Dra. Beatriz Mendes",
+    status: "Cancelada",
+  },
+  {
+    date: "2025-02-22",
+    time: "15:00",
+    therapist: "Dr. João Pereira",
+    status: "Concluída",
+  },
+  {
+    date: "2025-02-25",
+    time: "11:00",
+    therapist: "Dra. Maria Silva",
+    status: "Pendente",
+  },
+  {
+    date: "2025-03-01",
+    time: "09:30",
+    therapist: "Dr. Pedro Rocha",
+    status: "Cancelada",
+  },
+  {
+    date: "2025-03-01",
+    time: "09:30",
+    therapist: "Dr. Pedro Rocha",
+    status: "Cancelada",
+  },
+  {
+    date: "2025-03-01",
+    time: "09:30",
+    therapist: "Dr. Pedro Rocha",
+    status: "Cancelada",
+  },
+  {
+    date: "2025-03-01",
+    time: "09:30",
+    therapist: "Dr. Pedro Rocha",
+    status: "Cancelada",
+  },
+  {
+    date: "2025-03-01",
+    time: "09:30",
+    therapist: "Dr. Pedro Rocha",
+    status: "Cancelada",
+  },
+  {
+    date: "2025-03-01",
+    time: "09:30",
+    therapist: "Dr. Pedro Rocha",
+    status: "Cancelada",
+  },
+  {
+    date: "2025-03-01",
+    time: "09:30",
+    therapist: "Dr. Pedro Rocha",
+    status: "Cancelada",
+  },
+  {
+    date: "2025-03-01",
+    time: "09:30",
+    therapist: "Dr. Pedro Rocha",
+    status: "Cancelada",
+  },
+  {
+    date: "2025-03-01",
+    time: "09:30",
+    therapist: "Dr. Pedro Rocha",
+    status: "Cancelada",
+  },
+  {
+    date: "2025-03-01",
+    time: "09:30",
+    therapist: "Dr. Pedro Rocha",
+    status: "Cancelada",
+  },
+  {
+    date: "2025-03-01",
+    time: "09:30",
+    therapist: "Dr. Pedro Rocha",
+    status: "Cancelada",
+  },
+  {
+    date: "2025-03-01",
+    time: "09:30",
+    therapist: "Dr. Pedro Rocha",
+    status: "Cancelada",
+  },
 ];
 
 export default function HistoricoConsulta() {
@@ -31,7 +115,7 @@ export default function HistoricoConsulta() {
   const filteredAppointments = appointments.filter((appointment) =>
     `${appointment.date} ${appointment.therapist} ${appointment.time} ${appointment.status}`
       .toLowerCase()
-      .includes(searchQuery.toLowerCase())
+      .includes(searchQuery.toLowerCase()),
   );
 
   // Atualiza a pesquisa ao clicar na lupa ou pressionar Enter

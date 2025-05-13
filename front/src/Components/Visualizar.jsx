@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function Visualizar() {
-  return (
-    <div>
-      
-    </div>
-  )
+  return <div></div>;
 }
 
-export default Visualizar
+export default Visualizar;

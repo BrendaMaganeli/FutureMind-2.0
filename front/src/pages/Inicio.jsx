@@ -118,36 +118,6 @@ function Inicio() {
                   <input type="text" placeholder = "Buscar profissional..." onChange={(e) => valor_input_buscar(e)}/>
                   <img src="search.png" alt="" />
               </div>
-              <div>
-              {filtrados.length > 0 && (
-              <div
-              style={{
-                border: '1px solid #ccc',
-                position: 'absolute',
-                width: '100%',
-                background: 'white',
-                zIndex: 1000,
-                maxHeight: '150px',
-                overflowY: 'auto'
-              }}>
-               {filtrados.map((nome, index) => (
-                <div
-                  key={index}
-                  onClick={() => selecionarUsuario(nome)}
-                  style={{
-                    padding: '8px',
-                    cursor: 'pointer',
-                    borderBottom: '1px solid #eee'
-                  }}
-                  onMouseOver={(e) => (e.currentTarget.style.background = '#eee')}
-                  onMouseOut={(e) => (e.currentTarget.style.background = 'white')}
-                >
-                {nome.nome}
-                </div>
-                 ))}
-                </div>
-                )}
-              </div>
               <div className="div-filtro">
                 <div className="select-filtro">
                   <Select
@@ -159,8 +129,7 @@ function Inicio() {
                     onChange={(selectedOptions) => {
                       const opcoes = selectedOptions || [];
                       setEspecializacoes(opcoes);
-                      setEspecializacaoValida(opcoes.length
-         > 0);
+                      setEspecializacaoValida(opcoes.length > 0);
                     }}
                     value={especializacoes}
                     menuPortalTarget={document.body}
@@ -189,7 +158,23 @@ function Inicio() {
                     />
                 </div>
               </div>
-            </div>
+             </div>
+             <div className="container_filtrados">
+               {filtrados.length > 0 && (
+                <div className="filtrados">
+               {filtrados.map((nome, index) => (
+                <div className="nomes_filtrados"
+                  key={index}
+                  onClick={() => selecionarUsuario(nome)}
+                  onMouseOver={(e) => (e.currentTarget)}
+                  onMouseOut={(e) => (e.currentTarget)}
+                >
+                {nome.nome}
+                </div>
+                 ))}
+                </div>
+                )}
+              </div>
             <div className="filter-profissionais-baixo">
               <div className="plano-saude-img">
                 <Link to="/planoSaude">
@@ -214,7 +199,6 @@ function Inicio() {
           </div>
         </div>
       </div>
-
       <div className="resultados-container">
         <div className="resultado-texto-anota">
           <div className="resultado-frase">

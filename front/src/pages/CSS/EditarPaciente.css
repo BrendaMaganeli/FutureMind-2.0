@@ -391,3 +391,15 @@
   background-color: #5a7da0;
   color: white;
 }
+
+
+
+
+.ver-senha {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}

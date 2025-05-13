@@ -1,0 +1,28 @@
+.container-editarfoto{
+
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+}
+
+.cima {
+
+    width: 100%;
+    height: 10%;
+    background-color: blue;
+    display: flex;
+}
+
+.meio {
+
+    width: 100%;
+    height: 80%;
+    background-color: red;
+}
+
+.baixo {
+
+    width: 100%;
+    height: 10%;
+    background-color: yellow;
+}

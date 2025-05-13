@@ -1,18 +1,3 @@
-<<<<<<< HEAD
-import { createBrowserRouter } from 'react-router-dom'
-import Pagamento from '../pages/Pagamento'
-import VisualizarProfissional from '../pages/VisualizarProfissional.jsx'
-import TelaAgendamento from '../pages/TelaAgendamento.jsx'
-import EditarPaciente from '../pages/EditarPaciente.jsx'
-import EditarProfissional from '../pages/EditarProfissional.jsx'
-import Chat from '../pages/Chat.jsx'
-import DiarioEmocional from '../pages/DiarioEmocional.jsx'
-import Plano_saude from '../pages/Plano_saude.jsx'
-import Footer from '../Components/Footer.jsx'
-import Navbar from '../Components/Navbar.jsx'
-import Landing_page from '../pages/Landing_page.jsx'
-import EditarFoto from '../Components/EditarFoto.jsx'
-=======
 import { createBrowserRouter } from "react-router-dom";
 import VisualizarProfissional from "../pages/VisualizarProfissional.jsx";
 import TelaAgendamento from "../pages/TelaAgendamento.jsx";
@@ -34,7 +19,6 @@ import Politica from "../pages/Politica.jsx";
 import Termos from "../pages/Termos.jsx";
 import Consulta from "../pages/Consulta.jsx";
 import Text_modal from "../pages/Text_modal.jsx";
->>>>>>> 4f1ba0a41041783c19eae54b24ddf55df479ba0d
 
 const router = createBrowserRouter([
   {
@@ -46,43 +30,6 @@ const router = createBrowserRouter([
     element: <TelaAgendamento />,
   },
 
-<<<<<<< HEAD
-{   path: '/editarprofissional',
-    element: <EditarProfissional />
-},
-{
-    path: '/paciente',
-    element: <EditarPaciente />
-},
-{
-    path: '/chats',
-    element: <Chat />
-},
-{
-    path: '/diarioemocional',
-    element: <DiarioEmocional />
-},
-{
-    path: '/planoSaude',
-    element: <Plano_saude/>
-},
-{
-    path: '/footer',
-    element: <Footer/>
-},
-{
-    path: '/nav',
-    element: <Navbar />
-},
-{
-    path: '/landingPage',
-    element: <Landing_page/>
-},
-{
-    path: '/foto',
-    element: <EditarFoto />
-}
-=======
   { path: "/editarprofissional", element: <EditarProfissional /> },
   {
     path: "/paciente",
@@ -145,6 +92,5 @@ const router = createBrowserRouter([
     element: <Text_modal />,
   },
 ]);
->>>>>>> 4f1ba0a41041783c19eae54b24ddf55df479ba0d
 
 export default router;

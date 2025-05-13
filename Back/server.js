@@ -240,6 +240,62 @@ app.put('/paciente', async (req, res) => {
       res.status(500).json('Erro ao atualizar o paciente');
     }
   });
-  
 
+
+app.post('/chats', async(req, res) => {
+
+    try {
+
+        const { userType, fk_id } = req.body;
+
+        if (!userType || !fk_id) {
+
+            return res.status(404).json({ Erro: 'Parametros inválidos' });
+        };
+
+        if (userType === 'Profissional') {
+
+            const [response] = await pool.query('SELECT p.* FROM pacientes p INNER JOIN chat_paciente_profissional c ON p.id_paciente = c.fk_pacientes_id_paciente WHERE c.fk_profissionais_id_profissional = ? ORDER BY c.datahora DESC',[
+                fk_id
+            ]);
+
+            if (response.length > 0) {
+
+                return res.status(200).json(response);
+            }
+        } else if (userType === 'Paciente') {
+
+            const [response] = await pool.query('SELECT prof.* FROM profissionais prof JOIN chat_paciente_profissional c ON prof.id_profissional = c.fk_profissionais_id_profissional WHERE c.fk_pacientes_id_paciente = ? ORDER BY c.datahora DESC',[
+                fk_id
+            ]);
+
+            if (response.length > 0) {
+
+                return res.status(200).json(response);
+            }
+        } else {
+
+            return res.status(404).json({ Error: 'Usuário não identificado para buscar suas conversas' });
+        };
+
+
+    } catch (error) {
+        
+        res.status(500).json({ Error: 'Erro interno do servidor' });
+    };
+});
+
+app.post('/chats/chat', async(req, res) => {
+
+    try {
+        
+        const { id_paciente, id_profissional } = req.body;
+
+        const [response] = await pool.query('SELECT mensagem FROM chat_paciente_profissional WHERE fk_pacientes_id_paciente=? AND fk-profissionais_id_profissional=?', []);
+    } catch (error) {
+        
+        return res.status(500).json({ Error: 'Erro interno do servidor' });
+    }
+});
+  
 app.listen(4242, () => console.log ('Servidor servindo'));

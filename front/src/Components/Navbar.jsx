@@ -46,7 +46,7 @@ function Navbar({ cor }) {
         <NavLink to="/inicio" end ref={el => linksRef.current[0] = el}>Profissionais</NavLink>
         
         <NavLink to="/planoSaude" ref={el => linksRef.current[2] = el}>Planos</NavLink>
-        <a onClick={handleClick} href={profissional ? '/chats' : ''} ref={el => linksRef.current[3] = el}>
+        <a onClick={handleClick} href={profissional && '/chats'} ref={el => linksRef.current[3] = el}>
           Chats <img src="logo_chat.svg" alt="Chat" className='chatbalao' />
         </a>
       </div>

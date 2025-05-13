@@ -8,38 +8,67 @@ import { useNavigate } from 'react-router-dom';
 import close from '../assets/close-2.svg';
 import cam from '../assets/cam-recorder (1) 1.svg';
 import block from '../assets/blocked 1.svg';
-import handClick from '../assets/image 17.svg';
-import microfone from '../assets/image 15.svg';
-import figurinhaIcon from '../assets/image 16.svg';
 import arvoreAzul from '../assets/Arvore Azul.svg';
 import arvoreBranca from '../assets/Arvore Branca.svg';
 import io from "socket.io-client";
 import "./CSS/Chat.css";
 
 function Chat() {
+
+  const [chats, setChats] = useState([]);
+
+  useEffect(() => {
+
+    const fetchChats = async() => {
+  
+      try {
+  
+        const userLocal = JSON.parse(localStorage.getItem('User-Profile'));
+  
+          if (!userLocal) {
+              console.log('Usuário não encontrado no localStorage');
+              return;
+          }
+  
+          const data = {
+              fk_id: userLocal.id_profissional || userLocal.id_paciente,
+              userType: userLocal.id_profissional ? 'Profissional' : 'Paciente'
+          };
+        
+        const response = await fetch("http://localhost:4242/chats", {
+  
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+  
+        if (response.ok) {
+  
+          const data = await response.json();
+  
+          if (data.length === 0) {
+  
+            console.log('Nenhum chat encontrado!');
+          }
+          setChats(data);
+        } else {
+  
+          console.log('Erro ao encontrar chats');
+        }
+      } catch (error) {
+       
+        console.error({Erro: 'Internal Server Error'});
+      };
+    };
+
+    fetchChats();
+  }, []);
+
+
   const socket = io("https://futuremind-2-0.onrender.com");
 
-  const [chats, setChats] = useState([
-    { nome: "Vitor Azevedo", foto: mulher },
-    { nome: "Anderson Silva", foto: mulher },
-    { nome: "Lúcia Katia", foto: mulher },
-    { nome: "Vanessa Lopes", foto: mulher },
-    { nome: "Ritinha", foto: mulher },
-    { nome: "Cristiano", foto: mulher },
-    { nome: "Fundação E-Zag", foto: mulher },
-    { nome: "Manassés da Rosa Marcelino", foto: mulher },
-    { nome: "Silvana Barbosa", foto: mulher },
-    { nome: "Cintia Chagas", foto: mulher },
-    { nome: "Carlos Alberto", foto: mulher },
-    { nome: "Andi Ferreira", foto: mulher },
-    { nome: "Finneas", foto: mulher },
-    { nome: "Melissa Carpenter", foto: mulher },
-    { nome: "Melri Ribeiro", foto: mulher },
-    { nome: "Bárbara Soares", foto: mulher },
-    { nome: "Simone Monteiro", foto: mulher },
-    { nome: "Isabella coach", foto: mulher },
-    { nome: "Thiago klovisck", foto: mulher },
-  ]);
 
   const [chatSelected, setChatSelected] = useState();
   const [isChatSelected, setIsChatSelected] = useState("chat-not-selected");

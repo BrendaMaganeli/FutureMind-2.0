@@ -5,6 +5,8 @@ import './App.css';
 const socket = io("http://localhost:5000");
 
 const VideoConference = () => {
+//1
+
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const peerConnection = useRef(null);
@@ -107,7 +109,7 @@ const VideoConference = () => {
   const [micActive, setMicActive] = useState(true);
   const [chatActive, setChatActive] = useState(false);
 
-  const [chatSelected, setChatSelected] = useState({});
+  const [chatSelected, setChatSelected] = useState({foto: 'img.conversa.chat.png', name: 'Jana Maria'});
   const settingsRef = useRef(null);
   const [theme, setTheme] = useState('light');
   const tema = theme === 'light' ? 'escuro' : 'claro';
@@ -121,18 +123,16 @@ const VideoConference = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
-  useEffect(() => {
-    const nameAux = prompt('Qual seu nome?');
-    setName(nameAux);
+  // useEffect(() => {
 
-    socket.on("receiveMessage", (data) => {
-      let newMessage = JSON.parse(data);
-      newMessage.sender = newMessage.name === nameAux ? 'me' : 'other';
-      setMessages(prevMessages => [...prevMessages, newMessage]);
-    });
+  //   socket.on("receiveMessage", (data) => {
+  //     let newMessage = JSON.parse(data);
+  //     newMessage.sender = newMessage.name === nameAux ? 'me' : 'other';
+  //     setMessages(prevMessages => [...prevMessages, newMessage]);
+  //   });
 
-    return () => socket.off("receiveMessage");
-  }, []);
+  //   return () => socket.off("receiveMessage");
+  // }, []);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -150,14 +150,14 @@ const VideoConference = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const sendMessage = (e) => {
-    e.preventDefault();
-    if (inptvalue.trim() === '') return;
+  // const sendMessage = (e) => {
+  //   e.preventDefault();
+  //   if (inptvalue.trim() === '') return;
 
-    const newMessage = { sender: 'me', text: inptvalue, foto: 'icone_usuario.svg', name: name };
-    setInptvalue('');
-    socket.emit("sendMessage", JSON.stringify(newMessage));
-  };
+  //   const newMessage = { sender: 'me', text: inptvalue, foto: 'icone_usuario.svg', name: name };
+  //   setInptvalue('');
+  //   socket.emit("sendMessage", JSON.stringify(newMessage));
+  // };
 
   return (
     <div className="videoconferencia-container">
@@ -191,24 +191,52 @@ const VideoConference = () => {
       <div className="barra-config">
         <img src='phone.png' alt="Telefone"/>
         {videoActive ? (
+
+          <div className='ppp' style={{display: 'flex', flexDirection: 'column'}}>
           <img onClick={() => setVideoActive(!videoActive)} src='video-active.png' alt="Vídeo Ativo" />
+          <p style={{color: 'white'}}>Vídeo</p>
+          </div>
         ) : (
+          <div className='ppp' style={{display: 'flex', flexDirection: 'column'}}>
           <img onClick={() => setVideoActive(!videoActive)} src='video-desactive.png' alt="Vídeo Desativado" />
+          <p style={{color: '#013a63'}}>Vídeo</p>
+          </div>
         )}
         {micActive ? (
+
+          <div className='ppp' style={{display: 'flex', flexDirection: 'column'}}> 
           <img onClick={() => setMicActive(!micActive)} src='mic.png' alt="Microfone Ativo" />
+          <p style={{color: 'white'}}>Áudio</p>
+          </div>
         ) : (
+          <div className='ppp' style={{display: 'flex', flexDirection: 'column'}}> 
           <img onClick={() => setMicActive(!micActive)} src='mute.png' alt="Microfone Mutado" />
+          <p style={{color: '#013a63'}}>Áudio</p> </div> 
+
         )}
         {chatActive ? (
+
+          <div className='ppp' style={{display: 'flex', flexDirection: 'column'}}> 
           <img onClick={() => setChatActive(!chatActive)} src='comment (1).png' alt="Chat Aberto" />
+          <p style={{color: '#013a63'}}>Chat</p> </div>
+
         ) : (
+          <div className='ppp' style={{display: 'flex', flexDirection: 'column'}}> 
           <img onClick={() => setChatActive(!chatActive)} src='comment.png' alt="Chat Fechado" />
+          <p style={{color: 'white'}}>Chat</p> </div>
+
         )}
         {espelhar==='mirror' ?
+
+        <div className='ppp' style={{display: 'flex', flexDirection: 'column'}}> 
         <img onClick={() => setEspelhar('')} src='espelho 1.svg' />
+        <p style={{color: 'white'}}>Espelhar</p> </div>
+
         :
+        <div className='ppp' style={{display: 'flex', flexDirection: 'column'}}> 
         <img onClick={() => setEspelhar('mirror')} src='espelho (1) 1.svg' />
+        <p style={{color: '#013a63'}}>Espelhar</p> </div>
+
         }
       </div>
 
@@ -221,13 +249,6 @@ const VideoConference = () => {
             </div>
             <div className="nome-user-chat">
               <h5>{chatSelected.nome}</h5>
-            </div>
-            <div className="icons-chat">
-              <div className="icons-chat-p">
-                <img src='cam-recorder (1) 1.svg' className='icon-chat-p-1' alt="" />
-                <img src='blocked 1.svg' className='icon-chat-p-2' alt="" />
-              </div>
-              <img onClick={() => setChatSelected('')} src='close-2.svg' className='icon-chat-p-3' alt="" />
             </div>
           </div>
           <div style={{height: '83%', overflowY: 'auto'}}>
@@ -261,7 +282,7 @@ const VideoConference = () => {
               <div ref={messagesEndRef}></div>
             </div>
           </div>
-          <form onSubmit={sendMessage} className="barra-bottom">
+          <form onSubmit={(e) => e.preventDefault()} className="barra-bottom">
             <div className="inpt-chat">
               <input 
                 type="text" 

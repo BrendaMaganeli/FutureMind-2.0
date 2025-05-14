@@ -444,20 +444,33 @@
 }
 
 .div-especializacao {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 8px;
+  display: flex;
+  align-items: center;
+  
+  flex-wrap: wrap;
+  width: 100%;
   margin-top: 10px;
+  height: 12%;
+  gap: 10px;
+}
+
+.container_especializacao{
+
+  width: 46%;
+  height: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #5A789F;
+  padding: 4%;
+  border-radius: 15px;
 }
 
 .especializacao-style {
-  background-color: #5a789f7c;
+  
+  font-size: 100%;
   color: white;
-  width: 90%;
-  padding: 2%;
-  border-radius: 20px;
-  text-align: center;
-  font-size: 1em;
+  
 }
 
 .sobremim-inicio {
@@ -471,6 +484,8 @@
   padding: 4%;
   border-radius: 20px;
   font-size: 0.8em;
+  height: 110px;
+  width: 100%;
   color: #546e7aaf;
   width: 100%;
   margin-top: 3%;

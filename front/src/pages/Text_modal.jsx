@@ -1,77 +1,74 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-const usuariosMock = [
-  'Mateus',
-  'Matheus',
-  'giovana',
-  'Marcelo',
-  'Marcos',
-  'Marta',
-  'Maurício',
-  'Mariana'
-];
+export default function Profissionais() {
+  const [profissionais, setProfissionais] = useState([]);
+  const [idadeSelecionada, setIdadeSelecionada] = useState("");
+  const [trabalhoSelecionado, setTrabalhoSelecionado] = useState("");
+  const [filtrados, setFiltrados] = useState([]);
 
-export default function FiltroUsuarios() {
-  const [busca, setBusca] = useState('');
-  const [usuariosFiltrados, setUsuariosFiltrados] = useState([]);
-
-  const handleBusca = (e) => {
-    const valor = e.target.value;
-    setBusca(valor);
-
-    if (valor === '') {
-      setUsuariosFiltrados([]);
-    } else {
-      const filtrados = usuariosMock.filter((nome) =>
-        nome.toLowerCase().includes(valor.toLowerCase())
-      );
-      setUsuariosFiltrados(filtrados);
+  // Simula dados vindos de um "banco de dados" via API
+  useEffect(() => {
+    async function carregarProfissionais() {
+      // Aqui poderia ser um fetch real: fetch("/api/profissionais")
+      const dados = [
+        { id: 1, nome: "Ana", idade: 25, trabalho: "Designer" },
+        { id: 2, nome: "Bruno", idade: 30, trabalho: "Desenvolvedor" },
+        { id: 3, nome: "Carlos", idade: 25, trabalho: "Desenvolvedor" },
+        { id: 4, nome: "Daniela", idade: 35, trabalho: "Gerente" },
+        { id: 5, nome: "Eduarda", idade: 30, trabalho: "Designer" },
+      ];
+      setProfissionais(dados);
+      setFiltrados(dados);
     }
+    carregarProfissionais();
+  }, []);
+
+  const aplicarFiltro = () => {
+    const resultado = profissionais.filter((p) => {
+      const condIdade = idadeSelecionada === "" || p.idade === parseInt(idadeSelecionada);
+      const condTrabalho = trabalhoSelecionado === "" || p.trabalho === trabalhoSelecionado;
+      return condIdade && condTrabalho;
+    });
+    setFiltrados(resultado);
   };
 
-  const selecionarUsuario = (nome) => {
-    setBusca(nome);
-    setUsuariosFiltrados([]);
-  };
+  const idades = [...new Set(profissionais.map((p) => p.idade))];
+  const trabalhos = [...new Set(profissionais.map((p) => p.trabalho))];
 
   return (
-    <div style={{ position: 'relative', width: '250px' }}>
-      <input
-        type="text"
-        placeholder="Buscar usuário..."
-        value={busca}
-        onChange={handleBusca}
-        style={{ width: '100%', padding: '8px' }}
-      />
-      {usuariosFiltrados.length > 0 && (
-        <div
-          style={{
-            border: '1px solid #ccc',
-            position: 'absolute',
-            width: '100%',
-            background: 'white',
-            zIndex: 1000,
-            maxHeight: '150px',
-            overflowY: 'auto'
-          }}
-        >
-          {usuariosFiltrados.map((nome, index) => (
-            <div
-              key={index}
-              onClick={() => selecionarUsuario(nome)}
-              style={{
-                padding: '8px',
-                cursor: 'pointer',
-                borderBottom: '1px solid #eee'
-              }}
-              onMouseOver={(e) => (e.currentTarget.style.background = '#eee')}
-              onMouseOut={(e) => (e.currentTarget.style.background = 'white')}
-            >
-              {nome}
-            </div>
+    <div style={{ padding: "20px" }}>
+      <h2>Filtro de Profissionais</h2>
+
+      <div style={{ marginBottom: "10px" }}>
+        <label>Idade: </label>
+        <select value={idadeSelecionada} onChange={(e) => setIdadeSelecionada(e.target.value)}>
+          <option value="">Todas</option>
+          {idades.map((idade) => (
+            <option key={idade} value={idade}>{idade}</option>
           ))}
-        </div>
-      )}
+        </select>
+      </div>
+
+      <div style={{ marginBottom: "10px" }}>
+        <label>Trabalho: </label>
+        <select value={trabalhoSelecionado} onChange={(e) => setTrabalhoSelecionado(e.target.value)}>
+          <option value="">Todos</option>
+          {trabalhos.map((trabalho) => (
+            <option key={trabalho} value={trabalho}>{trabalho}</option>
+          ))}
+        </select>
+      </div>
+
+      <button onClick={aplicarFiltro}>Filtrar</button>
+
+      <h3>Resultados:</h3>
+      <ul>
+        {filtrados.map((p) => (
+          <li key={p.id}>
+            {p.nome} - {p.idade} anos - {p.trabalho}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

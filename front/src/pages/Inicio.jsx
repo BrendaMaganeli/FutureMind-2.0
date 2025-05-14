@@ -22,24 +22,38 @@ function Inicio() {
   const navigate = useNavigate();
   const { setId } = useContext(GlobalContext);
   
-  const buscaProfissionais = async () => {
-    try {
-      const response = await fetch("https://futuremind-2-0-mw60.onrender.com");
-
-      if (response.ok) {
-        const data = await response.json();
-
-        setProfissionais(data);
-        console.log(Array.isArray(data));
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   useEffect(() => {
+    const buscaProfissionais = async () => {
+      try {
+        const response = await fetch("https://futuremind-2-0-mw60.onrender.com");
+
+        if (response.ok) {
+          const data = await response.json();
+
+          const profissionaisTratados = data.map((p) => ({
+            ...p,
+            especializacao: parseJson(p.especializacao),
+            abordagem: parseJson(p.abordagem),
+            sobre_mim: p.sobre_mim || "",
+          }));
+
+          setProfissionais(profissionaisTratados);
+        }
+      } catch (err) {
+        console.log("Erro ao buscar profissionais:", err);
+      }
+    };
+
     buscaProfissionais();
   }, []);
+
+  const parseJson = (valor) => {
+    try {
+      return JSON.parse(valor || "[]");
+    } catch {
+      return [];
+    }
+  };
 
   const [isHovered, setIsHovered] = useState(false);
 
@@ -98,6 +112,19 @@ function Inicio() {
     setFiltrados([]);
     acessarPerfil(profi.id_profissional);
   };
+  
+  const [select_filtrados, setSelect_filtrados] = useState([])
+  const [filtrosAplicadosEspecializacoes, setFiltrosAplicadosEspecializacoes] = useState([]);
+  const [filtrosAplicadosAbordagens, setFiltrosAplicadosAbordagens] = useState([]);
+ 
+
+  const aplicarFiltro = () => {
+    setFiltrosAplicadosEspecializacoes(especializacoes);
+    setFiltrosAplicadosAbordagens(abordagens);
+  };
+
+ 
+ 
 
   return (
     <div className="container-inicio">
@@ -190,9 +217,9 @@ function Inicio() {
                   Em seguida, clique no botão para filtrar os profissionais mais
                   adequados para você.
                 </div>
-                <div className="div-btn-filtro">
-                  <button className="btn-filtro">Filtrar</button>
-                  <img src="filter-icon.svg" alt="" />
+                <div onClick={aplicarFiltro} className="div-btn-filtro">
+                  <button className="btn-filtro" onClick={aplicarFiltro}>Filtrar</button>
+                  <img onClick={aplicarFiltro} src="filter-icon.svg" alt="" />
                 </div>
               </div>
             </div>
@@ -220,10 +247,29 @@ function Inicio() {
               pagination={{ clickable: true }}
               className="swiper-profi"
             >
-              {Array.isArray(profissionais) &&
-                profissionais.length > 0 &&
-                profissionais?.map((item, index) => (
-                  <SwiperSlide key={index}>
+            {Array.isArray(profissionais) &&
+                    profissionais.length > 0 &&
+                    (
+                      filtrosAplicadosEspecializacoes.length > 0 || filtrosAplicadosAbordagens.length > 0
+                      ? profissionais.filter((p) => {
+                      const matchEspecializacao =
+                      filtrosAplicadosEspecializacoes.length > 0 &&
+                       p.especializacao.some((esp) =>
+                       filtrosAplicadosEspecializacoes.some((sel) => sel.value === esp.value)
+                     );
+
+                     const matchAbordagem =
+                     filtrosAplicadosAbordagens.length > 0 &&
+                     p.abordagem.some((abo) =>
+                     filtrosAplicadosAbordagens.some((sel) => sel.value === abo.value)
+                    );
+
+                    // Retorna true se pelo menos um dos dois filtros for verdadeiro
+                    return matchEspecializacao || matchAbordagem;
+                  })
+                    : profissionais
+                  ).map((item, index) => (
+                 <SwiperSlide key={index}>
                     <div className="card">
                       <div className="foto-perfilInicio">
                         <img src={item.foto} alt="" />
@@ -233,27 +279,24 @@ function Inicio() {
                         </div>
                       </div>
                       <div className="div-especializacao">
-                        <p className="especializacao-style">Adolecencia</p>
-                        <p className="especializacao-style">Idosos</p>
-                        <p className="especializacao-style">Crianças</p>
-                        <p className="especializacao-style">Crianças</p>
+                      {item?.especializacao?.map((item, index) => (
+                          <div className="container_especializacao">
+                            <p  className="especializacao-style" key={index}>{item.label}</p>
+                          </div>
+                          ))} 
                       </div>
                       <div className="sobremim-inicio">
                         <h3>Sobre mim:</h3>
                         <div className="textSobremim">
-                          Lorem ipsum dolor sit amet, consectetur adipisicing
-                          elit. Dolore, voluptates ducimus consectetur
-                          praesentium temporibus ut veniam nesciunt incidunt
-                          reprehenderit, deserunt, cupiditate eaque cumque magni
-                          nobis omnis? Iure temporibus doloribus libero?
+                            <p key={index}>{item?.sobre_mim}</p>
                         </div>
                       </div>
                       <div className="sobremim-inicio">
                         <h3>Abordagens:</h3>
                         <div className="textSobremim">
-                          Lorem ipsum dolor sit amet, consectetur adipisicing
-                          elit. Dolore, voluptates ducimus consectetur
-                          praesentium temporibus ut
+                          {item?.abordagem?.map((item, index) => (
+                            <p key={index}>{item.label}</p>
+                          ))}
                         </div>
                         <div className="crp-inicio">CRP {item.crp}</div>
                       </div>

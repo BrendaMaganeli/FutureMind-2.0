@@ -291,11 +291,41 @@ app.post('/chats/chat', async(req, res) => {
         
         const { id_paciente, id_profissional } = req.body;
 
-        const [response] = await pool.query('SELECT mensagem FROM chat_paciente_profissional WHERE fk_pacientes_id_paciente=? AND fk-profissionais_id_profissional=?', []);
+        if (!id_paciente || !id_profissional) return res.status(404).json('Valores inválidos');
+
+        const [response] = await pool.query('SELECT mensagem FROM chat_paciente_profissional WHERE fk_pacientes_id_paciente=? AND fk_profissionais_id_profissional=?', [
+
+            id_paciente,
+            id_profissional
+        ]);
+
+        if (response.length > 0) {
+
+            return res.status(200).json(response);
+        }
+
+        return res.status(404).json('Erro ao buscar mensagens');
     } catch (error) {
         
         return res.status(500).json({ Error: 'Erro interno do servidor' });
     }
 });
+
+app.post('/chats/chat/send-message', async (req, res) => {
+
+    const { mensagem, id_paciente, id_profissional, datahora } = req.body;
+  
+    try {
+      const [response] = await pool.query(
+        'INSERT INTO mensagens (mensagem, fk_pacientes_id_paciente, fk_profissionais_id_profissional, datahora) VALUES (?, ?, ?, ?)',
+        [mensagem, id_paciente, id_profissional, datahora]
+      );
+  
+      res.status(201).json({ success: true });
+    } catch (error) {
+      console.error('Erro ao salvar mensagem:', error);
+      res.status(500).json({ Error: 'Erro interno do servidor' });
+    }
+  });
   
 app.listen(4242, () => console.log ('Servidor servindo'));

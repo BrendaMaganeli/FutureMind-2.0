@@ -40,8 +40,10 @@ function CadastroProfissional1() {
       telefone,
       data_nascimento: converterParaFormatoBanco(dataNascimento),
       cpf,
-      valor_consulta: valorConsulta,
+      valor_consulta: formatarValorConsultaB(valorConsulta),
     });
+
+    console.log(formatarValorConsultaB(valorConsulta))
   }, [nome, valorCRP, telefone, dataNascimento, cpf, valorConsulta]);
 
   const formatarCPF = (value) => {
@@ -66,6 +68,12 @@ function CadastroProfissional1() {
     const somenteNumeros = valor.replace(/\D/g, "");
     const numero = (parseInt(somenteNumeros, 10) / 100).toFixed(2);
     return `R$ ${numero.replace(".", ",")}`;
+  };
+
+  const formatarValorConsultaB = (valor) => {
+    const somenteNumeros = valor.replace(/\D/g, "");
+    const numero = (parseInt(somenteNumeros, 10) / 100).toFixed(2);
+    return numero
   };
 
   const formatarTelefone = (value) => {

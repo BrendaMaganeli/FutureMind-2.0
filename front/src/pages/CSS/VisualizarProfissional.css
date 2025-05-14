@@ -199,7 +199,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  padding-bottom:3%;
 }
 
 .topicos {
@@ -261,7 +261,7 @@
 .cartao-sobremim {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
   height: 100%;
 }
 
@@ -274,6 +274,8 @@
   color: #013a63;
   font-size: 18px;
   font-weight: bold;
+  position:sticky;
+  margin-bottom: 5%;
 }
 
 .botoes-maior {
@@ -327,12 +329,13 @@
 }
 
 .abordagens-especializacoes {
-
-  border: 1px solid #5a7da0;
-  border-radius: 6px;
-  padding: 3.5%;
+  background-color: #BFDBFE;
+  color:#013a63;
+  border-radius: 20px;
+  padding: 1.7%;
+  padding-left: 3%;
+  padding-right: 3%;
   opacity: 70%;
   width: fit-content;
   height: fit-content;
-  /* text-align: center; */
 }

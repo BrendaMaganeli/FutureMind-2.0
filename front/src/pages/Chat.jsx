@@ -8,40 +8,127 @@ import { useNavigate } from 'react-router-dom';
 import close from '../assets/close-2.svg';
 import cam from '../assets/cam-recorder (1) 1.svg';
 import block from '../assets/blocked 1.svg';
-import handClick from '../assets/image 17.svg';
-import microfone from '../assets/image 15.svg';
-import figurinhaIcon from '../assets/image 16.svg';
 import arvoreAzul from '../assets/Arvore Azul.svg';
 import arvoreBranca from '../assets/Arvore Branca.svg';
 import io from "socket.io-client";
 import "./CSS/Chat.css";
 
 function Chat() {
+  
+  const [chats, setChats] = useState([]);
+  const [chatSelected, setChatSelected] = useState();
+  const user = JSON.parse(localStorage.getItem('User-Profile'));
+  const userType = user.id_paciente ? 'Paciente' : 'Profissional';
+
+  useEffect(() => {
+
+    const fetchChats = async() => {
+  
+      try {
+  
+        const userLocal = JSON.parse(localStorage.getItem('User-Profile'));
+  
+          if (!userLocal) {
+              console.log('Usuário não encontrado no localStorage');
+              return;
+          }
+  
+          const data = {
+              fk_id: userLocal.id_profissional || userLocal.id_paciente,
+              userType: userLocal.id_profissional ? 'Profissional' : 'Paciente'
+          };
+        
+        const response = await fetch("http://localhost:4242/chats", {
+  
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+  
+        if (response.ok) {
+  
+          const data = await response.json();
+  
+          if (data.length === 0) {
+  
+            console.log('Nenhum chat encontrado!');
+          }
+          setChats(data);
+        } else {
+  
+          console.log('Erro ao encontrar chats');
+        }
+      } catch (error) {
+       
+        console.error({Erro: 'Internal Server Error'});
+      };
+    };
+
+    fetchChats();
+  }, []);
+
+  
+
+  useEffect(() => {
+
+    if (chatSelected) {
+
+      const fetchMessages = async(id) => {
+        
+        try {
+
+          let dado ={};
+          
+          if (userType === 'Profissional') {
+            dado = {
+              
+              id_paciente: id,
+              id_profissional: user.id_profissional
+            }
+          } else if (userType === 'Paciente') {
+            
+            dado = {
+              
+              id_profissional: id,
+              id_paciente: user.id_paciente
+            }
+          }
+
+          if (!dado) return console.log('erro N');
+          
+          const response = await fetch(`http://localhost:4242/chats/chat`, {
+            
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dado)
+          });
+          
+          if (response.ok) {
+            
+            const data = await response.json();
+            
+            setMessages(data);
+          } else {
+
+            console.log('erro')
+          }
+        } catch (error) {
+          
+          console.error('Erro interno do servidor');
+        }
+      }
+      fetchMessages(userType === 'Profissional' ? chatSelected.id_paciente : chatSelected.id_profissional);
+    }
+  }, [chatSelected]);
+
+
   const socket = io("https://futuremind-2-0.onrender.com");
 
-  const [chats, setChats] = useState([
-    { nome: "Vitor Azevedo", foto: mulher },
-    { nome: "Anderson Silva", foto: mulher },
-    { nome: "Lúcia Katia", foto: mulher },
-    { nome: "Vanessa Lopes", foto: mulher },
-    { nome: "Ritinha", foto: mulher },
-    { nome: "Cristiano", foto: mulher },
-    { nome: "Fundação E-Zag", foto: mulher },
-    { nome: "Manassés da Rosa Marcelino", foto: mulher },
-    { nome: "Silvana Barbosa", foto: mulher },
-    { nome: "Cintia Chagas", foto: mulher },
-    { nome: "Carlos Alberto", foto: mulher },
-    { nome: "Andi Ferreira", foto: mulher },
-    { nome: "Finneas", foto: mulher },
-    { nome: "Melissa Carpenter", foto: mulher },
-    { nome: "Melri Ribeiro", foto: mulher },
-    { nome: "Bárbara Soares", foto: mulher },
-    { nome: "Simone Monteiro", foto: mulher },
-    { nome: "Isabella coach", foto: mulher },
-    { nome: "Thiago klovisck", foto: mulher },
-  ]);
 
-  const [chatSelected, setChatSelected] = useState();
   const [isChatSelected, setIsChatSelected] = useState("chat-not-selected");
   const [busca, setBusca] = useState("");
   const [result, setResult] = useState([]);
@@ -104,13 +191,10 @@ function Chat() {
   };
 
   useEffect(() => {
-    const nameAux = prompt("Qual seu nome?");
-    setName(nameAux);
 
     socket.on("receiveMessage", (data) => {
       let newMessage = JSON.parse(data);
-      newMessage.sender = newMessage.name === nameAux ? "me" : "other";
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      newMessage.sender = newMessage.name === user.nome ? "me" : "other";
     });
 
     return () => socket.off("receiveMessage");
@@ -154,17 +238,51 @@ function Chat() {
     if (inptvalue.trim() === "") return;
 
     const newMessage = {
-      sender: "me",
+      sender: 'me',
       text: inptvalue,
       foto: mulher,
-      name: name,
+      name: user.nome,
     };
     setInptvalue("");
     socket.emit("sendMessage", JSON.stringify(newMessage));
+    fetchSendMessage(inptvalue);
   };
 
   const handleVoltar = () => {
     navigate(-1);
+  };
+
+  const fetchSendMessage = async (mensagem) => {
+    try {
+      const data = {
+        mensagem: mensagem,
+        id_paciente: user.id_paciente || null,
+        id_profissional: user.id_profissional || null,
+        datahora: new Date().toISOString().slice(0, 19).replace('T', ' ')
+      };
+  
+      const response = await fetch('http://localhost:4242/chats/chat/send-message', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+  
+      if (!response.ok) {
+        console.error("Erro ao enviar mensagem");
+      }
+    } catch (error) {
+      console.error('Erro interno do servidor ao enviar mensagem:', error);
+    }
+  };
+
+  const isSentByCurrentUser = (msg) => {
+    if (userType === 'Paciente') {
+      return msg.fk_pacientes_id_paciente === user.id_paciente;
+    } else {
+      return msg.fk_profissionais_id_profissional === user.id_profissional;
+    }
   };
 
   return (
@@ -294,34 +412,38 @@ function Chat() {
                   <img src={arvoreBranca} alt="" />
                 )}
               </div>
-              {messages.map((msg, index) => (
+              {messages.map((msg, index) => {
+                
+                const isMine = isSentByCurrentUser(msg);
+              
+                return (
                 <div
                   key={index}
                   className={
-                    msg.sender === "me" ? "message-right" : "message-left"
+                    isMine ? "message-right" : "message-left"
                   }
                 >
-                  {msg.sender !== "me" && (
+                  {!isMine (
                     <div className="image-message-right">
-                      <img src={msg.foto} alt="" />
+                      <img src={user.foto} alt="" />
                     </div>
                   )}
                   <div
                     className={
-                      msg.sender === "me"
+                     isMine
                         ? "text-message-right"
                         : "text-message-left"
                     }
                   >
-                    {msg.text}
+                    {msg.mensagem}
                   </div>
-                  {msg.sender === "me" && (
+                  {isMine && (
                     <div className="image-message-left">
-                      <img src={msg.foto} alt="" />
+                      <img src={user.foto} alt="" />
                     </div>
                   )}
                 </div>
-              ))}
+              )})}
               <div ref={messagesEndRef}></div>
             </div>
           </div>

@@ -100,6 +100,7 @@
   background: none;
   width: 100%;
   color: white;
+  height: 40%;
 }
 
 .cartao-experiencia-p input::placeholder {
@@ -114,6 +115,7 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  height: 40%;
 }
 
 .caixa-comandos-p {
@@ -306,114 +308,54 @@
   transition: 0.5s;
 }
 
-
-
-
-/* Ajuste no Select */
-.custom-select .select__control {
-  width: 12.5em;
-  padding: 4px;
-  border: 2px solid #5a789f !important;
-  border-radius: 5px;
-  font-size: 1.1em;
-  background-color: #cad7ebe0;
-  box-shadow: none;
-  min-height: 45px;
-  max-height: 45px; /* altura máxima antes de scroll */
-  padding-bottom: 25px !important; /* cria espaço pra seta */
-  position: relative;
-  transition: box-shadow 0.3s ease;
+.select-filtro-prof {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 20px;
 }
 
-.custom-select .select__control:hover {
-  box-shadow: 0 4px 12px rgba(70, 130, 169, 0.3); /* sombra suave */
+.css-13cymwt-control{
+  width: 100%;
+  padding: 4px 6px 4px;
+  font-size: 16px;
+  border: 2px solid #ccc !important;
+  border-radius: 8px !important;
+  transition: border-color 0.3s !important;
+  box-sizing: border-box;
 }
 
-.custom-select .select__control--is-focused {
-  box-shadow: 0 0 3px rgba(90, 120, 159, 0.5);
-  border-color: #7ba6dd !important;
-}
-
-/* Ajuste para manter o tamanho das opções */
-.custom-select .select__multi-value {
-  background-color: #5a789f;
-  color: white;
-  border-radius: 4px;
-  padding: 1px 6px;
-  max-width: 115px;
-  white-space: nowrap;
-}
-
-.custom-select .select__multi-value__label {
-  color: white;
-}
-
-.custom-select .select__multi-value__remove {
-  color: white;
-}
-
-.custom-select .select__multi-value__remove:hover {
-  background-color: #466484;
-}
-
-.custom-select .select__value-container {
-  max-height: 37px;
-  flex-wrap: wrap; /* permite quebrar linha */
-  align-items: center;
-  gap: 4px; /* espaçamento entre os itens */
-  padding: 2px 8px;
+.css-1nmdiq5-menu {
+  max-height: 80px; /* ou o valor desejado */
   overflow-y: hidden;
 }
 
-.custom-select .select__value-container::-webkit-scrollbar {
-  width: 6px; /* largura da barra de rolagem */
-  height: 6px;
-}
-
-.custom-select .select__value-container::-webkit-scrollbar-track {
-  background: transparent; /* fundo da track */
-}
-
-.custom-select .select__value-container::-webkit-scrollbar-thumb {
-  background-color: #5a789f; /* cor do scroll */
-  border-radius: 10px;
-  border: 2px solid transparent;
-  background-clip: content-box; /* faz parecer mais fino */
-}
-
-.custom-select .select__value-container::-webkit-scrollbar-thumb:hover {
-  background-color: #466484; /* cor ao passar o mouse */
-}
-
-.custom-select .select__value-container:hover {
+.css-1nmdiq5-menu:hover{
   overflow-y: auto;
 }
 
-.custom-select .select__indicators {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-  pointer-events: auto; /* permite clique na seta */
+.css-1nmdiq5-menu::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-.custom-select .select__placeholder {
-  color: #013a63; /* Cor do texto quando nada está selecionado */
-  opacity: 1; /* Garante visibilidade */
-  transition: color 0.3s ease;
+.css-1nmdiq5-menu::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-/* Cor do placeholder quando o select está em foco */
-.custom-select .select__control--is-focused .select__placeholder {
-  color: #7ba6dd; /* Altere para a cor que quiser no focus */
+.css-1nmdiq5-menu::-webkit-scrollbar-thumb {
+  background-color: #5A789F;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 
-.custom-select .select__dropdown-indicator svg {
-  color: #013a63; /* Altere para a cor que quiser */
-  transition: color 0.3s ease;
+.css-1nmdiq5-menu::-webkit-scrollbar-thumb:hover {
+  background-color: #466484;
 }
 
-.custom-select .select__control--is-focused .select__dropdown-indicator svg {
-  color: #7ba6dd; /* cor ao passar o mouse ou ao focar */
+.css-t3ipsp-control:focus-within {
+  outline: none;
+  border-color: #013a63 !important;
+  box-shadow: none !important;
 }

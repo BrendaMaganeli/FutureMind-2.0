@@ -14,6 +14,7 @@ function EditarProfissional() {
   const navigate = useNavigate();
   const profissional = JSON.parse(localStorage.getItem('User-Profile'));
   const [showModal, setShowModal] = useState(false);
+  const [valorConsulta, setValorConsulta] = useState(`R$ ${profissional.valor_consulta}`);
 
   const opcoesEspecializacao = [
     { value: "psicologia-clinica", label: "Psicologia Clínica" },
@@ -86,10 +87,36 @@ function EditarProfissional() {
   }
 
   function formatarDataParaEnvio(dataBR) {
-    if (!dataBR.includes('/')) return dataBR; // já está no formato certo
+    if (!dataBR.includes('/')) {
+      // Caso seja um ISO ou Date válido
+      const data = new Date(dataBR);
+      const ano = data.getFullYear();
+      const mes = String(data.getMonth() + 1).padStart(2, '0');
+      const dia = String(data.getDate()).padStart(2, '0');
+      return `${ano}-${mes}-${dia}`;
+    }
+  
     const [dia, mes, ano] = dataBR.split('/');
     return `${ano}-${mes}-${dia}`;
   }
+
+  function transformarParaOpcoesSelecionadas(valoresSalvos, opcoesDisponiveis) {
+    try {
+      const valoresArray = typeof valoresSalvos === 'string'
+        ? JSON.parse(valoresSalvos)
+        : valoresSalvos;
+  
+      if (!Array.isArray(valoresArray)) return [];
+  
+      return opcoesDisponiveis.filter(opcao =>
+        valoresArray.some(valor => valor === opcao.value || valor.value === opcao.value)
+      );
+    } catch {
+      return [];
+    }
+  }
+  
+  
 
   const [profissionais, setProfissionais] = useState({
     id_profissional: profissional.id_profissional,
@@ -102,19 +129,21 @@ function EditarProfissional() {
     crp: profissional.crp,
     abordagem: profissional.abordagem,
     foto: profissional.foto,
-    valor_consulta: profissional.valor_consulta,
     especializacao: profissional.especializacao,
     email_profissional: profissional.email_profissional,
-    sobre_mim: profissional.sobre_mim
+    sobre_mim: profissional.sobre_mim,
   });
 
   const salvarEdicao = async () => {
     try {
       const profissionalParaEnviar = {
-        ...profissional,
-        data_nascimento: formatarDataParaEnvio(profissional.data_nascimento)
+        ...profissionais,
+        data_nascimento: formatarDataParaEnvio(profissionais.data_nascimento),
+        abordagem: JSON.stringify(abordagens), // serializa para string JSON
+        especializacao: JSON.stringify(especializacoes),
+        valor_consulta: formatarValorConsultab(valorConsulta)
       };
-
+  
       const response = await fetch(`http://localhost:4242/editarprofissional`, {
         method: 'PUT',
         headers: {
@@ -122,14 +151,11 @@ function EditarProfissional() {
         },
         body: JSON.stringify(profissionalParaEnviar),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
-        localStorage.setItem('User-Profile', JSON.stringify({
-          ...profissional,
-          data_nascimento: profissionalParaEnviar.data_nascimento
-        }));
+        localStorage.setItem('User-Profile', JSON.stringify(data));
         window.location.reload(); 
       } else {
         console.error('Erro ao salvar:', data);
@@ -138,6 +164,7 @@ function EditarProfissional() {
       console.error('Erro na requisição:', err);
     }
   };
+  
 
   // Máscaras para CPF, Telefone e Data
   function aplicarMascaraCPF(valor) {
@@ -165,6 +192,18 @@ function EditarProfissional() {
       .replace(/(\/\d{4})\d+?$/, '$1');
   }
 
+  const formatarValorConsulta = (valor) => {
+    const somenteNumeros = valor.replace(/\D/g, "");
+    const numero = (parseInt(somenteNumeros, 10) / 100).toFixed(2);
+    return `R$ ${numero.replace(".", ",")}`;
+  };
+
+  const formatarValorConsultab = (valor) => {
+    const somenteNumeros = valor.replace(/\D/g, "");
+    const numero = (parseInt(somenteNumeros, 10) / 100).toFixed(2);
+    return numero
+  };
+
   return (
     <div className="container">
       <aside className="barra-lateral">
@@ -184,10 +223,6 @@ function EditarProfissional() {
           </div>
           <div className="experiencia-perfil">
             <h3>Experiência</h3>
-            <div className="cartao-experiencia">
-              <strong>Cargo</strong> <span className="ano">Ano</span>
-              <p>Breve descrição.</p>
-            </div>
             <div className="cartao-experiencia">
               <strong>Cargo</strong> <span className="ano">Ano</span>
               <p>Breve descrição.</p>
@@ -307,47 +342,49 @@ function EditarProfissional() {
             <label>CRP</label>
           </div>
           <div className="floating-input-pac">
-            <input type="text" placeholder=" " required />
+            <input 
+            type="text" 
+            placeholder=" " 
+            value={valorConsulta}
+            required 
+            onChange={(e) => {
+              setValorConsulta(formatarValorConsulta(e.target.value));
+            }}
+            />
             <label>Preço</label>
           </div>
                 <div className="select-filtro-prof">
-                  <Select
-                    placeholder="Especialização"
-                    className="custom-select-prof"
-                    classNamePrefix="select"
-                    options={opcoesEspecializacao}
-                    isMulti
-                    onChange={(selectedOptions) => {
-                      const opcoes = selectedOptions || [];
-                      setEspecializacoes(opcoes);
-                      setEspecializacaoValida(opcoes.length
-         > 0);
-                    }}
-                    value={especializacoes}
-                    menuPortalTarget={document.body}
-                    styles={{
-                      menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                    }}
-                    />
-                </div>
-                <div className="select-filtro-prof">
-                  <Select
-                    placeholder="Abordagem"
-                    className="custom-select-prof"
-                    classNamePrefix="select"
-                    options={opcoesAbordagens}
-                    isMulti
-                    onChange={(selectedOptions) => {
-                      const opcoes = selectedOptions || [];
-                      setAbordagens(opcoes);
-                      setAbordagemValida(opcoes.length > 0);
-                    }}
-                    value={abordagens}
-                    menuPortalTarget={document.body}
-                    styles={{
-                      menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                    }}
-                    />
+                <Select
+                placeholder="Especializações"
+                isMulti
+                value={transformarParaOpcoesSelecionadas(profissionais.especializacao, opcoesEspecializacao)}
+                onChange={(selectedOptions) =>
+                  setProfissionais((prevState) => ({
+                    ...prevState,
+                    especializacao: selectedOptions.map((opcao) => opcao.value)
+                  }))
+                }
+                options={opcoesEspecializacao}
+                className="custom-select-prof"
+                required
+                
+              />
+
+              <Select
+                placeholder="Abordagem"
+                isMulti
+                value={transformarParaOpcoesSelecionadas(profissionais.abordagem, opcoesAbordagens)}
+                onChange={(selectedOptions) =>
+                  setProfissionais((prevState) => ({
+                    ...prevState,
+                    abordagem: selectedOptions.map((opcao) => opcao.value)
+                  }))
+                }
+                options={opcoesAbordagens}
+                className="custom-select-prof"
+                required
+              />
+
                 </div>
           <div className="floating-input-pac">
               <input 
@@ -355,7 +392,7 @@ function EditarProfissional() {
                 placeholder=" " 
                 value={profissionais.email_profissional}
                 required 
-                onChange={(e) => setProfissionais ({...profissionais, email_profissional: e.target.value})}
+                onChange={(e) => setProfissionais ({...profissionais, valor_consulta: e.target.value})}
               />
               <label>E-mail</label>
             </div>

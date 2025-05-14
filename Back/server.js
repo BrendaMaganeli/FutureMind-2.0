@@ -240,6 +240,48 @@ app.put('/paciente', async (req, res) => {
       res.status(500).json('Erro ao atualizar o paciente');
     }
   });
+
+
+  
+app.put('/editarprofissional', async (req, res) => {
+    try {
+      const {
+        nome,
+        cpf,
+        email,
+        telefone,
+        data_nascimento,
+        senha,
+        crp,
+        abordagem,
+        foto,
+        valor_consulta,
+        especializacao,
+        email_profissional,
+        sobre_mim,
+        id_profissional
+      } = req.body;
+  
+      const [result] = await pool.query(
+        `UPDATE profissionais SET nome=?, cpf=?, email=?, telefone=?, data_nascimento=?, senha=?, crp=? , abordagem=?,foto=?, valor_consulta=?, especializacao=?, email_profissional=?, sobre_mim=? WHERE id_profissional=?`,
+        [nome, cpf, email, telefone, data_nascimento, senha, crp, abordagem, foto, valor_consulta, especializacao, email_profissional, sobre_mim, id_profissional]
+      );
+  
+      if (result.affectedRows > 0) {
+        const [profissionalAtualizado] = await pool.query(
+            'SELECT * FROM profissionais WHERE id_profissional = ?',
+            [id_profissional]
+          );
+          
+          res.status(200).json(profissionalAtualizado[0]); 
+      } else {
+        res.status(404).json('Profissional não encontrado!');
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).json('Erro ao atualizar o profissional');
+    }
+  });
   
 
 app.listen(4242, () => console.log ('Servidor servindo'));

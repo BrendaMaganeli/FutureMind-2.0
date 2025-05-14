@@ -126,7 +126,7 @@
   position: absolute;
   left: 8%;
   top: 24%;
-  opacity: 15%;
+  opacity: 9%;
 }
 
 .arvore-chat img {
@@ -135,24 +135,28 @@
 }
 
 
-/* Barra superior (com ícone) */
+/* Barra superior do chat */
 .barra-top {
- 
-  padding: 12px 16px;
-  background: white; /* Roxo do Material Design (ou ajuste a cor) */
-  color: black;
+  padding: 12px 16px 12px 25px;
+  background: #ffffff;
+  color: #000;
   border-bottom: 1px solid #5a7da0;
-  gap: 25px;
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  height: 10%;
 }
 
 .barra-top img {
-
-  width: 10%;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
 }
 
 .barra-top p {
-
-  font-size: 18px;
+  font-size: 16px;
+  margin: 0;
+  font-weight: 500;
 }
 
 /* Área de conversa (mensagens) */
@@ -199,9 +203,6 @@
   width: 50%;
 }
 
-.barra-bottom button:hover {
-  background: #013a63;
-}
 
 .barra-bottom img {
 
@@ -234,4 +235,11 @@
 .ppp p {
 
   font-size: 75%;
+}
+
+.nome-user-chat h5 {
+
+  font-size: 130%;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
 }

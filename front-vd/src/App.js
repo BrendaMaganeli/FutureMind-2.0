@@ -6,10 +6,13 @@ const socket = io("http://localhost:5000");
 
 const VideoConference = () => {
 //1
-
+  const [videoActive, setVideoActive] = useState(true);
+  const [micActive, setMicActive] = useState(true);
+  const [chatActive, setChatActive] = useState(false);
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const peerConnection = useRef(null);
+  const localStreamRef = useRef(null);
   const [callInProgress, setCallInProgress] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [offer, setOffer] = useState(null);
@@ -38,16 +41,28 @@ const VideoConference = () => {
   };
 
   useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        if (localVideoRef.current) {
-          localVideoRef.current.srcObject = stream;
-        }
-        initializePeerConnection();
-        stream.getTracks().forEach(track => peerConnection.current.addTrack(track, stream));
-      })
-      .catch((error) => console.error("Erro ao acessar mídia:", error));
-  }, []);
+  navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    .then((stream) => {
+      localStreamRef.current = stream; // Salva o stream aqui
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = stream;
+      }
+      initializePeerConnection();
+      stream.getTracks().forEach(track => peerConnection.current.addTrack(track, stream));
+    })
+    .catch((error) => console.error("Erro ao acessar mídia:", error));
+}, []);
+
+useEffect(() => {
+  if (localStreamRef.current) {
+    const videoTrack = localStreamRef.current.getVideoTracks()[0];
+    if (videoTrack) {
+      videoTrack.enabled = videoActive;
+    }
+  }
+}, [videoActive]);
+
+
 
   useEffect(() => {
     socket.on("offer", async (receivedOffer) => {
@@ -105,11 +120,9 @@ const VideoConference = () => {
     setCallInProgress(true);
   };
 
-  const [videoActive, setVideoActive] = useState(true);
-  const [micActive, setMicActive] = useState(true);
-  const [chatActive, setChatActive] = useState(false);
+ 
 
-  const [chatSelected, setChatSelected] = useState({foto: 'img.conversa.chat.png', name: 'Jana Maria'});
+  const [chatSelected, setChatSelected] = useState({foto: 'img.conversa.chat.png', nome: 'Jana Maria'});
   const settingsRef = useRef(null);
   const [theme, setTheme] = useState('light');
   const tema = theme === 'light' ? 'escuro' : 'claro';

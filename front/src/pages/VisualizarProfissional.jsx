@@ -1,10 +1,10 @@
 import "./CSS/VisualizarProfissional.css";
 import icon_um from "../assets/agenda 2.svg";
 import icon_dois from "../assets/cam-recorder (1) 11.svg";
-import icon_tres from "../assets/icons8-bate-papo-48 2.svg";
+import icon_tres from "../assets/comments-regular.svg";
 import logo from "../assets/logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
-import anotar from "../assets/bloco-de-anotacoes.png";
+// import anotar from "../assets/bloco-de-anotacoes.png";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Arvore from '../assets/Arvore-perfil.svg'
@@ -97,10 +97,10 @@ function VisualizarProfissional() {
               <img src={icon_tres} alt="" />
               <p>Chat</p>
             </div>
-            <div className="topicos">
+            {/* <div className="topicos">
               <img src={anotar} alt="" />
               <p>Anotações</p>
-            </div>
+            </div> */}
           </div>
         </div>
       </aside>
@@ -120,6 +120,14 @@ function VisualizarProfissional() {
         </div>
 
         <div className="caixa-info-geral">
+          <div className="cartao-sobremim">
+            <div className="cabecalho-sobre-mim">
+              <h2>Sobre mim</h2>
+            </div>
+            <div className="corpo-sobre-mim">
+              <p>{profissional?.sobre_mim}</p>
+            </div>
+          </div>
           <div className="caixa-informacoes">
             <div className="cartao-informacao-e">
               <div className="cabecalho-informacao">
@@ -143,17 +151,9 @@ function VisualizarProfissional() {
             </div>
           </div>
 
-          <div className="cartao-sobremim">
-            <div className="cabecalho-sobre-mim">
-              <h2>Sobre mim</h2>
-            </div>
-            <div className="corpo-sobre-mim">
-              <p>{profissional?.sobre_mim}</p>
-            </div>
-          </div>
         </div>
         <div className="crp">
-          <p>{profissional?.crp}</p>
+          <p className="crp-design">{profissional?.crp}</p>
         </div>
       </main>
     </div>

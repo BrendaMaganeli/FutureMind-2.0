@@ -14,7 +14,7 @@ function EditarProfissional() {
   const navigate = useNavigate();
   const profissional = JSON.parse(localStorage.getItem('User-Profile'));
   const [showModal, setShowModal] = useState(false);
-  const [valorConsulta, setValorConsulta] = useState(`R$ ${profissional.valor_consulta}`);
+  const [valorConsulta, setValorConsulta] = useState(`R$ ${0.00}`);
 
   const opcoesEspecializacao = [
     { value: "psicologia-clinica", label: "Psicologia Clínica" },

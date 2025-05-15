@@ -22,9 +22,20 @@ function CadastroProfissional1() {
   const [dataNascimentoValido, setDataNascimentoValido] = useState(false);
   const [cpf, setCpf] = useState(profissional.cpf);
   const [cpfValido, setCpfValido] = useState(false);
-  const [valorConsulta, setValorConsulta] = useState(
-    profissional.valor_consulta,
-  );
+  
+  const formatarValorConsulta = (valor) => {
+    const somenteNumeros = valor.replace(/\D/g, "");
+    const numero = (parseInt(somenteNumeros, 10) / 100).toFixed(2);
+    return `R$ ${numero.replace(".", ",")}`;
+  };
+
+  const formatarValorConsultaB = (valor) => {
+    const somenteNumeros = valor.replace(/\D/g, "");
+    const numero = (parseInt(somenteNumeros, 10) / 100).toFixed(2);
+    return numero
+  };
+
+  const [valorConsulta, setValorConsulta] = useState('');
   const [valorConsultaValido, setValorConsultaValido] = useState(false);
 
   const converterParaFormatoBanco = (data) => {
@@ -43,7 +54,6 @@ function CadastroProfissional1() {
       valor_consulta: formatarValorConsultaB(valorConsulta),
     });
 
-    console.log(formatarValorConsultaB(valorConsulta))
   }, [nome, valorCRP, telefone, dataNascimento, cpf, valorConsulta]);
 
   const formatarCPF = (value) => {
@@ -64,17 +74,7 @@ function CadastroProfissional1() {
     return value.slice(0, 2) + "/" + value.slice(2, 7); // ex: "06/123456"
   };
 
-  const formatarValorConsulta = (valor) => {
-    const somenteNumeros = valor.replace(/\D/g, "");
-    const numero = (parseInt(somenteNumeros, 10) / 100).toFixed(2);
-    return `R$ ${numero.replace(".", ",")}`;
-  };
-
-  const formatarValorConsultaB = (valor) => {
-    const somenteNumeros = valor.replace(/\D/g, "");
-    const numero = (parseInt(somenteNumeros, 10) / 100).toFixed(2);
-    return numero
-  };
+  
 
   const formatarTelefone = (value) => {
     value = value.replace(/\D/g, "");

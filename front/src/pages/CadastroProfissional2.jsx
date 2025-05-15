@@ -203,7 +203,7 @@ function CadastroProfissional2() {
           email: "",
           email_profissional: "@futuremind.com",
           crp: "",
-          valor_consulta: 0.0,
+          valor_consulta: null,
         });
         navigate("/login");
       }

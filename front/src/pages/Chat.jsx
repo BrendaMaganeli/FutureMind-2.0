@@ -252,39 +252,6 @@ function Chat() {
     navigate(-1);
   };
 
-  const fetchSendMessage = async (mensagem) => {
-    try {
-      const data = {
-        mensagem: mensagem,
-        id_paciente: user.id_paciente || null,
-        id_profissional: user.id_profissional || null,
-        datahora: new Date().toISOString().slice(0, 19).replace('T', ' ')
-      };
-  
-      const response = await fetch('http://localhost:4242/chats/chat/send-message', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-  
-      if (!response.ok) {
-        console.error("Erro ao enviar mensagem");
-      }
-    } catch (error) {
-      console.error('Erro interno do servidor ao enviar mensagem:', error);
-    }
-  };
-
-  const isSentByCurrentUser = (msg) => {
-    if (userType === 'Paciente') {
-      return msg.fk_pacientes_id_paciente === user.id_paciente;
-    } else {
-      return msg.fk_profissionais_id_profissional === user.id_profissional;
-    }
-  };
-
   return (
     <div className={`container-chats ${theme} ${fontSize}`}>
       <div className="barra-lateral-chat">
@@ -414,8 +381,6 @@ function Chat() {
               </div>
               {messages.map((msg, index) => {
                 
-                const isMine = isSentByCurrentUser(msg);
-              
                 return (
                 <div
                   key={index}

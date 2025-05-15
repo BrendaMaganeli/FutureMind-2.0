@@ -216,8 +216,13 @@
   gap: 12px;
 }
 
-.botao-login {
+.container_button_login{
+
+  display: flex;
   width: 100%;
+}
+.botao-login {
+  width: 90%;
   max-width: 700px;
   padding: 14px;
   background-color: #5a789f;
@@ -273,21 +278,6 @@
   border: 2px solid #5a789f;
 }
 
-<<<<<<< HEAD
-=======
-/* Ícone de check */
-.styles-check:checked::after {
-  content: "✔";
-  font-size: 14px;
-  color: white;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-weight: bold;
-}
-
->>>>>>> 838539c4b6e0b27ad7d2975670a433f781c5b3fa
 /* Texto e link */
 .termos-styles {
   color: #5a789f;

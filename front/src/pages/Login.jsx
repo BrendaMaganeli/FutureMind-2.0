@@ -122,9 +122,12 @@ function login() {
             />
           </div>
         </div>
-        <button className="botao-login" onClick={handleCadastro}>
-          Realizar Login
-        </button>
+        <div className="container_button_login">
+          <button className="botao-login" onClick={handleCadastro}>
+             Realizar Login
+          </button>
+        </div>
+        
         <p className="login-texto">
           Ainda não possui cadastro?
           <a

@@ -194,16 +194,6 @@ function Chat() {
   };
 
   useEffect(() => {
-
-    socket.on("receiveMessage", (data) => {
-      let newMessage = JSON.parse(data);
-      newMessage.sender = newMessage.name === user.nome ? "me" : "other";
-    });
-
-    return () => socket.off("receiveMessage");
-  }, []);
-
-  useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }

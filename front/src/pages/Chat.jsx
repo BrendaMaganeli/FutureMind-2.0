@@ -251,9 +251,7 @@ function Chat() {
     socket.emit("sendMessage", JSON.stringify(newMessage));
 
     fetchSendMessage(newMessage);
-    if (fetchSendMessage(newMessage)) {
-      window.reLoad();
-    }
+    window.reLoad();
   };
 
   const handleVoltar = () => {
@@ -279,8 +277,6 @@ function Chat() {
         const data = await response.json();
 
         setMessages([...messages, data]);
-
-        return true;
       }
     } catch (error) {
       

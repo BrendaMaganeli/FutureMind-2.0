@@ -248,8 +248,6 @@ function Chat() {
       id_profissional: userType === 'Paciente' ? chatSelected.id_profissional : user.id_profissional
     };
     setInptvalue("");
-    socket.emit("sendMessage", JSON.stringify(newMessage));
-
     fetchSendMessage(newMessage);
     window.reLoad();
   };

@@ -129,7 +129,7 @@ function Chat() {
   }, [chatSelected]);
 
 
-  const socket = io("https://futuremind-2-0.onrender.com");
+  // const socket = io("https://futuremind-2-0.onrender.com");
 
 
   const [isChatSelected, setIsChatSelected] = useState("chat-not-selected");

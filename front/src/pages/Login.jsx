@@ -32,7 +32,7 @@ function login() {
   const handleLogin = async () => {
     const credentials = { email: valorEmail, senha: valorSenha };
     try {
-      const response = await fetch("https://futuremind-2-0-mw60.onrender.com/login", {
+      const response = await fetch("https://futuremind-2-0.onrender.com/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

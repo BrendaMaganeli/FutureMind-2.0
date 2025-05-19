@@ -262,7 +262,9 @@ function EditarProfissional() {
 
           <div className="botoes-maior-pro">
             <div className="botoes-pro">
+              <Link to="/chats">
               <img src={voltar} alt="" className="voltar-seta"/>
+              </Link>
             </div>
             <div className="botoes-superiores-p">
           <button onClick={handleDeletarClick} className="botao-deletar">Deletar</button>

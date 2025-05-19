@@ -226,31 +226,43 @@ function Chat() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const getDateTimeNow = () => {
+    const now = new Date();
+  
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+  
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  }
+
   const sendMessage = (e) => {
     e.preventDefault();
     if (inptvalue.trim() === "") return;
 
     const newMessage = {
       mensageiro: userType,
-      datahora: '2025-05-08 12:00:00',
+      datahora: getDateTimeNow(),
       mensagem: inptvalue,
       id_paciente: userType === 'Profissional' ? chatSelected.id_paciente : user.id_paciente,
       id_profissional: userType === 'Paciente' ? chatSelected.id_profissional : user.id_profissional
     };
     setInptvalue("");
     fetchSendMessage(newMessage);
-    window.reLoad;
   };
-
+  
   const handleVoltar = () => {
     navigate(-1);
   };
-
+  
   const fetchSendMessage = async(message) => {
 
     try {
       
-      const response = await fetch('https://futuremind-2-0.onrender.com/chats/chat/send-message', {
+      const response = await fetch('http://localhost:4242/chats/chat/send-message', {
 
         method: 'POST',
         headers: {
@@ -260,11 +272,10 @@ function Chat() {
       });
 
       if (response.ok) {
-
+        
         console.log('Mensagem enviada!');
-        const data = await response.json();
 
-        setMessages([...messages, data]);
+        setMessages(...prev => [...prev, data]);
       }
     } catch (error) {
       

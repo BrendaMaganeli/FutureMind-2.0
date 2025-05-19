@@ -333,7 +333,7 @@ app.post('/chats/chat', async(req, res) => {
 
         if (!id_paciente || !id_profissional) return res.status(404).json('Valores inválidos');
 
-        const [response] = await pool.query('SELECT mensagem, mensageiro FROM chat_paciente_profissional WHERE fk_pacientes_id_paciente=? AND fk_profissionais_id_profissional=? ORDER BY datahora DESC', [
+        const [response] = await pool.query('SELECT mensagem, mensageiro FROM chat_paciente_profissional WHERE fk_pacientes_id_paciente=? AND fk_profissionais_id_profissional=? ORDER BY datahora', [
 
             id_paciente,
             id_profissional
@@ -363,7 +363,7 @@ app.post('/chats/chat/send-message', async (req, res) => {
   
       if (response.length > 0) {
 
-        res.status(201).json(response);
+        res.status(201).json(response[0]);
       }
     } catch (error) {
       console.error('Erro ao salvar mensagem:', error);

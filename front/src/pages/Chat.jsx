@@ -39,7 +39,7 @@ function Chat() {
               userType: userLocal.id_profissional ? 'Profissional' : 'Paciente'
           };
         
-        const response = await fetch("http://localhost:4242/chats", {
+        const response = await fetch("https://futuremind-2-0.onrender.com/chats", {
   
           method: 'POST',
           headers: {
@@ -99,7 +99,7 @@ function Chat() {
 
           if (!dado) return console.log('erro N');
           
-          const response = await fetch(`http://localhost:4242/chats/chat`, {
+          const response = await fetch(`https://futuremind-2-0.onrender.com/chats/chat`, {
             
             method: 'POST',
             headers: {
@@ -261,7 +261,7 @@ function Chat() {
 
     try {
       
-      const response = await fetch('http://localhost:4242/chats/chat/send-message', {
+      const response = await fetch('https://futuremind-2-0.onrender.com/chats/chat/send-message', {
 
         method: 'POST',
         headers: {

@@ -239,7 +239,7 @@ function Chat() {
     };
     setInptvalue("");
     fetchSendMessage(newMessage);
-    window.reLoad();
+    window.reLoad;
   };
 
   const handleVoltar = () => {

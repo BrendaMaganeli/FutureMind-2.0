@@ -294,9 +294,10 @@ function Inicio() {
                       <div className="sobremim-inicio">
                         <h3>Abordagens:</h3>
                         <div className="textSobremim">
-                          {item?.abordagem?.map((item, index) => (
-                            <p key={index}>{item.label}</p>
-                          ))}
+                        {Array.isArray(item?.abordagem) &&
+                         item.abordagem.map((item, index) => (
+                         <p key={index}>{item.label}</p>
+                         ))}
                         </div>
                         <div className="crp-inicio">CRP {item.crp}</div>
                       </div>

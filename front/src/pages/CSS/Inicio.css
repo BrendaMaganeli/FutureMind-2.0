@@ -435,23 +435,26 @@
 .foto-perfilInicio {
   display: flex;
   align-items: center;
+  background-color: #007bff;
+  height: 30%;
 }
 
 .perfil-nomeValor {
   padding-left: 5%;
   color: #013a63;
   font-size: 1.1em;
+  background-color: aquamarine;
 }
 
 .div-especializacao {
   display: flex;
   align-items: center;
-  
   flex-wrap: wrap;
   width: 100%;
   margin-top: 10px;
   height: 12%;
   gap: 10px;
+  background-color: aqua;
 }
 
 .container_especializacao{

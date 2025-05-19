@@ -5,7 +5,7 @@ import icon_tres from "../assets/icons8-bate-papo-48 2.svg";
 import Arvore from "../assets/Group 239274.svg";
 import "./CSS/EditarProfissional.css";
 import voltar from "../assets/seta-principal.svg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 import Select from "react-select";
 

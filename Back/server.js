@@ -1,4 +1,6 @@
 const express =  require ('express');
+const http = require("http");
+const { Server } = require("socket.io");
 const mysql = require ('mysql2/promise');
 const app = express ();
 const cors = require('cors');
@@ -6,6 +8,14 @@ const cors = require('cors');
 app.use(cors({
     origin: '*'
 }));
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -370,5 +380,17 @@ app.post('/chats/chat/send-message', async (req, res) => {
       res.status(500).json({ Error: 'Erro interno do servidor' });
     }
 });
+
+io.on("connection", (socket) => {
+    console.log("Usuário conectado", socket.id);
+  
+    socket.on("sendMessage", (data) => {
+      io.emit("receiveMessage", data);
+    });
+  
+    socket.on("disconnect", () => {
+      console.log("Usuário desconectado", socket.id);
+    });
+  });
   
 app.listen(4242, () => console.log ('Servidor servindo'));

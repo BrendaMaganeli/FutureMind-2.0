@@ -19,6 +19,7 @@ function Chat() {
   const [chatSelected, setChatSelected] = useState();
   const user = JSON.parse(localStorage.getItem('User-Profile'));
   const userType = user.id_paciente ? 'Paciente' : 'Profissional';
+  const [isMine, setIsMine] = useState(true);
 
   useEffect(() => {
 
@@ -79,7 +80,7 @@ function Chat() {
         
         try {
 
-          let dado ={};
+          let dado = {};
           
           if (userType === 'Profissional') {
             dado = {
@@ -118,10 +119,12 @@ function Chat() {
           }
         } catch (error) {
           
-          console.error('Erro interno do servidor');
+          console.error('Erro interno do servidor', error);
         }
       }
-      fetchMessages(userType === 'Profissional' ? chatSelected.id_paciente : chatSelected.id_profissional);
+
+      const idAux = userType === 'Profissional' ? chatSelected.id_paciente : chatSelected.id_profissional;
+      fetchMessages(idAux);
     }
   }, [chatSelected]);
 
@@ -238,19 +241,47 @@ function Chat() {
     if (inptvalue.trim() === "") return;
 
     const newMessage = {
-      sender: 'me',
-      text: inptvalue,
-      foto: mulher,
-      name: user.nome,
+      mensageiro: userType,
+      datahora: '2025-05-03 01:00:00',
+      mensagem: inptvalue,
+      id_paciente: userType === 'Profissional' ? chatSelected.id_paciente : user.id_paciente,
+      id_profissional: userType === 'Paciente' ? chatSelected.id_profissional : user.id_profissional
     };
     setInptvalue("");
     socket.emit("sendMessage", JSON.stringify(newMessage));
-    fetchSendMessage(inptvalue);
+
+    fetchSendMessage(newMessage);
   };
 
   const handleVoltar = () => {
     navigate(-1);
   };
+
+  const fetchSendMessage = async(message) => {
+
+    try {
+      
+      const response = await fetch('http://localhost:4242/chats/chat/send-message', {
+
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(message)
+      });
+
+      if (response.ok) {
+
+        console.log('Mensagem enviada!');
+        const data = await response.json();
+
+        setMessages([...messages, data]);
+      }
+    } catch (error) {
+      
+      console.error(error);
+    }
+  }
 
   return (
     <div className={`container-chats ${theme} ${fontSize}`}>
@@ -379,36 +410,34 @@ function Chat() {
                   <img src={arvoreBranca} alt="" />
                 )}
               </div>
-              {messages.map((msg, index) => {
-                
-                return (
+              {messages.map((msg, index) => (
                 <div
                   key={index}
                   className={
-                    isMine ? "message-right" : "message-left"
+                    msg.mensageiro === userType ? "message-right" : "message-left"
                   }
                 >
-                  {!isMine (
+                  {!msg.mensageiro === userType && (
                     <div className="image-message-right">
                       <img src={user.foto} alt="" />
                     </div>
                   )}
                   <div
                     className={
-                     isMine
+                     msg.mensageiro === userType
                         ? "text-message-right"
                         : "text-message-left"
                     }
                   >
                     {msg.mensagem}
                   </div>
-                  {isMine && (
+                  {msg.mensageiro === userType && (
                     <div className="image-message-left">
                       <img src={user.foto} alt="" />
                     </div>
                   )}
                 </div>
-              )})}
+              ))}
               <div ref={messagesEndRef}></div>
             </div>
           </div>

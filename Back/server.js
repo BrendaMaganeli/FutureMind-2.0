@@ -333,7 +333,7 @@ app.post('/chats/chat', async(req, res) => {
 
         if (!id_paciente || !id_profissional) return res.status(404).json('Valores inválidos');
 
-        const [response] = await pool.query('SELECT mensagem FROM chat_paciente_profissional WHERE fk_pacientes_id_paciente=? AND fk_profissionais_id_profissional=?', [
+        const [response] = await pool.query('SELECT mensagem, mensageiro FROM chat_paciente_profissional WHERE fk_pacientes_id_paciente=? AND fk_profissionais_id_profissional=? ORDER BY datahora DESC', [
 
             id_paciente,
             id_profissional
@@ -353,15 +353,18 @@ app.post('/chats/chat', async(req, res) => {
 
 app.post('/chats/chat/send-message', async (req, res) => {
 
-    const { mensagem, id_paciente, id_profissional, datahora } = req.body;
+    const { mensagem, id_paciente, id_profissional, datahora, mensageiro } = req.body;
   
     try {
       const [response] = await pool.query(
-        'INSERT INTO mensagens (mensagem, fk_pacientes_id_paciente, fk_profissionais_id_profissional, datahora) VALUES (?, ?, ?, ?)',
-        [mensagem, id_paciente, id_profissional, datahora]
+        'INSERT INTO chat_paciente_profissional (mensagem, fk_pacientes_id_paciente, fk_profissionais_id_profissional, datahora, mensageiro) VALUES (?, ?, ?, ?, ?)',
+        [mensagem, id_paciente, id_profissional, datahora, mensageiro]
       );
   
-      res.status(201).json({ success: true });
+      if (response.length > 0) {
+
+        res.status(201).json(response);
+      }
     } catch (error) {
       console.error('Erro ao salvar mensagem:', error);
       res.status(500).json({ Error: 'Erro interno do servidor' });

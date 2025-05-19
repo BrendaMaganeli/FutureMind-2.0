@@ -16,7 +16,7 @@ import "./CSS/Chat.css";
 function Chat() {
   
   const [chats, setChats] = useState([]);
-  const [chatSelected, setChatSelected] = useState();
+  const [chatSelected, setChatSelected] = useState(null);
   const user = JSON.parse(localStorage.getItem('User-Profile'));
   const userType = user.id_paciente ? 'Paciente' : 'Profissional';
   const [isMine, setIsMine] = useState(true);
@@ -99,7 +99,7 @@ function Chat() {
 
           if (!dado) return console.log('erro N');
           
-          const response = await fetch(`https://futuremind-2-0.onrender.com/chats/chat`, {
+          const response = await fetch(`http://localhost:4242/chats/chat`, {
             
             method: 'POST',
             headers: {
@@ -129,7 +129,7 @@ function Chat() {
   }, [chatSelected]);
 
 
-  // const socket = io("https://futuremind-2-0.onrender.com");
+  const socket = useRef();
 
 
   const [isChatSelected, setIsChatSelected] = useState("chat-not-selected");
@@ -194,6 +194,7 @@ function Chat() {
   };
 
   useEffect(() => {
+
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
@@ -217,6 +218,7 @@ function Chat() {
   }
 
   useEffect(() => {
+
     function handleClickOutside(event) {
       if (settingsRef.current && !settingsRef.current.contains(event.target)) {
         setVisibleSettings(false);
@@ -238,6 +240,18 @@ function Chat() {
   
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
+
+  useEffect(() => {
+    socket.current = io("http://localhost:4242");
+  
+    socket.current.on("receive-message", (newMessage) => {
+      setMessages((prev) => [...prev, newMessage]);
+    });
+  
+    return () => {
+      socket.current.disconnect();
+    };
+  }, []);
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -270,12 +284,15 @@ function Chat() {
         },
         body: JSON.stringify(message)
       });
-
+      
       if (response.ok) {
         
         console.log('Mensagem enviada!');
+        socket.current = io("http://localhost:4242");
 
-        setMessages(...prev => [...prev, data]);
+
+        socket.current.emit("send-message", message);
+        setMessages(prev => [...prev, message]);
       }
     } catch (error) {
       
@@ -387,7 +404,7 @@ function Chat() {
               </div>
               <img
                 onClick={() => {
-                  setChatSelected(""), setIsChatSelected("chat-not-selected");
+                  setChatSelected(null), setIsChatSelected("chat-not-selected");
                 }}
                 src={close}
                 className="icon-chat-p-3"
@@ -417,11 +434,11 @@ function Chat() {
                     msg.mensageiro === userType ? "message-right" : "message-left"
                   }
                 >
-                  {!msg.mensageiro === userType && (
+                  {msg.mensageiro === !userType && (
                     <div className="image-message-right">
                       <img src={user.foto} alt="" />
                     </div>
-                  )}
+                  )} 
                   <div
                     className={
                      msg.mensageiro === userType

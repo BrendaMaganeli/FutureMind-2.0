@@ -16,9 +16,10 @@ import "./CSS/Chat.css";
 function Chat() {
   
   const [chats, setChats] = useState([]);
-  const [chatSelected, setChatSelected] = useState();
+  const [chatSelected, setChatSelected] = useState(null);
   const user = JSON.parse(localStorage.getItem('User-Profile'));
   const userType = user.id_paciente ? 'Paciente' : 'Profissional';
+  const [isMine, setIsMine] = useState(true);
 
   useEffect(() => {
 
@@ -38,7 +39,7 @@ function Chat() {
               userType: userLocal.id_profissional ? 'Profissional' : 'Paciente'
           };
         
-        const response = await fetch("http://localhost:4242/chats", {
+        const response = await fetch("https://futuremind-2-0.onrender.com/chats", {
   
           method: 'POST',
           headers: {
@@ -79,7 +80,7 @@ function Chat() {
         
         try {
 
-          let dado ={};
+          let dado = {};
           
           if (userType === 'Profissional') {
             dado = {
@@ -118,15 +119,17 @@ function Chat() {
           }
         } catch (error) {
           
-          console.error('Erro interno do servidor');
+          console.error('Erro interno do servidor', error);
         }
       }
-      fetchMessages(userType === 'Profissional' ? chatSelected.id_paciente : chatSelected.id_profissional);
+
+      const idAux = userType === 'Profissional' ? chatSelected.id_paciente : chatSelected.id_profissional;
+      fetchMessages(idAux);
     }
   }, [chatSelected]);
 
 
-  const socket = io("https://futuremind-2-0.onrender.com");
+  const socket = useRef();
 
 
   const [isChatSelected, setIsChatSelected] = useState("chat-not-selected");
@@ -192,15 +195,6 @@ function Chat() {
 
   useEffect(() => {
 
-    socket.on("receiveMessage", (data) => {
-      let newMessage = JSON.parse(data);
-      newMessage.sender = newMessage.name === user.nome ? "me" : "other";
-    });
-
-    return () => socket.off("receiveMessage");
-  }, []);
-
-  useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
@@ -224,6 +218,7 @@ function Chat() {
   }
 
   useEffect(() => {
+
     function handleClickOutside(event) {
       if (settingsRef.current && !settingsRef.current.contains(event.target)) {
         setVisibleSettings(false);
@@ -233,57 +228,77 @@ function Chat() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const getDateTimeNow = () => {
+    const now = new Date();
+  
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+  
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  }
+
+  useEffect(() => {
+    socket.current = io("http://localhost:4242");
+  
+    socket.current.on("receive-message", (newMessage) => {
+      setMessages((prev) => [...prev, newMessage]);
+    });
+  
+    return () => {
+      socket.current.disconnect();
+    };
+  }, []);
+
   const sendMessage = (e) => {
     e.preventDefault();
     if (inptvalue.trim() === "") return;
 
     const newMessage = {
-      sender: 'me',
-      text: inptvalue,
-      foto: mulher,
-      name: user.nome,
+      mensageiro: userType,
+      datahora: getDateTimeNow(),
+      mensagem: inptvalue,
+      id_paciente: userType === 'Profissional' ? chatSelected.id_paciente : user.id_paciente,
+      id_profissional: userType === 'Paciente' ? chatSelected.id_profissional : user.id_profissional
     };
     setInptvalue("");
-    socket.emit("sendMessage", JSON.stringify(newMessage));
-    fetchSendMessage(inptvalue);
+    fetchSendMessage(newMessage);
   };
-
+  
   const handleVoltar = () => {
     navigate(-1);
   };
-
-  const fetchSendMessage = async (mensagem) => {
-    try {
-      const data = {
-        mensagem: mensagem,
-        id_paciente: user.id_paciente || null,
-        id_profissional: user.id_profissional || null,
-        datahora: new Date().toISOString().slice(0, 19).replace('T', ' ')
-      };
   
+  const fetchSendMessage = async(message) => {
+
+    try {
+      
       const response = await fetch('http://localhost:4242/chats/chat/send-message', {
+
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(message)
       });
-  
-      if (!response.ok) {
-        console.error("Erro ao enviar mensagem");
+      
+      if (response.ok) {
+        
+        console.log('Mensagem enviada!');
+        socket.current = io("http://localhost:4242");
+
+
+        socket.current.emit("send-message", message);
+        setMessages(prev => [...prev, message]);
       }
     } catch (error) {
-      console.error('Erro interno do servidor ao enviar mensagem:', error);
+      
+      console.error(error);
     }
-  };
-
-  const isSentByCurrentUser = (msg) => {
-    if (userType === 'Paciente') {
-      return msg.fk_pacientes_id_paciente === user.id_paciente;
-    } else {
-      return msg.fk_profissionais_id_profissional === user.id_profissional;
-    }
-  };
+  }
 
   return (
     <div className={`container-chats ${theme} ${fontSize}`}>
@@ -389,7 +404,7 @@ function Chat() {
               </div>
               <img
                 onClick={() => {
-                  setChatSelected(""), setIsChatSelected("chat-not-selected");
+                  setChatSelected(null), setIsChatSelected("chat-not-selected");
                 }}
                 src={close}
                 className="icon-chat-p-3"
@@ -412,38 +427,34 @@ function Chat() {
                   <img src={arvoreBranca} alt="" />
                 )}
               </div>
-              {messages.map((msg, index) => {
-                
-                const isMine = isSentByCurrentUser(msg);
-              
-                return (
+              {messages.map((msg, index) => (
                 <div
                   key={index}
                   className={
-                    isMine ? "message-right" : "message-left"
+                    msg.mensageiro === userType ? "message-right" : "message-left"
                   }
                 >
-                  {!isMine (
+                  {msg.mensageiro === !userType && (
                     <div className="image-message-right">
                       <img src={user.foto} alt="" />
                     </div>
-                  )}
+                  )} 
                   <div
                     className={
-                     isMine
+                     msg.mensageiro === userType
                         ? "text-message-right"
                         : "text-message-left"
                     }
                   >
                     {msg.mensagem}
                   </div>
-                  {isMine && (
+                  {msg.mensageiro === userType && (
                     <div className="image-message-left">
                       <img src={user.foto} alt="" />
                     </div>
                   )}
                 </div>
-              )})}
+              ))}
               <div ref={messagesEndRef}></div>
             </div>
           </div>

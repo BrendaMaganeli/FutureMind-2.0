@@ -25,7 +25,7 @@ function Inicio() {
   useEffect(() => {
     const buscaProfissionais = async () => {
       try {
-        const response = await fetch("https://futuremind-2-0-mw60.onrender.com");
+        const response = await fetch("https://futuremind-2-0.onrender.com");
 
         if (response.ok) {
           const data = await response.json();
@@ -294,9 +294,10 @@ function Inicio() {
                       <div className="sobremim-inicio">
                         <h3>Abordagens:</h3>
                         <div className="textSobremim">
-                          {item?.abordagem?.map((item, index) => (
-                            <p key={index}>{item.label}</p>
-                          ))}
+                        {Array.isArray(item?.abordagem) &&
+                         item.abordagem.map((item, index) => (
+                         <p key={index}>{item.label}</p>
+                         ))}
                         </div>
                         <div className="crp-inicio">CRP {item.crp}</div>
                       </div>

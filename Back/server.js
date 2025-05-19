@@ -240,7 +240,6 @@ app.put('/paciente', async (req, res) => {
       res.status(500).json('Erro ao atualizar o paciente');
     }
   });
-<<<<<<< HEAD
 
 
   
@@ -284,8 +283,6 @@ app.put('/editarprofissional', async (req, res) => {
     }
   });
   
-=======
->>>>>>> f6b64cb717f941b62896e61165ce6dfb49abac88
 
 
 app.post('/chats', async(req, res) => {

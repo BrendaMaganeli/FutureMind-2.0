@@ -22,9 +22,7 @@ function CadastroProfissional1() {
   const [dataNascimentoValido, setDataNascimentoValido] = useState(false);
   const [cpf, setCpf] = useState(profissional.cpf);
   const [cpfValido, setCpfValido] = useState(false);
-  const [valorConsulta, setValorConsulta] = useState(
-    profissional.valor_consulta,
-  );
+  const [valorConsulta, setValorConsulta] = useState('');
   const [valorConsultaValido, setValorConsultaValido] = useState(false);
 
   const converterParaFormatoBanco = (data) => {

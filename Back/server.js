@@ -5,17 +5,31 @@ const mysql = require ('mysql2/promise');
 const app = express ();
 const cors = require('cors');
 
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
+
+io.on("connection", (socket) => {
+    console.log("Usuário conectado", socket.id);
+  
+    socket.on("sendMessage", (data) => {
+      io.emit("receiveMessage", data);
+    });
+  
+    socket.on("disconnect", () => {
+      console.log("Usuário desconectado", socket.id);
+    });
+  });
+
 app.use(cors({
     origin: '*'
 }));
-
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
-  }
-});
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -291,7 +305,7 @@ app.put('/editarprofissional', async (req, res) => {
       res.status(500).json('Erro ao atualizar o profissional');
     }
   });
-  
+
 app.post('/chats', async(req, res) => {
 
     try {
@@ -371,7 +385,7 @@ app.post('/chats/chat/send-message', async (req, res) => {
         [mensagem, id_paciente, id_profissional, datahora, mensageiro]
       );
   
-      if (response.length > 0) {
+      if (response.affectedRows > 0) {
 
         res.status(201).json(response[0]);
       }
@@ -381,16 +395,6 @@ app.post('/chats/chat/send-message', async (req, res) => {
     }
 });
 
-io.on("connection", (socket) => {
-    console.log("Usuário conectado", socket.id);
-  
-    socket.on("sendMessage", (data) => {
-      io.emit("receiveMessage", data);
-    });
-  
-    socket.on("disconnect", () => {
-      console.log("Usuário desconectado", socket.id);
-    });
-  });
+
   
 app.listen(4242, () => console.log ('Servidor servindo'));

@@ -128,10 +128,6 @@ function Chat() {
     }
   }, [chatSelected]);
 
-
-  const socket = useRef();
-
-
   const [isChatSelected, setIsChatSelected] = useState("chat-not-selected");
   const [busca, setBusca] = useState("");
   const [result, setResult] = useState([]);
@@ -193,12 +189,38 @@ function Chat() {
     }
   };
 
-  useEffect(() => {
+  const socket = useRef();
 
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+useEffect(() => {
+  socket.current = io("http://localhost:3001");
+  
+  // Verificação de conexão
+  socket.current.on("connect", () => {
+    console.log("Conectado ao Socket.IO!");
+  });
+
+  socket.current.on("connect_error", (err) => {
+    console.error("Erro de conexão:", err);
+  });
+
+  // Recebimento de mensagens
+  socket.current.on("receiveMessage", (savedMessage) => {
+    console.log("Nova savedMessage recebida:", savedMessage);
+    setMessages((prev) => [...prev, savedMessage]);
+  });
+
+  return () => {
+    if (socket.current) {
+      socket.current.disconnect();
     }
-  }, [messages]);
+
+  };
+}, []);
+    useEffect(() => {
+    if (messagesEndRef.current) {
+    messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+    }, [messages]);
 
   function buscaProfissional(e) {
     const termo = e.target.value;
@@ -241,17 +263,20 @@ function Chat() {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 
-  useEffect(() => {
-    socket.current = io("http://localhost:4242");
+//  useEffect(() => {
+//   socket.current = io("http://localhost:4242");
   
-    socket.current.on("receive-message", (newMessage) => {
-      setMessages((prev) => [...prev, newMessage]);
-    });
-  
-    return () => {
-      socket.current.disconnect();
-    };
-  }, []);
+//   socket.current.on("receiveMessage", (newMessage) => {
+//     setMessages((prev) => [...prev, newMessage]);
+//   });
+
+//   return () => {
+//     if (socket.current) {
+//       socket.current.off("receiveMessage");
+//       socket.current.disconnect();
+//     }
+//   };
+// }, []);
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -286,19 +311,16 @@ function Chat() {
       });
       
       if (response.ok) {
-        
-        console.log('Mensagem enviada!');
-        socket.current = io("http://localhost:4242");
 
-
-        socket.current.emit("send-message", message);
-        setMessages(prev => [...prev, message]);
+        console.log('a')
+        console.log("Mensagem salva no banco de dados!");
+        socket.current.emit("sendMessage", message); // Envia via Socket.IO
       }
-    } catch (error) {
+      } catch (error) {
       
-      console.error(error);
+        console.error(error);
+      }
     }
-  }
 
   return (
     <div className={`container-chats ${theme} ${fontSize}`}>

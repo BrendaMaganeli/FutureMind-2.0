@@ -1,4 +1,6 @@
 const express =  require ('express');
+const http = require("http");
+const { Server } = require("socket.io");
 const mysql = require ('mysql2/promise');
 const app = express ();
 const cors = require('cors');
@@ -6,6 +8,14 @@ const cors = require('cors');
 app.use(cors({
     origin: '*'
 }));
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -282,6 +292,11 @@ app.put('/editarprofissional', async (req, res) => {
     }
   });
   
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 2643766f945a2678c74f892e6f4775bafb1777d6
 app.post('/chats', async(req, res) => {
 
     try {
@@ -333,7 +348,7 @@ app.post('/chats/chat', async(req, res) => {
 
         if (!id_paciente || !id_profissional) return res.status(404).json('Valores inválidos');
 
-        const [response] = await pool.query('SELECT mensagem, mensageiro FROM chat_paciente_profissional WHERE fk_pacientes_id_paciente=? AND fk_profissionais_id_profissional=? ORDER BY datahora DESC', [
+        const [response] = await pool.query('SELECT mensagem, mensageiro FROM chat_paciente_profissional WHERE fk_pacientes_id_paciente=? AND fk_profissionais_id_profissional=? ORDER BY datahora', [
 
             id_paciente,
             id_profissional
@@ -363,7 +378,7 @@ app.post('/chats/chat/send-message', async (req, res) => {
   
       if (response.length > 0) {
 
-        res.status(201).json(response);
+        res.status(201).json(response[0]);
       }
     } catch (error) {
       console.error('Erro ao salvar mensagem:', error);
@@ -371,6 +386,20 @@ app.post('/chats/chat/send-message', async (req, res) => {
     }
 });
 
+<<<<<<< HEAD
 
+=======
+io.on("connection", (socket) => {
+    console.log("Usuário conectado", socket.id);
+  
+    socket.on("sendMessage", (data) => {
+      io.emit("receiveMessage", data);
+    });
+  
+    socket.on("disconnect", () => {
+      console.log("Usuário desconectado", socket.id);
+    });
+  });
+>>>>>>> cdc0bc1ddca838142b5fcafa1b8818e48951bfc5
   
 app.listen(4242, () => console.log ('Servidor servindo'));

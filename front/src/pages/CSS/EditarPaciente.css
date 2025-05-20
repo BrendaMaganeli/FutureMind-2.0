@@ -161,7 +161,7 @@
   justify-content: center;
   border: 0.5px solid #919fa9;
   border-radius: 15px;
-  height: 360px;
+  height: 410px;
   width: 85%;
 }
 
@@ -178,14 +178,32 @@
   justify-content: center;
 }
 
-.button_selecionar_foto {
+/* .button_selecionar_foto {
   background-color: #5a789f;
   color: white;
   padding: 8px;
   border: none;
   border-radius: 10px;
   width: 30%;
+} */
+
+input[type="file"] {
+  background-color: #c1dff48c; /* tom claro de verde */
+  color: #013a63; /* verde escuro para o texto */
+  border: 1px solid #a3bdcfb4; /* borda suave */
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border 0.3s ease;
+  font-family: 'Poppins', sans-serif;
 }
+
+input[type="file"]:hover {
+  background-color: #b2dfff8c;
+  border-color: #77a1beb4;
+}
+
 
 .container_oculta_corpo_direita {
   width: 35%;
@@ -219,7 +237,6 @@
 
 .conatiner_modelo_redondo {
   width: 100%;
-  padding-top: 10%;
 }
 .modelo_foto_redondo {
   padding: 35%;
@@ -231,6 +248,7 @@
   margin-right: 60px;
   width: 70%;
 }
+
 
 .container_footer_oculto {
   width: 100%;
@@ -249,43 +267,29 @@
   align-items: center;
 }
 
-.container_button_remover_foto {
-  padding-left: 2%;
-  width: 15%;
-}
-
-.button_remover_foto {
-  background-color: #5a789f;
-  border: none;
-  color: white;
-  padding: 5%;
-  width: 100%;
-  border-radius: 10px;
-  font-weight: 400;
-}
 .conatiner_buttons_cancelar_gostei {
-  width: 25%;
+  width: 100%;
   display: flex;
   justify-content: end;
 }
 
 .container_button_cancelar_editar {
-  width: 50%;
+  width: 15%;
   padding-right: 10px;
 }
 
 .button_cancelar_editar {
   border: none;
   background-color: white;
-  padding: 4%;
+  padding: 5%;
   color: #013a63;
-  width: 90%;
+  width: 100%;
   border-radius: 10px;
   font-weight: 600;
 }
 
 .container_button_gostei_salvar {
-  width: 50%;
+  width: 15%;
   padding-right: 10px;
 }
 

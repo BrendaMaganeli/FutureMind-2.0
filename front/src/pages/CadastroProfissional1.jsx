@@ -22,19 +22,6 @@ function CadastroProfissional1() {
   const [dataNascimentoValido, setDataNascimentoValido] = useState(false);
   const [cpf, setCpf] = useState(profissional.cpf);
   const [cpfValido, setCpfValido] = useState(false);
-  
-  const formatarValorConsulta = (valor) => {
-    const somenteNumeros = valor.replace(/\D/g, "");
-    const numero = (parseInt(somenteNumeros, 10) / 100).toFixed(2);
-    return `R$ ${numero.replace(".", ",")}`;
-  };
-
-  const formatarValorConsultaB = (valor) => {
-    const somenteNumeros = valor.replace(/\D/g, "");
-    const numero = (parseInt(somenteNumeros, 10) / 100).toFixed(2);
-    return numero
-  };
-
   const [valorConsulta, setValorConsulta] = useState('');
   const [valorConsultaValido, setValorConsultaValido] = useState(false);
 

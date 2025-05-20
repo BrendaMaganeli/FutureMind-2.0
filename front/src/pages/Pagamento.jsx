@@ -1,10 +1,12 @@
-import  { useState, useEffect } from "react";
+import  { useState, useEffect, useContext } from "react";
+import { GlobalContext } from "../Context/GlobalContext";
 import './CSS/Pagamento.css';
 import Seta from '../assets/caret-down-solid.svg';
 import mulher from '../assets/image 8.png';
 import { useNavigate } from 'react-router-dom';
 import voltar from '../assets/seta-principal.svg';
 import emailjs from '@emailjs/browser';
+import { Import } from "lucide-react";
 
 export default function PagamentoConsulta() {
   const navigate = useNavigate();
@@ -73,11 +75,34 @@ export default function PagamentoConsulta() {
       setDesconto(0);
     }
   };
+  
+  const user = JSON.parse(localStorage.getItem('User-Profile'));
 
-  const handleFinalizar = () => {
+  const handleFinalizar = async () => {
 
     if(generoDependente.length > 1 && numeroCartao.length == 19 && nomeCartao.length > 0 && validadeCartao.length == 5 && cvvCartao.length == 3){
+       
+      try {
+        
+        if (user.id_paciente) {
 
+          const body = {
+            data_assinatura: '2025-05-15',
+            fk_id_paciente: user.id_paciente,
+            tipo_assinatura: plano_selecionado
+          }
+
+          const response = await fetch("https://futuremind-2-0-mw60.onrender.com/cadastro-paciente", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+          });
+        }
+      } catch (error) {
+        
+      }
        sendEmail();
        navigate('/inicio')
     }
@@ -204,7 +229,11 @@ export default function PagamentoConsulta() {
       alert('Erro ao enviar o e-mail. Verifique o console para detalhes.');
     });
   };
+  
 
+  const {plano_selecionado} = useContext(GlobalContext)
+  
+ 
   return (
     <div
       style={{

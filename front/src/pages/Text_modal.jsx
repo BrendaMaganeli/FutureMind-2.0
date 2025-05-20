@@ -1,74 +1,86 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-export default function Profissionais() {
-  const [profissionais, setProfissionais] = useState([]);
-  const [idadeSelecionada, setIdadeSelecionada] = useState("");
-  const [trabalhoSelecionado, setTrabalhoSelecionado] = useState("");
-  const [filtrados, setFiltrados] = useState([]);
+// Simulando banco de dados em memória
+const usuariosDB = [
+  {
+    id: 1,
+    nome: "Mateus",
+    temAssinatura: false,
+    consultasFeitas: 0,
+  },
+];
 
-  // Simula dados vindos de um "banco de dados" via API
-  useEffect(() => {
-    async function carregarProfissionais() {
-      // Aqui poderia ser um fetch real: fetch("/api/profissionais")
-      const dados = [
-        { id: 1, nome: "Ana", idade: 25, trabalho: "Designer" },
-        { id: 2, nome: "Bruno", idade: 30, trabalho: "Desenvolvedor" },
-        { id: 3, nome: "Carlos", idade: 25, trabalho: "Desenvolvedor" },
-        { id: 4, nome: "Daniela", idade: 35, trabalho: "Gerente" },
-        { id: 5, nome: "Eduarda", idade: 30, trabalho: "Designer" },
-      ];
-      setProfissionais(dados);
-      setFiltrados(dados);
-    }
-    carregarProfissionais();
-  }, []);
+export default function App() {
+  const [usuario, setUsuario] = useState(usuariosDB[0]);
+  const [mensagem, setMensagem] = useState("");
 
-  const aplicarFiltro = () => {
-    const resultado = profissionais.filter((p) => {
-      const condIdade = idadeSelecionada === "" || p.idade === parseInt(idadeSelecionada);
-      const condTrabalho = trabalhoSelecionado === "" || p.trabalho === trabalhoSelecionado;
-      return condIdade && condTrabalho;
+  const assinarPlano = () => {
+    setUsuario({
+      ...usuario,
+      temAssinatura: true,
+      consultasFeitas: 0,
     });
-    setFiltrados(resultado);
+    setMensagem("Assinatura realizada com sucesso! Você pode fazer até 4 consultas por mês.");
   };
 
-  const idades = [...new Set(profissionais.map((p) => p.idade))];
-  const trabalhos = [...new Set(profissionais.map((p) => p.trabalho))];
+  const fazerConsulta = () => {
+    if (!usuario.temAssinatura) {
+      setMensagem("Você precisa assinar um plano para fazer consultas.");
+      return;
+    }
+
+    if (usuario.consultasFeitas >= 4) {
+      setMensagem("Limite de 4 consultas por mês atingido.");
+      return;
+    }
+
+    const novoUsuario = {
+      ...usuario,
+      consultasFeitas: usuario.consultasFeitas + 1,
+    };
+
+    setUsuario(novoUsuario);
+    setMensagem(`Consulta realizada com sucesso. Restam ${4 - novoUsuario.consultasFeitas} no mês.`);
+  };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Filtro de Profissionais</h2>
+    <div style={estilos.container}>
+      <h1>Bem-vindo, {usuario.nome}</h1>
 
-      <div style={{ marginBottom: "10px" }}>
-        <label>Idade: </label>
-        <select value={idadeSelecionada} onChange={(e) => setIdadeSelecionada(e.target.value)}>
-          <option value="">Todas</option>
-          {idades.map((idade) => (
-            <option key={idade} value={idade}>{idade}</option>
-          ))}
-        </select>
-      </div>
+      {!usuario.temAssinatura ? (
+        <>
+          <h2>Plano Mensal</h2>
+          <p>R$ 49,90 - Até 4 consultas por mês</p>
+          <button onClick={assinarPlano}>Assinar</button>
+        </>
+      ) : (
+        <>
+          <h2>Consultas do mês</h2>
+          <p>Consultas feitas: {usuario.consultasFeitas} / 4</p>
+          <button onClick={fazerConsulta} disabled={usuario.consultasFeitas >= 4}>
+            Fazer consulta
+          </button>
+        </>
+      )}
 
-      <div style={{ marginBottom: "10px" }}>
-        <label>Trabalho: </label>
-        <select value={trabalhoSelecionado} onChange={(e) => setTrabalhoSelecionado(e.target.value)}>
-          <option value="">Todos</option>
-          {trabalhos.map((trabalho) => (
-            <option key={trabalho} value={trabalho}>{trabalho}</option>
-          ))}
-        </select>
-      </div>
-
-      <button onClick={aplicarFiltro}>Filtrar</button>
-
-      <h3>Resultados:</h3>
-      <ul>
-        {filtrados.map((p) => (
-          <li key={p.id}>
-            {p.nome} - {p.idade} anos - {p.trabalho}
-          </li>
-        ))}
-      </ul>
+      {mensagem && <p style={estilos.mensagem}>{mensagem}</p>}
     </div>
   );
 }
+
+const estilos = {
+  container: {
+    maxWidth: "400px",
+    margin: "0 auto",
+    padding: "20px",
+    fontFamily: "Arial",
+    textAlign: "center",
+    backgroundColor: "#f9f9f9",
+    borderRadius: "10px",
+    marginTop: "40px",
+  },
+  mensagem: {
+    marginTop: "20px",
+    color: "#333",
+  },
+};

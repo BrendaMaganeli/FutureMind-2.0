@@ -370,5 +370,7 @@ app.post('/chats/chat/send-message', async (req, res) => {
       res.status(500).json({ Error: 'Erro interno do servidor' });
     }
 });
+
+
   
 app.listen(4242, () => console.log ('Servidor servindo'));

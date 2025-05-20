@@ -7,21 +7,15 @@
 .H1_recursos {
   padding: 5%;
   color: #5a789f;
-  width: 30%;
+  width: 40%;
   flex-wrap: wrap;
   font-size: 45px;
 }
 
-<<<<<<< HEAD
 /* div::-webkit-scrollbar-track{
 
     background: #ffffff;
     border-radius: 3px;
-=======
-div::-webkit-scrollbar-track {
-  background: #ffffff;
-  border-radius: 3px;
->>>>>>> 838539c4b6e0b27ad7d2975670a433f781c5b3fa
 }
 
 div::-webkit-scrollbar-thumb {
@@ -29,23 +23,18 @@ div::-webkit-scrollbar-thumb {
   border-radius: 3px;
 }
 
-<<<<<<< HEAD
 div::-webkit-scrollbar{
 
 
     width: 12px;
 } */
-=======
-div::-webkit-scrollbar {
-  width: 12px;
-}
->>>>>>> 838539c4b6e0b27ad7d2975670a433f781c5b3fa
 
 .Container-recursos {
   display: flex;
   width: 100%;
   background-color: #ffffff;
-  padding-bottom: 10%;
+  padding-bottom: 5%;
+  padding-top: 5%;
 }
 
 .div_tres_recursos img {
@@ -146,28 +135,29 @@ div::-webkit-scrollbar {
 }
 
 .botaodecisaoo {
-  width: 170%;
-  font-size: 140%;
+  width: 13%;
+  font-size: 1.2em;
   border-top-left-radius: 100px;
   border-bottom-left-radius: 100px;
   border: none;
   transition: 1s;
   background-color: #5a789f;
   color: #ffff;
-  padding: 5%;
+  padding: 2%;
   text-align: center;
   text-decoration: none;
 }
 
 .botaodecisaodoiss {
-  width: 150%;
-  font-size: 140%;
+  width: 13%;
+  font-size: 1.2em;
   border-top-right-radius: 100px;
   border-bottom-right-radius: 100px;
   border: none;
+  transition: 1s;
   background-color: #cad7eb;
   color: #5a789f;
-  padding: 5%;
+  padding: 2%;
   text-align: center;
   text-decoration: none;
 }

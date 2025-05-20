@@ -106,7 +106,8 @@ export const GlobalContextProvider = ({ children }) => {
       localStorage.removeItem("User-Profile");
     }
   }, [user]);
-
+  
+  const [plano_selecionado, setPlano_selecionado] = useState('')
   return (
     <GlobalContext.Provider
       value={{
@@ -184,6 +185,9 @@ export const GlobalContextProvider = ({ children }) => {
         setErros_passar,
         checkbox_cheked,
         setcheckbox_cheked,
+        plano_selecionado,
+        setPlano_selecionado,
+
       }}
     >
       {children}

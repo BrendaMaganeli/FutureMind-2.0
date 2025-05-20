@@ -4,16 +4,10 @@
   background-color: #ffffff;
 }
 
-<<<<<<< HEAD
 /* div::-webkit-scrollbar-track{
 
     background: #ffffff;
     border-radius: 3px;
-=======
-div::-webkit-scrollbar-track {
-  background: #ffffff;
-  border-radius: 3px;
->>>>>>> 838539c4b6e0b27ad7d2975670a433f781c5b3fa
 }
 
 div::-webkit-scrollbar-thumb {
@@ -21,61 +15,56 @@ div::-webkit-scrollbar-thumb {
   border-radius: 3px;
 }
 
-<<<<<<< HEAD
 div::-webkit-scrollbar{
 
 
     width: 12px;
 } */
-=======
-div::-webkit-scrollbar {
-  width: 12px;
-}
->>>>>>> 838539c4b6e0b27ad7d2975670a433f781c5b3fa
 
 .botaodecisao {
-  width: 170%;
-  font-size: 140%;
+  width: 13%;
+  font-size: 1.2em;
   border-top-left-radius: 100px;
   border-bottom-left-radius: 100px;
   border: none;
   transition: 1s;
   background-color: #cad7eb;
   color: #5a789f;
-  padding: 5%;
+  padding: 2%;
   text-align: center;
   text-decoration: none;
 }
 
 .botaodecisaodois {
-  width: 150%;
-  font-size: 140%;
+  width: 13%;
+  font-size: 1.2em;
   border-top-right-radius: 100px;
   border-bottom-right-radius: 100px;
   border: none;
   transition: 1s;
   background-color: #5a789f;
   color: #ffffff;
-  padding: 5%;
+  padding: 2%;
   text-align: center;
   text-decoration: none;
 }
 
 .divBotoes {
-  width: fit-content;
+  width: 100%;
   display: flex;
+  justify-content: center;
+  align-items: center;
   padding-top: 5%;
   background-color: #ffffff;
-  margin-left: 40%;
 }
 
 .container_bola_um {
-  width: 10%;
+  width: 8%;
   background-color: #cad7eb;
-  margin-left: 90%;
-  height: 350px;
+  margin-left: 92%;
+  height: 200px;
   position: absolute;
-  margin-top: 6%;
+  margin-top: 8%;
   border-top-left-radius: 1000px;
   border-bottom-left-radius: 1000px;
   border-top-right-radius: 15px;
@@ -89,7 +78,7 @@ div::-webkit-scrollbar {
   height: 20px;
   padding: 12px;
   position: absolute;
-  margin-top: 23%;
+  margin-top: 33%;
   border-top-left-radius: 1000px;
   border-bottom-left-radius: 1000px;
   border-top-right-radius: 1000px;
@@ -99,11 +88,11 @@ div::-webkit-scrollbar {
 .container_bola_tres {
   width: 1%;
   background-color: #cad7eb;
-  margin-left: 25%;
+  margin-left: 22%;
   height: 20px;
   padding: 35px;
   position: absolute;
-  margin-top: 28%;
+  margin-top: 37%;
   border-top-left-radius: 1000px;
   border-bottom-left-radius: 1000px;
   border-top-right-radius: 1000px;
@@ -117,7 +106,7 @@ div::-webkit-scrollbar {
   height: 20px;
   padding: 35px;
   position: absolute;
-  margin-top: 38%;
+  margin-top: 62%;
   border-top-left-radius: 1000px;
   border-bottom-left-radius: 1000px;
   border-top-right-radius: 1000px;
@@ -125,21 +114,24 @@ div::-webkit-scrollbar {
 }
 
 .conatiner_bola_cinco {
-  width: 10%;
+  width: 8%;
   background-color: #cad7eb;
-  height: 350px;
+  height: 200px;
   position: absolute;
-  margin-top: 40%;
+  margin-top: 55%;
   border-top-right-radius: 1000px;
   border-bottom-right-radius: 1000px;
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
 }
+
 .T_titulo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 160%;
   color: #5a789f;
-  width: fit-content;
-  margin-left: 30%;
+  width: 100%;
   text-align: center;
   padding-top: 5%;
 }
@@ -236,4 +228,10 @@ div::-webkit-scrollbar {
 .css-1umw9bq-MuiSvgIcon-root {
   font-size: 4rem !important;
   color: #5a789f;
+}
+
+.back-button-pt{
+  background-color: transparent;
+  border: none;
+  padding: 2%;
 }

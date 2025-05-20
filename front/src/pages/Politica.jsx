@@ -1,4 +1,3 @@
-import Navbar from "../Components/Navbar";
 import { Link } from "react-router-dom";
 import "./CSS/Politica.css";
 import Accordion from "@mui/material/Accordion";
@@ -8,9 +7,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Footer from "../Components/Footer";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import bolona from "../assets/bolona.png";
-import bolona2 from "../assets/bolona2.png";
-import bolonaEsquerda from "../assets/bolonaEsquerda.png";
 import identificacao from "../assets/identificacao.svg";
 import seguranca from "../assets/seguranca.svg";
 import iconeChaves from "../assets/icone_chaves.svg";
@@ -32,12 +28,10 @@ function ScrollToTop() {
 function Politica() {
   return (
     <div className="body-politica">
-      {/* Navbar fixa no topo da página */}
       <button className="back-button-pt" >
       <img src={voltar} alt="" style={{width: '4em'}} />
       </button>
       <ScrollToTop />
-      {/* Botões para navegação entre Política de Privacidade e Termos de Uso */}
       <div className="divBotoes">
         <Link to="/politica" className="botaodecisaoo">
           Política de Privacidade

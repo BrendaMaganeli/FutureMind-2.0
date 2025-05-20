@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import NavBar from "../Components/Navbar";
 import "./CSS/Plano_saude.css";
 import Footer from "../Components/Footer.jsx";
@@ -10,6 +10,7 @@ import empresarial from "../assets/empresarial.svg";
 import { useNavigate } from "react-router-dom";
 import { Modal, Box } from "@mui/material";
 import ModalLogin from "../Components/ModalLogin.jsx";
+import { GlobalContext } from "../Context/GlobalContext.jsx";
 
 function Plano_saude() {
   const [modalAberto, setModalAberto] = useState(false);
@@ -22,27 +23,33 @@ function Plano_saude() {
   const navigate = useNavigate();
   const [carregandoPlano, setCarregandoPlano] = useState(false);
   const [mostrarModalLogin, setMostrarModalLogin] = useState(false);
+  
+  const user = JSON.parse(localStorage.getItem('User-Profile'));
 
-  const profissional = JSON.parse(localStorage.getItem('User-Profile'));
-
-  const abrirModalPrata = () => setModalPrataAberto(true);
+  const abrirModalPrata = () => !user ? setMostrarModalLogin(true) : setModalPrataAberto(true);
   const fecharModalPrata = () => setModalPrataAberto(false);
 
-  const abrirModalOuro = () => setModalOuroAberto(true);
+  const abrirModalOuro = () => !user ? setMostrarModalLogin(true) : setModalOuroAberto(true);
   const fecharModalOuro = () => setModalOuroAberto(false);
 
   const abrirModal = () => {
     
-    setModalAberto(true);
-    setEmailEmpresa("");
-    setSenhaEmpresa("");
+    if (user) {
+
+      setModalAberto(true);
+      setEmailEmpresa("");
+      setSenhaEmpresa("");
+    } else {
+
+      setMostrarModalLogin(true);
+    }
   };
 
   const fecharModal = () => setModalAberto(false);
 
   const confirmarCadastro = () => {
 
-    if (profissional) {
+    if (user) {
 
       setErroEmail("");
       setErroSenha("");
@@ -73,28 +80,10 @@ function Plano_saude() {
     } else {
 
       setModalAberto(false);
-      setMostrarModalLogin(true);
     }
   };
 
-  const confirmarPlano = () => {
-
-    if (profissional) {
-
-      setCarregandoPlano(true);
-      setTimeout(() => {
-        setCarregandoPlano(false);
-        fecharModalPrata();
-        navigate("/pagamento");
-      }, 1500);
-    } else {
-
-      setModalOuroAberto(false);
-      setModalPrataAberto(false);
-      setModalAberto(false);
-      setMostrarModalLogin(true);
-    }
-  };
+  
 
   useEffect(() => {
     if (emailEmpresa.length > 0) {
@@ -110,15 +99,58 @@ function Plano_saude() {
 
   const navega = () => {
 
-    if (profissional) {
+    if (user) {
 
       navigate("/agendamento"); // rota que leva à tela de agendamento
-    } else {
-
-      setMostrarModalLogin(true);
-    }
+    } 
   };
 
+  const {plano_selecionado, setPlano_selecionado} = useContext(GlobalContext)
+
+  const selecionar_plano_prata = () => {
+      
+      setPlano_selecionado('prata')
+      
+      if (user) {
+
+        setCarregandoPlano(true);
+        setTimeout(() => {
+          setCarregandoPlano(false);
+          fecharModalPrata();
+          navigate("/pagamento");
+        }, 1500);
+      } else {
+  
+        setModalOuroAberto(false);
+        setModalPrataAberto(false);
+        setModalAberto(false);
+      }
+
+      
+  }
+
+  const selecionar_plano_ouro = ()  => {
+    
+    setPlano_selecionado('ouro')
+   
+    if (user) {
+
+      setCarregandoPlano(true);
+      setTimeout(() => {
+        setCarregandoPlano(false);
+        fecharModalPrata();
+        navigate("/pagamento");
+      }, 1500);
+    } else {
+
+      setModalOuroAberto(false);
+      setModalPrataAberto(false);
+      setModalAberto(false);
+    }
+
+  
+  }
+  
   return (
     <div className="container-planoSaude">
       <NavBar cor={"rgba(90,120,159, .5)"} />
@@ -162,7 +194,6 @@ function Plano_saude() {
           <p className="texto_numero">Anos no mercado</p>
         </div>
       </div>
-
       <div className="container-sobre-nos">
         <div className="img-sobre">
           <img src={Foto} alt="" />
@@ -291,7 +322,7 @@ function Plano_saude() {
                 <button className="btn-cancelar" onClick={fecharModalPrata}>
                   Cancelar
                 </button>
-                <button className="btn-confirmar" onClick={confirmarPlano}>
+                <button className="btn-confirmar" onClick={selecionar_plano_prata}>
                   Confirmar
                 </button>
               </div>
@@ -324,7 +355,7 @@ function Plano_saude() {
                 <button className="btn-cancelar" onClick={fecharModalOuro}>
                   Cancelar
                 </button>
-                <button className="btn-confirmar" onClick={confirmarPlano}>
+                <button className="btn-confirmar" onClick={selecionar_plano_ouro}>
                   Confirmar
                 </button>
               </div>

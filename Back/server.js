@@ -292,11 +292,6 @@ app.put('/editarprofissional', async (req, res) => {
     }
   });
   
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 2643766f945a2678c74f892e6f4775bafb1777d6
 app.post('/chats', async(req, res) => {
 
     try {
@@ -386,9 +381,6 @@ app.post('/chats/chat/send-message', async (req, res) => {
     }
 });
 
-<<<<<<< HEAD
-
-=======
 io.on("connection", (socket) => {
     console.log("Usuário conectado", socket.id);
   
@@ -400,6 +392,5 @@ io.on("connection", (socket) => {
       console.log("Usuário desconectado", socket.id);
     });
   });
->>>>>>> cdc0bc1ddca838142b5fcafa1b8818e48951bfc5
   
 app.listen(4242, () => console.log ('Servidor servindo'));

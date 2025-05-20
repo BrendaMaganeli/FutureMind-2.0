@@ -1,4 +1,3 @@
-
 import mulher from "../assets/image 8.png";
 import icon_um from "../assets/agenda 2.svg";
 import icon_dois from "../assets/cam-recorder (1) 11.svg";
@@ -8,69 +7,123 @@ import "./CSS/EditarProfissional.css";
 import voltar from "../assets/seta-principal.svg";
 
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Select from "react-select";
 
 function EditarProfissional() {
   const navigate = useNavigate();
-  const profissional = JSON.parse(localStorage.getItem("User-Profile"));
+  // Se você já armazenou o perfil no localStorage ao fazer login, mantém essa lógica:
+  // Caso contrário, você pode remover o JSON.parse daqui e buscar diretamente via API.
+  const perfilSalvo = JSON.parse(localStorage.getItem("User-Profile"));
 
-  const arrayInicialEspecializacao = (() => {
-    try {
-      if (!profissional.especializacao) return [];
-      return Array.isArray(profissional.especializacao)
-        ? profissional.especializacao
-        : JSON.parse(profissional.especializacao);
-    } catch {
-      return [];
-    }
-  })();
-
-  const arrayInicialAbordagem = (() => {
-    try {
-      if (!profissional.abordagem) return [];
-      return Array.isArray(profissional.abordagem)
-        ? profissional.abordagem
-        : JSON.parse(profissional.abordagem);
-    } catch {
-      return [];
-    }
-  })();
-
-  const [valorConsulta, setValorConsulta] = useState(
-    `R$ ${profissional.valor_consulta}`
-  );
-  const [showModal, setShowModal] = useState(false);
-
+  // Hook para manter o estado completo do profissional
   const [profissionais, setProfissionais] = useState({
-    id_profissional:    profissional.id_profissional,
-    nome:               profissional.nome,
-    cpf:                profissional.cpf,
-    telefone:           profissional.telefone,
-    email:              profissional.email,
-    data_nascimento:    formatarDataBrasileira(profissional.data_nascimento),
-    senha:              profissional.senha,
-    crp:                profissional.crp,
-    foto:               profissional.foto,
-    sobre_mim:          profissional.sobre_mim,
-    especializacao:     arrayInicialEspecializacao,
-    abordagem:         arrayInicialAbordagem,
-    valor_consulta:     `R$ ${profissional.valor_consulta.replace('.', ',')}`,  
-    email_profissional: profissional.email_profissional,
+    id_profissional:    perfilSalvo?.id_profissional || "",
+    nome:               perfilSalvo?.nome || "",
+    cpf:                perfilSalvo?.cpf || "",
+    telefone:           perfilSalvo?.telefone || "",
+    email:              perfilSalvo?.email || "",
+    data_nascimento:    perfilSalvo
+      ? formatarDataBrasileira(perfilSalvo.data_nascimento)
+      : "",
+    senha:              perfilSalvo?.senha || "",
+    crp:                perfilSalvo?.crp || "",
+    foto:               perfilSalvo?.foto || "",
+    sobre_mim:          perfilSalvo?.sobre_mim || "", // já puxa do localStorage
+    especializacao:     (() => {
+      try {
+        if (!perfilSalvo?.especializacao) return [];
+        return Array.isArray(perfilSalvo.especializacao)
+          ? perfilSalvo.especializacao
+          : JSON.parse(perfilSalvo.especializacao);
+      } catch {
+        return [];
+      }
+    })(),
+    abordagem: (() => {
+      try {
+        if (!perfilSalvo?.abordagem) return [];
+        return Array.isArray(perfilSalvo.abordagem)
+          ? perfilSalvo.abordagem
+          : JSON.parse(perfilSalvo.abordagem);
+      } catch {
+        return [];
+      }
+    })(),
+    valor_consulta:     perfilSalvo
+      ? `R$ ${perfilSalvo.valor_consulta.replace(".", ",")}`
+      : "",
+    email_profissional: perfilSalvo?.email_profissional || "",
   });
 
-  const opcoesEspecializacao = [
-    { value: "psicologia-clinica",    label: "Psicologia Clínica" },
-    { value: "psicopedagogia",        label: "Psicopedagogia" },
-    { value: "neuropsicologia",       label: "Neuropsicologia" },
-  ];
+  // Se você quiser garantir sempre os dados mais recentes do banco, pode usar useEffect:
+  useEffect(() => {
+    // supondo que exista na sua API um GET /editarprofissional/:id para buscar o perfil
+    async function buscarPerfil() {
+      try {
+        if (!profissionais.id_profissional) return;
+        const res = await fetch(
+          `http://localhost:4242/editarprofissional/${profissionais.id_profissional}`
+        );
+        if (!res.ok) throw new Error("Falha ao buscar perfil");
+        const data = await res.json();
+        // Ajusta data_nascimento para DD/MM/AAAA
+        const dataFormatada = formatarDataBrasileira(data.data_nascimento);
+        setProfissionais({
+          id_profissional:    data.id_profissional,
+          nome:               data.nome,
+          cpf:                data.cpf,
+          telefone:           data.telefone,
+          email:              data.email,
+          data_nascimento:    dataFormatada,
+          senha:              data.senha,
+          crp:                data.crp,
+          foto:               data.foto,
+          sobre_mim:          data.sobre_mim || "",
+          especializacao:     Array.isArray(data.especializacao)
+            ? data.especializacao
+            : JSON.parse(data.especializacao || "[]"),
+          abordagem: Array.isArray(data.abordagem)
+            ? data.abordagem
+            : JSON.parse(data.abordagem || "[]"),
+          valor_consulta:     `R$ ${parseFloat(data.valor_consulta)
+            .toFixed(2)
+            .replace(".", ",")}`,
+          email_profissional: data.email_profissional,
+        });
+        // Atualiza no localStorage (opcional)
+        localStorage.setItem("User-Profile", JSON.stringify(data));
+      } catch (err) {
+        console.error(err);
+      }
+    }
 
+    // Chama só se tivermos um id_profissional válido
+    buscarPerfil();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profissionais.id_profissional]);
+
+  // Controle de exibição do modal de confirmação
+  const [showModal, setShowModal] = useState(false);
+
+  // Controle dos selects (para animar o label “flutuante”)
+  const [hasValueEspecializacao, setHasValueEspecializacao] = useState(
+    profissionais.especializacao.length > 0
+  );
+  const [hasValueAbordagem, setHasValueAbordagem] = useState(
+    profissionais.abordagem.length > 0
+  );
+
+  const opcoesEspecializacao = [
+    { value: "psicologia-clinica", label: "Psicologia Clínica" },
+    { value: "psicopedagogia", label: "Psicopedagogia" },
+    { value: "neuropsicologia", label: "Neuropsicologia" },
+  ];
   const opcoesAbordagens = [
     { value: "cognitivo-comportamental", label: "Cognitivo-Comportamental" },
-    { value: "psicanalise",               label: "Psicanálise" },
-    { value: "humanista",                 label: "Humanista" },
+    { value: "psicanalise", label: "Psicanálise" },
+    { value: "humanista", label: "Humanista" },
   ];
-
 
   function formatarDataBrasileira(dataISO) {
     const data = new Date(dataISO);
@@ -82,11 +135,8 @@ function EditarProfissional() {
 
   function formatarDataParaEnvio(dataBR) {
     if (!dataBR.includes("/")) {
-      const data = new Date(dataBR);
-      const ano = data.getFullYear();
-      const mes = String(data.getMonth() + 1).padStart(2, "0");
-      const dia = String(data.getDate()).padStart(2, "0");
-      return `${ano}-${mes}-${dia}`;
+      // caso já esteja em formato YYYY-MM-DD
+      return dataBR;
     }
     const [dia, mes, ano] = dataBR.split("/");
     return `${ano}-${mes}-${dia}`;
@@ -124,11 +174,10 @@ function EditarProfissional() {
   }
 
   function formatarValorConsultab(valor) {
-  const somenteNumeros = valor.replace(/\D/g, "");
-  const numeroComPonto = (parseInt(somenteNumeros, 10) / 100).toFixed(2);
-  return numeroComPonto;
+    const somenteNumeros = valor.replace(/\D/g, "");
+    const numeroComPonto = (parseInt(somenteNumeros, 10) / 100).toFixed(2);
+    return numeroComPonto;
   }
-
 
   function transformarParaOpcoesSelecionadas(valoresSalvos, opcoesDisponiveis) {
     try {
@@ -143,17 +192,13 @@ function EditarProfissional() {
     }
   }
 
-
   const deletarProfissional = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:4242/editarprofissional",
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(profissional),
-        }
-      );
+      const response = await fetch("http://localhost:4242/editarprofissional", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_profissional: profissionais.id_profissional }),
+      });
       if (response.ok) {
         localStorage.setItem("User Logado", false);
         localStorage.removeItem("User-Profile");
@@ -170,57 +215,40 @@ function EditarProfissional() {
     navigate("/");
   };
 
-  const handleDeletarClick     = () => setShowModal(true);
-  const handleCloseModal       = () => setShowModal(false);
+  const handleDeletarClick = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
   const handleConfirmarDeletar = () => {
     deletarProfissional();
     setShowModal(false);
   };
 
-
-
   const salvarEdicao = async () => {
     try {
-
       const profissionalParaEnviar = {
         ...profissionais,
         data_nascimento: formatarDataParaEnvio(profissionais.data_nascimento),
-        abordagem:       JSON.stringify(profissionais.abordagem),
-        especializacao:  JSON.stringify(profissionais.especializacao),
-        valor_consulta:  formatarValorConsultab(profissionais.valor_consulta),
+        abordagem: JSON.stringify(profissionais.abordagem),
+        especializacao: JSON.stringify(profissionais.especializacao),
+        valor_consulta: formatarValorConsultab(profissionais.valor_consulta),
       };
-  
-      const response = await fetch(
-        "http://localhost:4242/editarprofissional",
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(profissionalParaEnviar),
-        }
-      );
+
+      const response = await fetch("http://localhost:4242/editarprofissional", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(profissionalParaEnviar),
+      });
       if (response.ok) {
         const data = await response.json();
         data.valor_consulta = data.valor_consulta.toFixed(2);
         localStorage.setItem("User-Profile", JSON.stringify(data));
         window.location.reload();
       } else {
-        console.error("Erro ao salvar:", data);
+        console.error("Erro ao salvar:", response.statusText);
       }
     } catch (err) {
       console.error("Erro na requisição:", err);
     }
   };
-  
-
-
-
-  const [hasValueEspecializacao, setHasValueEspecializacao] = useState(
-    profissionais.especializacao.length > 0
-  );
-
-  const [hasValueAbordagem, setHasValueAbordagem] = useState(
-    profissionais.abordagem.length > 0
-  );
 
   return (
     <div className="container">
@@ -236,25 +264,31 @@ function EditarProfissional() {
           }}
         >
           <div className="cabecalho-perfil">
-            <img
-              src={mulher}
-              alt="Foto do perfil"
-              className="imagem-perfil"
-            />
-            <h2 className="nome-perfil">
-              {profissional.nome}
-            </h2>
+            <img src={mulher} alt="Foto do perfil" className="imagem-perfil" />
+            <h2 className="nome-perfil">{profissionais.nome}</h2>
           </div>
           <div className="experiencia-perfil">
-            <div style={{ width: '20rem'}}>
-            <div style={{ position: 'relative', width: '100%', minWidth: '200px' }}>
-              <textarea className="textarea-custom" placeholder=" "></textarea>
-              <label className="label-custom">Sobre mim</label>
+            <div style={{ width: "20rem" }}>
+              <div style={{ position: "relative", width: "100%", minWidth: "200px" }}>
+                <textarea
+                  className="textarea-custom"
+                  placeholder=" "
+                  value={profissionais.sobre_mim}
+                  onChange={(e) =>
+                    setProfissionais((prev) => ({
+                      ...prev,
+                      sobre_mim: e.target.value,
+                    }))
+                  }
+                />
+                <label className="label-custom">Sua descrição...</label>
+              </div>
             </div>
-          </div>
-            <button className="botao-baixar">
-              Baixar currículo
-            </button>
+            <div className="baixarButton">
+              <button className="botao-baixar" onClick={salvarEdicao}>
+                Salvar
+              </button>
+            </div>
           </div>
         </div>
         <div className="caixa-comandos-p">
@@ -287,30 +321,19 @@ function EditarProfissional() {
 
         <div className="botoes-maior-pro">
           <div className="botoes-pro">
-            <img
-              src={voltar}
-              alt=""
-              className="voltar-seta"
-            />
+            <img src={voltar} alt="" className="voltar-seta" />
           </div>
           <div className="botoes-superiores-p">
-            <button
-              onClick={handleDeletarClick}
-              className="botao-deletar"
-            >
+            <button onClick={handleDeletarClick} className="botao-deletar">
               Deletar
             </button>
-            <button
-              onClick={sairProfissional}
-              className="botao-sair"
-            >
+            <button onClick={sairProfissional} className="botao-sair">
               Sair
             </button>
           </div>
         </div>
 
         <div className="editar-profissional">
-
           <div className="floating-input-pac">
             <input
               type="text"
@@ -318,10 +341,7 @@ function EditarProfissional() {
               value={profissionais.nome}
               required
               onChange={(e) =>
-                setProfissionais((prev) => ({
-                  ...prev,
-                  nome: e.target.value,
-                }))
+                setProfissionais((prev) => ({ ...prev, nome: e.target.value }))
               }
             />
             <label>Nome Completo</label>
@@ -342,7 +362,6 @@ function EditarProfissional() {
             />
             <label>CPF</label>
           </div>
-
 
           <div className="floating-input-pac">
             <input
@@ -367,16 +386,12 @@ function EditarProfissional() {
               value={profissionais.email}
               required
               onChange={(e) =>
-                setProfissionais((prev) => ({
-                  ...prev,
-                  email: e.target.value,
-                }))
+                setProfissionais((prev) => ({ ...prev, email: e.target.value }))
               }
             />
             <label>E-mail</label>
           </div>
 
-         
           <div className="floating-input-pac">
             <input
               type="text"
@@ -386,9 +401,7 @@ function EditarProfissional() {
               onChange={(e) =>
                 setProfissionais((prev) => ({
                   ...prev,
-                  data_nascimento: aplicarMascaraData(
-                    e.target.value
-                  ),
+                  data_nascimento: aplicarMascaraData(e.target.value),
                 }))
               }
             />
@@ -402,10 +415,7 @@ function EditarProfissional() {
               value={profissionais.senha}
               required
               onChange={(e) =>
-                setProfissionais((prev) => ({
-                  ...prev,
-                  senha: e.target.value,
-                }))
+                setProfissionais((prev) => ({ ...prev, senha: e.target.value }))
               }
             />
             <label>Senha</label>
@@ -419,24 +429,21 @@ function EditarProfissional() {
               required
               maxLength={8}
               onChange={(e) =>
-                setProfissionais((prev) => ({
-                  ...prev,
-                  crp: e.target.value,
-                }))
+                setProfissionais((prev) => ({ ...prev, crp: e.target.value }))
               }
             />
             <label>CRP</label>
           </div>
 
           <div className="floating-input-pac">
-          <input
+            <input
               type="text"
               placeholder=" "
               value={profissionais.valor_consulta}
               required
               onChange={(e) => {
                 const formatado = formatarValorConsulta(e.target.value);
-                setProfissionais(prev => ({
+                setProfissionais((prev) => ({
                   ...prev,
                   valor_consulta: formatado,
                 }));
@@ -446,31 +453,31 @@ function EditarProfissional() {
           </div>
 
           <div className="floating-select-pro">
-  <Select
-    placeholder="Select..."
-    isMulti
-    className="custom-select"
-    classNamePrefix="custom-select"
-    options={opcoesEspecializacao}
-    value={transformarParaOpcoesSelecionadas(
-      profissionais.especializacao,
-      opcoesEspecializacao
-    )}
-    onChange={(selectedOptions) => {
-      const novos = selectedOptions.map((opt) => opt.value);
-      setProfissionais((prev) => ({
-        ...prev,
-        especializacao: novos,
-      }));
-      setHasValueEspecializacao(novos.length > 0);
-    }}
-  />
-  <label className={hasValueEspecializacao ? "has-value" : ""}>
-    Especialização
-  </label>
-</div>
+            <Select
+              placeholder="Select..."
+              isMulti
+              className="custom-select"
+              classNamePrefix="custom-select"
+              options={opcoesEspecializacao}
+              value={transformarParaOpcoesSelecionadas(
+                profissionais.especializacao,
+                opcoesEspecializacao
+              )}
+              onChange={(selectedOptions) => {
+                const novos = selectedOptions.map((opt) => opt.value);
+                setProfissionais((prev) => ({
+                  ...prev,
+                  especializacao: novos,
+                }));
+                setHasValueEspecializacao(novos.length > 0);
+              }}
+            />
+            <label className={hasValueEspecializacao ? "has-value" : ""}>
+              Especialização
+            </label>
+          </div>
 
-<div className="floating-select-pro">
+          <div className="floating-select-pro">
             <Select
               placeholder="Select..."
               isMulti
@@ -490,12 +497,7 @@ function EditarProfissional() {
                 setHasValueAbordagem(novos.length > 0);
               }}
             />
-            <label
-              className={hasValueAbordagem ? "has-value" : ""}
-              htmlFor=""
-            >
-              Abordagem
-            </label>
+            <label className={hasValueAbordagem ? "has-value" : ""}>Abordagem</label>
           </div>
 
           <div className="floating-input-pac">
@@ -511,15 +513,12 @@ function EditarProfissional() {
                 }))
               }
             />
-            <label>E-mail</label>
+            <label>E-mail Profissional</label>
           </div>
         </div>
 
         <div className="BTN-SALVAR">
-          <button
-            className="salvar-btn"
-            onClick={salvarEdicao}
-          >
+          <button className="salvar-btn" onClick={salvarEdicao}>
             Salvar
           </button>
         </div>
@@ -528,20 +527,12 @@ function EditarProfissional() {
       {showModal && (
         <div className="modal">
           <div className="modal-content">
-            <h3>
-              Tem certeza de que deseja deletar sua conta?
-            </h3>
+            <h3>Tem certeza de que deseja deletar sua conta?</h3>
             <div className="buttons">
-              <button
-                onClick={handleConfirmarDeletar}
-                className="modal-btn-1"
-              >
+              <button onClick={handleConfirmarDeletar} className="modal-btn-1">
                 Sim
               </button>
-              <button
-                onClick={handleCloseModal}
-                className="modal-btn-1"
-              >
+              <button onClick={handleCloseModal} className="modal-btn-1">
                 Cancelar
               </button>
             </div>

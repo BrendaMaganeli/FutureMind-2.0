@@ -292,11 +292,6 @@ app.put('/editarprofissional', async (req, res) => {
     }
   });
   
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 2643766f945a2678c74f892e6f4775bafb1777d6
 app.post('/chats', async(req, res) => {
 
     try {

@@ -178,17 +178,10 @@ function Landing_page() {
           </div>
           <div className="container_text_p_funcionamento">
             <p className="text_p_funcionamento">
-              A FutureMind facilita o acesso à terapia online de forma prática e
-              segura. Após um cadastro rápido, o paciente escolhe um psicólogo
-              conforme suas necessidades, considerando especialidade,
-              experiência e abordagem. O agendamento é feito diretamente pelo
-              app, com notificações para lembrar os compromissos. As sessões
-              ocorrem por chamada de vídeo de alta qualidade, proporcionando uma
-              experiência próxima ao atendimento presencial. Além disso, o chat
-              seguro permite a troca de mensagens sigilosas entre paciente e
-              terapeuta. Com um sistema de pagamentos integrado e uma interface
-              intuitiva, a FutureMind garante transparência, acessibilidade e um
-              suporte psicológico de qualidade.
+              A FutureMind oferece terapia online prática e segura. Após um cadastro rápido, o paciente escolhe o
+               psicólogo ideal e agenda sessões diretamente pelo app. As consultas são por vídeo, com alta
+                qualidade, e há um chat seguro para mensagens sigilosas. Com pagamento integrado e interface 
+                intuitiva, a plataforma assegura acessibilidade e suporte psicológico de qualidade.
             </p>
           </div>
         </div>

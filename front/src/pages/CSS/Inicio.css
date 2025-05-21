@@ -89,7 +89,7 @@
 .filtrados{
   
   border: 1px solid #ccc;
-  width: 37.5%;
+  width: 29.3%;
   background-color:#f7fafc;
   max-Height: 120px;
   overflow-Y: hidden;
@@ -315,7 +315,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  height: 93vh;
+  height: 82vh;
 }
 
 .swiper-profi .swiper-slide {
@@ -681,7 +681,7 @@
 
 .footer_inicio{
   
-  top: 215.4%;
+  top: 199.3%;
   position: absolute;
   z-index: 999;
   width: 100%;

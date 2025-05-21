@@ -78,9 +78,16 @@ export default function PagamentoConsulta() {
   
   const user = JSON.parse(localStorage.getItem('User-Profile'));
 
+  // useEffect(() => {
+
+  //   console.log(plano_selecionado);
+
+  //   handleFinalizar();
+  // }, [])
+
   const handleFinalizar = async () => {
 
-    if(generoDependente.length > 1 && numeroCartao.length == 19 && nomeCartao.length > 0 && validadeCartao.length == 5 && cvvCartao.length == 3){
+     if(generoDependente.length > 1 && numeroCartao.length == 19 && nomeCartao.length > 0 && validadeCartao.length == 5 && cvvCartao.length == 3){
        
       try {
         
@@ -92,21 +99,33 @@ export default function PagamentoConsulta() {
             tipo_assinatura: plano_selecionado
           }
 
-          const response = await fetch("https://futuremind-2-0-mw60.onrender.com/cadastro-paciente", {
+          const response = await fetch("http://localhost:4242/assinatura", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(body),
           });
+          
+          if (response.ok) {
+            
+            console.log('a')
+            sendEmail();
+             navigate('/inicio')
+       
+          }
+          else {
+            console.log('b')
+
+          }
         }
       } catch (error) {
         
+        console.error('err');
       }
-       sendEmail();
-       navigate('/inicio')
     }
-    if (generoDependente < 1) {
+    
+    if (generoDependente.length < 1) {
       setValida_banco(true);
     }
     if (numeroCartao.length < 19) {
@@ -295,11 +314,11 @@ export default function PagamentoConsulta() {
                 <option value="" disabled hidden>
                   Selecione
                 </option>
-                <option value="masculino">C6 bank</option>
-                <option value="feminino">Inter</option>
-                <option value="outro">Nubank</option>
-                <option value="outro">Itaú</option>
-                <option value="outro">Bradesco</option>
+                <option value="c6_bank">C6 bank</option>
+                <option value="inter">Inter</option>
+                <option value="nubank">Nubank</option>
+                <option value="itau">Itaú</option>
+                <option value="bradesco">Bradesco</option>
               </select>
               <label>Banco</label>
             </div>

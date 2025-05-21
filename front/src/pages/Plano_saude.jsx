@@ -47,7 +47,9 @@ function Plano_saude() {
 
   const fecharModal = () => setModalAberto(false);
 
-  const confirmarCadastro = () => {
+  const confirmarCadastro = async () => {
+   
+    setPlano_selecionado('empresarial')
 
     if (user) {
 
@@ -77,6 +79,35 @@ function Plano_saude() {
       console.log("E-mail Empresarial:", emailEmpresa);
       console.log("Senha Empresarial:", senhaEmpresa);
       fecharModal();
+     
+      try {
+       
+        if (user.id_paciente) {
+
+          const body = {
+            fk_id_paciente: user.id_paciente,
+            tipo_assinatura: plano_selecionado,
+            data_assinatura: '2025-05-20'
+          }
+
+          const response = await fetch("http://localhost:4242/plano_empressarial", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+          });
+          
+          if(response.ok){
+            
+            alert("plano empresarial ok")
+          }
+        }
+
+      } catch (error) {
+        
+        console.error('err');
+      }
     } else {
 
       setModalAberto(false);
@@ -150,6 +181,15 @@ function Plano_saude() {
 
   
   }
+
+  const selecionar_plano_empresarial = () => {
+
+    setPlano_selecionado('empresarial')
+
+
+  }
+
+  
   
   return (
     <div className="container-planoSaude">
@@ -271,7 +311,6 @@ function Plano_saude() {
                 <label>E-mail Empresarial</label>
                 {erroEmail && <p className="mensagem-erro">{erroEmail}</p>}
               </div>
-
               <div className="input-container">
                 <input
                   type="password"

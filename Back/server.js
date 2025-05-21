@@ -393,4 +393,56 @@ io.on("connection", (socket) => {
     });
   });
   
+
+app.post('/assinatura', async (req, res) => {
+
+  const {data_assinatura, fk_id_paciente, tipo_assinatura} = req.body;
+
+    try {
+
+        if(!data_assinatura || !fk_id_paciente || !tipo_assinatura) return res.status(404).json({ Error: 'erro dados'})
+
+      const [response] = await pool.query(
+        'INSERT INTO assinaturas (data_assinatura, fk_id_paciente, tipo_assinatura) VALUES (?, ?, ?)',
+        [data_assinatura, fk_id_paciente, tipo_assinatura]
+      );
+
+      if(response.affectedRows > 0){
+
+        return res.status(201).json({ success: true});
+      }
+
+      return res.status(404).json({ Error: 'erro ao inserir dados'})
+    } catch (error) {
+        
+      console.error('Erro ao salvar mensagem:', error);
+      res.status(500).json({ Error: 'Erro interno do servidor' });
+    }
+});
+
+app.post('/plano_empressarial', async (req, res) => {
+
+    const {tipo_assinatura,fk_id_paciente, data_assinatura} = req.body;
+
+    try {
+     
+        const [response] = await pool.query(
+            'INSERT INTO assinaturas (tipo_assinatura, fk_id_paciente, data_assinatura) VALUES (?, ?, ?)',
+            [ tipo_assinatura, fk_id_paciente, data_assinatura]
+          );
+    
+          if(response.affectedRows > 0){
+    
+            return res.status(201).json({ success: true});
+          }
+    
+          return res.status(404).json({ Error: 'erro ao inserir dados'})
+        
+    } catch (error) {
+        
+        console.error('Erro ao salvar mensagem:', error);
+        res.status(500).json({ Error: 'Erro interno do servidor' });
+    }
+})
+
 app.listen(4242, () => console.log ('Servidor servindo'));

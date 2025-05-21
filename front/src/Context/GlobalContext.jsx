@@ -108,6 +108,9 @@ export const GlobalContextProvider = ({ children }) => {
   }, [user]);
   
   const [plano_selecionado, setPlano_selecionado] = useState('')
+  const [vim_plano, setVim_plano] = useState(false)
+  const [vim_agendamento, setVim_agendamento] = useState(false)
+
   return (
     <GlobalContext.Provider
       value={{
@@ -187,7 +190,10 @@ export const GlobalContextProvider = ({ children }) => {
         setcheckbox_cheked,
         plano_selecionado,
         setPlano_selecionado,
-
+        vim_plano, 
+        setVim_plano,
+        vim_agendamento,
+        setVim_agendamento
       }}
     >
       {children}

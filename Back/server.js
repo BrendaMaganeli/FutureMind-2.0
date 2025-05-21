@@ -388,13 +388,27 @@ app.post('/assinatura', async (req, res) => {
 
   const {data_assinatura, fk_id_paciente, tipo_assinatura} = req.body;
 
-    try {
-
-        if(!data_assinatura || !fk_id_paciente || !tipo_assinatura) return res.status(404).json({ Error: 'erro dados'})
+  
+  try {
+      
+      let consultas_disponiveis;
+      
+      if (tipo_assinatura === 'prata') {
+          
+          consultas_disponiveis = 4;
+        } else if (tipo_assinatura === 'ouro') {
+            
+            consultas_disponiveis = 12;
+        } else {
+            
+            consultas_disponiveis = null;
+        }
+        
+        if(!data_assinatura || !fk_id_paciente || !tipo_assinatura || !consultas_disponiveis) return res.status(404).json({ Error: 'erro dados'})
 
       const [response] = await pool.query(
-        'INSERT INTO assinaturas (data_assinatura, fk_id_paciente, tipo_assinatura) VALUES (?, ?, ?)',
-        [data_assinatura, fk_id_paciente, tipo_assinatura]
+        'INSERT INTO assinaturas (data_assinatura, fk_id_paciente, tipo_assinatura, consultas_disponiveis) VALUES (?, ?, ?, ?)',
+        [data_assinatura, fk_id_paciente, tipo_assinatura, consultas_disponiveis]
       );
 
       if(response.affectedRows > 0){
@@ -408,6 +422,27 @@ app.post('/assinatura', async (req, res) => {
       console.error('Erro ao salvar mensagem:', error);
       res.status(500).json({ Error: 'Erro interno do servidor' });
     }
+});
+
+app.get('/pagamento/:id', async(req, res) => {
+
+    try {
+        
+        const { id } = req.params;
+        
+        const [rows] = await pool.query('SELECT consultas_disponiveis FROM assinaturas WHERE fk_id_paciente=?', [id]);
+
+        if (rows.length > 0) {
+
+            res.status(200).json(rows[0]);
+        } else {
+
+            res.status(404).json('Profissional não encontrado!');
+        }
+    } catch (err) {
+
+        res.status(500).json({Erro: 'Erro no servidor, erro: ', err});
+    };
 });
 
 app.post('/plano_empressarial', async (req, res) => {

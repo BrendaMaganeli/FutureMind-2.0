@@ -3,7 +3,7 @@ import { GlobalContext } from "../Context/GlobalContext";
 import './CSS/Pagamento.css';
 import Seta from '../assets/caret-down-solid.svg';
 import mulher from '../assets/image 8.png';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import voltar from '../assets/seta-principal.svg';
 import emailjs from '@emailjs/browser';
 import { Import } from "lucide-react";
@@ -78,28 +78,61 @@ export default function PagamentoConsulta() {
   
   const user = JSON.parse(localStorage.getItem('User-Profile'));
 
-  // useEffect(() => {
+  const [consultas_disponiveis, setConsultas_disponiveis] = useState(0)
+  
+  useEffect(() => {
 
-  //   console.log(plano_selecionado);
+     const get_assinatura = async () => {
 
-  //   handleFinalizar();
-  // }, [])
+       try {
+        
+          const {id} = useParams()
+          
+          const response = await fetch(`http://localhost:4242/pagamento/${id}`)
+          
+          if (response.ok) {
+            
+            const data = await response.json()
+             console.log('deu certo')
+             setConsultas_disponiveis(data)
+          }
+          else {
+            console.log('b')
+          }
+          
+       } catch (error) {
+        
+         console.error(error)
+
+       }
+
+     }
+
+     get_assinatura()
+  }, []);
+
+  const {vim_plano, setVim_plano,} = useContext(GlobalContext)
+  const {vim_agendamento, setVim_agendamento} = useContext(GlobalContext)
 
   const handleFinalizar = async () => {
+    
 
      if(generoDependente.length > 1 && numeroCartao.length == 19 && nomeCartao.length > 0 && validadeCartao.length == 5 && cvvCartao.length == 3){
-       
-      try {
+      
+      if (!user.chk_plano && vim_plano) {
+       try {
         
         if (user.id_paciente) {
+        
 
-          const body = {
-            data_assinatura: '2025-05-15',
-            fk_id_paciente: user.id_paciente,
-            tipo_assinatura: plano_selecionado
-          }
-
-          const response = await fetch("http://localhost:4242/assinatura", {
+            const body = {
+              data_assinatura: '2025-05-15',
+              fk_id_paciente: user.id_paciente,
+              tipo_assinatura: plano_selecionado,
+              consultas_disponiveis: consultas_disponiveis
+            }
+            
+            const response = await fetch("http://localhost:4242/assinatura", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -111,18 +144,34 @@ export default function PagamentoConsulta() {
             
             console.log('a')
             sendEmail();
-             navigate('/inicio')
-       
+            navigate('/inicio')
+            
           }
           else {
-            console.log('b')
-
+            
           }
-        }
-      } catch (error) {
+        } 
+       
+       } catch (error) {
         
         console.error('err');
-      }
+       }
+
+     }else if(!user.chk_plano &&  vim_agendamento){
+
+      try {
+        
+     
+       
+       } catch (error) {
+        
+        console.error('err');
+       }
+
+     }else if(user.chk_plano &&  vim_agendamento){
+
+
+     }
     }
     
     if (generoDependente.length < 1) {

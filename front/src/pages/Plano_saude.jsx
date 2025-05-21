@@ -23,7 +23,6 @@ function Plano_saude() {
   const navigate = useNavigate();
   const [carregandoPlano, setCarregandoPlano] = useState(false);
   const [mostrarModalLogin, setMostrarModalLogin] = useState(false);
-  
   const user = JSON.parse(localStorage.getItem('User-Profile'));
 
   const abrirModalPrata = () => !user ? setMostrarModalLogin(true) : setModalPrataAberto(true);
@@ -148,7 +147,7 @@ function Plano_saude() {
         setTimeout(() => {
           setCarregandoPlano(false);
           fecharModalPrata();
-          navigate("/pagamento");
+          navigate(`/pagamento/${user.id_paciente}`);
         }, 1500);
       } else {
   
@@ -170,7 +169,7 @@ function Plano_saude() {
       setTimeout(() => {
         setCarregandoPlano(false);
         fecharModalPrata();
-        navigate("/pagamento");
+        navigate(`/pagamento/${user.id_paciente}`);
       }, 1500);
     } else {
 

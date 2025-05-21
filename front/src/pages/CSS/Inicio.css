@@ -509,7 +509,40 @@
   border-radius: 20px;
   font-size: 0.8em;
   height: 110px;
+  color: #546e7aaf;
   width: 100%;
+  margin-right: 2%;
+  overflow-y: auto;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.textSobremim::-webkit-scrollbar {
+  width: 6px; /* largura da barra de rolagem */
+  height: 6px;
+}
+
+.textSobremim::-webkit-scrollbar-track {
+  background: transparent; /* fundo da track */
+}
+
+.textSobremim::-webkit-scrollbar-thumb {
+  background-color: #5a789f; /* cor do scroll */
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box; /* faz parecer mais fino */
+}
+
+.textSobremim::-webkit-scrollbar-thumb:hover {
+  background-color: #466484; /* cor ao passar o mouse */
+}
+
+.textSobremimm{
+  border: 1px solid #013a6385;
+  padding: 4%;
+  border-radius: 20px;
+  font-size: 0.8em;
+  height: 110px;
   color: #546e7aaf;
   width: 100%;
   margin-right: 2%;

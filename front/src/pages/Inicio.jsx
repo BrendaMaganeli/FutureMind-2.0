@@ -292,7 +292,7 @@ function Inicio() {
                       </div>
                       <div className="sobremim-inicio">
                         <h3>Abordagens:</h3>
-                        <div className="textSobremim">
+                        <div className="textSobremimm">
                         {Array.isArray(item?.abordagem) &&
                          item.abordagem.map((item, index) => (
                          <p key={index}>{item.label}</p>

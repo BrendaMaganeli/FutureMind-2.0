@@ -12,11 +12,8 @@ import Select from "react-select";
 
 function EditarProfissional() {
   const navigate = useNavigate();
-  // Se você já armazenou o perfil no localStorage ao fazer login, mantém essa lógica:
-  // Caso contrário, você pode remover o JSON.parse daqui e buscar diretamente via API.
   const perfilSalvo = JSON.parse(localStorage.getItem("User-Profile"));
 
-  // Hook para manter o estado completo do profissional
   const [profissionais, setProfissionais] = useState({
     id_profissional:    perfilSalvo?.id_profissional || "",
     nome:               perfilSalvo?.nome || "",
@@ -29,7 +26,7 @@ function EditarProfissional() {
     senha:              perfilSalvo?.senha || "",
     crp:                perfilSalvo?.crp || "",
     foto:               perfilSalvo?.foto || "",
-    sobre_mim:          perfilSalvo?.sobre_mim || "", // já puxa do localStorage
+    sobre_mim:          perfilSalvo?.sobre_mim || "", 
     especializacao:     (() => {
       try {
         if (!perfilSalvo?.especializacao) return [];
@@ -50,15 +47,11 @@ function EditarProfissional() {
         return [];
       }
     })(),
-    valor_consulta:     perfilSalvo
-      ? `R$ ${perfilSalvo.valor_consulta.replace(".", ",")}`
-      : "",
+    valor_consulta: formatarValorConsulta(perfilSalvo?.valor_consulta || ""),
     email_profissional: perfilSalvo?.email_profissional || "",
   });
 
-  // Se você quiser garantir sempre os dados mais recentes do banco, pode usar useEffect:
   useEffect(() => {
-    // supondo que exista na sua API um GET /editarprofissional/:id para buscar o perfil
     async function buscarPerfil() {
       try {
         if (!profissionais.id_profissional) return;
@@ -168,10 +161,12 @@ function EditarProfissional() {
   }
 
   function formatarValorConsulta(valor) {
+    if (typeof valor !== "string") return "R$ 0,00";
     const somenteNumeros = valor.replace(/\D/g, "");
-    const numero = (parseInt(somenteNumeros, 10) / 100).toFixed(2);
+    const numero = (parseInt(somenteNumeros, 10) / 100 || 0).toFixed(2);
     return `R$ ${numero.replace(".", ",")}`;
   }
+  
 
   function formatarValorConsultab(valor) {
     const somenteNumeros = valor.replace(/\D/g, "");
@@ -267,8 +262,7 @@ function EditarProfissional() {
             <img src={mulher} alt="Foto do perfil" className="imagem-perfil" />
             <h2 className="nome-perfil">{profissionais.nome}</h2>
           </div>
-          <div className="experiencia-perfil">
-            <div style={{ width: "20rem" }}>
+            <div className="textarea-wrapper" style={{ width: "20rem" }}>
               <div style={{ position: "relative", width: "100%", minWidth: "200px" }}>
                 <textarea
                   className="textarea-custom"
@@ -283,13 +277,12 @@ function EditarProfissional() {
                 />
                 <label className="label-custom">Sua descrição...</label>
               </div>
-            </div>
+          </div>
             <div className="baixarButton">
               <button className="botao-baixar" onClick={salvarEdicao}>
                 Salvar
               </button>
             </div>
-          </div>
         </div>
         <div className="caixa-comandos-p">
           <div className="cartao-informacao">

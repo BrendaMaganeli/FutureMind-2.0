@@ -482,7 +482,6 @@
     width: 100%;
     resize: none;
     border-radius: 7px;
-    border: 1px solid white; 
     background-color: transparent;
     padding: 10px 12px;
     font-family: sans-serif;
@@ -492,11 +491,16 @@
     outline: none;
     transition: all 0.2s ease;
     box-sizing: border-box;
+    border: 1px solid white;
+    border-top: transparent;  
+    scrollbar-width: none;
+    -webkit-scrollbar-width: 0;
+    -webkit-scrollbar-color: transparent transparent;
   }
   
   .textarea-custom:focus {
     border-width: 2px;
-    border-color: white; 
+    border-color: white;
     border-top: transparent;
   }
   
@@ -524,18 +528,10 @@
     height: 100%;
     display: flex;
     align-items: flex-start;
+    border-top: none;
   }
   
-  .textarea-custom:placeholder-shown + .label-custom {
-    font-size: 0.875rem;
-    line-height: 3.75;
-    color: white;
-  }
-  
-  .textarea-custom:placeholder-shown + .label-custom::before,
-  .textarea-custom:placeholder-shown + .label-custom::after {
-    border-color: transparent;
-  }
+
   
   .label-custom::before,
   .label-custom::after {
@@ -603,3 +599,27 @@
 .floating-select-pro .custom-select__value-container:hover{
   overflow-y: auto;
 }
+
+.textarea-wrapper::-webkit-scrollbar,
+  .textarea-wrapper::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .textarea-wrapper::-webkit-scrollbar-track,
+  .textarea-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .textarea-wrapper::-webkit-scrollbar-thumb,
+  .textarea-wrapper::-webkit-scrollbar-thumb {
+    background-color: #5A789F;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  
+  .textarea-wrapper::-webkit-scrollbar-thumb:hover,
+  .textarea-wrapper::-webkit-scrollbar-thumb:hover {
+    background-color: #466484;
+  }

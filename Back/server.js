@@ -1,31 +1,7 @@
 const express =  require ('express');
-const http = require("http");
-const { Server } = require("socket.io");
 const mysql = require ('mysql2/promise');
 const app = express ();
 const cors = require('cors');
-
-
-const server = http.createServer(app);
-
-const io = new Server(server, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-    }
-});
-
-io.on("connection", (socket) => {
-    console.log("Usuário conectado", socket.id);
-  
-    socket.on("sendMessage", (data) => {
-      io.emit("receiveMessage", data);
-    });
-  
-    socket.on("disconnect", () => {
-      console.log("Usuário desconectado", socket.id);
-    });
-  });
 
 app.use(cors({
     origin: '*'
@@ -305,52 +281,58 @@ app.put('/editarprofissional', async (req, res) => {
       res.status(500).json('Erro ao atualizar o profissional');
     }
   });
-<<<<<<< HEAD
   
-=======
-
->>>>>>> 8d3f0f82e338d2054d66084c23f9f4b6b764b20d
-app.post('/chats', async(req, res) => {
-
+  app.post('/chats', async(req, res) => {
     try {
-
         const { userType, fk_id } = req.body;
 
         if (!userType || !fk_id) {
-
-            return res.status(404).json({ Erro: 'Parametros inválidos' });
+            return res.status(400).json({ Erro: 'Parâmetros inválidos' });
         };
 
+        let query, params;
+        
         if (userType === 'Profissional') {
-
-            const [response] = await pool.query('SELECT p.* FROM pacientes p INNER JOIN chat_paciente_profissional c ON p.id_paciente = c.fk_pacientes_id_paciente WHERE c.fk_profissionais_id_profissional = ? ORDER BY c.datahora DESC',[
-                fk_id
-            ]);
-
-            if (response.length > 0) {
-
-                return res.status(200).json(response);
-            }
+            query = `
+                SELECT DISTINCT p.*, MAX(c.datahora) as ultima_mensagem
+                FROM pacientes p
+                INNER JOIN chat_paciente_profissional c ON p.id_paciente = c.fk_pacientes_id_paciente
+                WHERE c.fk_profissionais_id_profissional = ?
+                GROUP BY p.id_paciente
+                ORDER BY ultima_mensagem DESC
+            `;
+            params = [fk_id];
         } else if (userType === 'Paciente') {
-
-            const [response] = await pool.query('SELECT prof.* FROM profissionais prof JOIN chat_paciente_profissional c ON prof.id_profissional = c.fk_profissionais_id_profissional WHERE c.fk_pacientes_id_paciente = ? ORDER BY c.datahora DESC',[
-                fk_id
-            ]);
-
-            if (response.length > 0) {
-
-                return res.status(200).json(response);
-            }
+            query = `
+                SELECT DISTINCT prof.*, MAX(c.datahora) as ultima_mensagem
+                FROM profissionais prof
+                JOIN chat_paciente_profissional c ON prof.id_profissional = c.fk_profissionais_id_profissional
+                WHERE c.fk_pacientes_id_paciente = ?
+                GROUP BY prof.id_profissional
+                ORDER BY ultima_mensagem DESC
+            `;
+            params = [fk_id];
         } else {
+            return res.status(400).json({ Error: 'Tipo de usuário inválido' });
+        }
 
-            return res.status(404).json({ Error: 'Usuário não identificado para buscar suas conversas' });
-        };
+        const [response] = await pool.query(query, params);
+        
+        // Filtro adicional de segurança no backend
+        const uniqueChats = response.reduce((acc, current) => {
+            const key = current.id_profissional || current.id_paciente;
+            if (!acc.some(chat => (chat.id_profissional || chat.id_paciente) === key)) {
+                acc.push(current);
+            }
+            return acc;
+        }, []);
 
+        return res.status(200).json(uniqueChats);
 
     } catch (error) {
-        
+        console.error('Erro no endpoint /chats:', error);
         res.status(500).json({ Error: 'Erro interno do servidor' });
-    };
+    }
 });
 
 app.post('/chats/chat', async(req, res) => {

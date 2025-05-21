@@ -1,7 +1,6 @@
 import voltar from '../assets/seta-principal.svg';
 import config from '../assets/settings.svg';
 import help from '../assets/help 1.svg';
-import mulher from '../assets/image 8.png';
 import lupa from '../assets/search 1.svg';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -13,13 +12,12 @@ import arvoreBranca from '../assets/Arvore Branca.svg';
 import io from "socket.io-client";
 import "./CSS/Chat.css";
 
-function Chat() {
+function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsInChat }) {
   
   const [chats, setChats] = useState([]);
-  const [chatSelected, setChatSelected] = useState(null);
+  const [chatSelected, setChatSelected] = useState(idChatSelected ? profissionalSelected : null);
   const user = JSON.parse(localStorage.getItem('User-Profile'));
   const userType = user.id_paciente ? 'Paciente' : 'Profissional';
-  const [isMine, setIsMine] = useState(true);
 
   useEffect(() => {
 
@@ -51,19 +49,23 @@ function Chat() {
         if (response.ok) {
   
           const data = await response.json();
-  
-          if (data.length === 0) {
-  
-            console.log('Nenhum chat encontrado!');
-          }
-          setChats(data);
+        
+        // Garantia final contra duplicatas
+        const uniqueChats = data.filter((chat, index, self) =>
+          index === self.findIndex((c) => (
+            c.id_profissional === chat.id_profissional && 
+            c.id_paciente === chat.id_paciente
+          ))
+        );
+        
+        setChats(uniqueChats);
         } else {
   
           console.log('Erro ao encontrar chats');
         }
       } catch (error) {
        
-        console.error({Erro: 'Internal Server Error'});
+        console.error({Erro: error});
       };
     };
 
@@ -145,7 +147,6 @@ function Chat() {
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
   const [inptvalue, setInptvalue] = useState("");
-  const [name, setName] = useState("");
   const navigate = useNavigate();
 
   const toggleTheme = () => {
@@ -191,31 +192,52 @@ function Chat() {
 
   const socket = useRef();
 
-useEffect(() => {
-  socket.current = io("http://localhost:3001");
+  useEffect(() => {
+    // Criação do socket apenas uma vez
+    if (!socket.current) {
+      socket.current = io("http://localhost:3001");
   
-  // Verificação de conexão
-  socket.current.on("connect", () => {
-    console.log("Conectado ao Socket.IO!");
-  });
-
-  socket.current.on("connect_error", (err) => {
-    console.error("Erro de conexão:", err);
-  });
-
-  // Recebimento de mensagens
-  socket.current.on("receiveMessage", (savedMessage) => {
-    console.log("Nova savedMessage recebida:", savedMessage);
-    setMessages((prev) => [...prev, savedMessage]);
-  });
-
-  return () => {
-    if (socket.current) {
-      socket.current.disconnect();
+      socket.current.on("connect", () => {
+        console.log("Conectado ao Socket.IO!");
+      });
+  
+      socket.current.on("connect_error", (err) => {
+        console.error("Erro de conexão:", err);
+      });
     }
-
-  };
-}, []);
+  
+    // Atualiza o listener quando chatSelected muda
+    const handleNewMessage = (savedMessage) => {
+      console.log("Nova mensagem recebida:", savedMessage);
+      
+      if (!chatSelected) return;
+  
+      const isRelevantMessage = (
+        // Profissional recebendo do paciente atual
+        (userType === 'Profissional' && 
+         savedMessage.userType === 'Paciente' &&
+         savedMessage.id_paciente === chatSelected.id_paciente) ||
+        
+        // Paciente recebendo do profissional atual
+        (userType === 'Paciente' && 
+         savedMessage.userType === 'Profissional' &&
+         savedMessage.id_profissional === chatSelected.id_profissional)
+      );
+  
+      if (isRelevantMessage) {
+        setMessages(prev => [...prev, savedMessage]);
+      }
+    };
+  
+    // Remove listener antigo e adiciona novo
+    socket.current.off("receiveMessage");
+    socket.current.on("receiveMessage", handleNewMessage);
+  
+    return () => {
+      // Limpa apenas o listener, mantendo a conexão
+      socket.current?.off("receiveMessage", handleNewMessage);
+    };
+  }, [chatSelected, userType, user.id_profissional, user.id_paciente]);
     useEffect(() => {
     if (messagesEndRef.current) {
     messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -279,19 +301,23 @@ useEffect(() => {
 // }, []);
 
   const sendMessage = (e) => {
-    e.preventDefault();
-    if (inptvalue.trim() === "") return;
+  e.preventDefault();
+  if (!inptvalue.trim() || !chatSelected) return;
 
-    const newMessage = {
-      mensageiro: userType,
-      datahora: getDateTimeNow(),
-      mensagem: inptvalue,
-      id_paciente: userType === 'Profissional' ? chatSelected.id_paciente : user.id_paciente,
-      id_profissional: userType === 'Paciente' ? chatSelected.id_profissional : user.id_profissional
-    };
-    setInptvalue("");
-    fetchSendMessage(newMessage);
+  const newMessage = {
+    datahora: getDateTimeNow(),
+    mensageiro: userType,
+    mensagem: inptvalue,
+    id_paciente: userType === 'Profissional' ? chatSelected.id_paciente : user.id_paciente,
+    id_profissional: userType === 'Paciente' ? chatSelected.id_profissional : user.id_profissional,
+    roomId: `chat_${userType === 'Profissional' ? 
+             user.id_profissional+'_'+chatSelected.id_paciente : 
+             user.id_paciente+'_'+chatSelected.id_profissional}` // ID único para a sala
   };
+
+  setInptvalue("");
+  fetchSendMessage(newMessage);
+};
   
   const handleVoltar = () => {
     navigate(-1);
@@ -314,11 +340,28 @@ useEffect(() => {
 
         console.log('a')
         console.log("Mensagem salva no banco de dados!");
-        socket.current.emit("sendMessage", message); // Envia via Socket.IO
+        socket.current.emit("sendMessage", message);
+        setMessages(prev => [...prev, message]); // Otimista
       }
       } catch (error) {
       
         console.error(error);
+      }
+    }
+
+    const encaminharPerfil = () => {
+
+      if (userType === 'Paciente') {
+
+        if (profissionalSelected) {
+
+          setIsInChat(false);
+          setIdChatSelected(chatSelected.id_profissional);
+        } else {
+
+          setIdChatSelected(chatSelected.id_profissional);
+          navigate(`profissional/${chatSelected.id_profissional}`);
+        }
       }
     }
 
@@ -439,7 +482,7 @@ useEffect(() => {
               <div className="acess-profile-div">
                 <div className="user-name">@jana.silvaa</div>
                 <div className="btn-acess">
-                  <b>Acessar perfil</b>
+                  <b onClick={encaminharPerfil}>Acessar perfil</b>
                 </div>
               </div>
               <div className="arvore-chat">

@@ -8,18 +8,20 @@ import voltar from "../assets/seta-principal.svg";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Arvore from '../assets/Arvore-perfil.svg'
+import Chat from "./Chat";
 
 function VisualizarProfissional() {
 
   const [profissional, setProfissional] = useState({});
 
   const { id } = useParams();
+  const [idChatSelected, setIdChatSelected] = useState(id);
 
   const renderizarPerfil = async() => {
 
     try {
       
-      const response = await fetch(`https://futuremind-2-0.onrender.com/profissional/${id}`, {
+      const response = await fetch(`https://futuremind-2-0.onrender.com/profissional/${idChatSelected}`, {
 
         method: 'GET',       
       });
@@ -47,8 +49,20 @@ function VisualizarProfissional() {
     renderizarPerfil();
   }, []);
 
+  const encaminharChat = () => {
+
+    setIsInChat(true);
+  }
+
+  const [isInChat, setIsInChat] = useState(false);
 
   return (
+    <>
+    {
+      isInChat
+      ?
+      <Chat idChatSelected={idChatSelected} profissionalSelected={profissional} setIdChatSelected={setIdChatSelected} setIsInChat={setIsInChat} />
+      :
     <div className="container">
       <aside className="barra-lateral">
         <div
@@ -95,7 +109,7 @@ function VisualizarProfissional() {
             </div>
             <div className="topicos">
               <img src={icon_tres} alt="" />
-              <p>Chat</p>
+              <p onClick={encaminharChat}>Chat</p>
             </div>
             {/* <div className="topicos">
               <img src={anotar} alt="" />
@@ -157,6 +171,8 @@ function VisualizarProfissional() {
         </div>
       </main>
     </div>
+    }
+    </>
   );
 }
 

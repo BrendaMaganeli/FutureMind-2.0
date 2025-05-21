@@ -8,7 +8,6 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Navigation, Pagination } from "swiper/modules";
-import foto from "../assets/fotoInicio.svg";
 import Lottie from "react-lottie";
 import animationData from "../assets/wired-flat-112-book-morph-open.json";
 import { useContext, useEffect, useState } from "react";

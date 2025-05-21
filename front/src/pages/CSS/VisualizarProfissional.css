@@ -169,16 +169,32 @@
 }
 
 .botao-baixar {
-  display: block;
   width: 40%;
-  border: 1px solid white;
-  color: white;
-  padding: 2%;
-  margin-top: 10px;
-  border-radius: 5px;
+  text-align: center;
+  font-size: 15px;
+  padding: 2.2%;
+  border-radius: 8px;
+  border: none;
+  background-color: white;
+  color: #013a63;
+  transition: all 0.2s ease;
   cursor: pointer;
-  background: none;
-  text-decoration: underline;
+}
+
+.botao-baixar:hover {
+  background-color: #BFDBFE;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.botao-baixar:active {
+  transform: scale(0.97);
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 3px 10px 0px;
+}
+
+.baixarButton{
+  width: 100%;
+  display: flex;
+  justify-content: end;
 }
 
 .arvore {

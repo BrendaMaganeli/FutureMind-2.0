@@ -73,10 +73,11 @@
     text-align: center;
     justify-self: end;
     padding: 2%;
+    border: none;
 
     &:hover {
-      background-color: white;
-      color: #5a7da0;
+      background-color: #BFDBFE;
+      color:#013A63;
       transition: 0.3s;
     }
   }
@@ -313,6 +314,7 @@
     flex-direction: column;
     gap: 30px;
     margin-top: 20px;
+    
   }
 
   .css-13cymwt-control{
@@ -478,7 +480,7 @@
   .textarea-custom {
     min-height: 100px;
     width: 100%;
-    resize: vertical;
+    resize: none;
     border-radius: 7px;
     border: 1px solid white; 
     background-color: transparent;
@@ -494,7 +496,7 @@
   
   .textarea-custom:focus {
     border-width: 2px;
-    border-color: #013A63; 
+    border-color: white; 
     border-top: transparent;
   }
   
@@ -515,7 +517,7 @@
     font-size: 11px;
     font-weight: 400;
     line-height: 1;
-    color:#013A63; 
+    color:white; 
     pointer-events: none;
     transition: all 0.2s ease;
     width: 100%;
@@ -549,15 +551,15 @@
   
   .label-custom::before {
     margin-right: 4px;
-    border-top: 1px solid #cbd5e1;
-    border-left: 1px solid #cbd5e1;
+    border-top: 1px solid white;
+    border-left: 1px solid white;
     border-top-left-radius: 4px;
   }
   
   .label-custom::after {
     margin-left: 4px;
-    border-top: 1px solid #cbd5e1;
-    border-right: 1px solid #cbd5e1;
+    border-top: 1px solid white;
+    border-right: 1px solid white;
     border-top-right-radius: 4px;
     flex-grow: 1;
   }
@@ -565,17 +567,17 @@
   .textarea-custom:focus + .label-custom {
     font-size: 11px;
     line-height: 1;
-    color: #013A63; 
+    color: white; 
   }
   
   .textarea-custom:focus + .label-custom::before {
-    border-top: 2px solid #013A63;
-    border-left: 2px solid #013A63;
+    border-top: 2px solid white;
+    border-left: 2px solid white;
   }
   
   .textarea-custom:focus + .label-custom::after {
-    border-top: 2px solid #013A63;
-    border-right: 2px solid #013A63;
+    border-top: 2px solid white;
+    border-right: 2px solid white;
   }
   
   .textarea-custom:disabled + .label-custom {
@@ -587,3 +589,17 @@
     border-color: transparent;
   }
   
+
+  .floating-select-pro .custom-select__control{
+    max-height: 48px;
+  }
+
+  .floating-select-pro .custom-select__value-container {
+    padding: 4px 8px;
+    max-height: 35px;
+    overflow-y: hidden;
+}
+
+.floating-select-pro .custom-select__value-container:hover{
+  overflow-y: auto;
+}

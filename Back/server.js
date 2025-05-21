@@ -468,6 +468,53 @@ app.post('/plano_empressarial', async (req, res) => {
         console.error('Erro ao salvar mensagem:', error);
         res.status(500).json({ Error: 'Erro interno do servidor' });
     }
-})
+});
+
+
+app.get('/agendamento/:id', async (req, res) => {
+    const { id_profissional, year, month } = req.params;
+    try {
+      const [rows] = await pool.query(
+        `SELECT id_agendamento, id_paciente, data, hora
+         FROM Agendamento
+         WHERE id_profissional = ?
+           AND YEAR(data) = ?
+           AND MONTH(data) = ?`,
+        [id_profissional, year, month]
+      );
+      res.status(200).json(rows);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Erro ao buscar agendamentos' });
+    }
+  });
+
+  app.post('/agendamento/:id', async (req, res) => {
+    console.log('→ Body recebido:', req.body);
+  
+    const { id_paciente, data, hora } = req.body;
+    const { id } = req.params;
+
+    try {
+      const [result] = await pool.query(
+        `INSERT INTO Agendamento (id_profissional, id_paciente, data, hora)
+         VALUES (?, ?, ?, ?)`,
+        [id, id_paciente, data, hora]
+      );
+      console.log('→ Result do INSERT:', result);
+  
+      if (result.affectedRows) {
+        return res.status(201).json({ id_agendamento: result.insertId });
+      } else {
+        console.warn('→ Nenhuma linha afetada no INSERT');
+        return res.status(400).json({ error: 'Não foi possível agendar' });
+      }
+    } catch (err) {
+      console.error('→ Erro no POST /agendamento:', err);
+      return res.status(500).json({ error: 'Erro ao criar agendamento' });
+    }
+  });
+  
+  
 
 app.listen(4242, () => console.log ('Servidor servindo'));

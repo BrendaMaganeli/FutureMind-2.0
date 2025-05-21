@@ -26,7 +26,7 @@ const router = createBrowserRouter([
     element: <VisualizarProfissional />,
   },
   {
-    path: "/agendamento",
+    path: "/agendamento/:id",
     element: <TelaAgendamento />,
   },
 

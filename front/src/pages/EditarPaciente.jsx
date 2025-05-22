@@ -6,7 +6,7 @@ import logo from "../assets/logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
 import "./CSS/EditarPaciente.css";
 import Arvore from "../assets/Group 239274.svg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function EditarPaciente() {
@@ -16,6 +16,23 @@ function EditarPaciente() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const pacienteLocal = JSON.parse(localStorage.getItem('User-Profile'));
+
+  useEffect(() => {
+    const fetchImagemPerfil = async () => {
+      try {
+        const response = await fetch(`http://localhost:4242/foto/${pacienteLocal.id_paciente}`);
+        if (!response.ok) throw new Error('Erro ao buscar imagem');
+  
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+        setImagemPreview(imageUrl); // Define a imagem real como prévia
+      } catch (error) {
+        console.error("Erro ao carregar imagem de perfil:", error);
+      }
+    };
+  
+    fetchImagemPerfil();
+  }, [pacienteLocal.id_paciente]);
 
   const deletarPaciente = async () => {
     try {
@@ -182,7 +199,7 @@ function EditarPaciente() {
       <div className={`container ${isVisible ? "blur" : ""}`}>
         <aside className="barra-lateral-p">
           <div className="cabecalho-perfil-paciente">
-            <img src={mulher} alt="Foto do perfil" className="imagem-perfil" />
+          <img src={imagemPreview} alt="Foto do perfil" className="imagem-perfil" />
             <h2 className="nome-perfil">{pacienteLocal.nome}</h2>
           </div>
           <div className="caixa-comandos-paciente">
@@ -204,7 +221,7 @@ function EditarPaciente() {
 
           <div className="botoes-maior-p">
             <div className="botoes-p">
-              <img src={voltar} alt="Voltar" style={{ cursor: 'pointer' }} onClick={() => navigate('/pagina-inicial')} />
+              <img src={voltar} alt="Voltar" style={{ cursor: 'pointer' }} onClick={() => navigate('/inicio')} />
             </div>
             <div className="botoes-superiores-p">
               <button onClick={handleDeletarClick} className="botao-deletar">Deletar</button>

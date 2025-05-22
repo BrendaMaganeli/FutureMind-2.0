@@ -5,6 +5,7 @@ import imgConsulta from "../assets/Group 239294.svg";
 import mulher from "../assets/image 8.png";
 import voltar from "../assets/voltar 2.svg"
 import "./CSS/Consulta.css";
+import { useNavigate } from "react-router-dom";
 
 const getMonthData = (year) => {
   const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
@@ -38,7 +39,8 @@ export default function AgendaConsultas() {
   const [isEditing, setIsEditing] = useState(false);
   const [newTime, setNewTime] = useState("");
   const [newDate, setNewDate] = useState("");
-
+  const navegate = useNavigate()
+  
   const initialAppointments = {
     [`${today.getFullYear()}-${today.getMonth()}-15`]: [
       {

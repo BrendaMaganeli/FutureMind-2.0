@@ -26,7 +26,7 @@ const router = createBrowserRouter([
     element: <VisualizarProfissional />,
   },
   {
-    path: "/agendamento",
+    path: "/agendamento/:id",
     element: <TelaAgendamento />,
   },
 
@@ -56,7 +56,7 @@ const router = createBrowserRouter([
     element: <Inicio />,
   },
   {
-    path: "/pagamento",
+    path: "/pagamento/:id",
     element: <Pagamento />,
   },
   {

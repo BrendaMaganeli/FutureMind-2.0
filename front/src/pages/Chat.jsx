@@ -140,10 +140,11 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
   const tema = theme === "light" ? "escuro" : "claro";
   const [fontSize, setFontSize] = useState("medium");
   const [filters, setFilters] = useState([
-    { text: "3 não lidas", active: false },
+    { text: "Ocultos", active: false },
     { text: "A-Z", active: false },
-    { text: "Antigas", active: false },
+    { text: "Antigas", active: false }
   ]);
+  const [ocultos, setOcultos] = useState([]);
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
   const [inptvalue, setInptvalue] = useState("");
@@ -155,13 +156,14 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
 
   const toggleFontSize = () => {
     setFontSize((prevSize) => {
-      if (prevSize === "small") return "medium";
-      if (prevSize === "medium") return "large";
-      return "small";
+      if (prevSize === "14px") return "16px";
+      if (prevSize === "16px") return "18px";
+      return "14px";
     });
   };
 
   const click = (index) => {
+    
     const filtersAux = [...filters];
     const [clickedItem] = filtersAux.splice(index, 1);
     clickedItem.active = !clickedItem.active;
@@ -182,9 +184,24 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
         const oldToNewChats = [...chats].reverse();
         setResult(oldToNewChats);
         setUseResult(true);
+      } else if (item.text === 'Ocultos') {
+
+        const filtersAux = [...filters];
+
+        for (let i=0; i < filtersAux.length; i++) {
+
+          if (filtersAux[i].text !== item.text) {
+
+            filtersAux[i].active = false;
+          };
+        };
+
+        setFilters(filtersAux);
+        setResult(ocultos);
+        setUseResult(true);
       }
     } else {
-      if (item.text === "A-Z" || item.text === "Antigas") {
+      if (item.text === "A-Z" || item.text === "Antigas" || item.text === "Ocultos") {
         setUseResult(false);
       }
     }
@@ -424,9 +441,11 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
     const ocultaChat = (index) => {
 
       const chatsAux = [...chats];
+      const ocultedChat = chatsAux[index];
       chatsAux.splice(index, 1);
       setChats(chatsAux);
       setOpenModal(null);
+      setOcultos(prev => [...prev, ocultedChat]);
     }
     const excluiChat = async(chat, index) => {
 

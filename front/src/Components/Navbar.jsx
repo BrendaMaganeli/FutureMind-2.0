@@ -51,7 +51,7 @@ function Navbar({ cor }) {
         </a>
       </div>
       <div className="container-icon">
-        <Link to={profissional.id_profissional ? "/editarprofissional" : profissional.id_paciente ? '/paciente' : "/login"}>
+        <Link to={profissional?.id_profissional ? "/editarprofissional" : profissional?.id_paciente ? '/paciente' : "/login"}>
           <img src={icon} alt="Perfil" />
         </Link>
       </div>

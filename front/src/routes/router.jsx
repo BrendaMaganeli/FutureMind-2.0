@@ -19,6 +19,7 @@ import Politica from "../pages/Politica.jsx";
 import Termos from "../pages/Termos.jsx";
 import Consulta from "../pages/Consulta.jsx";
 import Text_modal from "../pages/Text_modal.jsx";
+import VideoConferencia from "../pages/Call.jsx";
 
 const router = createBrowserRouter([
   {
@@ -91,6 +92,10 @@ const router = createBrowserRouter([
     path: "text_modal",
     element: <Text_modal />,
   },
+  {
+    path: '/live/:id',
+    element: <VideoConferencia />
+  }
 ]);
 
 export default router;

@@ -285,21 +285,6 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 
-//  useEffect(() => {
-//   socket.current = io("http://localhost:4242");
-  
-//   socket.current.on("receiveMessage", (newMessage) => {
-//     setMessages((prev) => [...prev, newMessage]);
-//   });
-
-//   return () => {
-//     if (socket.current) {
-//       socket.current.off("receiveMessage");
-//       socket.current.disconnect();
-//     }
-//   };
-// }, []);
-
   const sendMessage = (e) => {
   e.preventDefault();
   if (!inptvalue.trim() || !chatSelected) return;
@@ -364,6 +349,129 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
         }
       }
     }
+
+    const messageRef = useRef(null);
+
+    useEffect(() => {
+
+      function handleClickOutside(event) {
+        if (messageRef.current && !messageRef.current.contains(event.target)) {
+          setOpenModalMessage(null);
+        }
+      }
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);  
+
+    const [hoverElement, setHoverElement] = useState(null);
+    const [openModal, setOpenModal] = useState(null);
+    const [hoverMessage, setHoverMessage] = useState(null);
+    const [openModalMessage, setOpenModalMessage] = useState(null);
+
+    const ocultaMensagem = (index) => {
+
+      const messagesAux = [...messages];
+      messagesAux.splice(index, 1);
+      setMessages(messagesAux);
+      setOpenModalMessage(null);
+    }
+
+    const excluiMensagem = async(mensagem, index) => {
+
+      try {
+
+        let data = {};
+
+        if (userType === 'Profissional') {
+          
+          data = {
+            id_profissional: user.id_profissional,
+            id_paciente: mensagem.fk_pacientes_id_paciente,
+            datahora: mensagem.datahora
+          };
+        } else if (userType === 'Paciente') {
+
+          data = {
+
+            id_paciente: user.id_paciente,
+            id_profissional: mensagem.fk_profissionais_id_profissional,
+            datahora: mensagem.datahora
+          };
+        };
+        
+        if (!data) return console.log('Erro ao carregar dados');
+
+        const response = await fetch('http://localhost:4242/chats/mensagens', {
+
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+
+          ocultaMensagem(index);
+          console.log('Mensagem excluída com sucesso!');
+        };
+      } catch (error) {
+        
+        console.error(error, 'Erro ao excluir mensagem');
+      };
+    };
+
+    const ocultaChat = (index) => {
+
+      const chatsAux = [...chats];
+      chatsAux.splice(index, 1);
+      setChats(chatsAux);
+      setOpenModal(null);
+    }
+    const excluiChat = async(chat, index) => {
+
+      try {
+
+        let data = {};
+
+        if (userType === 'Profissional') {
+          
+          data = {
+            id_profissional: user.id_profissional,
+            id_paciente: chat.id_paciente
+          };
+        } else if (userType === 'Paciente') {
+
+          data = {
+
+            id_profissional: chat.id_profissional,
+            id_paciente: user.id_paciente
+          };
+        };
+        
+        if (!data) return console.log('Erro ao carregar dados');
+
+        const response = await fetch('http://localhost:4242/chats', {
+
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+
+          ocultaChat(index);
+          console.log('Conversa excluída com sucesso!');
+        };
+      } catch (error) {
+        
+        console.error(error, 'Erro ao excluir chat');
+      };
+
+      window.location.reload();
+    };
 
   return (
     <div className={`container-chats ${theme} ${fontSize}`}>
@@ -434,11 +542,26 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
               onClick={() => {
                 setChatSelected(item), setIsChatSelected("chat-selected");
               }}
+              onMouseEnter={() => setHoverElement(index)}
+              onMouseLeave={() => {setHoverElement(null); setOpenModal(null)}}
             >
               <img src={item.foto} alt="" />
               <div className="nome">
                 <p>{item.nome}</p>
               </div>
+              {
+                hoverElement === index &&
+                <div className='config-chat'>
+                 <img onClick={() => hoverElement === index ? setOpenModal(index) : setOpenModal(null)} src="more.png" alt="" />
+                </div>
+              }
+              {
+                openModal === index && hoverElement === index &&
+                <div className='modal-excluir'>
+                  <button className='btn-ocultar' onClick={() => {ocultaChat(index); setChatSelected(null); setIsChatSelected('chat-not-selected')}}>Ocultar</button>
+                  <button className='btn-excluir' onClick={() => excluiChat(item, index)}>Excluir</button>
+                </div>
+              }
             </div>
           ))}
 
@@ -505,6 +628,8 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
                     </div>
                   )} 
                   <div
+                    onMouseEnter={() => msg.mensageiro === userType && setHoverMessage(index)}
+                    onMouseLeave={() => {msg.mensageiro === userType && (setHoverMessage(null), setOpenModalMessage(openModalMessage))}}
                     className={
                      msg.mensageiro === userType
                         ? "text-message-right"
@@ -512,7 +637,20 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
                     }
                   >
                     {msg.mensagem}
+                  {
+                hoverMessage === index &&
+                <div className='config-msg'>
+                 <img onClick={() => setOpenModalMessage(index)} src="more (1).png" alt="" />
+                </div>
+              }
                   </div>
+              {
+                openModalMessage === index &&
+                <div className='modal-excluir-msg' ref={messageRef}>
+                  <button className='btn-ocultar' onClick={() => {ocultaMensagem(index); setChatSelected(null); setIsChatSelected('chat-not-selected')}}>Ocultar</button>
+                  <button className='btn-excluir' onClick={() => excluiMensagem(msg, index)}>Excluir</button>
+                </div>
+              }
                   {msg.mensageiro === userType && (
                     <div className="image-message-left">
                       <img src={user.foto} alt="" />
@@ -527,7 +665,7 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
             <div className="inpt-chat">
               <input
                 type="text"
-                placeholder="Enter a message..."
+                placeholder="Envie uma mensagem..."
                 value={inptvalue}
                 onChange={(e) => setInptvalue(e.target.value)}
               />

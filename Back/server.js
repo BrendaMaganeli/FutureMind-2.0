@@ -335,6 +335,57 @@ app.put('/editarprofissional', async (req, res) => {
     }
 });
 
+app.delete('/chats', async(req, res) => {
+
+    try {
+        
+        const { id_profissional, id_paciente } = req.body;
+
+        if (!id_profissional || !id_paciente) return res.status(404).json('Erro ao deletar chat!');
+
+        const [response] = await pool.query('DELETE FROM chat_paciente_profissional WHERE fk_pacientes_id_paciente=? AND fk_profissionais_id_profissional=?', [
+            id_paciente,
+            id_profissional
+        ]);
+
+        if (response.affectedRows > 0) {
+
+            return res.status(200).json('Chat deletado com sucesso!');
+        }
+
+        return res.status(404).json('Erro ao deletar chat!');
+    } catch (error) {
+      
+        return res.status(500).json('Erro interno do servidor');
+    };
+});
+
+app.delete('/chats/mensagens', async(req, res) => {
+
+    try {
+        
+        const { id_profissional, id_paciente, datahora } = req.body;
+
+        if (!id_profissional || !id_paciente || !datahora) return res.status(404).json('Erro ao deletar mensagem!');
+
+        const [response] = await pool.query('DELETE FROM chat_paciente_profissional WHERE fk_pacientes_id_paciente=? AND fk_profissionais_id_profissional=? AND datahora=?', [
+            id_paciente,
+            id_profissional,
+            datahora
+        ]);
+
+        if (response.affectedRows > 0) {
+
+            return res.status(200).json('Mensagem deletada com sucesso!');
+        }
+
+        return res.status(404).json('Erro ao deletar mensagem!');
+    } catch (error) {
+      
+        return res.status(500).json('Erro interno do servidor');
+    };
+});
+
 app.post('/chats/chat', async(req, res) => {
 
     try {

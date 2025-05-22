@@ -3,7 +3,6 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import "./CSS/Telaagendamento.css";
 import imgConsulta from '../assets/Group 239294.svg';
 import voltar from '../assets/seta-principal.svg';
-import cors from 'cors';
 import { useParams } from "react-router-dom";
 
 const getMonthData = (year) => {

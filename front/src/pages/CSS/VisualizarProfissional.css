@@ -114,9 +114,37 @@
 }
 
 .corpo-sobre-mim {
-  height: 60%;
+  height: 120px;
   background-color: #5a789f82;
   border-radius: 20px;
+  color: white;
+  padding: 3%;
+  font-size: 18px;
+  text-align: start;
+  overflow-y: auto;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  box-sizing: border-box;
+}
+
+.corpo-sobre-mim::-webkit-scrollbar {
+  width: 0px;
+}
+
+.corpo-sobre-mim::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 20px;
+}
+
+.corpo-sobre-mim::-webkit-scrollbar-thumb {
+  background-color: #5a789f;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.corpo-sobre-mim::-webkit-scrollbar-thumb:hover {
+  background-color: #466484;
 }
 
 .cabecalho-perfil {
@@ -321,8 +349,7 @@
   height: 70%;
 }
 
-.corpo-informacao,
-.corpo-sobre-mim {
+.corpo-informacao{
   padding: 4%;
   font-size: 18px;
   text-align: start;
@@ -330,10 +357,6 @@
 
 .corpo-informacao {
   color: #5a7da0;
-}
-
-.corpo-sobre-mim {
-  color: white;
 }
 
 .corpo-informacao {

@@ -386,7 +386,7 @@ app.post('/chats/chat/send-message', async (req, res) => {
 
 app.post('/assinatura', async (req, res) => {
 
-  const {data_assinatura, fk_id_paciente, tipo_assinatura} = req.body;
+  const {data_assinatura, fk_id_paciente, tipo_assinatura, data_fim_assinatura} = req.body;
 
   
   try {
@@ -404,11 +404,11 @@ app.post('/assinatura', async (req, res) => {
             consultas_disponiveis = null;
         }
         
-        if(!data_assinatura || !fk_id_paciente || !tipo_assinatura || !consultas_disponiveis) return res.status(404).json({ Error: 'erro dados'})
+        if(!data_assinatura || !fk_id_paciente || !tipo_assinatura || !consultas_disponiveis || !data_fim_assinatura) return res.status(404).json({ Error: 'erro dados'})
 
       const [response] = await pool.query(
-        'INSERT INTO assinaturas (data_assinatura, fk_id_paciente, tipo_assinatura, consultas_disponiveis) VALUES (?, ?, ?, ?)',
-        [data_assinatura, fk_id_paciente, tipo_assinatura, consultas_disponiveis]
+        'INSERT INTO assinaturas (data_assinatura, fk_id_paciente, tipo_assinatura, consultas_disponiveis, data_fim_assinatura) VALUES (?, ?, ?, ?, ?)',
+        [data_assinatura, fk_id_paciente, tipo_assinatura, consultas_disponiveis, data_fim_assinatura]
       );
 
       if(response.affectedRows > 0){
@@ -468,6 +468,32 @@ app.post('/plano_empressarial', async (req, res) => {
         console.error('Erro ao salvar mensagem:', error);
         res.status(500).json({ Error: 'Erro interno do servidor' });
     }
+})
+
+app.put('/pagamento', async (req, res) => {
+
+
+    const {id_paciente, chk_plano} = req.body;
+
+   try {
+    
+    const [response] = await pool.query(
+        `UPDATE pacientes SET chk_plano=? WHERE id_paciente=?`,
+        [chk_plano, id_paciente]
+    );
+
+    if(response.affectedRows > 0){
+
+        return res.status(201).json({ success: true});
+    }
+    return res.status(404).json({ Error: 'erro ao inserir dados'})
+
+   } catch (error) {
+     
+    console.error('Erro ao salvar mensagem:', error);
+    res.status(500).json({ Error: 'Erro interno do servidor' });
+   }
+   
 })
 
 app.listen(4242, () => console.log ('Servidor servindo'));

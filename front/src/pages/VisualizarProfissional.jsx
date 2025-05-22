@@ -62,7 +62,8 @@ function VisualizarProfissional() {
   }
 
   const [isInChat, setIsInChat] = useState(false);
-
+  
+  
   return (
     <>
     {

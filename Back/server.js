@@ -437,7 +437,7 @@ app.post('/chats/chat/send-message', async (req, res) => {
 
 app.post('/assinatura', async (req, res) => {
 
-  const {data_assinatura, fk_id_paciente, tipo_assinatura} = req.body;
+  const {data_assinatura, fk_id_paciente, tipo_assinatura, data_fim_assinatura} = req.body;
 
   
   try {
@@ -455,11 +455,11 @@ app.post('/assinatura', async (req, res) => {
             consultas_disponiveis = null;
         }
         
-        if(!data_assinatura || !fk_id_paciente || !tipo_assinatura || !consultas_disponiveis) return res.status(404).json({ Error: 'erro dados'})
+        if(!data_assinatura || !fk_id_paciente || !tipo_assinatura || !consultas_disponiveis || !data_fim_assinatura) return res.status(404).json({ Error: 'erro dados'})
 
       const [response] = await pool.query(
-        'INSERT INTO assinaturas (data_assinatura, fk_id_paciente, tipo_assinatura, consultas_disponiveis) VALUES (?, ?, ?, ?)',
-        [data_assinatura, fk_id_paciente, tipo_assinatura, consultas_disponiveis]
+        'INSERT INTO assinaturas (data_assinatura, fk_id_paciente, tipo_assinatura, consultas_disponiveis, data_fim_assinatura) VALUES (?, ?, ?, ?, ?)',
+        [data_assinatura, fk_id_paciente, tipo_assinatura, consultas_disponiveis, data_fim_assinatura]
       );
 
       if(response.affectedRows > 0){
@@ -522,8 +522,9 @@ app.post('/plano_empressarial', async (req, res) => {
 });
 
 
-app.get('/agendamento/:id', async (req, res) => {
-    const { id_profissional, year, month } = req.params;
+
+app.get('/agendamento/:id/:year/:month', async (req, res) => {
+    const { id: id_profissional, year, month } = req.params;
     try {
       const [rows] = await pool.query(
         `SELECT id_agendamento, id_paciente, data, hora
@@ -533,15 +534,16 @@ app.get('/agendamento/:id', async (req, res) => {
            AND MONTH(data) = ?`,
         [id_profissional, year, month]
       );
-      res.status(200).json(rows);
+      return res.status(200).json(rows);
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: 'Erro ao buscar agendamentos' });
+      return res.status(500).json({ error: 'Erro ao buscar agendamentos' });
     }
   });
+  
 
   app.post('/agendamento/:id', async (req, res) => {
-    console.log('→ Body recebido:', req.body);
+    console.log( req.body);
   
     const { id_paciente, data, hora } = req.body;
     const { id } = req.params;
@@ -564,8 +566,105 @@ app.get('/agendamento/:id', async (req, res) => {
       console.error('→ Erro no POST /agendamento:', err);
       return res.status(500).json({ error: 'Erro ao criar agendamento' });
     }
+
+  });
+
+
+
+  app.get('/consulta/:id_paciente', async (req, res) => {
+    const { id_paciente } = req.params;
+    try {
+      const [rows] = await pool.query(
+        `SELECT 
+           a.id_agendamento    AS id_consulta,
+           a.data,
+           a.hora,
+           p.id_profissional,
+           p.nome               AS nome_profissional
+         FROM Agendamento a
+         INNER JOIN Profissional p
+           ON a.id_profissional = p.id_profissional
+         WHERE a.id_paciente = ?
+         ORDER BY a.data, a.hora`,
+        [id_paciente]
+      );
+      return res.status(200).json(rows);
+    } catch (err) {
+      console.error('Erro no GET /consultas/:id_paciente', err);
+      return res.status(500).json({ error: 'Erro ao buscar consultas' });
+    }
+  });
+
+
+  app.delete('/consulta/id_consultas' , async (req,res) => {
+    const id_consultas = (req, res);
+
+    try{
+        const [result] = await pool.query(
+           `DELETE FROM Agendamento
+            WHERE id_agendamento = ?`
+            [id_consultas]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Consulta não encontrada' });
+          }
+      
+          return res.status(200).json({ message: 'Consulta removida com sucesso' });
+        } catch (err) {
+          console.error('Erro no DELETE /consulta/:id_consulta', err);
+          return res.status(500).json({ error: 'Erro ao remover consulta' });
+        
+    }
+  });
+
+
+  app.put('/consulta/:id_consultas' , async (req,res) =>{
+    const {id_consulta} = req.params;
+    const {data,hora} = req.params;
+
+    try {
+        const [result] = await pool.query(
+            `UPDATE Agendamento
+            SET data = ? hora =?
+            WHERE id_agendamento`,
+            [data,hora, id_consulta]
+        );
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Consulta não encontrada' });
+        }
+        return res.status(200).json({ message: 'Consulta atualizada com sucesso' });
+    } catch (err) {
+      console.error('Erro no PUT /consulta/:id_consulta', err);
+      return res.status(500).json({ error: 'Erro ao atualizar consulta' });
+    }
   });
   
-  
+
+app.put('/pagamento', async (req, res) => {
+
+
+    const {id_paciente, chk_plano} = req.body;
+
+   try {
+    
+    const [response] = await pool.query(
+        `UPDATE pacientes SET chk_plano=? WHERE id_paciente=?`,
+        [chk_plano, id_paciente]
+    );
+
+    if(response.affectedRows > 0){
+
+        return res.status(201).json({ success: true});
+    }
+    return res.status(404).json({ Error: 'erro ao inserir dados'})
+
+   } catch (error) {
+     
+    console.error('Erro ao salvar mensagem:', error);
+    res.status(500).json({ Error: 'Erro interno do servidor' });
+   }
+   
+})
 
 app.listen(4242, () => console.log ('Servidor servindo'));

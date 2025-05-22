@@ -221,7 +221,7 @@ function EditarPaciente() {
 
           <div className="botoes-maior-p">
             <div className="botoes-p">
-              <img src={voltar} alt="Voltar" style={{ cursor: 'pointer' }} onClick={() => navigate('/pagina-inicial')} />
+              <img src={voltar} alt="Voltar" style={{ cursor: 'pointer' }} onClick={() => navigate('/inicio')} />
             </div>
             <div className="botoes-superiores-p">
               <button onClick={handleDeletarClick} className="botao-deletar">Deletar</button>

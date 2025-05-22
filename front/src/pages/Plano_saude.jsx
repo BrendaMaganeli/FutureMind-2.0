@@ -136,6 +136,8 @@ function Plano_saude() {
   };
 
   const {plano_selecionado, setPlano_selecionado} = useContext(GlobalContext)
+  const {vim_plano, setVim_plano} = useContext(GlobalContext)
+  const {vim_agendamento, setVim_agendamento} = useContext(GlobalContext)
 
   const selecionar_plano_prata = () => {
       
@@ -149,6 +151,8 @@ function Plano_saude() {
           fecharModalPrata();
           navigate(`/pagamento/${user.id_paciente}`);
         }, 1500);
+        setVim_plano(true)
+        setVim_agendamento(false)
       } else {
   
         setModalOuroAberto(false);
@@ -171,6 +175,8 @@ function Plano_saude() {
         fecharModalPrata();
         navigate(`/pagamento/${user.id_paciente}`);
       }, 1500);
+      setVim_plano(true)
+      setVim_agendamento(false)
     } else {
 
       setModalOuroAberto(false);
@@ -251,6 +257,10 @@ function Plano_saude() {
           </div>
         </div>
       </div>
+
+{
+  (!user.chk_plano || user?.id_profissional) && 
+  <>
 
       <div className="container-planos">
         <h1 className="titulo-planos">Escolha seu plano</h1>
@@ -401,6 +411,8 @@ function Plano_saude() {
           </div>
         </div>
       </Modal>
+      </>
+}
       <Footer />
       {
         mostrarModalLogin &&

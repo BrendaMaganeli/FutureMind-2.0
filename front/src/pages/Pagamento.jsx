@@ -40,11 +40,12 @@ export default function PagamentoConsulta() {
   const [valida_nome, setValida_nome] = useState(false);
   const [valida_cartao, setValida_cartao] = useState(false);
   const [valida_cvv, setValida_cvv] = useState(false);
+  
 
   const [dependentes, setDependentes] = useState([
     { value: "evelyn", label: "Evelyn Lohanny Santos Da Silva" },
   ]);
-
+  
   const formatarNumeroCartao = (valor) => {
     return valor
       .replace(/\D/g, "")
@@ -54,6 +55,7 @@ export default function PagamentoConsulta() {
   };
 
   const formatarValidade = (valor) => {
+
     const somenteNumeros = valor.replace(/\D/g, "");
 
     let formatado = "";
@@ -111,67 +113,58 @@ export default function PagamentoConsulta() {
      get_assinatura()
   }, []);
 
-  const {vim_plano, setVim_plano,} = useContext(GlobalContext)
-  const {vim_agendamento, setVim_agendamento} = useContext(GlobalContext)
+  const {vim_plano,} = useContext(GlobalContext)
+  const {vim_agendamento,} = useContext(GlobalContext)
 
   const handleFinalizar = async () => {
-    
-
-     if(generoDependente.length > 1 && numeroCartao.length == 19 && nomeCartao.length > 0 && validadeCartao.length == 5 && cvvCartao.length == 3){
-      
+    if (
+      generoDependente.length > 1 &&
+      numeroCartao.length == 19 &&
+      nomeCartao.length > 0 &&
+      validadeCartao.length == 5 &&
+      cvvCartao.length == 3
+    ) {
       if (!user.chk_plano && vim_plano) {
-       try {
-        
-        if (user.id_paciente) {
-        
-
+        try {
+          if (user.id_paciente) {
+  
+            // 👉 Gerando datas
+            const hoje = new Date();
+            const data_assinatura = hoje.toISOString().split('T')[0]; // formato YYYY-MM-DD
+  
+            const data_fim = new Date(hoje);
+            data_fim.setMonth(data_fim.getMonth() + 1);
+            const data_fim_assinatura = data_fim.toISOString().split('T')[0]; // também YYYY-MM-DD
+  
             const body = {
-              data_assinatura: '2025-05-15',
+              data_assinatura: data_assinatura,
+              data_fim_assinatura: data_fim_assinatura,
               fk_id_paciente: user.id_paciente,
               tipo_assinatura: plano_selecionado,
-              consultas_disponiveis: consultas_disponiveis
-            }
-            
+              
+            };
+  
             const response = await fetch("http://localhost:4242/assinatura", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-          });
-          
-          if (response.ok) {
-            
-            console.log('a')
-            sendEmail();
-            navigate('/inicio')
-            
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(body),
+            });
+  
+            if (response.ok) {
+              sendEmail()
+              update_plano()
+              navigate('/inicio');
+              
+            } else {
+              console.error('Erro na resposta da API');
+            }
           }
-          else {
-            
-          }
-        } 
-       
-       } catch (error) {
-        
-        console.error('err');
-       }
-
-     }else if(!user.chk_plano &&  vim_agendamento){
-
-      try {
-        
-     
-       
-       } catch (error) {
-        
-        console.error('err');
-       }
-
-     }else if(user.chk_plano &&  vim_agendamento){
-
-
-     }
+        } catch (error) {
+          console.error('Erro ao finalizar assinatura:', error);
+        }
+      }
     }
     
     if (generoDependente.length < 1) {
@@ -302,6 +295,42 @@ export default function PagamentoConsulta() {
   const {plano_selecionado} = useContext(GlobalContext)
   
  
+  const voltar_pagina = () => {
+
+    navigate(-1);
+
+  }
+
+  const update_plano = async () => {
+
+    try {
+      
+      user.chk_plano = true;
+
+      const body = {
+        id_paciente: user.id_paciente,
+        chk_plano: user.chk_plano,
+        
+      };
+      
+      const response = await fetch("http://localhost:4242/pagamento", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+      
+      if(response.ok){
+        
+        console.log('deu certo!')
+        localStorage.setItem('User-Profile', JSON.stringify(user));
+      }
+      
+    } catch (error) {
+      console.error('Erro ao finalizar update:', error);
+    }
+  }
   return (
     <div
       style={{
@@ -314,7 +343,7 @@ export default function PagamentoConsulta() {
       }}
     >
       <div>
-      <button className="back-button-pt" >
+      <button onClick={voltar_pagina} className="back-button-pt" >
       <img src={voltar} alt="" style={{width: '3em'}} />
       </button>
         <h2 style={{ fontSize: "24px", fontWeight: "600", marginBottom: "16px" }}>Finalize seu agendamento</h2>

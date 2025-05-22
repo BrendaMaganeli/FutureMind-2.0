@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import "./CSS/Telaagendamento.css";
 import imgConsulta from '../assets/Group 239294.svg';
 import voltar from '../assets/seta-principal.svg';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const getMonthData = (year) => {
   const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
@@ -30,7 +30,7 @@ const getMonthData = (year) => {
 
 export default function AgendaConsultas() {
   const today = new Date();
-
+  const navigate = useNavigate()
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonthIndex, setCurrentMonthIndex] = useState(today.getMonth());
   const [appointments, setAppointments] = useState({});
@@ -65,9 +65,9 @@ export default function AgendaConsultas() {
 
   useEffect(() => {
     const year = currentYear;
-    const monthSQL = currentMonthIndex + 1; // 0–11 → 1–12
-
-    fetch(`http://localhost:4242/agendamento/${id}`)
+    const monthSQL = currentMonthIndex + 1; 
+  
+    fetch(`http://localhost:4242/agendamento/${id}/${year}/${monthSQL}`)
       .then(res => {
         if (!res.ok) throw new Error("Erro ao buscar agendamento");
         return res.json();
@@ -81,7 +81,7 @@ export default function AgendaConsultas() {
         setAppointments(map);
       })
       .catch(err => console.error(err));
-  }, [currentYear, currentMonthIndex]);
+  }, [currentYear, currentMonthIndex, id]);
 
   function handleChangeMonth(direction) {
     setCurrentMonthIndex(prev => {
@@ -112,7 +112,7 @@ export default function AgendaConsultas() {
 
   function handleConfirm() {
     if (!selected.day || !selected.time) return;
-
+    navigate(`/pagamento/${user.id_paciente}`);
     const dateISO = `${currentYear}-${String(currentMonthIndex + 1).padStart(2, "0")}-${String(selected.day).padStart(2, "0")}`;
     const payload = {
       id_paciente: user.id_paciente,
@@ -150,7 +150,10 @@ export default function AgendaConsultas() {
     setConfirmationMessage("");
   }
 
-  // 5) JSX
+  function navega(params) {
+    navigate(`/inicio`);
+  }
+
   return (
     <div className="container-agenda">
       {confirmationMessage && (
@@ -163,7 +166,7 @@ export default function AgendaConsultas() {
       )}
 
       <button className="back-button-c">
-        <img src={voltar} alt="Voltar" />
+        <img src={voltar} alt="Voltar" onClick={navega}/>
       </button>
 
       <div className="calendar">

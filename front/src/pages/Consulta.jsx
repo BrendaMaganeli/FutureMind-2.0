@@ -30,7 +30,7 @@ const getMonthData = (year) => {
   }));
 };
 
-export default function AgendaConsultas() {
+export default function Consulta() {
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonthIndex, setCurrentMonthIndex] = useState(today.getMonth());
@@ -139,12 +139,10 @@ export default function AgendaConsultas() {
       return updated;
     });
 
-    // Atualiza seleção
     setSelected({ day: newDay, time: finalTime });
     setCurrentMonthIndex(newMonth);
     setCurrentYear(newYear);
 
-    // Limpa estados
     setIsEditing(false);
     setNewTime("");
     setNewDate("");
@@ -157,7 +155,6 @@ export default function AgendaConsultas() {
     );
   };
 
-  // Função auxiliar para nome do mês por extenso (em português)
   const getMonthName = (monthIndex) => {
     return new Date(2025, monthIndex).toLocaleString("pt-BR", {
       month: "long",

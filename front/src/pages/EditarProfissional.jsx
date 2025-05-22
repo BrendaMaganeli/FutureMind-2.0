@@ -189,13 +189,12 @@ function EditarProfissional() {
 
   const deletarProfissional = async () => {
     try {
-      const response = await fetch("http://localhost:4242/editarprofissional", {
+      const response = await fetch("http://localhost:4242/editar-profissional", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id_profissional: profissionais.id_profissional }),
+        body: JSON.stringify({ id_profissional: perfilSalvo.id_profissional }),
       });
       if (response.ok) {
-        localStorage.setItem("User Logado", false);
         localStorage.removeItem("User-Profile");
         navigate("/");
       }

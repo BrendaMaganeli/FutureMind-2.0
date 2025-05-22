@@ -6,7 +6,7 @@ import logo from "../assets/logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
 // import anotar from "../assets/bloco-de-anotacoes.png";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import Arvore from '../assets/Arvore-perfil.svg'
 import Chat from "./Chat";
 
@@ -16,6 +16,13 @@ function VisualizarProfissional() {
 
   const { id } = useParams();
   const [idChatSelected, setIdChatSelected] = useState(id);
+
+  const navigate = useNavigate();
+
+  function encaminhaAgendamento() {
+    
+    navigate(`/agendamento/${id}`)
+  }
 
   const renderizarPerfil = async() => {
 
@@ -102,7 +109,7 @@ function VisualizarProfissional() {
           <div className="funcionalidades">
             <div className="topicos">
               <img src={icon_um} alt="" />
-              <p>Agende sua cosulta</p>
+              <p onClick={encaminhaAgendamento}>Agende sua cosulta</p>
             </div>
             <div className="topicos">
               <img src={icon_dois} alt="" />

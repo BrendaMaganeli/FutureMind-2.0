@@ -457,27 +457,34 @@
   align-items: start;
   flex-wrap: wrap;
   width: 100%;
-  min-height: 65px;
-  max-height: 65px;
-  gap: 10px;
-  background-color: aqua;
-  overflow-y: auto;  
-  scrollbar-width: thin;          /* Firefox */
-  scrollbar-color: gray transparent; /* Firefox */
+  min-height: 70px;
+  /* max-height: 65px; */
+  gap: 6px;
+  overflow-y: hidden;
 }
 
-/* Chrome, Edge, Safari */
+.div-especializacao:hover{
+  overflow-y: auto;
+}
+
 .div-especializacao::-webkit-scrollbar {
-  width: 4px; /* Define a largura da barra */
-}
-
-.div-especializacao::-webkit-scrollbar-thumb {
-  background-color: gray;
-  border-radius: 4px;
+  width: 5px;
 }
 
 .div-especializacao::-webkit-scrollbar-track {
   background: transparent;
+  border-radius: 20px;
+}
+
+.div-especializacao::-webkit-scrollbar-thumb {
+  background-color: #5a789f;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.div-especializacao::-webkit-scrollbar-thumb:hover {
+  background-color: #466484;
 }
 
 .container_especializacao{
@@ -505,36 +512,39 @@
 
 .textSobremim {
   border: 1px solid #013a6385;
-  padding: 4%;
+  padding: 8px;
   border-radius: 20px;
   font-size: 0.8em;
   height: 110px;
   color: #546e7aaf;
   width: 100%;
   margin-right: 2%;
+  background-color: white;
   overflow-y: auto;
   overflow-wrap: break-word;
   word-break: break-word;
+  box-sizing: border-box;
+  scrollbar-gutter: stable both-edges;
 }
 
 .textSobremim::-webkit-scrollbar {
-  width: 6px; /* largura da barra de rolagem */
-  height: 6px;
+  width: 0px;
 }
 
 .textSobremim::-webkit-scrollbar-track {
-  background: transparent; /* fundo da track */
+  background: transparent;
+  border-radius: 20px;
 }
 
 .textSobremim::-webkit-scrollbar-thumb {
-  background-color: #5a789f; /* cor do scroll */
-  border-radius: 10px;
+  background-color: #5a789f;
+  border-radius: 20px;
   border: 2px solid transparent;
-  background-clip: content-box; /* faz parecer mais fino */
+  background-clip: content-box;
 }
 
 .textSobremim::-webkit-scrollbar-thumb:hover {
-  background-color: #466484; /* cor ao passar o mouse */
+  background-color: #466484;
 }
 
 .textSobremimm{

@@ -914,11 +914,13 @@ html {
 
   .chat-barra .nome {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     height: 80%;
     align-items: center;
-    justify-content: center;
-    font-size: 20px;
+    justify-content: start;
+    font-size: 16px;
+    width: 40%;
+    overflow-y: hidden;
   }
 
   .chat-barra img {
@@ -1002,6 +1004,7 @@ html {
     align-items: center;
     text-align: center;
     width: 30%;
+    overflow-x: auto;
   }
 
   .barra-top .icons-chat {
@@ -1156,6 +1159,7 @@ html {
     font-size: 14px;
     max-width: 100%;
     word-wrap: break-word;
+    position: relative;
   }
 
   .text-message-right {
@@ -1384,3 +1388,117 @@ html {
     margin: 60px 0 0 0;
   }
 }
+
+.config-chat {
+
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  width: 30%;
+  height: 100%;
+}
+
+.config-chat:hover, .config-msg:hover {
+
+  cursor: pointer;
+}
+
+.config-chat img {
+
+  width: 25%;
+  height: 55%;
+  opacity: 50%;
+}
+
+.config-msg {
+
+  position: fixed;
+  margin-top: -1.4%;
+  left: 93%;
+  width: 10%;
+}
+
+.config-msg img {
+
+  width: 15%;
+  height: 45%;
+}
+
+.modal-excluir {
+
+    position: fixed;
+    width: 10%;
+    left: 25%;
+    margin-top: 5%;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 0.5% 1% 0.5% 1%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-excluir-msg {
+
+  position: fixed;
+  width: 10%;
+  left: 86.3%;
+  margin-top: -8.5%;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 0.5% 1% 0.5% 1%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-excluir button {
+
+  padding: 10px;
+  font-size: 12px;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.modal-excluir-msg button {
+
+  
+  padding: 7px;
+  font-size: 11px;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.modal-excluir .btn-ocultar:hover, .modal-excluir-msg .btn-ocultar:hover {
+
+  background: #f0f0f0;
+  transition: 0.5s;
+}
+
+.modal-excluir .btn-excluir, .modal-excluir-msg .btn-excluir {
+
+  background: #5a7da0;
+  color: white;
+  transition: 0.5s;
+}
+
+.modal-excluir .btn-excluir:hover, .modal-excluir-msg .btn-excluir:hover {
+
+  background: #013a63;
+  transition: 0.5s;
+}
+

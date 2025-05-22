@@ -5,6 +5,7 @@ import imgConsulta from "../assets/Group 239294.svg";
 import mulher from "../assets/image 8.png";
 import voltar from "../assets/voltar 2.svg"
 import "./CSS/Consulta.css";
+import { useNavigate } from "react-router-dom";
 
 const getMonthData = (year) => {
   const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
@@ -29,7 +30,7 @@ const getMonthData = (year) => {
   }));
 };
 
-export default function AgendaConsultas() {
+export default function Consulta() {
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonthIndex, setCurrentMonthIndex] = useState(today.getMonth());
@@ -38,7 +39,8 @@ export default function AgendaConsultas() {
   const [isEditing, setIsEditing] = useState(false);
   const [newTime, setNewTime] = useState("");
   const [newDate, setNewDate] = useState("");
-
+  const navegate = useNavigate()
+  
   const initialAppointments = {
     [`${today.getFullYear()}-${today.getMonth()}-15`]: [
       {
@@ -137,12 +139,10 @@ export default function AgendaConsultas() {
       return updated;
     });
 
-    // Atualiza seleção
     setSelected({ day: newDay, time: finalTime });
     setCurrentMonthIndex(newMonth);
     setCurrentYear(newYear);
 
-    // Limpa estados
     setIsEditing(false);
     setNewTime("");
     setNewDate("");
@@ -155,7 +155,6 @@ export default function AgendaConsultas() {
     );
   };
 
-  // Função auxiliar para nome do mês por extenso (em português)
   const getMonthName = (monthIndex) => {
     return new Date(2025, monthIndex).toLocaleString("pt-BR", {
       month: "long",

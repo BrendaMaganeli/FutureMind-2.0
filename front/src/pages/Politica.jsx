@@ -13,18 +13,17 @@ import iconeChaves from "../assets/icone_chaves.svg";
 import iconeBanco from "../assets/icone_banco.svg";
 import voltar from '../assets/seta-principal.svg';
 
-// Função para rolar para o topo ao mudar de rota
+
 function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Garante que a página começa no topo
+    window.scrollTo(0, 0); 
   }, [pathname]);
 
   return null;
 }
 
-// Componente principal para a página de Política de Privacidade
 function Politica() {
   return (
     <div className="body-politica">
@@ -45,7 +44,6 @@ function Politica() {
       <div className="container_bola_tres"></div>
       <div className="container_bola_quatro"></div>
       <div className="conatiner_bola_cinco"></div>
-      {/* Introdução da Política de Privacidade */}
       <div className="introducao">
         <div className="T_titulo">
           <h1>Política de Privacidade da FutureMind</h1>
@@ -73,7 +71,6 @@ function Politica() {
           </div>
         </div>
       </div>
-      {/* Seções expansíveis (Accordion) */}
       <div className="container_acodions">
         <div className="accordion-container">
           <Accordion className="container_ac">
@@ -152,8 +149,6 @@ function Politica() {
           </Accordion>
         </div>
       </div>
-
-      {/* Recursos que protegem os dados */}
       <div className="div-h1">
         <h1 className="H1_recursos">Quais Recursos Protegem seus Dados?</h1>
       </div>

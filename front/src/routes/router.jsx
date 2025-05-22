@@ -84,7 +84,7 @@ const router = createBrowserRouter([
     element: <Politica />,
   },
   {
-    path: "consulta",
+    path: "/consulta/:id_paciente",
     element: <Consulta />,
   },
   {

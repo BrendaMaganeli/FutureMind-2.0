@@ -3,13 +3,19 @@ import { GlobalContext } from "../Context/GlobalContext";
 import './CSS/Pagamento.css';
 import Seta from '../assets/caret-down-solid.svg';
 import mulher from '../assets/image 8.png';
-import { useNavigate, useParams } from 'react-router-dom';
 import voltar from '../assets/seta-principal.svg';
 import emailjs from '@emailjs/browser';
 import { Import } from "lucide-react";
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
+
 
 export default function PagamentoConsulta() {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const { id: professionalId } = useParams();
+  const [dataSelecionada, setDataSelecionada] = useState(state?.date || "");
+  const [horaSelecionada, setHoraSelecionada] = useState(state?.time || "");
+
   const [toque_input_numero, setToque_input_numero] = useState(false);
   const [toque_input_validade, setToque_input_validade] = useState(false);
   const [toque_input_cvv, setToque_input_cvv] = useState(false);
@@ -27,8 +33,6 @@ export default function PagamentoConsulta() {
   const valorOriginal = 165;
 
   const [mostrarAgenda, setMostrarAgenda] = useState(false);
-  const [dataSelecionada, setDataSelecionada] = useState("2025-04-12");
-  const [horaSelecionada, setHoraSelecionada] = useState("14:00");
 
   const [mostrarModalRemover, setMostrarModalRemover] = useState(false);
 
@@ -116,76 +120,93 @@ export default function PagamentoConsulta() {
   const {vim_plano,} = useContext(GlobalContext)
   const {vim_agendamento,} = useContext(GlobalContext)
 
+
   const handleFinalizar = async () => {
-    if (
-      generoDependente.length > 1 &&
-      numeroCartao.length == 19 &&
-      nomeCartao.length > 0 &&
-      validadeCartao.length == 5 &&
-      cvvCartao.length == 3
-    ) {
-      if (!user.chk_plano && vim_plano) {
-        try {
-          if (user.id_paciente) {
-  
-            // 👉 Gerando datas
-            const hoje = new Date();
-            const data_assinatura = hoje.toISOString().split('T')[0]; // formato YYYY-MM-DD
-  
-            const data_fim = new Date(hoje);
-            data_fim.setMonth(data_fim.getMonth() + 1);
-            const data_fim_assinatura = data_fim.toISOString().split('T')[0]; // também YYYY-MM-DD
-  
-            const body = {
-              data_assinatura: data_assinatura,
-              data_fim_assinatura: data_fim_assinatura,
-              fk_id_paciente: user.id_paciente,
-              tipo_assinatura: plano_selecionado,
-              
-            };
-  
-            const response = await fetch("http://localhost:4242/assinatura", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(body),
-            });
-  
-            if (response.ok) {
-              sendEmail()
-              update_plano()
-              navigate('/inicio');
-              
-            } else {
-              console.error('Erro na resposta da API');
-            }
-          }
-        } catch (error) {
-          console.error('Erro ao finalizar assinatura:', error);
-        }
+  // validações de cartão (mantive as suas)
+  if (
+    generoDependente.length <= 1 ||
+    numeroCartao.length !== 19 ||
+    nomeCartao.length === 0 ||
+    validadeCartao.length !== 5 ||
+    cvvCartao.length !== 3
+  ) {
+    if (generoDependente.length <= 1) setValida_banco(true);
+    if (numeroCartao.length !== 19) setValida_numero_cartao(true);
+    if (nomeCartao.length === 0) setValida_nome(true);
+    if (validadeCartao.length !== 5) setValida_cartao(true);
+    if (cvvCartao.length !== 3) setValida_cvv(true);
+    return;
+  }
+
+  try {
+    // 👉 1) Se não tiver plano, cria assinatura
+    if (!user.chk_plano && vim_plano) {
+      const hoje = new Date();
+      const data_assinatura = hoje.toISOString().split('T')[0];
+      const data_fim = new Date(hoje);
+      data_fim.setMonth(data_fim.getMonth() + 1);
+      const data_fim_assinatura = data_fim.toISOString().split('T')[0];
+
+      const assinaturaBody = {
+        data_assinatura,
+        data_fim_assinatura,
+        fk_id_paciente: user.id_paciente,
+        tipo_assinatura: plano_selecionado, // 'prata' ou 'ouro'
+      };
+
+      const assinaturaResp = await fetch('http://localhost:4242/assinatura', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(assinaturaBody),
+      });
+
+      if (!assinaturaResp.ok) {
+        const err = await assinaturaResp.json();
+        console.error('Falha na assinatura:', err);
+        alert('Erro ao processar assinatura: ' + (err.Error || assinaturaResp.statusText));
+        return;
       }
-    }
-    
-    if (generoDependente.length < 1) {
-      setValida_banco(true);
-    }
-    if (numeroCartao.length < 19) {
-      setValida_numero_cartao(true);
+
+      // marca o plano como ativo localmente
+      user.chk_plano = true;
+      localStorage.setItem('User-Profile', JSON.stringify(user));
+      await fetch('http://localhost:4242/pagamento', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_paciente: user.id_paciente, chk_plano: true }),
+      });
     }
 
-    if (nomeCartao.length == 0) {
-      setValida_nome(true);
+    // 👉 2) Registrar o agendamento
+    const agendamentoBody = {
+      id_paciente: user.id_paciente,
+      data: dataSelecionada,
+      hora: horaSelecionada,
+    };
+    const agendamentoResp = await fetch(
+      `http://localhost:4242/agendamento/${professionalId}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(agendamentoBody),
+      }
+    );
+    if (!agendamentoResp.ok) {
+      console.error('Falha ao registrar agendamento:', await agendamentoResp.text());
+      alert('Erro ao registrar o agendamento. Tente novamente.');
+      return;
     }
 
-    if (validadeCartao.length < 5) {
-      setValida_cartao(true);
-    }
+    // 👉 3) Se tudo OK, envia e-mail e redireciona
+    sendEmail();
+    navigate('/inicio');
 
-    if (cvvCartao.length < 3) {
-      setValida_cvv(true);
-    }
-  };
+  } catch (err) {
+    console.error('Erro inesperado em handleFinalizar:', err);
+    alert('Erro inesperado. Veja o console para mais detalhes.');
+  }
+};
+
 
   const handleAlterarAgendamento = () => {
     setMostrarAgenda(true);
@@ -282,7 +303,6 @@ export default function PagamentoConsulta() {
       templateParams,
       'ms7_9wi7dG_5vMUGt'
     ).then((response) => {
-      console.log('E-mail enviado com sucesso!', response.status, response.text);
       alert('E-mail enviado com sucesso!');
       navigate('/inicio');
     }).catch((error) => {
@@ -331,6 +351,13 @@ export default function PagamentoConsulta() {
       console.error('Erro ao finalizar update:', error);
     }
   }
+
+  useEffect(() => {
+  if (!dataSelecionada || !horaSelecionada) {
+    navigate(-1);
+  }
+}, []);
+
   return (
     <div
       style={{
@@ -699,7 +726,7 @@ export default function PagamentoConsulta() {
               >
                 <p>
                   <strong>Data</strong>{" "}
-                  {dataSelecionada.split("-").reverse().join("/")}
+                  {dataSelecionada?.split("-").reverse().join("/") ?? "--/--/----"}
                 </p>
                 <p>
                   <strong>Horário</strong> {horaSelecionada}

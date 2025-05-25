@@ -110,37 +110,15 @@ export default function AgendaConsultas() {
     }
   }
 
-  function handleConfirm() {
-    if (!selected.day || !selected.time) return;
-    navigate(`/pagamento/${user.id_paciente}`);
-    const dateISO = `${currentYear}-${String(currentMonthIndex + 1).padStart(2, "0")}-${String(selected.day).padStart(2, "0")}`;
-    const payload = {
-      id_paciente: user.id_paciente,
-      data: dateISO,
-      hora: selected.time
-    };
+function confirmar() {
+  if (!selected.day || !selected.time) return;
 
-    fetch(`http://localhost:4242/agendamento/${id}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    })
-      .then(res => {
-        if (!res.ok) throw new Error("Falha ao agendar");
-        return res.json();
-      })
-      .then(() => {
-        const key = `${currentYear}-${currentMonthIndex}-${selected.day}`;
-        setAppointments(prev => ({ ...prev, [key]: [selected.time] }));
-        setConfirmationMessage(
-          `Consulta agendada para ${selected.day} de ${month.name} às ${selected.time}`
-        );
-      })
-      .catch(err => {
-        console.error(err);
-        alert("Não foi possível agendar a consulta.");
-      });
-  }
+  const dateISO = `${currentYear}-${String(currentMonthIndex + 1).padStart(2, "0")}-${String(selected.day).padStart(2, "0")}`;
+  navigate(`/pagamento/${id}`, {
+     state: { date: dateISO, time: selected.time }
+  });
+}
+
 
   function handleClose() {
     setSelected({ day: null, time: null });
@@ -237,7 +215,7 @@ export default function AgendaConsultas() {
 
           <button
             className="confirm-button"
-            onClick={handleConfirm}
+            onClick={confirmar}
             disabled={!selected.time}
           >
             Confirmar agendamento

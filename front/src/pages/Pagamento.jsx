@@ -118,7 +118,7 @@ export default function PagamentoConsulta() {
   }, []);
 
   const {vim_plano,} = useContext(GlobalContext)
-  const {vim_agendamento,} = useContext(GlobalContext)
+  
 
 
   const handleFinalizar = async () => {

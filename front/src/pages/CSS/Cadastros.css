@@ -222,7 +222,7 @@
   width: 100%;
 }
 .botao-login {
-  width: 90%;
+  width: 88%;
   max-width: 700px;
   padding: 14px;
   background-color: #5a789f;
@@ -467,7 +467,7 @@
 }
 
 .login-input input {
-  width: 40em;
+  width: 35em;
   padding: 16px 12px 8px;
   font-size: 16px;
   border: 2px solid #ccc;

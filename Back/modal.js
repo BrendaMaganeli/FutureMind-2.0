@@ -35,3 +35,34 @@ app.post('/upload-foto/:id_paciente', upload.single('foto'), async (req, res) =>
     }
   });
   
+
+  // app.post('/upload-foto-profissional/:id_profissional', upload.single('foto'), async (req, res) => {
+  //   try {
+  //     const { id_profissional } = req.params;
+  //     const filePath = '/uploads/' + req.file.filename;
+  
+  //     const [result] = await pool.query(
+  //       'UPDATE profissionais SET foto=? WHERE id_profissional=?',
+  //       [filePath, id_profissional]
+  //     );
+  
+  //     if (result.affectedRows > 0) {
+  //       res.status(200).json({ mensagem: 'Foto atualizada com sucesso!', caminho: filePath });
+  //     } else {
+  //       res.status(404).json('Profissional não encontrado');
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //     res.status(500).json('Erro ao fazer upload da foto');
+  //   }
+  // });
+
+//   const formData = new FormData();
+// formData.append('foto', file);
+
+// await fetch(`http://localhost:4242/upload-foto-profissional/${profissional.id_profissional}`, {
+//   method: 'POST',
+//   body: formData,
+// });
+
+  

@@ -122,7 +122,6 @@ export default function PagamentoConsulta() {
 
 
   const handleFinalizar = async () => {
-  // validações de cartão (mantive as suas)
   if (
     generoDependente.length <= 1 ||
     numeroCartao.length !== 19 ||
@@ -139,7 +138,6 @@ export default function PagamentoConsulta() {
   }
 
   try {
-    // 👉 1) Se não tiver plano, cria assinatura
     if (!user.chk_plano && vim_plano) {
       const hoje = new Date();
       const data_assinatura = hoje.toISOString().split('T')[0];
@@ -151,7 +149,7 @@ export default function PagamentoConsulta() {
         data_assinatura,
         data_fim_assinatura,
         fk_id_paciente: user.id_paciente,
-        tipo_assinatura: plano_selecionado, // 'prata' ou 'ouro'
+        tipo_assinatura: plano_selecionado, 
       };
 
       const assinaturaResp = await fetch('http://localhost:4242/assinatura', {
@@ -167,7 +165,6 @@ export default function PagamentoConsulta() {
         return;
       }
 
-      // marca o plano como ativo localmente
       user.chk_plano = true;
       localStorage.setItem('User-Profile', JSON.stringify(user));
       await fetch('http://localhost:4242/pagamento', {
@@ -177,7 +174,6 @@ export default function PagamentoConsulta() {
       });
     }
 
-    // 👉 2) Registrar o agendamento
     const agendamentoBody = {
       id_paciente: user.id_paciente,
       data: dataSelecionada,
@@ -193,17 +189,14 @@ export default function PagamentoConsulta() {
     );
     if (!agendamentoResp.ok) {
       console.error('Falha ao registrar agendamento:', await agendamentoResp.text());
-      alert('Erro ao registrar o agendamento. Tente novamente.');
       return;
     }
 
-    // 👉 3) Se tudo OK, envia e-mail e redireciona
     sendEmail();
     navigate('/inicio');
 
   } catch (err) {
     console.error('Erro inesperado em handleFinalizar:', err);
-    alert('Erro inesperado. Veja o console para mais detalhes.');
   }
 };
 

@@ -33,7 +33,7 @@ const getMonthData = (year) => {
 };
 
 export default function Consulta() {
-  const { id_paciente } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const today = new Date();
 
@@ -60,7 +60,7 @@ export default function Consulta() {
   useEffect(() => {
     async function fetchConsultas() {
       try {
-        const resp = await fetch(`/consulta/${id_paciente}`);
+        const resp = await fetch(`/consulta/${id}`);
         if (!resp.ok) throw new Error("Falha ao buscar consultas");
         const data = await resp.json();
         const novoMapa = {};
@@ -84,7 +84,7 @@ export default function Consulta() {
     }
 
     fetchConsultas();
-  }, [id_paciente]);
+  }, [id]);
 
   const months = getMonthData(currentYear);
   const month = months[currentMonthIndex];
@@ -283,6 +283,7 @@ export default function Consulta() {
   const closeConfirmation = () => {
     setConfirmationMessage("");
   };
+
 
   return (
     <div className="container-agenda-c">

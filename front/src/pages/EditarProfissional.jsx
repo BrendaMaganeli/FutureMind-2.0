@@ -302,6 +302,10 @@ function EditarProfissional() {
               <img src={icon_tres} alt="" />
               <p>Chat</p>
             </div>
+            <div className="topicos">
+              <img src={icon_tres} alt="" />
+              <p>Consulta</p>
+            </div>
           </div>
         </div>
       </aside>

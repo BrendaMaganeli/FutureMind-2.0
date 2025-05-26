@@ -36,7 +36,8 @@ export default function AgendaConsultas() {
   const [appointments, setAppointments] = useState({});
   const [selected, setSelected] = useState({ day: null, time: null });
   const [confirmationMessage, setConfirmationMessage] = useState("");
-
+  const key = `${currentYear}-${currentMonthIndex}-${selected.day}`;
+  const agendados = appointments[key] || [];
   const months = getMonthData(currentYear);
   const month = months[currentMonthIndex];
   const prevMonth = months[(currentMonthIndex + 11) % 12];
@@ -76,8 +77,12 @@ export default function AgendaConsultas() {
         const map = {};
         data.forEach(a => {
           const day = new Date(a.data).getDate();
-          map[`${year}-${currentMonthIndex}-${day}`] = [a.hora];
-        });
+          const key = `${year}-${currentMonthIndex}-${day}`;
+          if (!map[key]) {
+            map[key] = [];
+          }
+          map[key].push(a.hora);
+        });        
         setAppointments(map);
       })
       .catch(err => console.error(err));
@@ -98,17 +103,20 @@ export default function AgendaConsultas() {
   }
 
   function handleDayClick(day) {
-    if (day.isCurrentMonth && !day.isUnavailable) {
+    if (day.isCurrentMonth ) {
       setSelected({ day: day.date, time: null });
     }
   }
 
   function handleTimeClick(time) {
     const key = `${currentYear}-${currentMonthIndex}-${selected.day}`;
-    if (!appointments[key]) {
+    const agendados = appointments[key] || [];
+    
+    if (!agendados.includes(time)) {
       setSelected(prev => ({ ...prev, time }));
     }
   }
+  
 
 function confirmar() {
   if (!selected.day || !selected.time) return;
@@ -202,15 +210,22 @@ function confirmar() {
 
           <h3>Horários</h3>
           <div className="times">
-            {["14:30", "17:30", "13:00", "16:10", "11:00", "19:20", "13:30"].map(time => (
+          {["14:30", "17:30", "13:00", "16:10", "11:00", "19:20", "13:30"].map(time => {
+            const key = `${currentYear}-${currentMonthIndex}-${selected.day}`;
+            const agendados = appointments[key] || [];
+            const isAgendado = agendados.includes(time);
+
+            return (
               <button
                 key={time}
                 className={`time-button ${selected.time === time ? "selected-time" : ""}`}
                 onClick={() => handleTimeClick(time)}
+                disabled={isAgendado} // ← desativa se já estiver agendado
               >
                 {time}
               </button>
-            ))}
+            );
+          })}
           </div>
 
           <button

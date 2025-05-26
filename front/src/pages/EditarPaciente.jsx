@@ -188,6 +188,10 @@ function EditarPaciente() {
     setIsVisible(false);
   };
 
+  const irParaConsultas = () => {
+    navigate(`/consulta/${paciente.id_paciente}`);
+  };
+
   return (
     <div>
       <img
@@ -209,9 +213,9 @@ function EditarPaciente() {
               </div>
             </div>
             <div className="funcionalidades-paciente">
-              <div className="topicos"><img src={icon_um} alt="" /><p>Agende sua consulta</p></div>
               <div className="topicos"><img src={icon_dois} alt="" /><p>Vídeo Chamada</p></div>
               <div className="topicos"><img src={icon_tres} alt="" /><p>Chat</p></div>
+              <div className="topicos"><img src={icon_tres} alt="" /><p onClick={irParaConsultas}>Consulta</p></div>
             </div>
           </div>
         </aside>

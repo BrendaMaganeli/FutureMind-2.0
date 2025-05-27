@@ -262,7 +262,6 @@
   height: 10vh;
   padding: 8px;          
   border-radius: 8px;    
-  background-color: #9aadc4; 
   display: flex;
   flex-direction: column;
   overflow-y: auto;

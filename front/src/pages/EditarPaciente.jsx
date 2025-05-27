@@ -197,7 +197,7 @@ function EditarPaciente() {
   };
 
   const irParaConsultas = () => {
-    navigate(`/consulta/${paciente.id_paciente}`);
+    navigate(`/consulta/paciente/${paciente.id_paciente}`);
   };
 
   return (

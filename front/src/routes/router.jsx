@@ -87,10 +87,11 @@ const router = createBrowserRouter([
     path: "politica",
     element: <Politica />,
   },
-  {
-    path: "/consulta/:id",
-    element: <Consulta />,
-  },
+{
+  path:"/consulta/paciente/:id",
+  element: <Consulta />,
+},
+
   {
     path: "text_modal",
     element: <Text_modal />,

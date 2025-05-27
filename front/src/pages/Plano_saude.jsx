@@ -130,7 +130,7 @@ function Plano_saude() {
 
     if (user) {
 
-      navigate("/agendamento"); // rota que leva à tela de agendamento
+      navigate("/inicio"); 
     } 
   };
 
@@ -213,7 +213,7 @@ function Plano_saude() {
             </div>
             <div className="info_div_button">
               <button className="button_info" onClick={navega}>
-                AGENDE SUA CONSULTA
+                AGENDE COM PROFISSIONAL
               </button>
             </div>
             

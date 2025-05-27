@@ -479,9 +479,9 @@ app.get('/pagamento/:id', async(req, res) => {
 
     try {
         
-        const { id } = req.params;
+        const { id_paciente } = req.params;
         
-        const [rows] = await pool.query('SELECT consultas_disponiveis FROM assinaturas WHERE fk_id_paciente=?', [id]);
+        const [rows] = await pool.query('SELECT consultas_disponiveis FROM assinaturas WHERE fk_id_paciente=?', [id_paciente]);
 
         if (rows.length > 0) {
 

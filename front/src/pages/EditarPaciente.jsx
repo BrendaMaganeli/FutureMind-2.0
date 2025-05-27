@@ -1,7 +1,7 @@
 import mulher from "../assets/image 8.png";
-import icon_um from "../assets/agenda 2.svg";
-import icon_dois from "../assets/cam-recorder (1) 11.svg";
-import icon_tres from "../assets/icons8-bate-papo-48 2.svg";
+import icon_um from "../assets/calendar-check.svg";
+import icon_dois from "../assets/video.svg";
+import icon_tres from "../assets/message-square (1).svg";
 import logo from "../assets/logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
 import "./CSS/EditarPaciente.css";
@@ -183,9 +183,17 @@ function EditarPaciente() {
     }
   }
 
+  const [uploading, setUploading] = useState(false);
+
   const handleSalvarFoto = async () => {
+    setUploading(true);
     await uploadFoto();
     setIsVisible(false);
+    const response = await fetch(`http://localhost:4242/foto/${paciente.id_paciente}`);
+    const blob = await response.blob();
+    const imageUrl = URL.createObjectURL(blob);
+    setImagemPreview(imageUrl);
+    setUploading(false)
   };
 
   const irParaConsultas = () => {
@@ -203,7 +211,7 @@ function EditarPaciente() {
       <div className={`container ${isVisible ? "blur" : ""}`}>
         <aside className="barra-lateral-p">
           <div className="cabecalho-perfil-paciente">
-          <img src={imagemPreview} alt="Foto do perfil" className="imagem-perfil" />
+          <img src={imagemPreview || mulher} alt="Foto do perfil" className="imagem-perfil" />
             <h2 className="nome-perfil">{pacienteLocal.nome}</h2>
           </div>
           <div className="caixa-comandos-paciente">
@@ -215,7 +223,7 @@ function EditarPaciente() {
             <div className="funcionalidades-paciente">
               <div className="topicos"><img src={icon_dois} alt="" /><p>Vídeo Chamada</p></div>
               <div className="topicos"><img src={icon_tres} alt="" /><p>Chat</p></div>
-              <div className="topicos"><img src={icon_tres} alt="" /><p onClick={irParaConsultas}>Consulta</p></div>
+              <div className="topicos"><img src={icon_um} alt="" /><p onClick={irParaConsultas}>Consulta</p></div>
             </div>
           </div>
         </aside>
@@ -309,7 +317,7 @@ function EditarPaciente() {
                   <button className="button_cancelar_editar" onClick={desativar_div}>Cancelar</button>
                 </div>
                 <div className="container_button_gostei_salvar">
-                  <button className="button_gostei_salvar" onClick={handleSalvarFoto}>Gostei, Salvar</button>
+                  <button className="button_gostei_salvar" onClick={handleSalvarFoto} disabled={uploading}>{uploading ? 'Salvando...' : 'Gostei, Salvar'}</button>
                 </div>
               </div>
             </div>

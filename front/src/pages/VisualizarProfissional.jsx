@@ -1,7 +1,7 @@
 import "./CSS/VisualizarProfissional.css";
-import icon_um from "../assets/agenda 2.svg";
-import icon_dois from "../assets/cam-recorder (1) 11.svg";
-import icon_tres from "../assets/comments-regular.svg";
+import icon_um from "../assets/calendar-check.svg";
+import icon_dois from "../assets/video.svg";
+import icon_tres from "../assets/message-square (1).svg";
 import logo from "../assets/logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
 // import anotar from "../assets/bloco-de-anotacoes.png";

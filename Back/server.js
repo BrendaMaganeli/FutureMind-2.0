@@ -496,6 +496,22 @@ app.get('/pagamento/:id', async(req, res) => {
     };
 });
 
+app.post('/planos', async (req, res) => {
+  try {
+    const { id } = req.body; // <-- CORRETO para POST
+
+    const [rows] = await pool.query('SELECT data_fim_assinatura FROM assinaturas WHERE fk_id_paciente = ?', [id]);
+
+    if (rows.length > 0) {
+      res.status(200).json(rows[0]); // retorna { data_fim_assinaturas: '...' }
+    } else {
+      res.status(404).json({ erro: 'Assinatura não encontrada!' });
+    }
+  } catch (err) {
+    res.status(500).json({ erro: 'Erro no servidor', detalhes: err.message });
+  }
+});
+
 app.post('/plano_empressarial', async (req, res) => {
 
     const {tipo_assinatura,fk_id_paciente, data_assinatura} = req.body;
@@ -696,6 +712,30 @@ app.put('/pagamento', async (req, res) => {
     res.status(500).json({ Error: 'Erro interno do servidor' });
    }
    
+})
+
+app.put('/validacao_planos', async (req, res) => {
+
+  const {id_paciente, chk_plano} = req.body;
+  
+  try {
+    
+    const [response] = await pool.query(
+        `UPDATE pacientes SET chk_plano=? WHERE id_paciente=?`,
+        [chk_plano, id_paciente]
+    );
+
+    if(response.affectedRows > 0){
+
+        return res.status(201).json({ success: true});
+    }
+    return res.status(404).json({ Error: 'erro ao inserir dados'})
+
+   } catch (error) {
+     
+    console.error('Erro ao salvar mensagem:', error);
+    res.status(500).json({ Error: 'Erro interno do servidor' });
+   }
 })
 
 app.listen(4242, () => console.log ('Servidor servindo'));

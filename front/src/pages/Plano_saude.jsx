@@ -82,11 +82,13 @@ function Plano_saude() {
       try {
        
         if (user.id_paciente) {
-
+          const hoje = new Date();
+          const data_assinatura = hoje.toISOString().split('T')[0];
+          
           const body = {
             fk_id_paciente: user.id_paciente,
             tipo_assinatura: plano_selecionado,
-            data_assinatura: '2025-05-20'
+            data_assinatura: data_assinatura
           }
 
           const response = await fetch("http://localhost:4242/plano_empressarial", {
@@ -185,12 +187,72 @@ function Plano_saude() {
 
   
   }
+  const [dataAr, setDataAr] = useState()
 
   useEffect(() => {
-    
-    // vai ser usado para fazer validação da data do plano, e fazer um try de put
-
+    const pegar_data_fim = async () => {
+      try {
+        const id = user?.id_paciente;
+  
+        if (!id) return;
+  
+        const response = await fetch('http://localhost:4242/planos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id }),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          setDataAr(data)
+          console.log('Data fim da assinatura:', data);
+          
+        } else {
+          console.log('Não conseguiu pegar a data.');
+        }
+      } catch (error) {
+        console.error('Erro na requisição:', error);
+      }
+    };
+  
+    pegar_data_fim(); 
+  
   }, []);
+
+  useEffect(() => {
+    if (!dataAr?.data_fim_assinaturas) return;
+  
+    const data_fim_assinatura = new Date(dataAr.data_fim_assinaturas).toISOString().split('T')[0];
+    const hoje = new Date().toISOString().split('T')[0];
+  
+    const mandar_data = async () => {
+      if (data_fim_assinatura === hoje) {
+        try {
+          
+          const response = await fetch(`http://localhost:4242/validacao_planos`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              id_paciente: user.id_paciente,
+              chk_plano: false
+            }),
+          });
+
+        } catch (error) {
+          
+        }
+      } else {
+        console.log('o tempo de plano nao acabou!');
+      }
+    };
+  
+    mandar_data();
+  }, [dataAr]);
+  
 
   return (
     <div className="container-planoSaude">

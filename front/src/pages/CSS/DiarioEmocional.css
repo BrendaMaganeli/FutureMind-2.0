@@ -79,13 +79,13 @@
   .custom-tabs-slider {
     position: relative;
     display: flex;
-    background-color: #f1f5f9;
+    background-color: #e8edf3;
     border-radius: 4px;
     overflow: hidden;
     width: 30%; /* ajustável conforme conteúdo */
-    height: 30px;
+    height: 35px;
     margin-bottom: 16px;
-    border: 1.5px solid #f1f5f9;
+    border: 1.5px solid #e8edf3;
   }
   
   .tab-button {
@@ -144,7 +144,7 @@
   
   .textarea-note {
     width: 100%;
-    height: 620px;
+    height: 600px;
     padding: 8px;
     border-radius: 8px;
     border: 1px solid #ddd;
@@ -155,7 +155,7 @@
   .btn.add-item {
     background-color: #2B4A60;
     color: white;
-    padding: 4px;
+    padding: 0.6%;
     border-radius: 4px;
     margin-top: 8px;
   }

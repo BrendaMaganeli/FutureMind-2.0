@@ -31,7 +31,10 @@ const router = createBrowserRouter([
     element: <TelaAgendamento />,
   },
 
-  { path: "/editarprofissional", element: <EditarProfissional /> },
+  { 
+    path: "/editarprofissional", 
+    element: <EditarProfissional /> 
+  },
   {
     path: "/paciente",
     element: <EditarPaciente />,
@@ -84,10 +87,11 @@ const router = createBrowserRouter([
     path: "politica",
     element: <Politica />,
   },
-  {
-    path: "/consulta/:id_paciente",
-    element: <Consulta />,
-  },
+{
+  path:"/consulta/paciente/:id",
+  element: <Consulta />,
+},
+
   {
     path: "text_modal",
     element: <Text_modal />,

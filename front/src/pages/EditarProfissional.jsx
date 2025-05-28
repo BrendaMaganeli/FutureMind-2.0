@@ -1,7 +1,7 @@
 import mulher from "../assets/image 8.png";
-import icon_um from "../assets/agenda 2.svg";
-import icon_dois from "../assets/cam-recorder (1) 11.svg";
-import icon_tres from "../assets/icons8-bate-papo-48 2.svg";
+import icon_um from "../assets/calendar-check.svg";
+import icon_dois from "../assets/video.svg";
+import icon_tres from "../assets/message-square (1).svg";
 import Arvore from "../assets/Group 239274.svg";
 import "./CSS/EditarProfissional.css";
 import voltar from "../assets/seta-principal.svg";
@@ -301,6 +301,10 @@ function EditarProfissional() {
             <div className="topicos">
               <img src={icon_tres} alt="" />
               <p>Chat</p>
+            </div>
+            <div className="topicos">
+              <img src={icon_tres} alt="" />
+              <p>Consulta</p>
             </div>
           </div>
         </div>

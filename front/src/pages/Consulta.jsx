@@ -1,17 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import "./CSS/Consulta.css";
 import imgConsulta from "../assets/Group 239294.svg";
-import mulher from "../assets/image 8.png";
 import voltar from "../assets/voltar 2.svg";
 
-const getMonthData = (year) => {
-  const isLeapYear =
-    year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
-  const daysInMonth = [
+const obterDadosMes = (ano) => {
+  const bissexto = ano % 4 === 0 && (ano % 100 !== 0 || ano % 400 === 0);
+  const diasNoMes = [
     31,
-    isLeapYear ? 29 : 28,
+    bissexto ? 29 : 28,
     31,
     30,
     31,
@@ -23,540 +21,363 @@ const getMonthData = (year) => {
     30,
     31,
   ];
-  return daysInMonth.map((days, index) => ({
-    name: new Date(year, index).toLocaleString("pt-BR", { month: "long" }),
-    days,
-    start: new Date(year, index, 1).getDay(),
+  return diasNoMes.map((dias, indice) => ({
+    nome: new Date(ano, indice).toLocaleString("pt-BR", { month: "long" }),
+    totalDias: dias,
+    inicio: new Date(ano, indice, 1).getDay(),
   }));
 };
 
+const paraDataISO = (dataStr, ano) => {
+  const [diaStr, mesStr] = dataStr.split("/");
+  const dia = String(parseInt(diaStr, 10)).padStart(2, "0");
+  const mes = String(parseInt(mesStr, 10)).padStart(2, "0");
+  return `${ano}-${mes}-${dia}`;
+};
+
 export default function Consulta() {
-  const { id_paciente } = useParams();
+  const { role, id } = useParams(); 
   const navigate = useNavigate();
-  const today = new Date();
+  const hoje = new Date();
 
-  const [appointments, setAppointments] = useState({});
-  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [agendamentos, setAgendamentos] = useState({});
+  const [consultaSelecionada, setConsultaSelecionada] = useState(null);
 
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [currentMonthIndex, setCurrentMonthIndex] = useState(today.getMonth());
+  const [anoAtual, setAnoAtual] = useState(hoje.getFullYear());
+  const [indiceMesAtual, setIndiceMesAtual] = useState(hoje.getMonth());
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [newTime, setNewTime] = useState("");
-  const [newDate, setNewDate] = useState("");
+  const [mostrarModalReagendamento, setMostrarModalReagendamento] = useState(false);
+  const [indiceMesReagendamento, setIndiceMesReagendamento] = useState(hoje.getMonth());
+  const [anoReagendamento, setAnoReagendamento] = useState(hoje.getFullYear());
+  const [dataSelecionada, setDataSelecionada] = useState(null);
+  const [horaSelecionada, setHoraSelecionada] = useState(null);
 
-  const [showRescheduleModal, setShowRescheduleModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
-  const [rescheduleMonthIndex, setRescheduleMonthIndex] = useState(
-    today.getMonth()
-  );
-  const [rescheduleYear, setRescheduleYear] = useState(today.getFullYear());
+  const [mensagemConfirmacao, setMensagemConfirmacao] = useState("");
 
-  const [confirmationMessage, setConfirmationMessage] = useState("");
+  const buscarConsultas = useCallback(async () => {
+    try {
+      let endpoint = "";
+      if (role === "profissional") {
+        endpoint = `/consulta/profissional/${id}/${anoAtual}/${indiceMesAtual + 1}`;
+      } else {
+        endpoint = `/consulta/paciente/${id}`;
+      }
+      const resp = await fetch(endpoint);
+      if (!resp.ok) throw new Error("Falha ao buscar consultas");
+      const dados = await resp.json();
+
+      const novoMapa = {};
+      dados.forEach((registro) => {
+        const dt = new Date(registro.data);
+        const a = dt.getFullYear();
+        const m = dt.getMonth();
+        const d = dt.getDate();
+        const chave = `${a}-${m}-${d}`;
+        if (!novoMapa[chave]) novoMapa[chave] = [];
+
+        const base = {
+          id_consulta: registro.id_consulta,
+          horario: registro.hora,
+          fotoPar: registro.foto_par || null,
+        };
+
+        if (role === "profissional") {
+          novoMapa[chave].push({ ...base, nomePar: registro.nome_paciente });
+        } else {
+          novoMapa[chave].push({ ...base, nomePar: registro.nome_profissional });
+        }
+      });
+
+      setAgendamentos(novoMapa);
+    } catch (err) {
+      console.error("Erro ao buscar agendamentos:", err);
+    }
+  }, [role, id, anoAtual, indiceMesAtual]);
 
   useEffect(() => {
-    async function fetchConsultas() {
-      try {
-        const resp = await fetch(`/consulta/${id_paciente}`);
-        if (!resp.ok) throw new Error("Falha ao buscar consultas");
-        const data = await resp.json();
-        const novoMapa = {};
-        data.forEach((row) => {
-          const dt = new Date(row.data);
-          const y = dt.getFullYear();
-          const m = dt.getMonth();
-          const d = dt.getDate();
-          const key = `${y}-${m}-${d}`;
-          if (!novoMapa[key]) novoMapa[key] = [];
-          novoMapa[key].push({
-            id_consulta: row.id_consulta,
-            time: row.hora,
-            nome_profissional: row.nome_profissional,
-          });
-        });
-        setAppointments(novoMapa);
-      } catch (err) {
-        console.error("Erro ao buscar agendamentos no React:", err);
-      }
-    }
+    buscarConsultas();
+  }, [buscarConsultas]);
 
-    fetchConsultas();
-  }, [id_paciente]);
+  const mesesDoAno = obterDadosMes(anoAtual);
+  const mesAtual = mesesDoAno[indiceMesAtual];
+  const mesAnterior = mesesDoAno[(indiceMesAtual + 11) % 12];
 
-  const months = getMonthData(currentYear);
-  const month = months[currentMonthIndex];
-  const prevMonth = months[(currentMonthIndex + 11) % 12];
-  const days = Array.from({ length: 42 }, (_, i) => {
-    let date,
-      isCurrentMonth,
-      isUnavailable,
-      appointmentsForDay = [];
+  const gradeDias = Array.from({ length: 42 }, (_, i) => {
+    let dia;
+    let mesCorrente;
+    let indisponivel;
+    let registrosDoDia = [];
 
-    if (i < month.start) {
-      date = prevMonth.days - (month.start - i - 1);
-      isCurrentMonth = false;
-      isUnavailable = true;
-    } else if (i >= month.start + month.days) {
-      date = i - (month.start + month.days) + 1;
-      isCurrentMonth = false;
-      isUnavailable = true;
+    if (i < mesAtual.inicio) {
+      dia = mesAnterior.totalDias - (mesAtual.inicio - i - 1);
+      mesCorrente = false;
+      indisponivel = true;
+    } else if (i >= mesAtual.inicio + mesAtual.totalDias) {
+      dia = i - (mesAtual.inicio + mesAtual.totalDias) + 1;
+      mesCorrente = false;
+      indisponivel = true;
     } else {
-      date = i - month.start + 1;
-      isCurrentMonth = true;
-      const key = `${currentYear}-${currentMonthIndex}-${date}`;
-      appointmentsForDay = appointments[key] || [];
-      isUnavailable = appointmentsForDay.length === 0;
+      dia = i - mesAtual.inicio + 1;
+      mesCorrente = true;
+      const chave = `${anoAtual}-${indiceMesAtual}-${dia}`;
+      registrosDoDia = agendamentos[chave] || [];
+      indisponivel = registrosDoDia.length === 0;
     }
 
-    return {
-      id: i,
-      date,
-      isCurrentMonth,
-      isUnavailable,
-      appointmentsForDay,
-    };
+    return { id: `${id}-${i}`, dia, mesCorrente, indisponivel, registrosDoDia };
   });
 
-  const handleChangeMonth = (direction) => {
-    setCurrentMonthIndex((prev) => {
-      let newMonth = prev + direction;
-      let newYear = currentYear;
-      if (newMonth < 0) {
-        newMonth = 11;
-        newYear -= 1;
-      } else if (newMonth > 11) {
-        newMonth = 0;
-        newYear += 1;
+  const trocarMes = (direcao) => {
+    setIndiceMesAtual((prev) => {
+      let novoMes = prev + direcao;
+      let novoAno = anoAtual;
+      if (novoMes < 0) {
+        novoMes = 11;
+        novoAno -= 1;
+      } else if (novoMes > 11) {
+        novoMes = 0;
+        novoAno += 1;
       }
-      setCurrentYear(newYear);
-      return newMonth;
+      setAnoAtual(novoAno);
+      return novoMes;
     });
   };
 
-  const handleDayClick = (day) => {
-    if (day.isCurrentMonth && day.appointmentsForDay.length > 0) {
-      const agendamento = day.appointmentsForDay[0];
-      setSelectedAppointment({
-        day: day.date,
-        month: currentMonthIndex,
-        year: currentYear,
-        ...agendamento,
-      });
-      setIsEditing(false);
-      setNewTime("");
-      setNewDate("");
-    }
+  const aoSelecionarDia = (diaObj) => {
+    if (!diaObj.mesCorrente || diaObj.registrosDoDia.length === 0) return;
+    const agendamento = diaObj.registrosDoDia[0];
+    setConsultaSelecionada({
+      dia: diaObj.dia,
+      mes: indiceMesAtual,
+      ano: anoAtual,
+      ...agendamento,
+    });
+    setMostrarModalReagendamento(false);
+    setDataSelecionada(null);
+    setHoraSelecionada(null);
   };
 
-  const handleClose = () => {
-    setSelectedAppointment(null);
-    setIsEditing(false);
-    setNewTime("");
-    setNewDate("");
+  const fecharDetalhes = () => {
+    setConsultaSelecionada(null);
   };
 
-  const handleRemoveAppointment = async () => {
-    if (!selectedAppointment) return;
+  const cancelarConsulta = async () => {
+    if (!consultaSelecionada) return;
     try {
-      const resp = await fetch(
-        `/consulta/${selectedAppointment.id_consulta}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const resp = await fetch(`/consulta/${consultaSelecionada.id_consulta}`, { method: "DELETE" });
       if (resp.status === 404) {
-        alert("Consulta não encontrada no servidor");
+        alert("Consulta não encontrada");
         return;
       }
-      if (!resp.ok) {
-        throw new Error("Erro ao remover no back-end");
-      }
-      const key = `${selectedAppointment.year}-${selectedAppointment.month}-${selectedAppointment.day}`;
-      setAppointments((prev) => {
-        const novo = { ...prev };
-        if (novo[key]) {
-          novo[key] = novo[key].filter(
-            (appt) => appt.id_consulta !== selectedAppointment.id_consulta
-          );
-          if (novo[key].length === 0) {
-            delete novo[key];
-          }
-        }
-        return novo;
+      if (!resp.ok) throw new Error("Erro no back-end");
+
+      const chave = `${consultaSelecionada.ano}-${consultaSelecionada.mes}-${consultaSelecionada.dia}`;
+      setAgendamentos((prev) => {
+        const copia = { ...prev };
+        copia[chave] = copia[chave].filter((a) => a.id_consulta !== consultaSelecionada.id_consulta);
+        if (copia[chave].length === 0) delete copia[chave];
+        return copia;
       });
-      handleClose();
+      fecharDetalhes();
     } catch (err) {
-      console.error("Erro ao deletar agendamento:", err);
-      alert("Não foi possível remover a consulta.");
+      console.error("Erro ao remover agendamento:", err);
+      alert("Não foi possível cancelar a consulta.");
     }
   };
 
-  const handleConfirmUpdate = async () => {
-    if (!selectedAppointment) return;
-
-    const [diaStr, mesStr] = newDate.split("/");
-    const dayNum = parseInt(diaStr, 10);
-    const monthNum = currentMonthIndex;
-    const yearNum = currentYear;
-    const isoDate = `${yearNum}-${(monthNum + 1)
-      .toString()
-      .padStart(2, "0")}-${dayNum.toString().padStart(2, "0")}`;
-
-    const newTimeToSend = newTime; 
-
+  const confirmarReagendamento = async () => {
+    if (!consultaSelecionada || !dataSelecionada || !horaSelecionada) return;
+    const dataISO = paraDataISO(dataSelecionada, anoReagendamento);
     try {
-      const resp = await fetch(
-        `/consulta/${selectedAppointment.id_consulta}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ data: isoDate, hora: newTimeToSend }),
-        }
-      );
+      const resp = await fetch(`/consulta/${consultaSelecionada.id_consulta}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: dataISO, hora: horaSelecionada }),
+      });
       if (resp.status === 404) {
-        alert("Consulta não encontrada no servidor");
+        alert("Consulta não encontrada");
         return;
       }
-      if (!resp.ok) {
-        throw new Error("Erro ao atualizar no back-end");
-      }
-      const oldKey = `${selectedAppointment.year}-${selectedAppointment.month}-${selectedAppointment.day}`;
-      const newKey = `${yearNum}-${monthNum}-${dayNum}`;
+      if (!resp.ok) throw new Error("Erro no back-end");
 
-      setAppointments((prev) => {
-        const atualizado = { ...prev };
-        if (atualizado[oldKey]) {
-          atualizado[oldKey] = atualizado[oldKey].filter(
-            (appt) => appt.id_consulta !== selectedAppointment.id_consulta
-          );
-          if (atualizado[oldKey].length === 0) {
-            delete atualizado[oldKey];
-          }
-        }
-        const novoObj = {
-          id_consulta: selectedAppointment.id_consulta,
-          time: newTimeToSend,
-          nome_profissional: selectedAppointment.nome_profissional,
-        };
-        if (!atualizado[newKey]) {
-          atualizado[newKey] = [novoObj];
-        } else {
-          atualizado[newKey].push(novoObj);
-        }
+      const chaveAntiga = `${consultaSelecionada.ano}-${consultaSelecionada.mes}-${consultaSelecionada.dia}`;
+      const dt = new Date(dataISO);
+      const chaveNova = `${dt.getFullYear()}-${dt.getMonth()}-${dt.getDate()}`;
+      const agendamentoAtualizado = {
+        id_consulta: consultaSelecionada.id_consulta,
+        horario: horaSelecionada,
+        nomePar: consultaSelecionada.nomePar,
+        fotoPar: consultaSelecionada.fotoPar,
+      };
 
-        return atualizado;
+      setAgendamentos((prev) => {
+        const copia = { ...prev };
+        copia[chaveAntiga] = copia[chaveAntiga].filter((a) => a.id_consulta !== consultaSelecionada.id_consulta);
+        if (copia[chaveAntiga].length === 0) delete copia[chaveAntiga];
+        if (!copia[chaveNova]) copia[chaveNova] = [agendamentoAtualizado];
+        else copia[chaveNova].push(agendamentoAtualizado);
+        return copia;
       });
 
-      setSelectedAppointment((prev) => ({
+      setConsultaSelecionada((prev) => ({
         ...prev,
-        day: dayNum,
-        month: monthNum,
-        year: yearNum,
-        time: newTimeToSend,
+        dia: dt.getDate(),
+        mes: dt.getMonth(),
+        ano: dt.getFullYear(),
+        horario: horaSelecionada,
       }));
 
-      setIsEditing(false);
-      setNewTime("");
-      setNewDate("");
-      setShowRescheduleModal(false);
-
-      setConfirmationMessage(
-        `Consulta reagendada para ${dayNum} de ${getMonthName(
-          monthNum
-        )} às ${newTimeToSend}`
+      setMostrarModalReagendamento(false);
+      setMensagemConfirmacao(
+        `Consulta reagendada para ${dt.getDate()} de ${new Date(dt.getFullYear(), dt.getMonth()).toLocaleString("pt-BR", { month: "long" })} às ${horaSelecionada}`
       );
     } catch (err) {
-      console.error("Erro ao reagendar consulta:", err);
+      console.error("Erro ao reagendar:", err);
       alert("Não foi possível reagendar a consulta.");
     }
   };
 
-  const getMonthName = (monthIndex) => {
-    return new Date(2025, monthIndex).toLocaleString("pt-BR", {
-      month: "long",
-    });
-  };
+  const renderizarGradeReagendamento = () => {
+    const opcoes = [
+      { diaSemana: "ter", data: "29/04" },
+      { diaSemana: "qua", data: "30/04" },
+      { diaSemana: "qui", data: "01/05" },
+      { diaSemana: "sex", data: "02/05" },
+      { diaSemana: "sáb", data: "03/05" },
+      { diaSemana: "dom", data: "04/05" },
+      { diaSemana: "seg", data: "05/05" },
+    ];
+    const horarios = ["08:00", "09:00", "10:00", "11:00"];
 
-  const closeConfirmation = () => {
-    setConfirmationMessage("");
+    return opcoes.map(({ diaSemana, data }, i) => (
+      <div key={i} className="calendar-day">
+        <strong>{diaSemana}</strong>
+        <span>{data}</span>
+        {horarios.map((hora) => (
+          <button
+            key={hora}
+            className={`hour-btn ${dataSelecionada === data && horaSelecionada === hora ? "selected" : ""}`}
+            onClick={() => {
+              setDataSelecionada(data);
+              setHoraSelecionada(hora);
+            }}
+          >
+            {hora}
+          </button>
+        ))}
+      </div>
+    ));
   };
 
   return (
     <div className="container-agenda-c">
-      {confirmationMessage && (
+      {mensagemConfirmacao && (
         <div className="confirmation-message-c">
-          <span>{confirmationMessage}</span>
-          <button
-            className="close-confirmation-c"
-            onClick={closeConfirmation}
-          >
-            <X size={16} />
-          </button>
+          <span>{mensagemConfirmacao}</span>
+          <button className="close-confirmation-c" onClick={() => setMensagemConfirmacao("")}> <X size={16} /> </button>
         </div>
       )}
 
       <button className="back-button-c" onClick={() => navigate(-1)}>
         <img src={voltar} alt="Voltar" />
       </button>
-      <div className="calendar-c">
-        <div className="calendar-header-c">
-          <button
-            onClick={() => handleChangeMonth(-1)}
-            className="setaEsquerda-c"
-          >
-            <ChevronLeft />
-          </button>
-          <h2>
-            {month.name} {currentYear}
-          </h2>
-          <button
-            onClick={() => handleChangeMonth(1)}
-            className="setadireita-c"
-          >
-            <ChevronRight />
-          </button>
-        </div>
+
+      <section className="calendar-c">
+        <header className="calendar-header-c">
+          {role === "profissional" && <button onClick={() => trocarMes(-1)} className="setaEsquerda-c"> <ChevronLeft /> </button>}
+          <h2>{mesAtual.nome} {anoAtual}</h2>
+          {role === "profissional" && <button onClick={() => trocarMes(1)} className="setaDireita-c"> <ChevronRight /> </button>}
+        </header>
 
         <div className="weekdays-c">
-          {"Dom Seg Ter Qua Qui Sex Sab".split(" ").map((d) => (
-            <div key={d}>{d}</div>
-          ))}
+          {"Dom Seg Ter Qua Qui Sex Sab".split(" ").map((d) => <div key={d}>{d}</div>)}
         </div>
 
         <div className="days-grid-c">
-          {days.map((day) => (
+          {gradeDias.map((diaObj) => (
             <div
-              key={day.id}
-              className={`day ${day.isUnavailable ? "unavailable" : ""}`}
-              onClick={() => handleDayClick(day)}
+              key={diaObj.id}
+              className={`day ${diaObj.indisponivel ? "unavailable" : ""}`}
+              onClick={() => aoSelecionarDia(diaObj)}
             >
-              <span>{day.date}</span>
-              {day.appointmentsForDay.map((appt, idx) => (
-                <div key={idx} className="appointment-detail-c">
-                  {appt.time}
-                </div>
+              <span>{diaObj.dia}</span>
+              {diaObj.registrosDoDia.map((ag, idx) => (
+                <div key={idx} className="appointment-detail-c"> {ag.horario} </div>
               ))}
             </div>
           ))}
         </div>
-      </div>
+      </section>
 
       <div className="divimg-c">
         <h1 className="agenda0104">Agenda de Consultas</h1>
-        {!selectedAppointment ? (
+        {!consultaSelecionada ? (
           <img src={imgConsulta} alt="Sem seleção" />
         ) : (
           <div className="disabledimage"></div>
         )}
       </div>
 
-      {selectedAppointment && (
-        <div className="schedule-c">
-          <button className="close-button-c" onClick={handleClose}>
-            <X size={24} />
-          </button>
+      {consultaSelecionada && (
+        <aside className="schedule-c">
+          <button className="close-button-c" onClick={fecharDetalhes}> <X size={24} /> </button>
 
           <div className="resumo-card-c">
             <div className="agendamento-info-c">
-              <div className="profissional-c">
-                <img
-                  src={mulher}
-                  alt="Foto do Profissional"
-                  className="foto-profissional-c"
-                />
+
+              <div className="par-info-c">
+                {consultaSelecionada.fotoPar && <img src={consultaSelecionada.fotoPar} alt="Foto" className="foto-par-c" />}
                 <div>
-                  <h3>{selectedAppointment.nome_profissional}</h3>
-                  <p>CRP 03/12345</p>
-                  <p>Consulta Presencial</p>
+                  <h3>{consultaSelecionada.nomePar}</h3>
+                  <p>{role === "paciente" ? "Profissional responsável" : "Paciente agendado"}</p>
                 </div>
               </div>
 
-              <div className="div-aux">
-                <div className="detalhes-c">
-                  <div>
-                    <strong>Data:</strong> {selectedAppointment.day}/
-                    {selectedAppointment.month + 1}/
-                    {selectedAppointment.year}
-                  </div>
-                  <div>
-                    <strong>Horário:</strong> {selectedAppointment.time}
-                  </div>
-                  <div className="valor-consulta-c">
-                    <strong>Valor:</strong> R$ 165,00
-                  </div>
-                </div>
+              <div className="detalhes-c">
+                <div><strong>Data:</strong> {consultaSelecionada.dia}/{consultaSelecionada.mes + 1}/{consultaSelecionada.ano}</div>
+                <div><strong>Horário:</strong> {consultaSelecionada.horario}</div>
+                {role === "profissional" && (
+                  <div className="valor-consulta-c"><strong>Valor:</strong> R$ 165,00</div>
+                )}
+              </div>
 
-                <div className="botoes-c">
-                  {isEditing ? (
-                    <>
-                      <select
-                        className="select-data-c"
-                        value={newDate}
-                        onChange={(e) => setNewDate(e.target.value)}
-                      >
-                        <option value="">Selecione o dia</option>
-                        {days
-                          .filter((d) => d.isCurrentMonth && !d.isUnavailable)
-                          .map((d) => (
-                            <option
-                              key={d.id}
-                              value={`${d.date}/${currentMonthIndex + 1}`}
-                            >
-                              {d.date}/{currentMonthIndex + 1}
-                            </option>
-                          ))}
-                      </select>
-
-                      <select
-                        className="select-horario-c"
-                        value={newTime}
-                        onChange={(e) => setNewTime(e.target.value)}
-                      >
-                        <option value="">Selecione um horário</option>
-                        <option value="09:00">09:00</option>
-                        <option value="10:00">10:00</option>
-                        <option value="11:00">11:00</option>
-                        <option value="14:00">14:00</option>
-                        <option value="15:00">15:00</option>
-                        <option value="16:00">16:00</option>
-                      </select>
-
-                      <button
-                        className="confirmar-c"
-                        onClick={handleConfirmUpdate}
-                      >
-                        Confirmar
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        className="alterar-c"
-                        onClick={() => setShowRescheduleModal(true)}
-                      >
-                        Alterar
-                      </button>
-                      <button
-                        className="remover-c"
-                        onClick={handleRemoveAppointment}
-                      >
-                        Remover
-                      </button>
-                    </>
-                  )}
-                </div>
+              <div className="botoes-c">
+                {role === "paciente" ? (
+                  <>
+                    <button className="alterar-c" onClick={() => setMostrarModalReagendamento(true)}>Alterar</button>
+                    <button className="remover-c" onClick={cancelarConsulta}>Remover</button>
+                  </>
+                ) : (
+                  <button className="remover-c" onClick={cancelarConsulta}>Remover</button>
+                )}
               </div>
             </div>
           </div>
-        </div>
+        </aside>
       )}
 
-      {showRescheduleModal && (
+      {mostrarModalReagendamento && (
         <div className="reschedule-modal-overlay">
           <div className="reschedule-modal">
-            <button
-              className="modal-close-btn"
-              onClick={() => setShowRescheduleModal(false)}
-            >
-              <X size={20} />
-            </button>
+            <button className="modal-close-btn" onClick={() => setMostrarModalReagendamento(false)}> <X size={20} /> </button>
             <h2>Reagendamento de consulta</h2>
-            <p>Escolha o melhor dia e horário para reagendar sua consulta:</p>
+            <p>Escolha dia e horário:</p>
 
             <div className="calendar-scroll">
               <div className="calendar-title">
-                <button
-                  onClick={() => {
-                    let newM = rescheduleMonthIndex - 1;
-                    let newY = rescheduleYear;
-                    if (newM < 0) {
-                      newM = 11;
-                      newY -= 1;
-                    }
-                    setRescheduleMonthIndex(newM);
-                    setRescheduleYear(newY);
-                  }}
-                  className="setaE-c"
-                >
-                  <ChevronLeft />
-                </button>
-
-                <h3>
-                  {new Date(rescheduleYear, rescheduleMonthIndex).toLocaleString(
-                    "pt-BR",
-                    { month: "long", year: "numeric" }
-                  )}
-                </h3>
-
-                <button
-                  onClick={() => {
-                    let newM = rescheduleMonthIndex + 1;
-                    let newY = rescheduleYear;
-                    if (newM > 11) {
-                      newM = 0;
-                      newY += 1;
-                    }
-                    setRescheduleMonthIndex(newM);
-                    setRescheduleYear(newY);
-                  }}
-                  className="setaD-c"
-                >
-                  <ChevronRight />
-                </button>
+                <button onClick={() => { let nm = indiceMesReagendamento - 1; let na = anoReagendamento; if (nm < 0) { nm = 11; na -= 1; } setIndiceMesReagendamento(nm); setAnoReagendamento(na); }} className="setaE-c"> <ChevronLeft /> </button>
+                <h3>{new Date(anoReagendamento, indiceMesReagendamento).toLocaleString("pt-BR", { month: "long", year: "numeric" })}</h3>
+                <button onClick={() => { let nm = indiceMesReagendamento + 1; let na = anoReagendamento; if (nm > 11) { nm = 0; na += 1; } setIndiceMesReagendamento(nm); setAnoReagendamento(na); }} className="setaD-c"> <ChevronRight /> </button>
               </div>
 
               <div className="calendar-grid">
-                {[
-                  { day: "ter", date: "29 abr" },
-                  { day: "qua", date: "30 abr" },
-                  { day: "qui", date: "1 mai" },
-                  { day: "sex", date: "2 mai" },
-                  { day: "sáb", date: "3 mai" },
-                  { day: "dom", date: "4 mai" },
-                  { day: "seg", date: "5 mai" },
-                ].map(({ day, date }, i) => (
-                  <div key={i} className="calendar-day">
-                    <strong>{day}</strong>
-                    <span>{date}</span>
-                    {["08:00", "09:00", "10:00", "11:00"].map((hour) => (
-                      <button
-                        key={hour}
-                        className={`hour-btn ${
-                          selectedDate === date && selectedTime === hour
-                            ? "selected"
-                            : ""
-                        }`}
-                        onClick={() => {
-                          setSelectedDate(date);
-                          setSelectedTime(hour);
-                        }}
-                      >
-                        {hour}
-                      </button>
-                    ))}
-                  </div>
-                ))}
+                {renderizarGradeReagendamento()}
               </div>
             </div>
 
             <div className="modal-actions">
-              <button
-                className="btn-back"
-                onClick={() => setShowRescheduleModal(false)}
-              >
-                Voltar
-              </button>
-              <button
-                className="btn-confirm"
-                disabled={!selectedDate || !selectedTime}
-                onClick={() => {
-                  handleConfirmUpdate();
-                  setShowRescheduleModal(false);
-                }}
-              >
-                Reagendar consulta
-              </button>
+              <button className="btn-back" onClick={() => setMostrarModalReagendamento(false)}>Voltar</button>
+              <button className="btn-confirm" disabled={!dataSelecionada || !horaSelecionada} onClick={confirmarReagendamento}>Reagendar</button>
             </div>
           </div>
         </div>

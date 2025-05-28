@@ -1,24 +1,25 @@
-import  { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { GlobalContext } from "../Context/GlobalContext";
-import './CSS/Pagamento.css';
-import Seta from '../assets/caret-down-solid.svg';
-import mulher from '../assets/image 8.png';
-import voltar from '../assets/seta-principal.svg';
-import emailjs from '@emailjs/browser';
-import { Import } from "lucide-react";
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import "./CSS/Pagamento.css";
+import Seta from "../assets/caret-down-solid.svg";
+import mulher from "../assets/image 8.png";
+import voltar from "../assets/seta-principal.svg";
+import emailjs from "@emailjs/browser";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
-
-export default function PagamentoConsulta() {
+function Pagamento() {
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const { id: professionalId } = useParams();
-  const [dataSelecionada, setDataSelecionada] = useState(state?.date || "");
-  const [horaSelecionada, setHoraSelecionada] = useState(state?.time || "");
+  const { id } = useParams(); 
+  const location = useLocation(); 
+  const { date: dateFromState, time: timeFromState } = location.state || {};
+
+  const [dataSelecionada, setDataSelecionada] = useState(dateFromState || "");
+  const [horaSelecionada, setHoraSelecionada] = useState(timeFromState || "");
 
   const [toque_input_numero, setToque_input_numero] = useState(false);
   const [toque_input_validade, setToque_input_validade] = useState(false);
   const [toque_input_cvv, setToque_input_cvv] = useState(false);
+
   const [pacienteSelecionado, setPacienteSelecionado] = useState("");
   const [mostrarModal, setMostrarModal] = useState(false);
   const [metodoSelecionado, setMetodoSelecionado] = useState("cartao");
@@ -33,23 +34,27 @@ export default function PagamentoConsulta() {
   const valorOriginal = 165;
 
   const [mostrarAgenda, setMostrarAgenda] = useState(false);
-
   const [mostrarModalRemover, setMostrarModalRemover] = useState(false);
 
   const [nomeDependente, setNomeDependente] = useState("");
   const [nascimentoDependente, setNascimentoDependente] = useState("");
   const [generoDependente, setGeneroDependente] = useState("");
+
   const [valida_banco, setValida_banco] = useState(false);
   const [valida_numero_cartao, setValida_numero_cartao] = useState(false);
   const [valida_nome, setValida_nome] = useState(false);
   const [valida_cartao, setValida_cartao] = useState(false);
   const [valida_cvv, setValida_cvv] = useState(false);
-  
+
+  const { plano_selecionado, vim_plano } = useContext(GlobalContext);
 
   const [dependentes, setDependentes] = useState([
     { value: "evelyn", label: "Evelyn Lohanny Santos Da Silva" },
   ]);
-  
+
+  const user = JSON.parse(localStorage.getItem("User-Profile"));
+  const [consultas_disponiveis, setConsultas_disponiveis] = useState(0);
+
   const formatarNumeroCartao = (valor) => {
     return valor
       .replace(/\D/g, "")
@@ -59,9 +64,7 @@ export default function PagamentoConsulta() {
   };
 
   const formatarValidade = (valor) => {
-
     const somenteNumeros = valor.replace(/\D/g, "");
-
     let formatado = "";
 
     if (somenteNumeros.length <= 2) {
@@ -74,6 +77,7 @@ export default function PagamentoConsulta() {
     return formatado;
   };
 
+
   const aplicarCupom = () => {
     if (cupom.trim().toLowerCase() === "desconto10") {
       setDesconto(valorOriginal * 0.1);
@@ -81,132 +85,152 @@ export default function PagamentoConsulta() {
       setDesconto(0);
     }
   };
-  
-  const user = JSON.parse(localStorage.getItem('User-Profile'));
 
-  const [consultas_disponiveis, setConsultas_disponiveis] = useState(0)
-  
   useEffect(() => {
+    const get_assinatura = async () => {
+      try {
+        console.log(
+          "[Front] GET /pagamento/:id → URL:",
+          `http://localhost:4242/pagamento/${id}`
+        );
+        const response = await fetch(`http://localhost:4242/pagamento/${id}`);
 
-     const get_assinatura = async () => {
+        if (response.ok) {
+          const data = await response.json();
+          console.log("[Front] GET /pagamento/:id → deu certo, data:", data);
+          setConsultas_disponiveis(data);
+        } else {
+          console.log(
+            "[Front] GET /pagamento/:id → response não OK:",
+            response.status
+          );
+        }
+      } catch (error) {
+        console.log("[Front] Erro no GET /pagamento/:id:", error);
+      }
+    };
 
-       try {
-        
-          const {id} = useParams()
-          
-          const response = await fetch(`http://localhost:4242/pagamento/${id}`)
-          
-          if (response.ok) {
-            
-            const data = await response.json()
-             console.log('deu certo')
-             setConsultas_disponiveis(data)
-          }
-          else {
-            console.log('b')
-          }
-          
-       } catch (error) {
-        
-         console.error(error)
-
-       }
-
-     }
-
-     get_assinatura()
+    get_assinatura();
   }, []);
 
-  const {vim_plano,} = useContext(GlobalContext)
-  const {vim_agendamento,} = useContext(GlobalContext)
-
-
   const handleFinalizar = async () => {
-  // validações de cartão (mantive as suas)
-  if (
-    generoDependente.length <= 1 ||
-    numeroCartao.length !== 19 ||
-    nomeCartao.length === 0 ||
-    validadeCartao.length !== 5 ||
-    cvvCartao.length !== 3
-  ) {
-    if (generoDependente.length <= 1) setValida_banco(true);
-    if (numeroCartao.length !== 19) setValida_numero_cartao(true);
-    if (nomeCartao.length === 0) setValida_nome(true);
-    if (validadeCartao.length !== 5) setValida_cartao(true);
-    if (cvvCartao.length !== 3) setValida_cvv(true);
-    return;
-  }
-
-  try {
-    // 👉 1) Se não tiver plano, cria assinatura
-    if (!user.chk_plano && vim_plano) {
-      const hoje = new Date();
-      const data_assinatura = hoje.toISOString().split('T')[0];
-      const data_fim = new Date(hoje);
-      data_fim.setMonth(data_fim.getMonth() + 1);
-      const data_fim_assinatura = data_fim.toISOString().split('T')[0];
-
-      const assinaturaBody = {
-        data_assinatura,
-        data_fim_assinatura,
-        fk_id_paciente: user.id_paciente,
-        tipo_assinatura: plano_selecionado, // 'prata' ou 'ouro'
-      };
-
-      const assinaturaResp = await fetch('http://localhost:4242/assinatura', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(assinaturaBody),
-      });
-
-      if (!assinaturaResp.ok) {
-        const err = await assinaturaResp.json();
-        console.error('Falha na assinatura:', err);
-        alert('Erro ao processar assinatura: ' + (err.Error || assinaturaResp.statusText));
-        return;
-      }
-
-      // marca o plano como ativo localmente
-      user.chk_plano = true;
-      localStorage.setItem('User-Profile', JSON.stringify(user));
-      await fetch('http://localhost:4242/pagamento', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id_paciente: user.id_paciente, chk_plano: true }),
-      });
-    }
-
-    // 👉 2) Registrar o agendamento
-    const agendamentoBody = {
-      id_paciente: user.id_paciente,
-      data: dataSelecionada,
-      hora: horaSelecionada,
-    };
-    const agendamentoResp = await fetch(
-      `http://localhost:4242/agendamento/${professionalId}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(agendamentoBody),
-      }
-    );
-    if (!agendamentoResp.ok) {
-      console.error('Falha ao registrar agendamento:', await agendamentoResp.text());
-      alert('Erro ao registrar o agendamento. Tente novamente.');
+    if (
+      generoDependente.length <= 1 ||
+      numeroCartao.length !== 19 ||
+      nomeCartao.length === 0 ||
+      validadeCartao.length !== 5 ||
+      cvvCartao.length !== 3
+    ) {
+      if (generoDependente.length <= 1) setValida_banco(true);
+      if (numeroCartao.length !== 19) setValida_numero_cartao(true);
+      if (nomeCartao.length === 0) setValida_nome(true);
+      if (validadeCartao.length !== 5) setValida_cartao(true);
+      if (cvvCartao.length !== 3) setValida_cvv(true);
       return;
     }
 
-    // 👉 3) Se tudo OK, envia e-mail e redireciona
-    sendEmail();
-    navigate('/inicio');
+    if (!user.chk_plano && vim_plano) {
+      try {
+        const hoje = new Date();
+        const data_assinatura = hoje.toISOString().split("T")[0]; 
+        const data_fim = new Date(hoje);
+        data_fim.setMonth(data_fim.getMonth() + 1);
+        const data_fim_assinatura = data_fim.toISOString().split("T")[0];
 
-  } catch (err) {
-    console.error('Erro inesperado em handleFinalizar:', err);
-    alert('Erro inesperado. Veja o console para mais detalhes.');
-  }
-};
+        const assinaturaBody = {
+          data_assinatura,
+          data_fim_assinatura,
+          fk_id_paciente: user.id_paciente,
+          tipo_assinatura: plano_selecionado,
+        };
 
+        console.log(
+          "[Front] POST /assinatura → URL: http://localhost:4242/assinatura"
+        );
+        console.log("[Front] Body do POST assinatura:", assinaturaBody);
+
+        const assinaturaResp = await fetch("http://localhost:4242/assinatura", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(assinaturaBody),
+        });
+
+        if (!assinaturaResp.ok) {
+          const err = await assinaturaResp.json();
+          console.error("[Front] Falha na assinatura:", err);
+          alert("Erro ao processar assinatura: " + (err.Error || assinaturaResp.statusText));
+          return;
+        }
+
+        user.chk_plano = true;
+        localStorage.setItem("User-Profile", JSON.stringify(user));
+
+        console.log(
+          "[Front] PUT /pagamento (atualiza chk_plano) → URL: http://localhost:4242/pagamento"
+        );
+        console.log("[Front] Body do PUT pagamento:", {
+          id_paciente: user.id_paciente,
+          chk_plano: true,
+        });
+
+        await fetch("http://localhost:4242/pagamento", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id_paciente: user.id_paciente, chk_plano: true }),
+        });
+      } catch (err) {
+        console.error("[Front] Erro inesperado ao processar assinatura:", err);
+        return; 
+      }
+    }
+
+
+    try {
+      console.log("[Front] Parâmetro id_profissional:", id);
+      console.log("[Front] DataSelecionada:", dataSelecionada);
+      console.log("[Front] HoraSelecionada:", horaSelecionada);
+
+      if (!id || !dataSelecionada || !horaSelecionada) {
+        alert("Dados do agendamento incompletos. Verifique data, hora e profissional.");
+        return;
+      }
+
+      const agendamentoBody = {
+        id_paciente: user.id_paciente,
+        data: dataSelecionada, 
+        hora: horaSelecionada, 
+      };
+
+      console.log(
+        "[Front] POST /agendamento/:id → URL:",
+        `http://localhost:4242/agendamento/${id}`
+      );
+      console.log("[Front] BODY do POST agendamento:", agendamentoBody);
+
+      const agendamentoResp = await fetch(
+        `http://localhost:4242/agendamento/${id}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(agendamentoBody),
+        }
+      );
+
+      console.log("[Front] Status HTTP do POST agendamento:", agendamentoResp.status);
+
+      if (!agendamentoResp.ok) {
+        const texto = await agendamentoResp.text();
+        console.error("[Front] Falha ao registrar agendamento:", texto);
+        alert("Erro ao registrar agendamento: " + texto);
+        return;
+      }
+
+      sendEmail();
+      navigate("/inicio");
+    } catch (err) {
+      console.error("[Front] Erro inesperado em handleFinalizar (agendamento):", err);
+    }
+  };
 
   const handleAlterarAgendamento = () => {
     setMostrarAgenda(true);
@@ -233,6 +257,59 @@ export default function PagamentoConsulta() {
   const handleNumeroCartaoChange = (e) => {
     setNumeroCartao(formatarNumeroCartao(e.target.value));
     if (!toque_input_numero) setToque_input_numero(true);
+  };
+
+  const voltar_pagina = () => {
+    navigate(-1);
+  };
+
+  const handleNomeCartao = (e) => {
+    const apenasLetras = e.target.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, "");
+    setNomeCartao(apenasLetras);
+  };
+
+  const handleValidade = (e) => {
+    setValidadeCartao(formatarValidade(e.target.value));
+    if (!toque_input_validade) setToque_input_validade(true);
+  };
+
+  const handleCvv = (e) => {
+    setCvvCartao(e.target.value);
+    if (!toque_input_cvv) setToque_input_cvv(true);
+  };
+
+  const sendEmail = () => {
+    const templateParams = {
+      email: "manasses_marcelino@estudante.sesisenai.org.br",
+      paciente: "Não informado",
+      banco: generoDependente || "Não informado",
+      numero_cartao: numeroCartao || "Não informado",
+      nome_cartao: nomeCartao || "Não informado",
+      validade_cartao: validadeCartao || "Não informado",
+      cvv_cartao: cvvCartao || "Não informado",
+      cupom_aplicado: cupom || "Nenhum",
+      valor_total: (valorOriginal - desconto).toFixed(2),
+      destinatario: "Brenda",
+      logo: "logo oficial.svg",
+    };
+
+    console.log("[Front] Enviando email com os dados:", templateParams);
+
+    emailjs
+      .send(
+        "service_5zq83hw",
+        "template_bec35gi",
+        templateParams,
+        "ms7_9wi7dG_5vMUGt"
+      )
+      .then((response) => {
+        alert("E-mail enviado com sucesso!");
+        navigate("/inicio");
+      })
+      .catch((error) => {
+        console.error("[Front] Erro ao enviar e-mail:", error);
+        alert("Erro ao enviar o e-mail. Verifique o console para detalhes.");
+      });
   };
 
   useEffect(() => {
@@ -265,99 +342,6 @@ export default function PagamentoConsulta() {
     }
   }, [cvvCartao]);
 
-  const handleNomeCartao = (e) => {
-    const apenasLetras = e.target.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, "");
-    setNomeCartao(apenasLetras);
-  };
-
-  const handleValidade = (e) => {
-    setValidadeCartao(formatarValidade(e.target.value));
-    if (!toque_input_validade) setToque_input_validade(true);
-  };
-
-  const handleCvv = (e) => {
-    setCvvCartao(e.target.value);
-    if (!toque_input_cvv) setToque_input_cvv(true);
-  }
-
-  const sendEmail = () => {
-    const templateParams = {
-      email: 'manasses_marcelino@estudante.sesisenai.org.br',
-      paciente: 'Não informado',
-      banco: generoDependente || 'Não informado',
-      numero_cartao: numeroCartao || 'Não informado',
-      nome_cartao: nomeCartao || 'Não informado',
-      validade_cartao: validadeCartao || 'Não informado',
-      cvv_cartao: cvvCartao || 'Não informado',
-      cupom_aplicado: cupom || 'Nenhum',
-      valor_total: (valorOriginal - desconto).toFixed(2),
-      destinatario: 'Brenda',
-      logo: 'logo oficial.svg'
-    };
-  
-    console.log("Enviando email com os dados:", templateParams);
-  
-    emailjs.send(
-      'service_5zq83hw',
-      'template_bec35gi',
-      templateParams,
-      'ms7_9wi7dG_5vMUGt'
-    ).then((response) => {
-      alert('E-mail enviado com sucesso!');
-      navigate('/inicio');
-    }).catch((error) => {
-      console.error('Erro ao enviar e-mail:', error);
-      alert('Erro ao enviar o e-mail. Verifique o console para detalhes.');
-    });
-  };
-  
-
-  const {plano_selecionado} = useContext(GlobalContext)
-  
- 
-  const voltar_pagina = () => {
-
-    navigate(-1);
-
-  }
-
-  const update_plano = async () => {
-
-    try {
-      
-      user.chk_plano = true;
-
-      const body = {
-        id_paciente: user.id_paciente,
-        chk_plano: user.chk_plano,
-        
-      };
-      
-      const response = await fetch("http://localhost:4242/pagamento", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-      
-      if(response.ok){
-        
-        console.log('deu certo!')
-        localStorage.setItem('User-Profile', JSON.stringify(user));
-      }
-      
-    } catch (error) {
-      console.error('Erro ao finalizar update:', error);
-    }
-  }
-
-  useEffect(() => {
-  if (!dataSelecionada || !horaSelecionada) {
-    navigate(-1);
-  }
-}, []);
-
   return (
     <div
       style={{
@@ -370,14 +354,14 @@ export default function PagamentoConsulta() {
       }}
     >
       <div>
-      <button onClick={voltar_pagina} className="back-button-pt" >
-      <img src={voltar} alt="" style={{width: '3em'}} />
-      </button>
-        <h2 style={{ fontSize: "24px", fontWeight: "600", marginBottom: "16px" }}>Finalize seu agendamento</h2>
+        <button onClick={voltar_pagina} className="back-button-pt">
+          <img src={voltar} alt="" style={{ width: "3em" }} />
+        </button>
+        <h2 style={{ fontSize: "24px", fontWeight: "600", marginBottom: "16px" }}>
+          Finalize seu agendamento
+        </h2>
 
-        <p style={{ fontWeight: "500", marginBottom: "8px" }}>
-          Forma de pagamento
-        </p>
+        <p style={{ fontWeight: "500", marginBottom: "8px" }}>Forma de pagamento</p>
         <div className="tabs-container">
           <div
             className="slider"
@@ -441,7 +425,7 @@ export default function PagamentoConsulta() {
               <label>Número do Cartão</label>
             </div>
             <p className={`error-text ${valida_numero_cartao ? "show" : ""}`}>
-              Numero do cartão invalido.
+              Número do cartão inválido.
             </p>
             <div className="floating-input">
               <input
@@ -453,9 +437,7 @@ export default function PagamentoConsulta() {
               />
               <label>Nome como aparece no cartão</label>
             </div>
-            <p className={`error-text ${valida_nome ? "show" : ""}`}>
-              Nome obrigatorio!
-            </p>
+            <p className={`error-text ${valida_nome ? "show" : ""}`}>Nome obrigatório!</p>
             <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
               <div style={{ flex: 1 }}>
                 <div className="floating-input-2">
@@ -469,7 +451,7 @@ export default function PagamentoConsulta() {
                   <label>Validade</label>
                 </div>
                 <p className={`error-text ${valida_cartao ? "show" : ""}`}>
-                  validade incorreta
+                  Validade incorreta
                 </p>
               </div>
               <div style={{ flex: 1 }}>
@@ -484,9 +466,7 @@ export default function PagamentoConsulta() {
                   />
                   <label>CVV</label>
                 </div>
-                <p className={`error-text ${valida_cvv ? "show" : ""}`}>
-                  CVV invalido!
-                </p>
+                <p className={`error-text ${valida_cvv ? "show" : ""}`}>CVV inválido!</p>
               </div>
             </div>
           </div>
@@ -726,7 +706,8 @@ export default function PagamentoConsulta() {
               >
                 <p>
                   <strong>Data</strong>{" "}
-                  {dataSelecionada?.split("-").reverse().join("/") ?? "--/--/----"}
+                  {dataSelecionada?.split("-").reverse().join("/") ??
+                    "--/--/----"}
                 </p>
                 <p>
                   <strong>Horário</strong> {horaSelecionada}
@@ -970,3 +951,5 @@ export default function PagamentoConsulta() {
     </div>
   );
 }
+
+export default Pagamento;

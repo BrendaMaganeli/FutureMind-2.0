@@ -479,9 +479,9 @@ app.get('/pagamento/:id', async(req, res) => {
 
     try {
         
-        const { id } = req.params;
+        const { id_paciente } = req.params;
         
-        const [rows] = await pool.query('SELECT consultas_disponiveis FROM assinaturas WHERE fk_id_paciente=?', [id]);
+        const [rows] = await pool.query('SELECT consultas_disponiveis FROM assinaturas WHERE fk_id_paciente=?', [id_paciente]);
 
         if (rows.length > 0) {
 
@@ -571,74 +571,175 @@ app.get('/agendamento/:id/:year/:month', async (req, res) => {
 
 
 
-  app.get('/consulta/:id_paciente', async (req, res) => {
-    const { id_paciente } = req.params;
-    try {
-      const [rows] = await pool.query(
-        `SELECT 
-           a.id_agendamento    AS id_consulta,
-           a.data,
-           a.hora,
-           p.id_profissional,
-           p.nome               AS nome_profissional
-         FROM Agendamento a
-         INNER JOIN Profissional p
-           ON a.id_profissional = p.id_profissional
-         WHERE a.id_paciente = ?
-         ORDER BY a.data, a.hora`,
-        [id_paciente]
-      );
-      return res.status(200).json(rows);
-    } catch (err) {
-      console.error('Erro no GET /consultas/:id_paciente', err);
-      return res.status(500).json({ error: 'Erro ao buscar consultas' });
-    }
-  });
+//   app.get('/consulta/:id_paciente', async (req, res) => {
+//     const { id_paciente } = req.params;
+//     try {
+//       const [rows] = await pool.query(
+//         `SELECT 
+//            a.id_agendamento    AS id_consulta,
+//            a.data,
+//            a.hora,
+//            p.id_profissional,
+//            p.nome               AS nome_profissional
+//          FROM Agendamento a
+//          INNER JOIN Profissional p
+//            ON a.id_profissional = p.id_profissional
+//          WHERE a.id_paciente = ?
+//          ORDER BY a.data, a.hora`,
+//         [id_paciente]
+//       );
+//       return res.status(200).json(rows);
+//     } catch (err) {
+//       console.error('Erro no GET /consultas/:id_paciente', err);
+//       return res.status(500).json({ error: 'Erro ao buscar consultas' });
+//     }
+//   });
 
 
-  app.delete('/consulta/id_consultas' , async (req,res) => {
-    const id_consultas = (req, res);
+//   app.delete('/consulta/id_consultas' , async (req,res) => {
+//     const id_consultas = (req, res);
 
-    try{
-        const [result] = await pool.query(
-           `DELETE FROM Agendamento
-            WHERE id_agendamento = ?`
-            [id_consultas]
-        );
+//     try{
+//         const [result] = await pool.query(
+//            `DELETE FROM Agendamento
+//             WHERE id_agendamento = ?`
+//             [id_consultas]
+//         );
 
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Consulta não encontrada' });
-          }
+//         if (result.affectedRows === 0) {
+//             return res.status(404).json({ error: 'Consulta não encontrada' });
+//           }
       
-          return res.status(200).json({ message: 'Consulta removida com sucesso' });
-        } catch (err) {
-          console.error('Erro no DELETE /consulta/:id_consulta', err);
-          return res.status(500).json({ error: 'Erro ao remover consulta' });
+//           return res.status(200).json({ message: 'Consulta removida com sucesso' });
+//         } catch (err) {
+//           console.error('Erro no DELETE /consulta/:id_consulta', err);
+//           return res.status(500).json({ error: 'Erro ao remover consulta' });
         
-    }
-  });
+//     }
+//   });
 
 
-  app.put('/consulta/:id_consultas' , async (req,res) =>{
-    const {id_consulta} = req.params;
-    const {data,hora} = req.params;
+//   app.put('/consulta/:id_consultas' , async (req,res) =>{
+//     const {id_consulta} = req.params;
+//     const {data,hora} = req.params;
+
+//     try {
+//         const [result] = await pool.query(
+//             `UPDATE Agendamento
+//             SET data = ? hora =?
+//             WHERE id_agendamento`,
+//             [data,hora, id_consulta]
+//         );
+//         if (result.affectedRows === 0) {
+//             return res.status(404).json({ error: 'Consulta não encontrada' });
+//         }
+//         return res.status(200).json({ message: 'Consulta atualizada com sucesso' });
+//     } catch (err) {
+//       console.error('Erro no PUT /consulta/:id_consulta', err);
+//       return res.status(500).json({ error: 'Erro ao atualizar consulta' });
+//     }
+//   });
+
+
+app.get('/consulta/profissional/:id_profissional/:year/:month' , async (req,res) => {
+    const {id_profissional , year ,month} = req.params;
 
     try {
-        const [result] = await pool.query(
-            `UPDATE Agendamento
-            SET data = ? hora =?
-            WHERE id_agendamento`,
-            [data,hora, id_consulta]
+        const [rows] = await pool.query(
+            `SELECT
+            a.id_agendamento   AS id_consulta,
+            a.data,
+            a.hora,
+            p.id_paciente,
+            p.nome            AS nome_paciente,
+            p.foto            AS foto_paciente
+          FROM Agendamento a
+          INNER JOIN Paciente p
+            ON a.id_paciente = p.id_paciente
+          WHERE a.id_profissional = ?
+            AND YEAR(a.data) = ?
+            AND MONTH(a.data) = ?
+          ORDER BY a.data, a.hora;`,
+         [id_profissional, year, month]
         );
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Consulta não encontrada' });
-        }
-        return res.status(200).json({ message: 'Consulta atualizada com sucesso' });
+
+        return res.status(200).json(rows)
+    } catch (error) {
+        console.error('Erro no GET /consulta/profissional/:id_profissional:', err);
+        return res.status(500).json({ error: 'Erro ao buscar consultas do profissional' });
+    }
+});
+
+app.delete('/consulta/:id_consulta', async (req, res) => {
+    const { id_consulta } = req.params;
+  
+    try {
+      const [result] = await pool.query(
+        `DELETE FROM Agendamento
+         WHERE id_agendamento = ?`,
+        [id_consulta]
+      );
+  
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Consulta não encontrada' });
+      }
+      return res.status(200).json({ message: 'Consulta removida com sucesso' });
+    } catch (err) {
+      console.error('Erro no DELETE /consulta/:id_consulta', err);
+      return res.status(500).json({ error: 'Erro ao remover consulta' });
+    }
+  });
+  
+
+app.get('/consulta/:id_paciente' , async (req, res) =>{
+    const {id_paciente} = req.params;
+
+    try {
+        const [rows] = await pool.query(
+          `SELECT
+             a.id_agendamento     AS id_consulta,
+             a.data,
+             a.hora,
+             pr.id_profissional,
+             pr.nome              AS nome_profissional,
+             pr.foto              AS foto_profissional
+           FROM Agendamento a
+           INNER JOIN Profissional pr
+             ON a.id_profissional = pr.id_profissional
+           WHERE a.id_paciente = ?
+           ORDER BY a.data, a.hora;`,
+          [id_paciente]
+        );
+    
+        return res.status(200).json(rows);
+      } catch (err) {
+        console.error('Erro no GET /consulta/paciente/:id_paciente', err);
+        return res.status(500).json({ error: 'Erro ao buscar consultas do paciente' });
+      }
+});
+
+app.put('/consulta/:id_consulta', async (req, res) => {
+    const { id_consulta } = req.params;
+    const { data, hora } = req.body;
+  
+    try {
+      const [result] = await pool.query(
+        `UPDATE Agendamento
+         SET data = ?, hora = ?
+         WHERE id_agendamento = ?`,
+        [data, hora, id_consulta]
+      );
+  
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Consulta não encontrada' });
+      }
+      return res.status(200).json({ message: 'Consulta atualizada com sucesso' });
     } catch (err) {
       console.error('Erro no PUT /consulta/:id_consulta', err);
       return res.status(500).json({ error: 'Erro ao atualizar consulta' });
     }
   });
+  
   
 
 app.put('/pagamento', async (req, res) => {

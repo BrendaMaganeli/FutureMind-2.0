@@ -113,7 +113,6 @@ function Plano_saude() {
     }
   };
 
-  
 
   useEffect(() => {
     if (emailEmpresa.length > 0) {
@@ -131,13 +130,13 @@ function Plano_saude() {
 
     if (user) {
 
-      navigate("/agendamento"); // rota que leva à tela de agendamento
+      navigate("/inicio"); 
     } 
   };
 
   const {plano_selecionado, setPlano_selecionado} = useContext(GlobalContext)
-  const {vim_plano, setVim_plano} = useContext(GlobalContext)
-  const {vim_agendamento, setVim_agendamento} = useContext(GlobalContext)
+  const { setVim_plano } = useContext(GlobalContext)
+  const { setVim_agendamento } = useContext(GlobalContext)
 
   const selecionar_plano_prata = () => {
       
@@ -187,15 +186,12 @@ function Plano_saude() {
   
   }
 
-  const selecionar_plano_empresarial = () => {
+  useEffect(() => {
+    
+    // vai ser usado para fazer validação da data do plano, e fazer um try de put
 
-    setPlano_selecionado('empresarial')
+  }, []);
 
-
-  }
-
-  
-  
   return (
     <div className="container-planoSaude">
       <NavBar cor={"rgba(90,120,159, .5)"} />
@@ -217,7 +213,7 @@ function Plano_saude() {
             </div>
             <div className="info_div_button">
               <button className="button_info" onClick={navega}>
-                AGENDE SUA CONSULTA
+                AGENDE COM PROFISSIONAL
               </button>
             </div>
             
@@ -259,7 +255,7 @@ function Plano_saude() {
       </div>
 
 {
-  (!user.chk_plano || user?.id_profissional) && 
+  (!user?.chk_plano || user?.id_profissional) && 
   <>
 
       <div className="container-planos">

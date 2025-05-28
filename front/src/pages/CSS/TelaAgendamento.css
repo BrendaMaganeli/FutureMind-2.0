@@ -257,3 +257,71 @@
   white-space: nowrap;
   width: 100%;
 }
+
+.day {
+  height: 10vh;
+  padding: 8px;          
+  border-radius: 8px;    
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.day:hover {
+  scrollbar-color: rgba(0,0,0,0.25) transparent;
+}
+
+.day::-webkit-scrollbar-button {
+  display: none;
+}
+
+.day::-webkit-scrollbar {
+  width: 4px;
+  background: transparent;
+}
+
+.day::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 2px;
+}
+
+.day:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.day:hover::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.day::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.appointment-detail {
+  background-color: #3e6d8f;   
+  color: white;                
+  font-size: 12px;             
+  padding: 2px 4px;            
+  border-radius: 10px;         
+  display: block;              
+  text-align: center;          
+  font-weight: bold;           
+  white-space: nowrap;         
+  width: 100%;                 
+  box-sizing: border-box;     
+  margin-bottom: 4px;         
+}
+
+.time-button:disabled {
+  background-color: #d1d5db;  
+  color: #9ca3af;             
+  cursor: not-allowed;         
+  border: 1px solid #cbd5e1;   
+}
+
+.time-button:not(:disabled):hover {
+  background: #c1dff4; 
+}

@@ -111,7 +111,7 @@ function VisualizarProfissional() {
               <img src={icon_um} alt="" />
               <p onClick={encaminhaAgendamento}>Agende sua cosulta</p>
             </div>
-            <div className="topicos">
+            <div onClick={() => navigate(`/live/${profissional.id_profissional}`)} className="topicos">
               <img src={icon_dois} alt="" />
               <p>Vídeo Chamada</p>
             </div>

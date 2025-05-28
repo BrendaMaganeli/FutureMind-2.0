@@ -170,7 +170,7 @@ function Pagamento() {
         body: JSON.stringify({ id_paciente: user.id_paciente, chk_plano: true }),
       });
     }
-
+ 
     const agendamentoBody = {
       id_paciente: user.id_paciente,
       data: dataSelecionada,

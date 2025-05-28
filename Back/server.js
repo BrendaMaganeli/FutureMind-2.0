@@ -2,21 +2,6 @@ const express =  require ('express');
 const mysql = require ('mysql2/promise');
 const app = express ();
 const cors = require('cors');
-const multer = require('multer');
-const path = require('path');
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-      cb(null, 'public/uploads/');
-  },
-  filename: (req, file, cb) => {
-      const ext = path.extname(file.originalname);
-      const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${ext}`;
-      cb(null, uniqueName);
-  }
-});
-
-const upload = multer({ storage });
 
 app.use(cors({
     origin: '*'
@@ -511,6 +496,22 @@ app.get('/pagamento/:id', async(req, res) => {
     };
 });
 
+app.post('/planos', async (req, res) => {
+  try {
+    const { id } = req.body; // <-- CORRETO para POST
+
+    const [rows] = await pool.query('SELECT data_fim_assinatura FROM assinaturas WHERE fk_id_paciente = ?', [id]);
+
+    if (rows.length > 0) {
+      res.status(200).json(rows[0]); // retorna { data_fim_assinaturas: '...' }
+    } else {
+      res.status(404).json({ erro: 'Assinatura não encontrada!' });
+    }
+  } catch (err) {
+    res.status(500).json({ erro: 'Erro no servidor', detalhes: err.message });
+  }
+});
+
 app.post('/plano_empressarial', async (req, res) => {
 
     const {tipo_assinatura,fk_id_paciente, data_assinatura} = req.body;
@@ -586,90 +587,20 @@ app.get('/agendamento/:id/:year/:month', async (req, res) => {
 
 
 
-//   app.get('/consulta/:id_paciente', async (req, res) => {
-//     const { id_paciente } = req.params;
-//     try {
-//       const [rows] = await pool.query(
-//         `SELECT 
-//            a.id_agendamento    AS id_consulta,
-//            a.data,
-//            a.hora,
-//            p.id_profissional,
-//            p.nome               AS nome_profissional
-//          FROM Agendamento a
-//          INNER JOIN Profissional p
-//            ON a.id_profissional = p.id_profissional
-//          WHERE a.id_paciente = ?
-//          ORDER BY a.data, a.hora`,
-//         [id_paciente]
-//       );
-//       return res.status(200).json(rows);
-//     } catch (err) {
-//       console.error('Erro no GET /consultas/:id_paciente', err);
-//       return res.status(500).json({ error: 'Erro ao buscar consultas' });
-//     }
-//   });
-
-
-//   app.delete('/consulta/id_consultas' , async (req,res) => {
-//     const id_consultas = (req, res);
-
-//     try{
-//         const [result] = await pool.query(
-//            `DELETE FROM Agendamento
-//             WHERE id_agendamento = ?`
-//             [id_consultas]
-//         );
-
-//         if (result.affectedRows === 0) {
-//             return res.status(404).json({ error: 'Consulta não encontrada' });
-//           }
-      
-//           return res.status(200).json({ message: 'Consulta removida com sucesso' });
-//         } catch (err) {
-//           console.error('Erro no DELETE /consulta/:id_consulta', err);
-//           return res.status(500).json({ error: 'Erro ao remover consulta' });
-        
-//     }
-//   });
-
-
-//   app.put('/consulta/:id_consultas' , async (req,res) =>{
-//     const {id_consulta} = req.params;
-//     const {data,hora} = req.params;
-
-//     try {
-//         const [result] = await pool.query(
-//             `UPDATE Agendamento
-//             SET data = ? hora =?
-//             WHERE id_agendamento`,
-//             [data,hora, id_consulta]
-//         );
-//         if (result.affectedRows === 0) {
-//             return res.status(404).json({ error: 'Consulta não encontrada' });
-//         }
-//         return res.status(200).json({ message: 'Consulta atualizada com sucesso' });
-//     } catch (err) {
-//       console.error('Erro no PUT /consulta/:id_consulta', err);
-//       return res.status(500).json({ error: 'Erro ao atualizar consulta' });
-//     }
-//   });
-
-
 app.get('/consulta/profissional/:id_profissional/:year/:month' , async (req,res) => {
     const {id_profissional , year ,month} = req.params;
 
     try {
         const [rows] = await pool.query(
             `SELECT
-            a.id_agendamento   AS id_consulta,
+            a.id_agendamento   AS id_consultas,
             a.data,
             a.hora,
             p.id_paciente,
             p.nome            AS nome_paciente,
             p.foto            AS foto_paciente
           FROM Agendamento a
-          INNER JOIN Paciente p
+          INNER JOIN pacientes p
             ON a.id_paciente = p.id_paciente
           WHERE a.id_profissional = ?
             AND YEAR(a.data) = ?
@@ -679,13 +610,13 @@ app.get('/consulta/profissional/:id_profissional/:year/:month' , async (req,res)
         );
 
         return res.status(200).json(rows)
-    } catch (error) {
+    } catch (err) {
         console.error('Erro no GET /consulta/profissional/:id_profissional:', err);
         return res.status(500).json({ error: 'Erro ao buscar consultas do profissional' });
     }
 });
 
-app.delete('/consulta/:id_consulta', async (req, res) => {
+app.delete('/consulta/:id_consultas', async (req, res) => {
     const { id_consulta } = req.params;
   
     try {
@@ -712,14 +643,14 @@ app.get('/consulta/:id_paciente' , async (req, res) =>{
     try {
         const [rows] = await pool.query(
           `SELECT
-             a.id_agendamento     AS id_consulta,
+             a.id_agendamento     AS id_consultas,
              a.data,
              a.hora,
              pr.id_profissional,
              pr.nome              AS nome_profissional,
              pr.foto              AS foto_profissional
            FROM Agendamento a
-           INNER JOIN Profissional pr
+           INNER JOIN profissionais pr
              ON a.id_profissional = pr.id_profissional
            WHERE a.id_paciente = ?
            ORDER BY a.data, a.hora;`,
@@ -783,25 +714,28 @@ app.put('/pagamento', async (req, res) => {
    
 })
 
-app.post('/upload-foto/:id_paciente', upload.single('foto'), async (req, res) => {
+app.put('/validacao_planos', async (req, res) => {
+
+  const {id_paciente, chk_plano} = req.body;
+  
   try {
-    const { id_paciente } = req.params;
-    const foto = req.file;
+    
+    const [response] = await pool.query(
+        `UPDATE pacientes SET chk_plano=? WHERE id_paciente=?`,
+        [chk_plano, id_paciente]
+    );
 
-    if (!foto) {
-      return res.status(400).json({ erro: 'Nenhuma foto enviada' });
+    if(response.affectedRows > 0){
+
+        return res.status(201).json({ success: true});
     }
+    return res.status(404).json({ Error: 'erro ao inserir dados'})
 
-    const [result] = await pool.execute(
-      'UPDATE pacientes SET foto_perfil = ? WHERE id_paciente = ?',
-      [`/uploads/${foto.filename}`, id_paciente]
-    );    
-
-    res.status(200).json({ mensagem: 'Foto enviada com sucesso' });
-  } catch (error) {
-    console.error('Erro ao enviar foto:', error);
-    res.status(500).json({ erro: 'Erro interno ao enviar foto' });
-  }
-});
+   } catch (error) {
+     
+    console.error('Erro ao salvar mensagem:', error);
+    res.status(500).json({ Error: 'Erro interno do servidor' });
+   }
+})
 
 app.listen(4242, () => console.log ('Servidor servindo'));

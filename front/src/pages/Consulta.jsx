@@ -56,43 +56,50 @@ export default function Consulta() {
 
   const buscarConsultas = useCallback(async () => {
     try {
-      let endpoint = "";
+      let resp;
+  
       if (role === "profissional") {
-        endpoint = `/consulta/profissional/${id}/${anoAtual}/${indiceMesAtual + 1}`;
+        resp = await fetch(
+          `http://localhost:4242/consulta/profissional/${id}/${anoAtual}/${indiceMesAtual + 1}`
+        );
       } else {
-        endpoint = `/consulta/paciente/${id}`;
+        resp = await fetch(`http://localhost:4242/consulta/${id}`);
       }
-      const resp = await fetch(endpoint);
-      if (!resp.ok) throw new Error("Falha ao buscar consultas");
+  
+      if (!resp.ok) {
+        throw new Error("Falha ao buscar consultas");
+      }
       const dados = await resp.json();
-
-      const novoMapa = {};
-      dados.forEach((registro) => {
-        const dt = new Date(registro.data);
-        const a = dt.getFullYear();
-        const m = dt.getMonth();
-        const d = dt.getDate();
-        const chave = `${a}-${m}-${d}`;
-        if (!novoMapa[chave]) novoMapa[chave] = [];
-
-        const base = {
-          id_consulta: registro.id_consulta,
-          horario: registro.hora,
-          fotoPar: registro.foto_par || null,
-        };
-
-        if (role === "profissional") {
-          novoMapa[chave].push({ ...base, nomePar: registro.nome_paciente });
-        } else {
-          novoMapa[chave].push({ ...base, nomePar: registro.nome_profissional });
-        }
-      });
-
+  
+       const novoMapa = {};
+       dados.forEach((registro) => {
+         const dt = new Date(registro.data);
+         const a = dt.getFullYear();
+         const m = dt.getMonth();
+         const d = dt.getDate();
+         const chave = `${a}-${m}-${d}`;
+    
+         if (!novoMapa[chave]) novoMapa[chave] = [];
+    
+         const base = {
+           id_consulta: registro.id_consulta,
+           horario: registro.hora,
+           fotoPar: registro.foto_par || null,
+         };
+    
+         if (role === "profissional") {
+           novoMapa[chave].push({ ...base, nomePar: registro.nome_paciente });
+         } else {
+           novoMapa[chave].push({ ...base, nomePar: registro.nome_profissional });
+         }
+       });
+  
       setAgendamentos(novoMapa);
     } catch (err) {
       console.error("Erro ao buscar agendamentos:", err);
     }
   }, [role, id, anoAtual, indiceMesAtual]);
+  
 
   useEffect(() => {
     buscarConsultas();
@@ -268,6 +275,8 @@ export default function Consulta() {
       </div>
     ));
   };
+
+
 
   return (
     <div className="container-agenda-c">

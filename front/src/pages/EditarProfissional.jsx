@@ -244,6 +244,11 @@ function EditarProfissional() {
     }
   };
 
+  function navegaParaConsulta() {
+    navigate(`/consulta/profissional/${profissionais.id_profissional}`);
+  };
+  
+
   return (
     <div className="container">
       <aside className="barra-lateral">
@@ -292,7 +297,7 @@ function EditarProfissional() {
           <div className="funcionalidades-p">
             <div className="topicos">
               <img src={icon_um} alt="" />
-              <p>Agende sua consulta</p>
+              <p onClick={navegaParaConsulta}>Suas Consultas</p>
             </div>
             <div className="topicos">
               <img src={icon_dois} alt="" />
@@ -301,10 +306,6 @@ function EditarProfissional() {
             <div className="topicos">
               <img src={icon_tres} alt="" />
               <p>Chat</p>
-            </div>
-            <div className="topicos">
-              <img src={icon_tres} alt="" />
-              <p>Consulta</p>
             </div>
           </div>
         </div>

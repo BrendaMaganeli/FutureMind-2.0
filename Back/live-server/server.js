@@ -1,37 +1,51 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
- //2
+const cors = require("cors");
 
 const app = express();
-const server = http.createServer(app); 
+const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"]
   }
 });
 
-io.on("connection", (socket) => {
-  console.log("Usuário conectado: ", socket.id);
+// Usando Set para evitar IDs duplicados
+const connectedUsers = new Set();
 
-  socket.on("offer", ({ offer, to }) => {
-    console.log(`Oferta de ${socket.id} para ${to}`);
-    io.to(to).emit("offer", { offer, from: socket.id });
+// Função para emitir usuários atualizados com debounce
+let emitUsersTimeout;
+const emitUsersUpdate = () => {
+  clearTimeout(emitUsersTimeout);
+  emitUsersTimeout = setTimeout(() => {
+    io.emit("users", Array.from(connectedUsers));
+  }, 100); // Debounce de 100ms
+};
+
+io.on("connection", (socket) => {
+  console.log(`Novo usuário conectado: ${socket.id}`);
+  connectedUsers.add(socket.id);
+  emitUsersUpdate();
+
+  socket.on("offer", ({ offer, to, from }) => {
+    io.to(to).emit("offer", { offer, from });
   });
 
   socket.on("answer", ({ answer, to }) => {
-    console.log(`Resposta de ${socket.id} para ${to}`);
-    io.to(to).emit("answer", { answer });
+    io.to(to).emit("answer", answer);
   });
 
   socket.on("ice-candidate", ({ candidate, to }) => {
-    console.log(`ICE candidate de ${socket.id} para ${to}`);
     io.to(to).emit("ice-candidate", { candidate });
   });
 
   socket.on("disconnect", () => {
-    console.log("Usuário desconectado:", socket.id);
+    console.log(`Usuário desconectado: ${socket.id}`);
+    connectedUsers.delete(socket.id);
+    emitUsersUpdate();
   });
 });
 

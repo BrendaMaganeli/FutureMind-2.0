@@ -1,11 +1,12 @@
-const express = require("express");
-const http = require("http");
-const { Server } = require("socket.io");
-const cors = require("cors");
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const cors = require('cors');
 
 const app = express();
-const server = http.createServer(app);
+app.use(cors());
 
+const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173",
@@ -13,42 +14,49 @@ const io = new Server(server, {
   }
 });
 
-// Usando Set para evitar IDs duplicados
-const connectedUsers = new Set();
+let connectedUsers = [];
 
-// Função para emitir usuários atualizados com debounce
-let emitUsersTimeout;
-const emitUsersUpdate = () => {
-  clearTimeout(emitUsersTimeout);
-  emitUsersTimeout = setTimeout(() => {
-    io.emit("users", Array.from(connectedUsers));
-  }, 100); // Debounce de 100ms
-};
+io.on('connection', (socket) => {
+  console.log(`Usuário conectado: ${socket.id}`);
+  
+  // Adiciona à lista de usuários conectados
+  if (!connectedUsers.includes(socket.id)) {
+    connectedUsers.push(socket.id);
+  }
+  
+  // Envia lista atualizada para todos
+  io.emit('users', connectedUsers);
 
-io.on("connection", (socket) => {
-  console.log(`Novo usuário conectado: ${socket.id}`);
-  connectedUsers.add(socket.id);
-  emitUsersUpdate();
-
-  socket.on("offer", ({ offer, to, from }) => {
-    io.to(to).emit("offer", { offer, from });
+  // Handler para ofertas
+  socket.on('offer', (data) => {
+    console.log(`Oferta de ${data.from} para ${data.to}`);
+    socket.to(data.to).emit('offer', {
+      offer: data.offer,
+      from: data.from
+    });
   });
 
-  socket.on("answer", ({ answer, to }) => {
-    io.to(to).emit("answer", answer);
+  // Handler para respostas
+  socket.on('answer', (data) => {
+    console.log(`Resposta para ${data.to}`);
+    socket.to(data.to).emit('answer', data.answer);
   });
 
-  socket.on("ice-candidate", ({ candidate, to }) => {
-    io.to(to).emit("ice-candidate", { candidate });
+  // Handler para ICE candidates
+  socket.on('ice-candidate', (data) => {
+    console.log(`ICE candidate para ${data.to}`);
+    socket.to(data.to).emit('ice-candidate', {
+      candidate: data.candidate
+    });
   });
 
-  socket.on("disconnect", () => {
+  // Handler para desconexão
+  socket.on('disconnect', () => {
     console.log(`Usuário desconectado: ${socket.id}`);
-    connectedUsers.delete(socket.id);
-    emitUsersUpdate();
+    connectedUsers = connectedUsers.filter(id => id !== socket.id);
+    io.emit('users', connectedUsers);
   });
 });
 
-server.listen(5000, () => {
-  console.log("Servidor rodando na porta 5000");
-});
+const PORT = 5000;
+server.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));

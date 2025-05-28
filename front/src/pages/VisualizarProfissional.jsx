@@ -4,9 +4,8 @@ import icon_dois from "../assets/video.svg";
 import icon_tres from "../assets/message-square (1).svg";
 import logo from "../assets/logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
-// import anotar from "../assets/bloco-de-anotacoes.png";
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Arvore from '../assets/Arvore-perfil.svg'
 import Chat from "./Chat";
 
@@ -111,7 +110,7 @@ function VisualizarProfissional() {
               <img src={icon_um} alt="" />
               <p onClick={encaminhaAgendamento}>Agende sua cosulta</p>
             </div>
-            <div className="topicos">
+            <div onClick={() => navigate(`/live/${profissional.id_profissional}`)} className="topicos">
               <img src={icon_dois} alt="" />
               <p>Vídeo Chamada</p>
             </div>

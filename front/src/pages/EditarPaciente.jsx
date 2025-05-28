@@ -1,13 +1,13 @@
+import "./CSS/EditarPaciente.css";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import mulher from "../assets/image 8.png";
 import icon_um from "../assets/calendar-check.svg";
 import icon_dois from "../assets/video.svg";
 import icon_tres from "../assets/message-square (1).svg";
 import logo from "../assets/logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
-import "./CSS/EditarPaciente.css";
 import Arvore from "../assets/Group 239274.svg";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 function EditarPaciente() {
   const [isVisible, setIsVisible] = useState(false);
@@ -25,7 +25,7 @@ function EditarPaciente() {
   
         const blob = await response.blob();
         const imageUrl = URL.createObjectURL(blob);
-        setImagemPreview(imageUrl); // Define a imagem real como prévia
+        setImagemPreview(imageUrl);
       } catch (error) {
         console.error("Erro ao carregar imagem de perfil:", error);
       }
@@ -150,51 +150,44 @@ function EditarPaciente() {
   }
 
   const [imagemPreview, setImagemPreview] = useState(null);
-  const [file, setFile] = useState(null);
+  const [fotoSelecionada, setFotoSelecionada] = useState(null);
 
   const handleImagemChange = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
-      setFile(selectedFile);
+      setFotoSelecionada(selectedFile);
       setImagemPreview(URL.createObjectURL(selectedFile));
     }
   };
 
-  async function uploadFoto() {
-    if (!file) return;
-
+  const uploadFoto = async (foto, id_paciente) => {
     const formData = new FormData();
-    formData.append('foto', file);
+    formData.append('foto', foto);
 
-    try {
-      const response = await fetch(`http://localhost:4242/upload-foto/${paciente.id_paciente}`, {
-        method: 'POST',
-        body: formData,
-      });
+    const response = await fetch(`http://localhost:4242/upload-foto/${id_paciente}`, {
+      method: 'POST',
+      body: formData
+    });
 
-      if (!response.ok) {
-        throw new Error('Erro ao enviar a foto');
-      }
-
-      const data = await response.json();
-      console.log('Upload bem-sucedido:', data);
-    } catch (error) {
-      console.error('Falha no upload:', error);
-    }
-  }
-
-  const [uploading, setUploading] = useState(false);
+  if (!response.ok) throw new Error('Erro ao enviar a foto');
+  return response.json()
+  };
 
   const handleSalvarFoto = async () => {
-    setUploading(true);
-    await uploadFoto();
-    setIsVisible(false);
-    const response = await fetch(`http://localhost:4242/foto/${paciente.id_paciente}`);
-    const blob = await response.blob();
-    const imageUrl = URL.createObjectURL(blob);
-    setImagemPreview(imageUrl);
-    setUploading(false)
+    try {
+      await uploadFoto(fotoSelecionada, paciente.id_paciente);
+  
+      const response = await fetch(`http://localhost:4242/foto/${paciente.id_paciente}?_=${new Date().getTime()}`);
+      const blob = await response.blob();
+      const imageUrl = URL.createObjectURL(blob);
+      setImagemPreview(imageUrl);
+      setIsVisible(false);
+    } catch (error) {
+      console.error('Erro ao salvar a foto:', error);
+    } finally {
+    }
   };
+  
 
   const irParaConsultas = () => {
     navigate(`/consulta/paciente/${paciente.id_paciente}`);
@@ -317,7 +310,7 @@ function EditarPaciente() {
                   <button className="button_cancelar_editar" onClick={desativar_div}>Cancelar</button>
                 </div>
                 <div className="container_button_gostei_salvar">
-                  <button className="button_gostei_salvar" onClick={handleSalvarFoto} disabled={uploading}>{uploading ? 'Salvando...' : 'Gostei, Salvar'}</button>
+                  <button className="button_gostei_salvar" onClick={handleSalvarFoto}>Gostei, Salvar</button>
                 </div>
               </div>
             </div>

@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
-import './CSS/Call.css';
+import "./CSS/Call.css";
 
 const socket = io("http://localhost:5000");
 
 const VideoConferencia = () => {
-  // Refs e estados originais
   const [videoActive, setVideoActive] = useState(true);
   const [micActive, setMicActive] = useState(true);
   const [chatActive, setChatActive] = useState(false);
@@ -19,10 +18,10 @@ const VideoConferencia = () => {
   const [userId, setUserId] = useState(null);
   const [targetUser, setTargetUser] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  
-  // Configuração inicial do stream de mídia (original)
+
   useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
       .then((stream) => {
         localStreamRef.current = stream;
         if (localVideoRef.current) {
@@ -33,20 +32,19 @@ const VideoConferencia = () => {
 
     return () => {
       if (localStreamRef.current) {
-        localStreamRef.current.getTracks().forEach(track => track.stop());
+        localStreamRef.current.getTracks().forEach((track) => track.stop());
       }
     };
   }, []);
 
-  // Configuração do Socket.io (original com melhorias)
   useEffect(() => {
     socket.on("connect", () => {
       setUserId(socket.id);
-      socket.emit('get-users');
+      socket.emit("get-users");
     });
 
     socket.on("users", (users) => {
-      setOnlineUsers(users.filter(u => u !== socket.id));
+      setOnlineUsers(users.filter((u) => u !== socket.id));
     });
 
     socket.on("offer", handleIncomingOffer);
@@ -63,7 +61,6 @@ const VideoConferencia = () => {
     };
   }, []);
 
-  // Função para inicializar PeerConnection (atualizada)
   const initializePeerConnection = () => {
     if (peerConnection.current) {
       peerConnection.current.close();
@@ -73,8 +70,8 @@ const VideoConferencia = () => {
       iceServers: [
         { urls: "stun:stun.l.google.com:19302" },
         { urls: "stun:stun1.l.google.com:19302" },
-        { urls: "stun:stun2.l.google.com:19302" }
-      ]
+        { urls: "stun:stun2.l.google.com:19302" },
+      ],
     });
 
     pc.onicecandidate = (event) => {
@@ -89,12 +86,12 @@ const VideoConferencia = () => {
     pc.ontrack = (event) => {
       if (remoteVideoRef.current) {
         remoteVideoRef.current.srcObject = event.streams[0];
-        // Forçar reprodução do vídeo
-        remoteVideoRef.current.play().catch(err => console.error("Erro ao reproduzir vídeo:", err));
+        remoteVideoRef.current
+          .play()
+          .catch((err) => console.error("Erro ao reproduzir vídeo:", err));
       }
     };
 
-    // Adiciona logs para depuração
     pc.oniceconnectionstatechange = () => {
       console.log("ICE connection state:", pc.iceConnectionState);
     };
@@ -103,9 +100,8 @@ const VideoConferencia = () => {
       console.log("Connection state:", pc.connectionState);
     };
 
-    // Adiciona os tracks locais
     if (localStreamRef.current) {
-      localStreamRef.current.getTracks().forEach(track => {
+      localStreamRef.current.getTracks().forEach((track) => {
         pc.addTrack(track, localStreamRef.current);
       });
     }
@@ -113,7 +109,6 @@ const VideoConferencia = () => {
     peerConnection.current = pc;
   };
 
-  // Handlers atualizados
   const handleIncomingOffer = async ({ offer, from }) => {
     setTargetUser(from);
     setOffer({ offer, from });
@@ -122,7 +117,9 @@ const VideoConferencia = () => {
   const handleAnswer = async (answer) => {
     if (!peerConnection.current) return;
     try {
-      await peerConnection.current.setRemoteDescription(new RTCSessionDescription(answer));
+      await peerConnection.current.setRemoteDescription(
+        new RTCSessionDescription(answer)
+      );
     } catch (error) {
       console.error("Erro ao definir resposta remota:", error);
     }
@@ -131,14 +128,15 @@ const VideoConferencia = () => {
   const handleIceCandidate = async ({ candidate }) => {
     if (peerConnection.current && candidate) {
       try {
-        await peerConnection.current.addIceCandidate(new RTCIceCandidate(candidate));
+        await peerConnection.current.addIceCandidate(
+          new RTCIceCandidate(candidate)
+        );
       } catch (err) {
         console.error("Erro ao adicionar ICE candidate:", err);
       }
     }
   };
 
-  // Funções de chamada (originais com melhorias)
   const startCall = async () => {
     if (!targetUser) {
       alert("Selecione um usuário da lista abaixo antes de chamar");
@@ -147,14 +145,14 @@ const VideoConferencia = () => {
 
     try {
       initializePeerConnection();
-      
+
       const offer = await peerConnection.current.createOffer();
       await peerConnection.current.setLocalDescription(offer);
 
-      socket.emit("offer", { 
-        offer, 
-        to: targetUser, 
-        from: userId 
+      socket.emit("offer", {
+        offer,
+        to: targetUser,
+        from: userId,
       });
 
       setCallInProgress(true);
@@ -177,9 +175,9 @@ const VideoConferencia = () => {
       const answer = await peerConnection.current.createAnswer();
       await peerConnection.current.setLocalDescription(answer);
 
-      socket.emit("answer", { 
-        answer, 
-        to: offer.from 
+      socket.emit("answer", {
+        answer,
+        to: offer.from,
       });
 
       setCallInProgress(true);
@@ -196,7 +194,9 @@ const VideoConferencia = () => {
       peerConnection.current = null;
     }
     if (remoteVideoRef.current && remoteVideoRef.current.srcObject) {
-      remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
+      remoteVideoRef.current.srcObject
+        .getTracks()
+        .forEach((track) => track.stop());
       remoteVideoRef.current.srcObject = null;
     }
     setCallInProgress(false);
@@ -204,23 +204,25 @@ const VideoConferencia = () => {
     setOffer(null);
   };
 
-  // Restante do seu código original (chat, configurações, etc.)
-  const [chatSelected, setChatSelected] = useState({foto: 'img.conversa.chat.png', nome: 'Jana Maria'});
+  const [chatSelected, setChatSelected] = useState({
+    foto: "img.conversa.chat.png",
+    nome: "Jana Maria",
+  });
   const settingsRef = useRef(null);
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState("light");
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
-  const [inptvalue, setInptvalue] = useState('');
-  const [name, setName] = useState('');
-  const [espelhar, setEspelhar] = useState('mirror');
+  const [inptvalue, setInptvalue] = useState("");
+  const [name, setName] = useState("");
+  const [espelhar, setEspelhar] = useState("mirror");
 
   const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+    setTheme(theme === "light" ? "dark" : "light");
   };
 
   useEffect(() => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
 
@@ -230,39 +232,45 @@ const VideoConferencia = () => {
         setVisibleSettings(false);
       }
     }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
     <div className="videoconferencia-container">
-      {/* Seção de vídeo (original) */}
-      <video 
-        onClick={() => setClicked(!clicked)} 
-        ref={!clicked ? localVideoRef : remoteVideoRef} 
-        className={!clicked ? `me-video ${espelhar}` : `other-video ${espelhar}`} 
-        autoPlay 
-        playsInline 
-        muted 
+      <video
+        onClick={() => setClicked(!clicked)}
+        ref={!clicked ? localVideoRef : remoteVideoRef}
+        className={
+          !clicked ? `me-video ${espelhar}` : `other-video ${espelhar}`
+        }
+        autoPlay
+        playsInline
+        muted
       />
       {clicked ? (
-        <video 
-          ref={!clicked ? remoteVideoRef : localVideoRef} 
-          className={!clicked ? `other-video ${espelhar}` : `me-video ${espelhar}`} 
-          autoPlay 
-          playsInline 
-        /> 
+        <video
+          ref={!clicked ? remoteVideoRef : localVideoRef}
+          className={
+            !clicked ? `other-video ${espelhar}` : `me-video ${espelhar}`
+          }
+          autoPlay
+          playsInline
+        />
       ) : (
-        <img className="resposta.carre" src="/public/carre-resposta.svg" alt="Aguardando chamada"/>
+        <img
+          className="resposta.carre"
+          src="/public/carre-resposta.svg"
+          alt="Aguardando chamada"
+        />
       )}
 
-      {/* Controles de chamada (original) */}
       {!callInProgress && !offer && (
         <button className="start-call-button" onClick={startCall}>
           Iniciar Chamada
         </button>
       )}
-      
+
       {offer && (
         <div className="incoming-call">
           <button className="end-call-button" onClick={endCall}>
@@ -273,7 +281,7 @@ const VideoConferencia = () => {
           </button>
         </div>
       )}
-      
+
       {callInProgress && (
         <button className="end-call-button" onClick={endCall}>
           Encerrar Chamada
@@ -282,38 +290,80 @@ const VideoConferencia = () => {
 
       {/* Barra de configurações (original) */}
       <div className="barra-config">
-        <img src='/public/phone.png' alt="Telefone" onClick={endCall}/>
+        <img src="/public/phone.png" alt="Telefone" onClick={endCall} />
         {videoActive ? (
-          <div className='ppp' style={{display: 'flex', flexDirection: 'column'}}>
-            <img onClick={() => setVideoActive(!videoActive)} src='/public/video-active.png' alt="Vídeo Ativo" />
-            <p style={{color: 'white'}}>Vídeo</p>
+          <div
+            className="ppp"
+            style={{ display: "flex", flexDirection: "column" }}
+          >
+            <img
+              onClick={() => setVideoActive(!videoActive)}
+              src="/public/video-active.png"
+              alt="Vídeo Ativo"
+            />
+            <p style={{ color: "white" }}>Vídeo</p>
           </div>
         ) : (
-          <div className='ppp' style={{display: 'flex', flexDirection: 'column'}}>
-            <img onClick={() => setVideoActive(!videoActive)} src='/public/video-desactive.png' alt="Vídeo Desativado" />
-            <p style={{color: '#013a63'}}>Vídeo</p>
+          <div
+            className="ppp"
+            style={{ display: "flex", flexDirection: "column" }}
+          >
+            <img
+              onClick={() => setVideoActive(!videoActive)}
+              src="/public/video-desactive.png"
+              alt="Vídeo Desativado"
+            />
+            <p style={{ color: "#013a63" }}>Vídeo</p>
           </div>
         )}
         {micActive ? (
-          <div className='ppp' style={{display: 'flex', flexDirection: 'column'}}> 
-            <img onClick={() => setMicActive(!micActive)} src='/public/mic.png' alt="Microfone Ativo" />
-            <p style={{color: 'white'}}>Áudio</p>
+          <div
+            className="ppp"
+            style={{ display: "flex", flexDirection: "column" }}
+          >
+            <img
+              onClick={() => setMicActive(!micActive)}
+              src="/public/mic.png"
+              alt="Microfone Ativo"
+            />
+            <p style={{ color: "white" }}>Áudio</p>
           </div>
         ) : (
-          <div className='ppp' style={{display: 'flex', flexDirection: 'column'}}> 
-            <img onClick={() => setMicActive(!micActive)} src='/public/mute.png' alt="Microfone Mutado" />
-            <p style={{color: '#013a63'}}>Áudio</p> 
-          </div> 
+          <div
+            className="ppp"
+            style={{ display: "flex", flexDirection: "column" }}
+          >
+            <img
+              onClick={() => setMicActive(!micActive)}
+              src="/public/mute.png"
+              alt="Microfone Mutado"
+            />
+            <p style={{ color: "#013a63" }}>Áudio</p>
+          </div>
         )}
-        {espelhar==='mirror' ? (
-          <div className='ppp' style={{display: 'flex', flexDirection: 'column'}}> 
-            <img onClick={() => setEspelhar('')} src='/public/espelho 1.svg' alt="Espelhar" />
-            <p style={{color: 'white'}}>Espelhar</p> 
+        {espelhar === "mirror" ? (
+          <div
+            className="ppp"
+            style={{ display: "flex", flexDirection: "column" }}
+          >
+            <img
+              onClick={() => setEspelhar("")}
+              src="/public/espelho 1.svg"
+              alt="Espelhar"
+            />
+            <p style={{ color: "white" }}>Espelhar</p>
           </div>
         ) : (
-          <div className='ppp' style={{display: 'flex', flexDirection: 'column'}}> 
-            <img onClick={() => setEspelhar('mirror')} src='/public/espelho (1) 1.svg' alt="Não Espelhar" />
-            <p style={{color: '#013a63'}}>Espelhar</p> 
+          <div
+            className="ppp"
+            style={{ display: "flex", flexDirection: "column" }}
+          >
+            <img
+              onClick={() => setEspelhar("mirror")}
+              src="/public/espelho (1) 1.svg"
+              alt="Não Espelhar"
+            />
+            <p style={{ color: "#013a63" }}>Espelhar</p>
           </div>
         )}
       </div>
@@ -324,7 +374,7 @@ const VideoConferencia = () => {
         {onlineUsers.map((user) => (
           <div key={user} className="user-item">
             <span>ID: {user}</span>
-            <button 
+            <button
               onClick={() => setTargetUser(user)}
               disabled={callInProgress || (offer && offer.from === user)}
             >

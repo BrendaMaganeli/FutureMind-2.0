@@ -36,7 +36,7 @@ const paraDataISO = (dataStr, ano) => {
 };
 
 export default function Consulta() {
-  const { role, id } = useParams(); 
+  const { role, id } = useParams();
   const navigate = useNavigate();
   const hoje = new Date();
 
@@ -46,8 +46,11 @@ export default function Consulta() {
   const [anoAtual, setAnoAtual] = useState(hoje.getFullYear());
   const [indiceMesAtual, setIndiceMesAtual] = useState(hoje.getMonth());
 
-  const [mostrarModalReagendamento, setMostrarModalReagendamento] = useState(false);
-  const [indiceMesReagendamento, setIndiceMesReagendamento] = useState(hoje.getMonth());
+  const [mostrarModalReagendamento, setMostrarModalReagendamento] =
+    useState(false);
+  const [indiceMesReagendamento, setIndiceMesReagendamento] = useState(
+    hoje.getMonth()
+  );
   const [anoReagendamento, setAnoReagendamento] = useState(hoje.getFullYear());
   const [dataSelecionada, setDataSelecionada] = useState(null);
   const [horaSelecionada, setHoraSelecionada] = useState(null);
@@ -57,7 +60,7 @@ export default function Consulta() {
   const buscarConsultas = useCallback(async () => {
     try {
       let resp;
-  
+
       if (role === "profissional") {
         resp = await fetch(
           `http://localhost:4242/consulta/profissional/${id}/${anoAtual}/${indiceMesAtual + 1}`
@@ -65,41 +68,43 @@ export default function Consulta() {
       } else {
         resp = await fetch(`http://localhost:4242/consulta/${id}`);
       }
-  
+
       if (!resp.ok) {
         throw new Error("Falha ao buscar consultas");
       }
       const dados = await resp.json();
-  
-       const novoMapa = {};
-       dados.forEach((registro) => {
-         const dt = new Date(registro.data);
-         const a = dt.getFullYear();
-         const m = dt.getMonth();
-         const d = dt.getDate();
-         const chave = `${a}-${m}-${d}`;
-    
-         if (!novoMapa[chave]) novoMapa[chave] = [];
-    
-         const base = {
-           id_consulta: registro.id_consulta,
-           horario: registro.hora,
-           fotoPar: registro.foto_par || null,
-         };
-    
-         if (role === "profissional") {
-           novoMapa[chave].push({ ...base, nomePar: registro.nome_paciente });
-         } else {
-           novoMapa[chave].push({ ...base, nomePar: registro.nome_profissional });
-         }
-       });
-  
+
+      const novoMapa = {};
+      dados.forEach((registro) => {
+        const dt = new Date(registro.data);
+        const a = dt.getFullYear();
+        const m = dt.getMonth();
+        const d = dt.getDate();
+        const chave = `${a}-${m}-${d}`;
+
+        if (!novoMapa[chave]) novoMapa[chave] = [];
+
+        const base = {
+          id_consulta: registro.id_consulta,
+          horario: registro.hora,
+          fotoPar: registro.foto_par || null,
+        };
+
+        if (role === "profissional") {
+          novoMapa[chave].push({ ...base, nomePar: registro.nome_paciente });
+        } else {
+          novoMapa[chave].push({
+            ...base,
+            nomePar: registro.nome_profissional,
+          });
+        }
+      });
+
       setAgendamentos(novoMapa);
     } catch (err) {
       console.error("Erro ao buscar agendamentos:", err);
     }
   }, [role, id, anoAtual, indiceMesAtual]);
-  
 
   useEffect(() => {
     buscarConsultas();
@@ -171,7 +176,9 @@ export default function Consulta() {
   const cancelarConsulta = async () => {
     if (!consultaSelecionada) return;
     try {
-      const resp = await fetch(`/consulta/${consultaSelecionada.id_consulta}`, { method: "DELETE" });
+      const resp = await fetch(`/consulta/${consultaSelecionada.id_consulta}`, {
+        method: "DELETE",
+      });
       if (resp.status === 404) {
         alert("Consulta não encontrada");
         return;
@@ -181,7 +188,9 @@ export default function Consulta() {
       const chave = `${consultaSelecionada.ano}-${consultaSelecionada.mes}-${consultaSelecionada.dia}`;
       setAgendamentos((prev) => {
         const copia = { ...prev };
-        copia[chave] = copia[chave].filter((a) => a.id_consulta !== consultaSelecionada.id_consulta);
+        copia[chave] = copia[chave].filter(
+          (a) => a.id_consulta !== consultaSelecionada.id_consulta
+        );
         if (copia[chave].length === 0) delete copia[chave];
         return copia;
       });
@@ -219,7 +228,9 @@ export default function Consulta() {
 
       setAgendamentos((prev) => {
         const copia = { ...prev };
-        copia[chaveAntiga] = copia[chaveAntiga].filter((a) => a.id_consulta !== consultaSelecionada.id_consulta);
+        copia[chaveAntiga] = copia[chaveAntiga].filter(
+          (a) => a.id_consulta !== consultaSelecionada.id_consulta
+        );
         if (copia[chaveAntiga].length === 0) delete copia[chaveAntiga];
         if (!copia[chaveNova]) copia[chaveNova] = [agendamentoAtualizado];
         else copia[chaveNova].push(agendamentoAtualizado);
@@ -276,14 +287,18 @@ export default function Consulta() {
     ));
   };
 
-
-
   return (
     <div className="container-agenda-c">
       {mensagemConfirmacao && (
         <div className="confirmation-message-c">
           <span>{mensagemConfirmacao}</span>
-          <button className="close-confirmation-c" onClick={() => setMensagemConfirmacao("")}> <X size={16} /> </button>
+          <button
+            className="close-confirmation-c"
+            onClick={() => setMensagemConfirmacao("")}
+          >
+            {" "}
+            <X size={16} />{" "}
+          </button>
         </div>
       )}
 
@@ -293,13 +308,27 @@ export default function Consulta() {
 
       <section className="calendar-c">
         <header className="calendar-header-c">
-          {role === "profissional" && <button onClick={() => trocarMes(-1)} className="setaEsquerda-c"> <ChevronLeft /> </button>}
-          <h2>{mesAtual.nome} {anoAtual}</h2>
-          {role === "profissional" && <button onClick={() => trocarMes(1)} className="setaDireita-c"> <ChevronRight /> </button>}
+          {role === "profissional" && (
+            <button onClick={() => trocarMes(-1)} className="setaEsquerda-c">
+              {" "}
+              <ChevronLeft />{" "}
+            </button>
+          )}
+          <h2>
+            {mesAtual.nome} {anoAtual}
+          </h2>
+          {role === "profissional" && (
+            <button onClick={() => trocarMes(1)} className="setaDireita-c">
+              {" "}
+              <ChevronRight />{" "}
+            </button>
+          )}
         </header>
 
         <div className="weekdays-c">
-          {"Dom Seg Ter Qua Qui Sex Sab".split(" ").map((d) => <div key={d}>{d}</div>)}
+          {"Dom Seg Ter Qua Qui Sex Sab".split(" ").map((d) => (
+            <div key={d}>{d}</div>
+          ))}
         </div>
 
         <div className="days-grid-c">
@@ -311,7 +340,10 @@ export default function Consulta() {
             >
               <span>{diaObj.dia}</span>
               {diaObj.registrosDoDia.map((ag, idx) => (
-                <div key={idx} className="appointment-detail-c"> {ag.horario} </div>
+                <div key={idx} className="appointment-detail-c">
+                  {" "}
+                  {ag.horario}{" "}
+                </div>
               ))}
             </div>
           ))}
@@ -329,35 +361,63 @@ export default function Consulta() {
 
       {consultaSelecionada && (
         <aside className="schedule-c">
-          <button className="close-button-c" onClick={fecharDetalhes}> <X size={24} /> </button>
+          <button className="close-button-c" onClick={fecharDetalhes}>
+            {" "}
+            <X size={24} />{" "}
+          </button>
 
           <div className="resumo-card-c">
             <div className="agendamento-info-c">
-
               <div className="par-info-c">
-                {consultaSelecionada.fotoPar && <img src={consultaSelecionada.fotoPar} alt="Foto" className="foto-par-c" />}
+                {consultaSelecionada.fotoPar && (
+                  <img
+                    src={consultaSelecionada.fotoPar}
+                    alt="Foto"
+                    className="foto-par-c"
+                  />
+                )}
                 <div>
                   <h3>{consultaSelecionada.nomePar}</h3>
-                  <p>{role === "paciente" ? "Profissional responsável" : "Paciente agendado"}</p>
+                  <p>
+                    {role === "paciente"
+                      ? "Profissional responsável"
+                      : "Paciente agendado"}
+                  </p>
                 </div>
               </div>
 
               <div className="detalhes-c">
-                <div><strong>Data:</strong> {consultaSelecionada.dia}/{consultaSelecionada.mes + 1}/{consultaSelecionada.ano}</div>
-                <div><strong>Horário:</strong> {consultaSelecionada.horario}</div>
+                <div>
+                  <strong>Data:</strong> {consultaSelecionada.dia}/
+                  {consultaSelecionada.mes + 1}/{consultaSelecionada.ano}
+                </div>
+                <div>
+                  <strong>Horário:</strong> {consultaSelecionada.horario}
+                </div>
                 {role === "profissional" && (
-                  <div className="valor-consulta-c"><strong>Valor:</strong> R$ 165,00</div>
+                  <div className="valor-consulta-c">
+                    <strong>Valor:</strong> R$ 165,00
+                  </div>
                 )}
               </div>
 
               <div className="botoes-c">
                 {role === "paciente" ? (
                   <>
-                    <button className="alterar-c" onClick={() => setMostrarModalReagendamento(true)}>Alterar</button>
-                    <button className="remover-c" onClick={cancelarConsulta}>Remover</button>
+                    <button
+                      className="alterar-c"
+                      onClick={() => setMostrarModalReagendamento(true)}
+                    >
+                      Alterar
+                    </button>
+                    <button className="remover-c" onClick={cancelarConsulta}>
+                      Remover
+                    </button>
                   </>
                 ) : (
-                  <button className="remover-c" onClick={cancelarConsulta}>Remover</button>
+                  <button className="remover-c" onClick={cancelarConsulta}>
+                    Remover
+                  </button>
                 )}
               </div>
             </div>
@@ -368,15 +428,56 @@ export default function Consulta() {
       {mostrarModalReagendamento && (
         <div className="reschedule-modal-overlay">
           <div className="reschedule-modal">
-            <button className="modal-close-btn" onClick={() => setMostrarModalReagendamento(false)}> <X size={20} /> </button>
+            <button
+              className="modal-close-btn"
+              onClick={() => setMostrarModalReagendamento(false)}
+            >
+              {" "}
+              <X size={20} />{" "}
+            </button>
             <h2>Reagendamento de consulta</h2>
             <p>Escolha dia e horário:</p>
 
             <div className="calendar-scroll">
               <div className="calendar-title">
-                <button onClick={() => { let nm = indiceMesReagendamento - 1; let na = anoReagendamento; if (nm < 0) { nm = 11; na -= 1; } setIndiceMesReagendamento(nm); setAnoReagendamento(na); }} className="setaE-c"> <ChevronLeft /> </button>
-                <h3>{new Date(anoReagendamento, indiceMesReagendamento).toLocaleString("pt-BR", { month: "long", year: "numeric" })}</h3>
-                <button onClick={() => { let nm = indiceMesReagendamento + 1; let na = anoReagendamento; if (nm > 11) { nm = 0; na += 1; } setIndiceMesReagendamento(nm); setAnoReagendamento(na); }} className="setaD-c"> <ChevronRight /> </button>
+                <button
+                  onClick={() => {
+                    let nm = indiceMesReagendamento - 1;
+                    let na = anoReagendamento;
+                    if (nm < 0) {
+                      nm = 11;
+                      na -= 1;
+                    }
+                    setIndiceMesReagendamento(nm);
+                    setAnoReagendamento(na);
+                  }}
+                  className="setaE-c"
+                >
+                  {" "}
+                  <ChevronLeft />{" "}
+                </button>
+                <h3>
+                  {new Date(
+                    anoReagendamento,
+                    indiceMesReagendamento
+                  ).toLocaleString("pt-BR", { month: "long", year: "numeric" })}
+                </h3>
+                <button
+                  onClick={() => {
+                    let nm = indiceMesReagendamento + 1;
+                    let na = anoReagendamento;
+                    if (nm > 11) {
+                      nm = 0;
+                      na += 1;
+                    }
+                    setIndiceMesReagendamento(nm);
+                    setAnoReagendamento(na);
+                  }}
+                  className="setaD-c"
+                >
+                  {" "}
+                  <ChevronRight />{" "}
+                </button>
               </div>
 
               <div className="calendar-grid">
@@ -385,8 +486,19 @@ export default function Consulta() {
             </div>
 
             <div className="modal-actions">
-              <button className="btn-back" onClick={() => setMostrarModalReagendamento(false)}>Voltar</button>
-              <button className="btn-confirm" disabled={!dataSelecionada || !horaSelecionada} onClick={confirmarReagendamento}>Reagendar</button>
+              <button
+                className="btn-back"
+                onClick={() => setMostrarModalReagendamento(false)}
+              >
+                Voltar
+              </button>
+              <button
+                className="btn-confirm"
+                disabled={!dataSelecionada || !horaSelecionada}
+                onClick={confirmarReagendamento}
+              >
+                Reagendar
+              </button>
             </div>
           </div>
         </div>

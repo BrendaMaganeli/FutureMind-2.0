@@ -5,7 +5,7 @@ import './CSS/Call.css';
 const socket = io("http://localhost:5000");
 
 const VideoConferencia = () => {
-  // Refs e estados originais
+
   const [videoActive, setVideoActive] = useState(true);
   const [micActive, setMicActive] = useState(true);
   const [chatActive, setChatActive] = useState(false);

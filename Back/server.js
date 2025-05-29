@@ -616,7 +616,7 @@ app.get('/consulta/profissional/:id_profissional/:year/:month' , async (req,res)
     }
 });
 
-app.delete('/consulta/:id_consultas', async (req, res) => {
+app.delete('/consulta/:id_consulta', async (req, res) => {
     const { id_consulta } = req.params;
   
     try {

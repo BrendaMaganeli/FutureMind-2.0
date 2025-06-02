@@ -1,8 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useLayoutEffect, useRef } from "react";
-import { GlobalContext } from "../Context/GlobalContext";
+import {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import Select from "react-select";
-import { useState } from "react";
+import { GlobalContext } from "../Context/GlobalContext";
 import logo from "../assets/logoCadastro2.svg";
 import imagem from "../assets/FotoCadastro.svg";
 import "./CSS/Cadastros.css";
@@ -20,30 +25,34 @@ const opcoesAbordagens = [
 ];
 
 function CadastroProfissional2() {
-  const navigate = useNavigate(); // Hook para navegação
+  const navigate = useNavigate();
   const { profissional, setProfissional } = useContext(GlobalContext);
+
   const [especializacoes, setEspecializacoes] = useState(
-    profissional.especializacao,
+    profissional.especializacao
   );
   const [abordagens, setAbordagens] = useState(profissional.abordagem);
+  const [valorEmail, setValorEmail] = useState(profissional.email);
+  const [valorSenha, setValorSenha] = useState(profissional.senha);
+  const [prefixoEmailProfissional, setPrefixoEmailProfissional] = useState(
+    profissional.email_profissional
+  );
+
   const [especializacaoValida, setEspecializacaoValida] = useState(true);
   const [abordagemValida, setAbordagemValida] = useState(true);
   const [emailValido, setEmailValido] = useState();
   const [senhaValido, setSenhaValido] = useState();
-  const [valorEmail, setValorEmail] = useState(profissional.email);
-  const [valorSenha, setValorSenha] = useState(profissional.senha);
-  const [tipoInput, setTipoInput] = useState("password");
-  const [tipoIconSenha, setTipoIconSenha] = useState("icon_nao_ver.png");
-  const [prefixoEmailProfissional, setPrefixoEmailProfissional] = useState(
-    profissional.email_profissional,
-  );
   const [prefixoEmailProfissionalValido, setPrefixoEmailProfissionalValido] =
     useState();
+
+  const [tipoInput, setTipoInput] = useState("password");
+  const [tipoIconSenha, setTipoIconSenha] = useState("icon_nao_ver.png");
+
   const inputRef = useRef(null);
   const [caretPos, setCaretPos] = useState(null);
+
   const DOMINIO = "@futuremind.com.br";
 
-  // Sincroniza com o ctx
   useEffect(() => {
     setProfissional((prev) => ({
       ...prev,
@@ -51,27 +60,11 @@ function CadastroProfissional2() {
     }));
   }, [prefixoEmailProfissional]);
 
-  // Depois de cada re-render, reposiciona o cursor
   useLayoutEffect(() => {
     if (inputRef.current != null && caretPos !== null) {
       inputRef.current.setSelectionRange(caretPos, caretPos);
     }
   }, [prefixoEmailProfissional, caretPos]);
-
-  // onChange customizado
-  const handlePrefixoChange = (e) => {
-    let val = e.target.value;
-    // remove qualquer domínio “colado”
-    if (val.endsWith(DOMINIO)) {
-      val = val.slice(0, -DOMINIO.length);
-    }
-    // bloqueia o “@”
-    if (val.includes("@")) return;
-
-    // guarda onde tava o cursor
-    setCaretPos(e.target.selectionStart);
-    setPrefixoEmailProfissional(val);
-  };
 
   useEffect(() => {
     setProfissional((prev) => ({
@@ -94,6 +87,36 @@ function CadastroProfissional2() {
   useEffect(() => {
     setProfissional((prev) => ({ ...prev, senha: valorSenha }));
   }, [valorSenha]);
+
+  const handlePrefixoChange = (e) => {
+    let val = e.target.value;
+    if (val.endsWith(DOMINIO)) val = val.slice(0, -DOMINIO.length);
+    if (val.includes("@")) return;
+
+    setCaretPos(e.target.selectionStart);
+    setPrefixoEmailProfissional(val);
+  };
+
+  const indentificadorEmail = (e) => {
+    const valor = e.target.value;
+    setValorEmail(valor);
+    setEmailValido(
+      !(valor.trim().endsWith("@gmail.com") || valor.endsWith("@hotmail.com"))
+    );
+  };
+
+  const indentificadorSenha = (e) => {
+    const valor = e.target.value;
+    setValorSenha(valor);
+    setSenhaValido(valor.trim().length < 8);
+  };
+
+  const alternarTipo = () => {
+    setTipoInput((prev) => (prev === "password" ? "text" : "password"));
+    setTipoIconSenha((prev) =>
+      prev === "icon_nao_ver.png" ? "icon_ver.png" : "icon_nao_ver.png"
+    );
+  };
 
   const handleCadastro = () => {
     let erro = false;
@@ -139,42 +162,7 @@ function CadastroProfissional2() {
       setSenhaValido(false);
     }
 
-    if (!erro) {
-      req();
-    }
-  };
-
-  const indentificadorEmail = (e) => {
-    let valor_email = e.target.value;
-    setValorEmail(valor_email);
-    if (
-      valor_email.trim().endsWith("@gmail.com") ||
-      valor_email.endsWith("@gmail.com")
-    ) {
-      setEmailValido(false);
-    } else {
-      setEmailValido(true);
-    }
-  };
-
-  const indentificadorSenha = (e) => {
-    let valor_senha = e.target.value;
-    setValorSenha(valor_senha);
-    if (valor_senha.trim().length >= 8) {
-      setSenhaValido(false);
-    } else {
-      setSenhaValido(true);
-    }
-  };
-
-  const alternarTipo = () => {
-    if (tipoInput == "password") {
-      setTipoInput("text");
-      setTipoIconSenha("icon_ver.png");
-    } else {
-      setTipoInput("password");
-      setTipoIconSenha("icon_nao_ver.png");
-    }
+    if (!erro) req();
   };
 
   const req = async () => {
@@ -183,11 +171,9 @@ function CadastroProfissional2() {
         "https://futuremind-2-0-mw60.onrender.com/cadastro-profissional",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(profissional),
-        },
+        }
       );
 
       if (response.ok) {
@@ -223,6 +209,7 @@ function CadastroProfissional2() {
             className="logo-paraCadastro"
           />
         </div>
+
         <div className="inputs-cadastro-divP">
           <div className="input-cadastro">
             <label className="label-input">Especialização</label>
@@ -231,10 +218,9 @@ function CadastroProfissional2() {
               classNamePrefix="select"
               options={opcoesEspecializacao}
               isMulti
-              onChange={(selectedOptions) => {
-                const opcoes = selectedOptions || [];
-                setEspecializacoes(opcoes);
-                setEspecializacaoValida(opcoes.length > 0);
+              onChange={(opcoes) => {
+                setEspecializacoes(opcoes || []);
+                setEspecializacaoValida((opcoes || []).length > 0);
               }}
               menuPortalTarget={document.body}
               styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
@@ -253,10 +239,9 @@ function CadastroProfissional2() {
               classNamePrefix="select"
               options={opcoesAbordagens}
               isMulti
-              onChange={(selectedOptions) => {
-                const opcoes = selectedOptions || [];
-                setAbordagens(opcoes);
-                setAbordagemValida(opcoes.length > 0);
+              onChange={(opcoes) => {
+                setAbordagens(opcoes || []);
+                setAbordagemValida((opcoes || []).length > 0);
               }}
               menuPortalTarget={document.body}
               styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
@@ -267,15 +252,13 @@ function CadastroProfissional2() {
               <p>Selecione pelo menos uma abordagem.</p>
             </div>
           </div>
+
           <div className="input-lados">
             <div className="cadastro-input">
               <input
                 type="text"
                 value={valorEmail}
-                onChange={(e) => {
-                  setValorEmail(e.target.value);
-                  setEmailValido(false);
-                }}
+                onChange={indentificadorEmail}
                 placeholder=" "
                 required
               />
@@ -289,10 +272,7 @@ function CadastroProfissional2() {
               <input
                 type={tipoInput}
                 value={valorSenha}
-                onChange={(e) => {
-                  setValorSenha(e.target.value);
-                  setSenhaValido(false);
-                }}
+                onChange={indentificadorSenha}
                 placeholder=" "
                 required
               />
@@ -308,6 +288,7 @@ function CadastroProfissional2() {
               />
             </div>
           </div>
+
           <div className="cadastro-input">
             <input
               type="text"
@@ -325,17 +306,20 @@ function CadastroProfissional2() {
             <span
               className={`erro ${prefixoEmailProfissionalValido ? "visivel" : ""}`}
             >
-              Seu usuário deve ter um "." e não deve conter "@"
+              Seu usuário deve ter um "."
             </span>
           </div>
         </div>
+
         <button className="botao-cadastro" onClick={handleCadastro}>
           Prosseguir com cadastro
         </button>
+
         <p className="login-texto">
           Já possui uma conta no nosso site? <a href="/login">Aperte aqui</a>
         </p>
       </div>
+
       <div className="lado-direitoProfissional">
         <img
           src={imagem}

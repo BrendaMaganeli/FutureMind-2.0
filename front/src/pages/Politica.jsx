@@ -1,24 +1,22 @@
-import { Link } from "react-router-dom";
-import "./CSS/Politica.css";
+import { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Footer from "../Components/Footer";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import "./CSS/Politica.css";
 import identificacao from "../assets/identificacao.svg";
 import seguranca from "../assets/seguranca.svg";
 import iconeChaves from "../assets/icone_chaves.svg";
 import iconeBanco from "../assets/icone_banco.svg";
-import voltar from '../assets/seta-principal.svg';
-
+import voltar from "../assets/seta-principal.svg";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0); 
+    window.scrollTo(0, 0);
   }, [pathname]);
 
   return null;
@@ -27,10 +25,12 @@ function ScrollToTop() {
 function Politica() {
   return (
     <div className="body-politica">
-      <button className="back-button-pt" >
-      <img src={voltar} alt="" style={{width: '4em'}} />
-      </button>
       <ScrollToTop />
+
+      <button className="back-button-pt">
+        <img src={voltar} alt="Voltar" style={{ width: "4em" }} />
+      </button>
+
       <div className="divBotoes">
         <Link to="/politica" className="botaodecisaoo">
           Política de Privacidade
@@ -39,11 +39,13 @@ function Politica() {
           Termos de uso
         </Link>
       </div>
-      <div className="container_bola_um"></div>
-      <div className="container_bola_dois"></div>
-      <div className="container_bola_tres"></div>
-      <div className="container_bola_quatro"></div>
-      <div className="conatiner_bola_cinco"></div>
+
+      <div className="container_bola_um" />
+      <div className="container_bola_dois" />
+      <div className="container_bola_tres" />
+      <div className="container_bola_quatro" />
+      <div className="conatiner_bola_cinco" />
+
       <div className="introducao">
         <div className="T_titulo">
           <h1>Política de Privacidade da FutureMind</h1>
@@ -71,6 +73,7 @@ function Politica() {
           </div>
         </div>
       </div>
+
       <div className="container_acodions">
         <div className="accordion-container">
           <Accordion className="container_ac">
@@ -102,8 +105,8 @@ function Politica() {
           <Accordion className="container_ac">
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1-content"
-              id="panel1-header"
+              aria-controls="panel2-content"
+              id="panel2-header"
             >
               <AccordionDetails className="titulo_ac_um">
                 Dados Coletados Pela FutureMind
@@ -130,8 +133,8 @@ function Politica() {
           <Accordion className="container_ac">
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1-content"
-              id="panel1-header"
+              aria-controls="panel3-content"
+              id="panel3-header"
             >
               <AccordionDetails className="titulo_ac_um">
                 Proteção dos Dados Pessoais
@@ -149,39 +152,41 @@ function Politica() {
           </Accordion>
         </div>
       </div>
+
       <div className="div-h1">
         <h1 className="H1_recursos">Quais Recursos Protegem seus Dados?</h1>
       </div>
 
       <div className="Container-recursos">
         <div className="div_um_recursos">
-          <img src={identificacao} />
+          <img src={identificacao} alt="Identificação" />
           <h2>
             Identificação <br /> de Usuário
           </h2>
         </div>
 
         <div className="div_dois_recursos">
-          <img src={seguranca} />
+          <img src={seguranca} alt="Segurança" />
           <h2>
             Segurança <br /> de dados
           </h2>
         </div>
 
         <div className="div_tres_recursos">
-          <img src={iconeBanco} />
+          <img src={iconeBanco} alt="Banco de dados" />
           <h2>
             Banco <br /> de dados
           </h2>
         </div>
 
         <div className="div_quatro_recursos">
-          <img src={iconeChaves} />
+          <img src={iconeChaves} alt="Chaves e senhas" />
           <h2>
             Chaves/ <br /> Senhas
           </h2>
         </div>
       </div>
+
       <Footer />
     </div>
   );

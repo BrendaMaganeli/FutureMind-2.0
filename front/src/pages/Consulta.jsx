@@ -1,10 +1,13 @@
-import { useState, useEffect, useCallback } from "react";
+// src/pages/Consulta.jsx
+
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import "./CSS/Consulta.css";
 import imgConsulta from "../assets/Group 239294.svg";
 import voltar from "../assets/voltar 2.svg";
 
+// Utilitário: gera dados de cada mês (nome, total de dias e dia da semana do dia 1º)
 const obterDadosMes = (ano) => {
   const bissexto = ano % 4 === 0 && (ano % 100 !== 0 || ano % 400 === 0);
   const diasNoMes = [
@@ -28,6 +31,7 @@ const obterDadosMes = (ano) => {
   }));
 };
 
+// Utilitário: converte "DD/MM" + ano em ISO "YYYY-MM-DD"
 const paraDataISO = (dataStr, ano) => {
   const [diaStr, mesStr] = dataStr.split("/");
   const dia = String(parseInt(diaStr, 10)).padStart(2, "0");
@@ -36,7 +40,7 @@ const paraDataISO = (dataStr, ano) => {
 };
 
 export default function Consulta() {
-  const { role, id } = useParams(); 
+  const { role, id } = useParams();
   const navigate = useNavigate();
   const hoje = new Date();
 
@@ -46,74 +50,133 @@ export default function Consulta() {
   const [anoAtual, setAnoAtual] = useState(hoje.getFullYear());
   const [indiceMesAtual, setIndiceMesAtual] = useState(hoje.getMonth());
 
-  const [mostrarModalReagendamento, setMostrarModalReagendamento] = useState(false);
-  const [indiceMesReagendamento, setIndiceMesReagendamento] = useState(hoje.getMonth());
+  const [mostrarModalReagendamento, setMostrarModalReagendamento] =
+    useState(false);
+  const [indiceMesReagendamento, setIndiceMesReagendamento] = useState(
+    hoje.getMonth()
+  );
   const [anoReagendamento, setAnoReagendamento] = useState(hoje.getFullYear());
   const [dataSelecionada, setDataSelecionada] = useState(null);
   const [horaSelecionada, setHoraSelecionada] = useState(null);
 
   const [mensagemConfirmacao, setMensagemConfirmacao] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState(null);
 
-  const buscarConsultas = useCallback(async () => {
+  // Função que busca consultas do back-end conforme role
+  async function buscarConsultas() {
     try {
       let resp;
-  
+<<<<<<< HEAD
+
+=======
+>>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
       if (role === "profissional") {
+        const ano = hoje.getFullYear();
+        const mes = hoje.getMonth() + 1; // 1..12
         resp = await fetch(
-          `http://localhost:4242/consulta/profissional/${id}/${anoAtual}/${indiceMesAtual + 1}`
+          `http://localhost:4242/consulta/profissional/${id}/${ano}/${mes}`
         );
       } else {
         resp = await fetch(`http://localhost:4242/consulta/${id}`);
       }
-  
+<<<<<<< HEAD
+
       if (!resp.ok) {
         throw new Error("Falha ao buscar consultas");
       }
       const dados = await resp.json();
-  
-       const novoMapa = {};
-       dados.forEach((registro) => {
-         const dt = new Date(registro.data);
-         const a = dt.getFullYear();
-         const m = dt.getMonth();
-         const d = dt.getDate();
-         const chave = `${a}-${m}-${d}`;
-    
-         if (!novoMapa[chave]) novoMapa[chave] = [];
-    
-         const base = {
-           id_consulta: registro.id_consulta,
-           horario: registro.hora,
-           fotoPar: registro.foto_par || null,
-         };
-    
-         if (role === "profissional") {
-           novoMapa[chave].push({ ...base, nomePar: registro.nome_paciente });
-         } else {
-           novoMapa[chave].push({ ...base, nomePar: registro.nome_profissional });
-         }
-       });
-  
+
+      const novoMapa = {};
+      dados.forEach((registro) => {
+        const dt = new Date(registro.data);
+        const a = dt.getFullYear();
+        const m = dt.getMonth();
+        const d = dt.getDate();
+        const chave = `${a}-${m}-${d}`;
+
+        if (!novoMapa[chave]) novoMapa[chave] = [];
+
+        const base = {
+          id_consulta: registro.id_consulta,
+          horario: registro.hora,
+          fotoPar: registro.foto_par || null,
+        };
+
+        if (role === "profissional") {
+          novoMapa[chave].push({ ...base, nomePar: registro.nome_paciente });
+        } else {
+          novoMapa[chave].push({
+            ...base,
+            nomePar: registro.nome_profissional,
+          });
+        }
+      });
+
       setAgendamentos(novoMapa);
     } catch (err) {
       console.error("Erro ao buscar agendamentos:", err);
     }
   }, [role, id, anoAtual, indiceMesAtual]);
-  
+=======
+      if (!resp.ok) throw new Error("Falha ao buscar consultas");
+>>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
 
+      const dados = await resp.json();
+      const novoMapa = {};
+
+      dados.forEach((registro) => {
+        const dt = new Date(registro.data);
+        const a = dt.getFullYear();
+        const m = dt.getMonth(); // 0..11
+        const d = dt.getDate();
+        const chave = `${a}-${m}-${d}`;
+
+        if (!novoMapa[chave]) novoMapa[chave] = [];
+        novoMapa[chave].push({
+          id_consulta: registro.id_consulta || registro.id_consultas,
+          horario: registro.hora,
+          nomePar:
+            role === "profissional"
+              ? registro.nome_paciente
+              : registro.nome_profissional,
+          fotoPar:
+            role === "profissional"
+              ? registro.foto_paciente
+              : registro.foto_profissional,
+        });
+      });
+
+      setAgendamentos(novoMapa);
+      setErro(null);
+    } catch (e) {
+      console.error(e);
+      setErro(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Chama buscarConsultas na montagem e sempre que role ou id mudarem
   useEffect(() => {
     buscarConsultas();
-  }, [buscarConsultas]);
+  }, [role, id]);
 
+  if (loading) {
+    return <div>Carregando consultas...</div>;
+  }
+  if (erro) {
+    return <div style={{ color: "red" }}>Erro: {erro}</div>;
+  }
+
+  // Dados do calendário principal
   const mesesDoAno = obterDadosMes(anoAtual);
   const mesAtual = mesesDoAno[indiceMesAtual];
   const mesAnterior = mesesDoAno[(indiceMesAtual + 11) % 12];
 
+  // Gera as 42 células do calendário
   const gradeDias = Array.from({ length: 42 }, (_, i) => {
-    let dia;
-    let mesCorrente;
-    let indisponivel;
-    let registrosDoDia = [];
+    let dia, mesCorrente, indisponivel, registrosDoDia = [];
 
     if (i < mesAtual.inicio) {
       dia = mesAnterior.totalDias - (mesAtual.inicio - i - 1);
@@ -134,6 +197,7 @@ export default function Consulta() {
     return { id: `${id}-${i}`, dia, mesCorrente, indisponivel, registrosDoDia };
   });
 
+  // Navega entre meses no calendário principal (para profissional)
   const trocarMes = (direcao) => {
     setIndiceMesAtual((prev) => {
       let novoMes = prev + direcao;
@@ -150,9 +214,8 @@ export default function Consulta() {
     });
   };
 
-  const aoSelecionarDia = (diaObj) => {
-    if (!diaObj.mesCorrente || diaObj.registrosDoDia.length === 0) return;
-    const agendamento = diaObj.registrosDoDia[0];
+  // Ao clicar num horário em uma célula, abre detalhes
+  const aoSelecionarHorario = (diaObj, agendamento) => {
     setConsultaSelecionada({
       dia: diaObj.dia,
       mes: indiceMesAtual,
@@ -164,27 +227,44 @@ export default function Consulta() {
     setHoraSelecionada(null);
   };
 
+  // Fecha o cartão de detalhes
   const fecharDetalhes = () => {
     setConsultaSelecionada(null);
   };
 
+  // Cancela consulta (DELETE) e refaz o fetch
   const cancelarConsulta = async () => {
     if (!consultaSelecionada) return;
     try {
-      const resp = await fetch(`/consulta/${consultaSelecionada.id_consulta}`, { method: "DELETE" });
+<<<<<<< HEAD
+      const resp = await fetch(`/consulta/${consultaSelecionada.id_consulta}`, {
+        method: "DELETE",
+      });
+=======
+      const resp = await fetch(
+        `http://localhost:4242/consulta/${consultaSelecionada.id_consulta}`,
+        { method: "DELETE" }
+      );
+>>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
       if (resp.status === 404) {
         alert("Consulta não encontrada");
         return;
       }
-      if (!resp.ok) throw new Error("Erro no back-end");
+      if (!resp.ok) throw new Error("Erro no back-end ao deletar");
 
+<<<<<<< HEAD
       const chave = `${consultaSelecionada.ano}-${consultaSelecionada.mes}-${consultaSelecionada.dia}`;
       setAgendamentos((prev) => {
         const copia = { ...prev };
-        copia[chave] = copia[chave].filter((a) => a.id_consulta !== consultaSelecionada.id_consulta);
+        copia[chave] = copia[chave].filter(
+          (a) => a.id_consulta !== consultaSelecionada.id_consulta
+        );
         if (copia[chave].length === 0) delete copia[chave];
         return copia;
       });
+=======
+      await buscarConsultas();
+>>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
       fecharDetalhes();
     } catch (err) {
       console.error("Erro ao remover agendamento:", err);
@@ -192,19 +272,24 @@ export default function Consulta() {
     }
   };
 
+  // Confirma reagendamento (PUT) e refaz o fetch
   const confirmarReagendamento = async () => {
     if (!consultaSelecionada || !dataSelecionada || !horaSelecionada) return;
     const dataISO = paraDataISO(dataSelecionada, anoReagendamento);
     try {
-      const resp = await fetch(`/consulta/${consultaSelecionada.id_consulta}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data: dataISO, hora: horaSelecionada }),
-      });
+      const resp = await fetch(
+        `http://localhost:4242/consulta/${consultaSelecionada.id_consulta}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data: dataISO, hora: horaSelecionada }),
+        }
+      );
       if (resp.status === 404) {
         alert("Consulta não encontrada");
         return;
       }
+<<<<<<< HEAD
       if (!resp.ok) throw new Error("Erro no back-end");
 
       const chaveAntiga = `${consultaSelecionada.ano}-${consultaSelecionada.mes}-${consultaSelecionada.dia}`;
@@ -219,7 +304,9 @@ export default function Consulta() {
 
       setAgendamentos((prev) => {
         const copia = { ...prev };
-        copia[chaveAntiga] = copia[chaveAntiga].filter((a) => a.id_consulta !== consultaSelecionada.id_consulta);
+        copia[chaveAntiga] = copia[chaveAntiga].filter(
+          (a) => a.id_consulta !== consultaSelecionada.id_consulta
+        );
         if (copia[chaveAntiga].length === 0) delete copia[chaveAntiga];
         if (!copia[chaveNova]) copia[chaveNova] = [agendamentoAtualizado];
         else copia[chaveNova].push(agendamentoAtualizado);
@@ -233,57 +320,93 @@ export default function Consulta() {
         ano: dt.getFullYear(),
         horario: horaSelecionada,
       }));
+=======
+      if (!resp.ok) throw new Error("Erro no back-end ao reagendar");
+>>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
 
+      await buscarConsultas();
       setMostrarModalReagendamento(false);
       setMensagemConfirmacao(
-        `Consulta reagendada para ${dt.getDate()} de ${new Date(dt.getFullYear(), dt.getMonth()).toLocaleString("pt-BR", { month: "long" })} às ${horaSelecionada}`
+        `Consulta reagendada para ${dataSelecionada} às ${horaSelecionada}`
       );
+      setConsultaSelecionada(null);
     } catch (err) {
       console.error("Erro ao reagendar:", err);
       alert("Não foi possível reagendar a consulta.");
     }
   };
 
+  // Gera dinamicamente a grade de dias e horários para reagendar
   const renderizarGradeReagendamento = () => {
-    const opcoes = [
-      { diaSemana: "ter", data: "29/04" },
-      { diaSemana: "qua", data: "30/04" },
-      { diaSemana: "qui", data: "01/05" },
-      { diaSemana: "sex", data: "02/05" },
-      { diaSemana: "sáb", data: "03/05" },
-      { diaSemana: "dom", data: "04/05" },
-      { diaSemana: "seg", data: "05/05" },
-    ];
     const horarios = ["08:00", "09:00", "10:00", "11:00"];
+    const primeiroDiaMes = new Date(anoReagendamento, indiceMesReagendamento, 1);
+    const diaSemanaInicio = primeiroDiaMes.getDay(); // 0 = domingo
 
-    return opcoes.map(({ diaSemana, data }, i) => (
-      <div key={i} className="calendar-day">
-        <strong>{diaSemana}</strong>
-        <span>{data}</span>
-        {horarios.map((hora) => (
-          <button
-            key={hora}
-            className={`hour-btn ${dataSelecionada === data && horaSelecionada === hora ? "selected" : ""}`}
-            onClick={() => {
-              setDataSelecionada(data);
-              setHoraSelecionada(hora);
-            }}
-          >
-            {hora}
-          </button>
+    // Ajusta para começar na segunda-feira (ou domingo = -6)
+    const offset = diaSemanaInicio === 0 ? -6 : 1 - diaSemanaInicio;
+    const dataBase = new Date(
+      anoReagendamento,
+      indiceMesReagendamento,
+      1 + offset
+    );
+
+    const diasSemana = Array.from({ length: 7 }, (_, i) => {
+      const data = new Date(dataBase);
+      data.setDate(data.getDate() + i);
+
+      const diaSemana = data.toLocaleString("pt-BR", { weekday: "short" });
+      const dataStr = data.toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+      });
+
+      return { diaSemana, dataStr };
+    });
+
+    return (
+      <div className="calendar-grid">
+        {diasSemana.map(({ diaSemana, dataStr }) => (
+          <div key={dataStr} className="calendar-day">
+            <strong>{diaSemana}</strong>
+            <span>{dataStr}</span>
+            {horarios.map((h) => (
+              <button
+                key={`${dataStr}-${h}`}
+                className={`hour-btn ${
+                  dataSelecionada === dataStr && horaSelecionada === h
+                    ? "selected"
+                    : ""
+                }`}
+                onClick={() => {
+                  setDataSelecionada(dataStr);
+                  setHoraSelecionada(h);
+                }}
+              >
+                {h}
+              </button>
+            ))}
+          </div>
         ))}
       </div>
-    ));
+    );
   };
-
-
 
   return (
     <div className="container-agenda-c">
       {mensagemConfirmacao && (
         <div className="confirmation-message-c">
           <span>{mensagemConfirmacao}</span>
-          <button className="close-confirmation-c" onClick={() => setMensagemConfirmacao("")}> <X size={16} /> </button>
+          <button
+            className="close-confirmation-c"
+            onClick={() => setMensagemConfirmacao("")}
+          >
+<<<<<<< HEAD
+            {" "}
+            <X size={16} />{" "}
+=======
+            <X size={16} />
+>>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
+          </button>
         </div>
       )}
 
@@ -292,26 +415,65 @@ export default function Consulta() {
       </button>
 
       <section className="calendar-c">
+<<<<<<< HEAD
         <header className="calendar-header-c">
-          {role === "profissional" && <button onClick={() => trocarMes(-1)} className="setaEsquerda-c"> <ChevronLeft /> </button>}
-          <h2>{mesAtual.nome} {anoAtual}</h2>
-          {role === "profissional" && <button onClick={() => trocarMes(1)} className="setaDireita-c"> <ChevronRight /> </button>}
+          {role === "profissional" && (
+            <button onClick={() => trocarMes(-1)} className="setaEsquerda-c">
+              {" "}
+              <ChevronLeft />{" "}
+            </button>
+          )}
+          <h2>
+            {mesAtual.nome} {anoAtual}
+          </h2>
+          {role === "profissional" && (
+            <button onClick={() => trocarMes(1)} className="setaDireita-c">
+              {" "}
+              <ChevronRight />{" "}
+            </button>
+          )}
         </header>
+=======
+        <div className="calendar-header-c">
+          <button onClick={() => trocarMes(-1)} className="setaEsquerda-c">
+            <ChevronLeft />
+          </button>
+          <h2>
+            {mesAtual.nome} {anoAtual}
+          </h2>
+          <button onClick={() => trocarMes(1)} className="setaDireita-c">
+            <ChevronRight />
+          </button>
+        </div>
+>>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
 
         <div className="weekdays-c">
-          {"Dom Seg Ter Qua Qui Sex Sab".split(" ").map((d) => <div key={d}>{d}</div>)}
+          {"Dom Seg Ter Qua Qui Sex Sab".split(" ").map((d) => (
+            <div key={d}>{d}</div>
+          ))}
         </div>
 
         <div className="days-grid-c">
           {gradeDias.map((diaObj) => (
             <div
               key={diaObj.id}
-              className={`day ${diaObj.indisponivel ? "unavailable" : ""}`}
-              onClick={() => aoSelecionarDia(diaObj)}
+              className={`day-c ${diaObj.indisponivel ? "unavailable-c" : ""}`}
             >
               <span>{diaObj.dia}</span>
               {diaObj.registrosDoDia.map((ag, idx) => (
-                <div key={idx} className="appointment-detail-c"> {ag.horario} </div>
+<<<<<<< HEAD
+                <div key={idx} className="appointment-detail-c">
+                  {" "}
+                  {ag.horario}{" "}
+=======
+                <div
+                  key={idx}
+                  className="appointment-detail-c"
+                  onClick={() => aoSelecionarHorario(diaObj, ag)}
+                >
+                  {ag.horario}
+>>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
+                </div>
               ))}
             </div>
           ))}
@@ -328,65 +490,175 @@ export default function Consulta() {
       </div>
 
       {consultaSelecionada && (
+<<<<<<< HEAD
         <aside className="schedule-c">
-          <button className="close-button-c" onClick={fecharDetalhes}> <X size={24} /> </button>
+          <button className="close-button-c" onClick={fecharDetalhes}>
+            {" "}
+            <X size={24} />{" "}
+          </button>
 
           <div className="resumo-card-c">
             <div className="agendamento-info-c">
-
               <div className="par-info-c">
-                {consultaSelecionada.fotoPar && <img src={consultaSelecionada.fotoPar} alt="Foto" className="foto-par-c" />}
+=======
+        <div className="schedule-c">
+          <button className="close-button-c" onClick={fecharDetalhes}>
+            <X size={24} />
+          </button>
+          <div className="resumo-card-c">
+            <div className="agendamento-info-c">
+              <div className="profissional-c">
+>>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
+                {consultaSelecionada.fotoPar && (
+                  <img
+                    src={consultaSelecionada.fotoPar}
+                    alt="Foto"
+<<<<<<< HEAD
+                    className="foto-par-c"
+=======
+                    className="foto-profissional-c"
+>>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
+                  />
+                )}
                 <div>
                   <h3>{consultaSelecionada.nomePar}</h3>
-                  <p>{role === "paciente" ? "Profissional responsável" : "Paciente agendado"}</p>
+                  <p>
+                    {role === "paciente"
+                      ? "Profissional responsável"
+                      : "Paciente agendado"}
+                  </p>
                 </div>
               </div>
 
               <div className="detalhes-c">
-                <div><strong>Data:</strong> {consultaSelecionada.dia}/{consultaSelecionada.mes + 1}/{consultaSelecionada.ano}</div>
-                <div><strong>Horário:</strong> {consultaSelecionada.horario}</div>
+                <div>
+                  <strong>Data:</strong> {consultaSelecionada.dia}/
+                  {consultaSelecionada.mes + 1}/{consultaSelecionada.ano}
+                </div>
+                <div>
+                  <strong>Horário:</strong> {consultaSelecionada.horario}
+                </div>
                 {role === "profissional" && (
-                  <div className="valor-consulta-c"><strong>Valor:</strong> R$ 165,00</div>
+                  <div className="valor-consulta-c">
+                    <strong>Valor:</strong> R$ 165,00
+                  </div>
                 )}
               </div>
 
               <div className="botoes-c">
                 {role === "paciente" ? (
                   <>
-                    <button className="alterar-c" onClick={() => setMostrarModalReagendamento(true)}>Alterar</button>
-                    <button className="remover-c" onClick={cancelarConsulta}>Remover</button>
+                    <button
+                      className="alterar-c"
+                      onClick={() => setMostrarModalReagendamento(true)}
+                    >
+                      Alterar
+                    </button>
+                    <button className="remover-c" onClick={cancelarConsulta}>
+                      Remover
+                    </button>
                   </>
                 ) : (
-                  <button className="remover-c" onClick={cancelarConsulta}>Remover</button>
+                  <button className="remover-c" onClick={cancelarConsulta}>
+                    Remover
+                  </button>
                 )}
               </div>
             </div>
           </div>
-        </aside>
+        </div>
       )}
 
       {mostrarModalReagendamento && (
         <div className="reschedule-modal-overlay">
           <div className="reschedule-modal">
-            <button className="modal-close-btn" onClick={() => setMostrarModalReagendamento(false)}> <X size={20} /> </button>
+            <button
+              className="modal-close-btn"
+              onClick={() => setMostrarModalReagendamento(false)}
+            >
+<<<<<<< HEAD
+              {" "}
+              <X size={20} />{" "}
+=======
+              <X size={20} />
+>>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
+            </button>
             <h2>Reagendamento de consulta</h2>
             <p>Escolha dia e horário:</p>
 
             <div className="calendar-scroll">
               <div className="calendar-title">
-                <button onClick={() => { let nm = indiceMesReagendamento - 1; let na = anoReagendamento; if (nm < 0) { nm = 11; na -= 1; } setIndiceMesReagendamento(nm); setAnoReagendamento(na); }} className="setaE-c"> <ChevronLeft /> </button>
-                <h3>{new Date(anoReagendamento, indiceMesReagendamento).toLocaleString("pt-BR", { month: "long", year: "numeric" })}</h3>
-                <button onClick={() => { let nm = indiceMesReagendamento + 1; let na = anoReagendamento; if (nm > 11) { nm = 0; na += 1; } setIndiceMesReagendamento(nm); setAnoReagendamento(na); }} className="setaD-c"> <ChevronRight /> </button>
+                <button
+                  onClick={() => {
+                    let nm = indiceMesReagendamento - 1;
+                    let na = anoReagendamento;
+                    if (nm < 0) {
+                      nm = 11;
+                      na -= 1;
+                    }
+                    setIndiceMesReagendamento(nm);
+                    setAnoReagendamento(na);
+                  }}
+                  className="setaE-c"
+                >
+<<<<<<< HEAD
+                  {" "}
+                  <ChevronLeft />{" "}
+                </button>
+                <h3>
+                  {new Date(
+                    anoReagendamento,
+                    indiceMesReagendamento
+                  ).toLocaleString("pt-BR", { month: "long", year: "numeric" })}
+=======
+                  <ChevronLeft />
+                </button>
+                <h3>
+                  {new Date(anoReagendamento, indiceMesReagendamento).toLocaleString(
+                    "pt-BR",
+                    { month: "long", year: "numeric" }
+                  )}
+>>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
+                </h3>
+                <button
+                  onClick={() => {
+                    let nm = indiceMesReagendamento + 1;
+                    let na = anoReagendamento;
+                    if (nm > 11) {
+                      nm = 0;
+                      na += 1;
+                    }
+                    setIndiceMesReagendamento(nm);
+                    setAnoReagendamento(na);
+                  }}
+                  className="setaD-c"
+                >
+<<<<<<< HEAD
+                  {" "}
+                  <ChevronRight />{" "}
+=======
+                  <ChevronRight />
+>>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
+                </button>
               </div>
 
-              <div className="calendar-grid">
-                {renderizarGradeReagendamento()}
-              </div>
-            </div>
+              {renderizarGradeReagendamento()}
+            </div>-
 
             <div className="modal-actions">
-              <button className="btn-back" onClick={() => setMostrarModalReagendamento(false)}>Voltar</button>
-              <button className="btn-confirm" disabled={!dataSelecionada || !horaSelecionada} onClick={confirmarReagendamento}>Reagendar</button>
+              <button
+                className="btn-back"
+                onClick={() => setMostrarModalReagendamento(false)}
+              >
+                Voltar
+              </button>
+              <button
+                className="btn-confirm"
+                disabled={!dataSelecionada || !horaSelecionada}
+                onClick={confirmarReagendamento}
+              >
+                Reagendar
+              </button>
             </div>
           </div>
         </div>

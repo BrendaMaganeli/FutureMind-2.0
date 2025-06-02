@@ -5,10 +5,9 @@ import "./CSS/Cadastros.css";
 import { useContext, useState } from "react";
 import { GlobalContext } from "../Context/GlobalContext";
 
-function login() {
-
-  const { setUserLogado, setUser } = useContext(GlobalContext);
+function Login() {
   const navigate = useNavigate();
+  const { setUserLogado, setUser } = useContext(GlobalContext);
 
   const [valorEmail, setValorEmail] = useState("");
   const [valorSenha, setValorSenha] = useState("");
@@ -32,13 +31,16 @@ function login() {
   const handleLogin = async () => {
     const credentials = { email: valorEmail, senha: valorSenha };
     try {
-      const response = await fetch("https://futuremind-2-0.onrender.com/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-      });
+      const response = await fetch(
+        "https://futuremind-2-0.onrender.com/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(credentials),
+        }
+      );
 
       const data = await response.json();
 
@@ -55,8 +57,6 @@ function login() {
   const handleCadastro = () => {
     let validacoes = true;
 
-    // Email
-    // Senha
     if (!valorSenha || valorSenha.trim().length < 8) {
       setSenhaValido(true);
       validacoes = false;
@@ -64,7 +64,6 @@ function login() {
       setSenhaValido(false);
     }
 
-    // Se tudo estiver válido, redireciona
     if (validacoes) {
       handleLogin();
     }
@@ -81,6 +80,7 @@ function login() {
             className="logo-paraCadastro"
           />
         </div>
+
         <div className="inputs-login-div">
           <div className="login-input">
             <input
@@ -122,12 +122,13 @@ function login() {
             />
           </div>
         </div>
+
         <div className="container_button_login">
           <button className="botao-login" onClick={handleCadastro}>
-             Realizar Login
+            Realizar Login
           </button>
         </div>
-        
+
         <p className="login-texto">
           Ainda não possui cadastro?
           <a
@@ -135,7 +136,7 @@ function login() {
             style={{ marginLeft: "8px", marginRight: "8px" }}
           >
             Profissional
-          </a>{" "}
+          </a>
           ou
           <a
             href="/cadastroPaciente"
@@ -145,6 +146,7 @@ function login() {
           </a>
         </p>
       </div>
+
       <div className="lado-direitoProfissional">
         <img
           src={imagem}
@@ -156,4 +158,4 @@ function login() {
   );
 }
 
-export default login;
+export default Login;

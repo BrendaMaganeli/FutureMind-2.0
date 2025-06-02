@@ -199,7 +199,19 @@ export default function Consulta() {
       }
       if (!resp.ok) throw new Error("Erro no back-end ao deletar");
 
+<<<<<<< HEAD
       await buscarConsultas();
+=======
+      const chave = `${consultaSelecionada.ano}-${consultaSelecionada.mes}-${consultaSelecionada.dia}`;
+      setAgendamentos((prev) => {
+        const copia = { ...prev };
+        copia[chave] = copia[chave].filter(
+          (a) => a.id_consulta !== consultaSelecionada.id_consulta
+        );
+        if (copia[chave].length === 0) delete copia[chave];
+        return copia;
+      });
+>>>>>>> c5153b869c4b6ac25f3e4998a2e32b66656c0805
       fecharDetalhes();
     } catch (err) {
       console.error("Erro ao remover agendamento:", err);
@@ -224,7 +236,40 @@ export default function Consulta() {
         alert("Consulta não encontrada");
         return;
       }
+<<<<<<< HEAD
       if (!resp.ok) throw new Error("Erro no back-end ao reagendar");
+=======
+      if (!resp.ok) throw new Error("Erro no back-end");
+
+      const chaveAntiga = `${consultaSelecionada.ano}-${consultaSelecionada.mes}-${consultaSelecionada.dia}`;
+      const dt = new Date(dataISO);
+      const chaveNova = `${dt.getFullYear()}-${dt.getMonth()}-${dt.getDate()}`;
+      const agendamentoAtualizado = {
+        id_consulta: consultaSelecionada.id_consulta,
+        horario: horaSelecionada,
+        nomePar: consultaSelecionada.nomePar,
+        fotoPar: consultaSelecionada.fotoPar,
+      };
+
+      setAgendamentos((prev) => {
+        const copia = { ...prev };
+        copia[chaveAntiga] = copia[chaveAntiga].filter(
+          (a) => a.id_consulta !== consultaSelecionada.id_consulta
+        );
+        if (copia[chaveAntiga].length === 0) delete copia[chaveAntiga];
+        if (!copia[chaveNova]) copia[chaveNova] = [agendamentoAtualizado];
+        else copia[chaveNova].push(agendamentoAtualizado);
+        return copia;
+      });
+
+      setConsultaSelecionada((prev) => ({
+        ...prev,
+        dia: dt.getDate(),
+        mes: dt.getMonth(),
+        ano: dt.getFullYear(),
+        horario: horaSelecionada,
+      }));
+>>>>>>> c5153b869c4b6ac25f3e4998a2e32b66656c0805
 
       await buscarConsultas();
       setMostrarModalReagendamento(false);
@@ -302,7 +347,12 @@ export default function Consulta() {
             className="close-confirmation-c"
             onClick={() => setMensagemConfirmacao("")}
           >
+<<<<<<< HEAD
             <X size={16} />
+=======
+            {" "}
+            <X size={16} />{" "}
+>>>>>>> c5153b869c4b6ac25f3e4998a2e32b66656c0805
           </button>
         </div>
       )}
@@ -312,6 +362,7 @@ export default function Consulta() {
       </button>
 
       <section className="calendar-c">
+<<<<<<< HEAD
         <div className="calendar-header-c">
           <button onClick={() => trocarMes(-1)} className="setaEsquerda-c">
             <ChevronLeft />
@@ -323,6 +374,25 @@ export default function Consulta() {
             <ChevronRight />
           </button>
         </div>
+=======
+        <header className="calendar-header-c">
+          {role === "profissional" && (
+            <button onClick={() => trocarMes(-1)} className="setaEsquerda-c">
+              {" "}
+              <ChevronLeft />{" "}
+            </button>
+          )}
+          <h2>
+            {mesAtual.nome} {anoAtual}
+          </h2>
+          {role === "profissional" && (
+            <button onClick={() => trocarMes(1)} className="setaDireita-c">
+              {" "}
+              <ChevronRight />{" "}
+            </button>
+          )}
+        </header>
+>>>>>>> c5153b869c4b6ac25f3e4998a2e32b66656c0805
 
         <div className="weekdays-c">
           {"Dom Seg Ter Qua Qui Sex Sab".split(" ").map((d) => (
@@ -338,12 +408,18 @@ export default function Consulta() {
             >
               <span>{diaObj.dia}</span>
               {diaObj.registrosDoDia.map((ag, idx) => (
+<<<<<<< HEAD
                 <div
                   key={idx}
                   className="appointment-detail-c"
                   onClick={() => aoSelecionarHorario(diaObj, ag)}
                 >
                   {ag.horario}
+=======
+                <div key={idx} className="appointment-detail-c">
+                  {" "}
+                  {ag.horario}{" "}
+>>>>>>> c5153b869c4b6ac25f3e4998a2e32b66656c0805
                 </div>
               ))}
             </div>
@@ -361,6 +437,7 @@ export default function Consulta() {
       </div>
 
       {consultaSelecionada && (
+<<<<<<< HEAD
         <div className="schedule-c">
           <button className="close-button-c" onClick={fecharDetalhes}>
             <X size={24} />
@@ -368,11 +445,26 @@ export default function Consulta() {
           <div className="resumo-card-c">
             <div className="agendamento-info-c">
               <div className="profissional-c">
+=======
+        <aside className="schedule-c">
+          <button className="close-button-c" onClick={fecharDetalhes}>
+            {" "}
+            <X size={24} />{" "}
+          </button>
+
+          <div className="resumo-card-c">
+            <div className="agendamento-info-c">
+              <div className="par-info-c">
+>>>>>>> c5153b869c4b6ac25f3e4998a2e32b66656c0805
                 {consultaSelecionada.fotoPar && (
                   <img
                     src={consultaSelecionada.fotoPar}
                     alt="Foto"
+<<<<<<< HEAD
                     className="foto-profissional-c"
+=======
+                    className="foto-par-c"
+>>>>>>> c5153b869c4b6ac25f3e4998a2e32b66656c0805
                   />
                 )}
                 <div>
@@ -421,7 +513,7 @@ export default function Consulta() {
               </div>
             </div>
           </div>
-        </div>
+        </aside>
       )}
 
       {mostrarModalReagendamento && (
@@ -431,7 +523,12 @@ export default function Consulta() {
               className="modal-close-btn"
               onClick={() => setMostrarModalReagendamento(false)}
             >
+<<<<<<< HEAD
               <X size={20} />
+=======
+              {" "}
+              <X size={20} />{" "}
+>>>>>>> c5153b869c4b6ac25f3e4998a2e32b66656c0805
             </button>
             <h2>Reagendamento de consulta</h2>
             <p>Escolha dia e horário:</p>
@@ -451,6 +548,7 @@ export default function Consulta() {
                   }}
                   className="setaE-c"
                 >
+<<<<<<< HEAD
                   <ChevronLeft />
                 </button>
                 <h3>
@@ -458,6 +556,16 @@ export default function Consulta() {
                     "pt-BR",
                     { month: "long", year: "numeric" }
                   )}
+=======
+                  {" "}
+                  <ChevronLeft />{" "}
+                </button>
+                <h3>
+                  {new Date(
+                    anoReagendamento,
+                    indiceMesReagendamento
+                  ).toLocaleString("pt-BR", { month: "long", year: "numeric" })}
+>>>>>>> c5153b869c4b6ac25f3e4998a2e32b66656c0805
                 </h3>
                 <button
                   onClick={() => {
@@ -472,7 +580,12 @@ export default function Consulta() {
                   }}
                   className="setaD-c"
                 >
+<<<<<<< HEAD
                   <ChevronRight />
+=======
+                  {" "}
+                  <ChevronRight />{" "}
+>>>>>>> c5153b869c4b6ac25f3e4998a2e32b66656c0805
                 </button>
               </div>
 

@@ -85,7 +85,6 @@ function Pagamento() {
   };
 
   useEffect(() => {
-    
 
     const get_assinatura = async () => {
       
@@ -113,7 +112,7 @@ function Pagamento() {
      get_assinatura()
     }, []);
 
-  const {vim_plano,} = useContext(GlobalContext)
+  const {vim_plano} = useContext(GlobalContext)
   
 
 
@@ -337,15 +336,6 @@ function Pagamento() {
       setValida_cvv(false);
     }
   }, [cvvCartao]);
-
-  
- 
-
-  useEffect(() => {
-  if ((!dataSelecionada || !horaSelecionada) && !vim_plano) {
-    navigate(-1);
-  }
-}, []);
 
   return (
     <div

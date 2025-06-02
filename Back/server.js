@@ -1,16 +1,22 @@
-const express =  require ('express');
-const mysql = require ('mysql2/promise');
-const app = express ();
-const cors = require('cors');
+import express from "express";
+import mysql from "mysql2/promise";
+import cors from "cors";
+import multer from "multer";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-app.use(cors({
-    origin: '*'
-}));
+// recria __dirname em ESM:
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-app.use(express.static('public'));
+// 👉 Defina o app aqui:
+const app = express();
+
+app.use(cors({ origin: "*" }));
+app.use(express.static("public"));
 app.use(express.json());
-
-app.use(express.json())
 const pool = mysql.createPool({
    
     host: 'nozomi.proxy.rlwy.net',
@@ -22,6 +28,23 @@ const pool = mysql.createPool({
     connectionLimit: 10,
     queueLimit: 0
 });
+const uploadDir = path.resolve(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname); 
+    const idPaciente = req.params.id_paciente;
+    cb(null, `paciente_${idPaciente}${ext}`);
+  },
+});
+
+const upload = multer({ storage });
 
 app.get('/', async(req, res) => {
     try {
@@ -238,6 +261,25 @@ app.put('/paciente', async (req, res) => {
     } catch (err) {
       console.error(err);
       res.status(500).json('Erro ao atualizar o paciente');
+    }
+  });
+
+
+  app.post("/upload-foto/:id_paciente", upload.single("foto"), async (req, res) => {
+    try {
+      const { id_paciente } = req.params;
+      // Aqui você já tem acesso a req.file (com informações do arquivo)
+      // Faça o que for necessário: salvar caminho no banco, etc.
+      console.log("Recebi upload de foto do paciente:", id_paciente);
+      console.log("Dados do arquivo:", req.file);
+  
+      // Exemplo: se quiser gravar no banco o caminho do arquivo:
+      // await pool.query(`UPDATE pacientes SET foto_path = ? WHERE id_paciente = ?`, [req.file.filename, id_paciente]);
+  
+      return res.status(200).json({ message: "Upload realizado com sucesso" });
+    } catch (err) {
+      console.error("Erro no upload de foto:", err);
+      return res.status(500).json({ error: "Erro interno ao salvar a foto" });
     }
   });
 
@@ -479,9 +521,12 @@ app.get('/pagamento/:id', async(req, res) => {
 
     try {
         
-        const { id_paciente } = req.params;
-        
-        const [rows] = await pool.query('SELECT consultas_disponiveis FROM assinaturas WHERE fk_id_paciente=?', [id_paciente]);
+      const { id } = req.params; // "id" aqui é o id_paciente que você quer consultar
+          const [rows] = await pool.query(
+             'SELECT consultas_disponiveis FROM assinaturas WHERE fk_id_paciente = ?',
+             [ id ]
+            );
+    
 
         if (rows.length > 0) {
 

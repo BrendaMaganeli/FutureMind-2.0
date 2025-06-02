@@ -51,14 +51,16 @@ export default function Consulta() {
   const [indiceMesAtual, setIndiceMesAtual] = useState(hoje.getMonth());
 
   const [mostrarModalReagendamento, setMostrarModalReagendamento] = useState(false);
-  const [indiceMesReagendamento, setIndiceMesReagendamento] = useState(hoje.getMonth());
-  const [anoReagendamento, setAnoReagendamento] = useState(hoje.getFullYear());
-  const [dataSelecionada, setDataSelecionada] = useState(null);
+
+  const [dataSelecionada, setDataSelecionada] = useState(null); // "DD/MM"
   const [horaSelecionada, setHoraSelecionada] = useState(null);
 
   const [mensagemConfirmacao, setMensagemConfirmacao] = useState("");
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(null);
+
+  // Estado para controlar navegação de semanas (0 = semana atual, 1 = próxima semana, -1 = semana anterior, etc.)
+  const [semanaOffset, setSemanaOffset] = useState(0);
 
   // Função que busca consultas do back-end conforme role
   async function buscarConsultas() {
@@ -127,7 +129,7 @@ export default function Consulta() {
   const mesAtual = mesesDoAno[indiceMesAtual];
   const mesAnterior = mesesDoAno[(indiceMesAtual + 11) % 12];
 
-  // Gera as 42 células do calendário
+  // Gera as 42 células do calendário principal
   const gradeDias = Array.from({ length: 42 }, (_, i) => {
     let dia, mesCorrente, indisponivel, registrosDoDia = [];
 
@@ -144,6 +146,7 @@ export default function Consulta() {
       mesCorrente = true;
       const chave = `${anoAtual}-${indiceMesAtual}-${dia}`;
       registrosDoDia = agendamentos[chave] || [];
+      // Se não houver registros, a célula está indisponível
       indisponivel = registrosDoDia.length === 0;
     }
 
@@ -210,7 +213,9 @@ export default function Consulta() {
   // Confirma reagendamento (PUT) e refaz o fetch
   const confirmarReagendamento = async () => {
     if (!consultaSelecionada || !dataSelecionada || !horaSelecionada) return;
-    const dataISO = paraDataISO(dataSelecionada, anoReagendamento);
+    // Precisamos converter "DD/MM" + ano da semana exibida para ISO:
+    const anoParaISO = hoje.getFullYear(); // vamos usar o ano atual no ISO
+    const dataISO = paraDataISO(dataSelecionada, anoParaISO);
     try {
       const resp = await fetch(
         `http://localhost:4242/consulta/${consultaSelecionada.id_consulta}`,
@@ -238,23 +243,25 @@ export default function Consulta() {
     }
   };
 
-  // Gera dinamicamente a grade de dias e horários para reagendar
+  // Gera dinamicamente a grade de dias (7 dias) para reagendar,
+  // com base no semanaOffset (0 = semana atual, 1 = próxima semana, etc.)
   const renderizarGradeReagendamento = () => {
     const horarios = ["08:00", "09:00", "10:00", "11:00"];
-    const primeiroDiaMes = new Date(anoReagendamento, indiceMesReagendamento, 1);
-    const diaSemanaInicio = primeiroDiaMes.getDay(); // 0 = domingo
 
-    // Ajusta para começar na segunda-feira (ou domingo = -6)
-    const offset = diaSemanaInicio === 0 ? -6 : 1 - diaSemanaInicio;
-    const dataBase = new Date(
-      anoReagendamento,
-      indiceMesReagendamento,
-      1 + offset
-    );
+    // Calcula a data base para a semana atual + offset
+    const referencia = new Date(hoje);
+    referencia.setDate(hoje.getDate() + semanaOffset * 7);
 
+    // Achar segunda-feira daquela semana
+    const diaSemanaRef = referencia.getDay(); // 0 (domingo) a 6 (sábado)
+    const diffParaSegunda = diaSemanaRef === 0 ? -6 : 1 - diaSemanaRef;
+    const monday = new Date(referencia);
+    monday.setDate(referencia.getDate() + diffParaSegunda);
+
+    // Monta os 7 dias a partir da segunda-feira
     const diasSemana = Array.from({ length: 7 }, (_, i) => {
-      const data = new Date(dataBase);
-      data.setDate(data.getDate() + i);
+      const data = new Date(monday);
+      data.setDate(monday.getDate() + i);
 
       const diaSemana = data.toLocaleString("pt-BR", { weekday: "short" });
       const dataStr = data.toLocaleDateString("pt-BR", {
@@ -262,12 +269,12 @@ export default function Consulta() {
         month: "2-digit",
       });
 
-      return { diaSemana, dataStr };
+      return { diaSemana, dataStr, diaNum: data.getDate(), mesNum: data.getMonth() };
     });
 
     return (
       <div className="calendar-grid">
-        {diasSemana.map(({ diaSemana, dataStr }) => (
+        {diasSemana.map(({ diaSemana, dataStr, diaNum, mesNum }) => (
           <div key={dataStr} className="calendar-day">
             <strong>{diaSemana}</strong>
             <span>{dataStr}</span>
@@ -291,6 +298,24 @@ export default function Consulta() {
         ))}
       </div>
     );
+  };
+
+  // Monta título da modal de reagendamento: exibir o intervalo de datas da semana
+  const obterTituloSemana = () => {
+    const referencia = new Date(hoje);
+    referencia.setDate(hoje.getDate() + semanaOffset * 7);
+    // Encontrar segunda e domingo dessa semana
+    const diaSemanaRef = referencia.getDay();
+    const diffParaSegunda = diaSemanaRef === 0 ? -6 : 1 - diaSemanaRef;
+    const monday = new Date(referencia);
+    monday.setDate(referencia.getDate() + diffParaSegunda);
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+
+    const formatDate = (d) =>
+      d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
+
+    return `${formatDate(monday)} - ${formatDate(sunday)}`;
   };
 
   return (
@@ -319,7 +344,7 @@ export default function Consulta() {
           <h2>
             {mesAtual.nome} {anoAtual}
           </h2>
-          <button onClick={() => trocarMes(1)} className="setaDireita-c">
+          <button onClick={() => trocarMes(1)} className="setaEsquerda-c">
             <ChevronRight />
           </button>
         </div>
@@ -434,42 +459,19 @@ export default function Consulta() {
               <X size={20} />
             </button>
             <h2>Reagendamento de consulta</h2>
-            <p>Escolha dia e horário:</p>
+            <p>Semana: {obterTituloSemana()}</p>
 
             <div className="calendar-scroll">
               <div className="calendar-title">
                 <button
-                  onClick={() => {
-                    let nm = indiceMesReagendamento - 1;
-                    let na = anoReagendamento;
-                    if (nm < 0) {
-                      nm = 11;
-                      na -= 1;
-                    }
-                    setIndiceMesReagendamento(nm);
-                    setAnoReagendamento(na);
-                  }}
+                  onClick={() => setSemanaOffset((prev) => prev - 1)}
                   className="setaE-c"
                 >
                   <ChevronLeft />
                 </button>
-                <h3>
-                  {new Date(anoReagendamento, indiceMesReagendamento).toLocaleString(
-                    "pt-BR",
-                    { month: "long", year: "numeric" }
-                  )}
-                </h3>
+                <h3>{obterTituloSemana()}</h3>
                 <button
-                  onClick={() => {
-                    let nm = indiceMesReagendamento + 1;
-                    let na = anoReagendamento;
-                    if (nm > 11) {
-                      nm = 0;
-                      na += 1;
-                    }
-                    setIndiceMesReagendamento(nm);
-                    setAnoReagendamento(na);
-                  }}
+                  onClick={() => setSemanaOffset((prev) => prev + 1)}
                   className="setaD-c"
                 >
                   <ChevronRight />
@@ -477,7 +479,7 @@ export default function Consulta() {
               </div>
 
               {renderizarGradeReagendamento()}
-            </div>-
+            </div>
 
             <div className="modal-actions">
               <button

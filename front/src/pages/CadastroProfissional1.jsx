@@ -17,12 +17,12 @@ function CadastroProfissional1() {
   const [telefone, setTelefone] = useState(profissional.telefone);
   const [telefoneValido, setTelefoneValido] = useState(false);
   const [dataNascimento, setDataNascimento] = useState(
-    profissional.data_nascimento,
+    profissional.data_nascimento
   );
   const [dataNascimentoValido, setDataNascimentoValido] = useState(false);
   const [cpf, setCpf] = useState(profissional.cpf);
   const [cpfValido, setCpfValido] = useState(false);
-  const [valorConsulta, setValorConsulta] = useState('');
+  const [valorConsulta, setValorConsulta] = useState("");
   const [valorConsultaValido, setValorConsultaValido] = useState(false);
 
   const converterParaFormatoBanco = (data) => {
@@ -30,6 +30,36 @@ function CadastroProfissional1() {
     const [dia, mes, ano] = data.split("/");
     return `${ano}-${mes.padStart(2, "0")}-${dia.padStart(2, "0")}`;
   };
+
+  // const formatarValorConsultaB = (valor) => {
+  //   if (!valor) return "";
+  
+  //   const numerico = valor
+  //     .replace("R$", "")
+  //     .replace(/\s/g, "")
+  //     .replace(/\./g, "")
+  //     .replace(",", ".");
+  
+  //   const valorFloat = parseFloat(numerico);
+  
+  //   return isNaN(valorFloat) ? "" : valorFloat.toFixed(2);
+  // };
+  
+  // const formatarValorConsulta = (valor) => {
+  //   if (!valor) return "";
+  
+  //   const numeros = valor.replace(/\D/g, "");
+  
+  //   const valorComZeros = numeros.padStart(3, "0");
+  
+  //   const reais = valorComZeros.slice(0, -2);
+  //   const centavos = valorComZeros.slice(-2);
+  
+  //   const reaisFormatado = reais.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  
+  //   return `R$ ${reaisFormatado},${centavos}`;
+  // };
+  
 
   useEffect(() => {
     setProfissional({
@@ -40,7 +70,6 @@ function CadastroProfissional1() {
       cpf,
       valor_consulta: formatarValorConsultaB(valorConsulta),
     });
-
   }, [nome, valorCRP, telefone, dataNascimento, cpf, valorConsulta]);
 
   const formatarCPF = (value) => {
@@ -60,8 +89,6 @@ function CadastroProfissional1() {
 
     return value.slice(0, 2) + "/" + value.slice(2, 7); // ex: "06/123456"
   };
-
-  
 
   const formatarTelefone = (value) => {
     value = value.replace(/\D/g, "");
@@ -139,7 +166,7 @@ function CadastroProfissional1() {
         .replace("R$", "")
         .replace(/\./g, "")
         .replace(",", ".")
-        .trim(),
+        .trim()
     );
 
     if (isNaN(valorNumerico) || valorNumerico < 50) {

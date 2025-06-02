@@ -1,37 +1,34 @@
-// Importações de bibliotecas e componentes necessários
-import { Link } from "react-router-dom";
-import Navbar from "../Components/Navbar";
-import Footer from "../Components/Footer";
-import "./CSS/Termos.css";
+import { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import voltar from '../assets/seta-principal.svg';
 
-// Componente para rolar a página até o topo sempre que a rota mudar
+import Footer from "../Components/Footer";
+import voltar from "../assets/seta-principal.svg";
+
+import "./CSS/Termos.css";
+
 function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Faz a rolagem para o topo
+    window.scrollTo(0, 0);
   }, [pathname]);
 
   return null;
 }
 
-// Componente principal dos Termos de Uso
 function Termos() {
   return (
     <div className="body-termos">
-      {/* Barra de navegação */}
-      <button className="back-button-pt" >
-      <img src={voltar} alt="" style={{width: '4em'}} />
+      <button className="back-button-pt">
+        <img src={voltar} alt="Voltar" style={{ width: "4em" }} />
       </button>
+
       <ScrollToTop />
-      {/* Botões para navegação entre Política de Privacidade e Termos de Uso */}
+
       <div className="divBotoes">
         <Link to="/politica" className="botaodecisao">
           Política de Privacidade
@@ -40,11 +37,13 @@ function Termos() {
           Termos de Uso
         </Link>
       </div>
+
       <div className="container_bola_um"></div>
       <div className="container_bola_dois"></div>
       <div className="container_bola_tres"></div>
       <div className="container_bola_quatro"></div>
       <div className="conatiner_bola_cinco"></div>
+
       <div className="introducao">
         <div className="T_titulo">
           <h1>Termos de Uso da FutureMind</h1>
@@ -72,11 +71,10 @@ function Termos() {
           </div>
         </div>
       </div>
-      {/* Elementos visuais decorativos */}
-      {/* Seção de Acordeões com informações detalhadas */}
+
       <div className="container_acodions">
+        {/* Aceitação dos Termos */}
         <div className="accordion-container">
-          {/* Primeiro Acordeão: Aceitação dos Termos */}
           <Accordion className="container_ac">
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -90,26 +88,14 @@ function Termos() {
             <AccordionDetails className="textinhoAceitação">
               <p>
                 Ao acessar e utilizar o site FutureMind, você concorda em
-                cumprir e estar vinculado aos seguintes Termos de Uso. Se você
-                não concordar com estes termos, pedimos que não utilize nosso
-                site. Os Termos de Uso são aplicáveis a todos os usuários,
-                visitantes e qualquer pessoa que acesse o conteúdo e serviços
-                oferecidos pelo FutureMind. Reservamo-nos o direito de modificar
-                estes termos a qualquer momento, e recomendamos que você os
-                revise periodicamente. Seu uso contínuo do site após a
-                publicação de alterações constitui aceitação das novas
-                condições. No FutureMind, nossa missão é proporcionar um espaço
-                seguro e acolhedor para a terapia e o bem-estar emocional. Ao
-                utilizar nossos serviços, você concorda em respeitar as
-                diretrizes e políticas estabelecidas, buscando sempre um
-                ambiente positivo e construtivo.
+                cumprir e estar vinculado aos seguintes Termos de Uso...
               </p>
             </AccordionDetails>
           </Accordion>
         </div>
 
+        {/* Direitos Autorais */}
         <div className="accordion-container">
-          {/* Segundo Acordeão: Direitos Autorais */}
           <Accordion className="container_ac">
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -121,21 +107,13 @@ function Termos() {
               </AccordionDetails>
             </AccordionSummary>
             <AccordionDetails className="textinhoAceitação">
-              <p>
-                © 2024 FutureMind. Todos os direitos reservados. O conteúdo
-                deste site, incluindo textos, imagens, gráficos, logotipos e
-                materiais relacionados, é protegido por leis de direitos
-                autorais e propriedade intelectual. Nenhuma parte deste site
-                pode ser reproduzida, distribuída, modificada ou utilizada de
-                qualquer forma sem a autorização prévia por escrito da
-                FutureMind.
-              </p>
+              <p>© 2024 FutureMind. Todos os direitos reservados...</p>
             </AccordionDetails>
           </Accordion>
         </div>
 
+        {/* Uso Permitido */}
         <div className="accordion-container">
-          {/* Terceiro Acordeão: Uso Permitido */}
           <Accordion className="container_ac">
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -149,33 +127,14 @@ function Termos() {
             <AccordionDetails className="textinhoAceitação">
               <p>
                 Ao utilizar o site FutureMind, você concorda em fazer uso
-                responsável e ético de nossos serviços e conteúdos. O uso
-                permitido inclui: Acesso aos Conteúdos: Você pode acessar,
-                visualizar e interagir com os materiais disponibilizados no
-                site, como artigos, vídeos e recursos relacionados à terapia e
-                ao bem-estar. Compartilhamento de Experiências: Você é
-                encorajado a compartilhar suas experiências e feedback, desde
-                que faça isso de maneira respeitosa e construtiva, contribuindo
-                para um ambiente acolhedor. Criação de Conta: Caso decida criar
-                uma conta, você deve fornecer informações precisas e
-                atualizadas, mantendo a confidencialidade de sua senha e sendo
-                responsável por todas as atividades realizadas em sua conta.
-                Proibições: É estritamente proibido: Utilizar o site para fins
-                ilegais ou não autorizados. Compartilhar informações falsas,
-                enganosas ou prejudiciais. Realizar atividades que possam
-                comprometer a segurança do site ou a experiência de outros
-                usuários, como assédio, discriminação ou spam. Ao seguir estas
-                diretrizes, você ajuda a manter um ambiente seguro e positivo
-                para todos os usuários do FutureMind. Agradecemos sua
-                colaboração e desejamos uma experiência enriquecedora em sua
-                jornada de autoconhecimento e crescimento pessoal!
+                responsável e ético de nossos serviços e conteúdos...
               </p>
             </AccordionDetails>
           </Accordion>
         </div>
 
+        {/* Contato */}
         <div className="accordion-container-final">
-          {/* Quarto Acordeão: Contato */}
           <Accordion className="container_ac">
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -189,24 +148,13 @@ function Termos() {
             <AccordionDetails className="textinhoAceitação">
               <p>
                 Estamos aqui para ajudar você! Se você tiver dúvidas, sugestões
-                ou precisar de mais informações sobre nossos serviços, não
-                hesite em entrar em contato conosco. A sua experiência é
-                importante para nós, e queremos garantir que você tenha todo o
-                apoio necessário em sua jornada de autoconhecimento e bem-estar.
-                <br />
-                Formas de Contato:
-                <br />
-                E-mail:[futuremind.tecn@gmail.com]
-                <br />
-                Telefone:[(48)98982-1222]
-                <br />
-                Agradecemos por escolher a FutureMind. Estamos ansiosos para
-                ouvir de você e apoiá-lo em sua jornada de terapia!
+                ou precisar de mais informações...
               </p>
             </AccordionDetails>
           </Accordion>
         </div>
       </div>
+
       <Footer />
     </div>
   );

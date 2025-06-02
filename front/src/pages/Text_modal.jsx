@@ -20,7 +20,9 @@ export default function App() {
       temAssinatura: true,
       consultasFeitas: 0,
     });
-    setMensagem("Assinatura realizada com sucesso! Você pode fazer até 4 consultas por mês.");
+    setMensagem(
+      "Assinatura realizada com sucesso! Você pode fazer até 4 consultas por mês."
+    );
   };
 
   const fazerConsulta = () => {
@@ -40,7 +42,9 @@ export default function App() {
     };
 
     setUsuario(novoUsuario);
-    setMensagem(`Consulta realizada com sucesso. Restam ${4 - novoUsuario.consultasFeitas} no mês.`);
+    setMensagem(
+      `Consulta realizada com sucesso. Restam ${4 - novoUsuario.consultasFeitas} no mês.`
+    );
   };
 
   return (
@@ -57,7 +61,10 @@ export default function App() {
         <>
           <h2>Consultas do mês</h2>
           <p>Consultas feitas: {usuario.consultasFeitas} / 4</p>
-          <button onClick={fazerConsulta} disabled={usuario.consultasFeitas >= 4}>
+          <button
+            onClick={fazerConsulta}
+            disabled={usuario.consultasFeitas >= 4}
+          >
             Fazer consulta
           </button>
         </>

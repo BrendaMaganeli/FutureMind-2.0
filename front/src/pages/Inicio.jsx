@@ -17,10 +17,10 @@ import Footer from "../Components/Footer.jsx";
 
 function Inicio() {
   const [profissionais, setProfissionais] = useState([]);
-  const [valorBuscar, setValorBuscar] = useState('')
+  const [valorBuscar, setValorBuscar] = useState("");
   const navigate = useNavigate();
   const { setId } = useContext(GlobalContext);
-  
+
   useEffect(() => {
     const buscaProfissionais = async () => {
       try {
@@ -83,47 +83,43 @@ function Inicio() {
   const [abordagemValida, setAbordagemValida] = useState(true);
 
   const acessarPerfil = (id) => {
-    
-      navigate(`/profissional/${id}`);
-      setId(id);
+    navigate(`/profissional/${id}`);
+    setId(id);
   };
 
-  const [filtrados, setFiltrados] = useState([])
+  const [filtrados, setFiltrados] = useState([]);
 
-   const valor_input_buscar = (e) =>{
-    const valor = e.target.value
-    setValorBuscar(valor)
-    
-    if (valor === '') {
+  const valor_input_buscar = (e) => {
+    const valor = e.target.value;
+    setValorBuscar(valor);
+
+    if (valor === "") {
       setFiltrados([]);
     } else {
-      
       const filtrados = profissionais.filter((nome) =>
         nome.nome.toLowerCase().includes(valor.toLowerCase())
       );
       setFiltrados(filtrados);
     }
-   }
+  };
 
   const selecionarUsuario = (profi) => {
-    
     setValorBuscar(profi.nome);
     setFiltrados([]);
     acessarPerfil(profi.id_profissional);
   };
-  
-  const [select_filtrados, setSelect_filtrados] = useState([])
-  const [filtrosAplicadosEspecializacoes, setFiltrosAplicadosEspecializacoes] = useState([]);
-  const [filtrosAplicadosAbordagens, setFiltrosAplicadosAbordagens] = useState([]);
- 
+
+  const [select_filtrados, setSelect_filtrados] = useState([]);
+  const [filtrosAplicadosEspecializacoes, setFiltrosAplicadosEspecializacoes] =
+    useState([]);
+  const [filtrosAplicadosAbordagens, setFiltrosAplicadosAbordagens] = useState(
+    []
+  );
 
   const aplicarFiltro = () => {
     setFiltrosAplicadosEspecializacoes(especializacoes);
     setFiltrosAplicadosAbordagens(abordagens);
   };
-
- 
- 
 
   return (
     <div className="container-inicio">
@@ -140,9 +136,13 @@ function Inicio() {
         <div className="filter-background">
           <div className="filter-profissionais-container">
             <div className="filtros-profissionais">
-              <div className="inpt-filtro">              
-                  <input type="text" placeholder = "Buscar profissional..." onChange={(e) => valor_input_buscar(e)}/>
-                  <img src="search.png" alt="" />
+              <div className="inpt-filtro">
+                <input
+                  type="text"
+                  placeholder="Buscar profissional..."
+                  onChange={(e) => valor_input_buscar(e)}
+                />
+                <img src="search.png" alt="" />
               </div>
               <div className="div-filtro">
                 <div className="select-filtro">
@@ -162,7 +162,7 @@ function Inicio() {
                     styles={{
                       menuPortal: (base) => ({ ...base, zIndex: 9999 }),
                     }}
-                    />
+                  />
                 </div>
                 <div className="select-filtro">
                   <Select
@@ -181,26 +181,27 @@ function Inicio() {
                     styles={{
                       menuPortal: (base) => ({ ...base, zIndex: 9999 }),
                     }}
-                    />
+                  />
                 </div>
               </div>
-             </div>
-             <div className="container_filtrados">
-               {filtrados.length > 0 && (
+            </div>
+            <div className="container_filtrados">
+              {filtrados.length > 0 && (
                 <div className="filtrados">
-               {filtrados.map((nome, index) => (
-                <div className="nomes_filtrados"
-                  key={index}
-                  onClick={() => selecionarUsuario(nome)}
-                  onMouseOver={(e) => (e.currentTarget)}
-                  onMouseOut={(e) => (e.currentTarget)}
-                >
-                {nome.nome}
+                  {filtrados.map((nome, index) => (
+                    <div
+                      className="nomes_filtrados"
+                      key={index}
+                      onClick={() => selecionarUsuario(nome)}
+                      onMouseOver={(e) => e.currentTarget}
+                      onMouseOut={(e) => e.currentTarget}
+                    >
+                      {nome.nome}
+                    </div>
+                  ))}
                 </div>
-                 ))}
-                </div>
-                )}
-              </div>
+              )}
+            </div>
             <div className="filter-profissionais-baixo">
               <div className="plano-saude-img">
                 <Link to="/planoSaude">
@@ -217,7 +218,9 @@ function Inicio() {
                   adequados para você.
                 </div>
                 <div onClick={aplicarFiltro} className="div-btn-filtro">
-                  <button className="btn-filtro" onClick={aplicarFiltro}>Filtrar</button>
+                  <button className="btn-filtro" onClick={aplicarFiltro}>
+                    Filtrar
+                  </button>
                   <img onClick={aplicarFiltro} src="filter-icon.svg" alt="" />
                 </div>
               </div>
@@ -246,57 +249,66 @@ function Inicio() {
               pagination={{ clickable: true }}
               className="swiper-profi"
             >
-            {Array.isArray(profissionais) &&
-                    profissionais.length > 0 &&
-                    (
-                      filtrosAplicadosEspecializacoes.length > 0 || filtrosAplicadosAbordagens.length > 0
-                      ? profissionais.filter((p) => {
+              {Array.isArray(profissionais) &&
+                profissionais.length > 0 &&
+                (filtrosAplicadosEspecializacoes.length > 0 ||
+                filtrosAplicadosAbordagens.length > 0
+                  ? profissionais.filter((p) => {
                       const matchEspecializacao =
-                      filtrosAplicadosEspecializacoes.length > 0 &&
-                       p.especializacao.some((esp) =>
-                       filtrosAplicadosEspecializacoes.some((sel) => sel.value === esp.value)
-                     );
+                        filtrosAplicadosEspecializacoes.length > 0 &&
+                        p.especializacao.some((esp) =>
+                          filtrosAplicadosEspecializacoes.some(
+                            (sel) => sel.value === esp.value
+                          )
+                        );
 
-                     const matchAbordagem =
-                     filtrosAplicadosAbordagens.length > 0 &&
-                     p.abordagem.some((abo) =>
-                     filtrosAplicadosAbordagens.some((sel) => sel.value === abo.value)
-                    );
+                      const matchAbordagem =
+                        filtrosAplicadosAbordagens.length > 0 &&
+                        p.abordagem.some((abo) =>
+                          filtrosAplicadosAbordagens.some(
+                            (sel) => sel.value === abo.value
+                          )
+                        );
 
-                    // Retorna true se pelo menos um dos dois filtros for verdadeiro
-                    return matchEspecializacao || matchAbordagem;
-                  })
-                    : profissionais
-                  ).map((item, index) => (
-                 <SwiperSlide key={index}>
+                      return matchEspecializacao || matchAbordagem;
+                    })
+                  : profissionais
+                ).map((item, index) => (
+                  <SwiperSlide key={index}>
                     <div className="card">
                       <div className="foto-perfilInicio">
                         <img src={item.foto} alt="" />
                         <div className="perfil-nomeValor">
-                          <h2 onClick={() => acessarPerfil(item.id_profissional)} >{item.nome}</h2>
+                          <h2
+                            onClick={() => acessarPerfil(item.id_profissional)}
+                          >
+                            {item.nome}
+                          </h2>
                           <p>R$ 50/60 min</p>
                         </div>
                       </div>
                       <div className="div-especializacao">
-                      {item?.especializacao?.map((item, index) => (
+                        {item?.especializacao?.map((item, index) => (
                           <div className="container_especializacao">
-                            <p  className="especializacao-style" key={index}>{item.label}</p>
+                            <p className="especializacao-style" key={index}>
+                              {item.label}
+                            </p>
                           </div>
-                          ))} 
+                        ))}
                       </div>
                       <div className="sobremim-inicio">
                         <h3>Sobre mim:</h3>
                         <div className="textSobremim">
-                            <p key={index}>{item?.sobre_mim}</p>
+                          <p key={index}>{item?.sobre_mim}</p>
                         </div>
                       </div>
                       <div className="sobremim-inicio">
                         <h3>Abordagens:</h3>
                         <div className="textSobremimm">
-                        {Array.isArray(item?.abordagem) &&
-                         item.abordagem.map((item, index) => (
-                         <p key={index}>{item.label}</p>
-                         ))}
+                          {Array.isArray(item?.abordagem) &&
+                            item.abordagem.map((item, index) => (
+                              <p key={index}>{item.label}</p>
+                            ))}
                         </div>
                         <div className="crp-inicio">CRP {item.crp}</div>
                       </div>
@@ -311,25 +323,23 @@ function Inicio() {
       <div className="botao-anota">
         <Link
           to="/diarioemocional"
-          onMouseEnter={() => setIsHovered(true)} // Ativa a animação ao passar o mouse
-          onMouseLeave={() => setIsHovered(false)} // Desativa a animação ao tirar o mouse
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
           <Lottie
             options={animationOptions}
             height={60}
             width={60}
             isPaused={false}
-            speed={0.4} // Tente diminuir mais a velocidade aqui
-            isStopped={!isHovered} // A animação só acontece quando está "hovering"
+            speed={0.4}
+            isStopped={!isHovered}
           />
         </Link>
       </div>
       <div className="footer_inicio">
-
-      <Footer className = "footer_inicio"/>
+        <Footer className="footer_inicio" />
       </div>
     </div>
-   
   );
 }
 

@@ -1,52 +1,50 @@
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import Select from "react-select";
 import mulher from "../assets/image 8.png";
 import icon_um from "../assets/calendar-check.svg";
 import icon_dois from "../assets/video.svg";
 import icon_tres from "../assets/message-square (1).svg";
 import Arvore from "../assets/Group 239274.svg";
-import "./CSS/EditarProfissional.css";
 import voltar from "../assets/seta-principal.svg";
-
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import Select from "react-select";
+import "./CSS/EditarProfissional.css";
 
 function EditarProfissional() {
   const navigate = useNavigate();
+
   const perfilSalvo = JSON.parse(localStorage.getItem("User-Profile"));
 
+  const [showModal, setShowModal] = useState(false);
+  const [hasValueEspecializacao, setHasValueEspecializacao] = useState(false);
+  const [hasValueAbordagem, setHasValueAbordagem] = useState(false);
+
+  const opcoesEspecializacao = [
+    { value: "psicologia-clinica", label: "Psicologia Clínica" },
+    { value: "psicopedagogia", label: "Psicopedagogia" },
+    { value: "neuropsicologia", label: "Neuropsicologia" },
+  ];
+
+  const opcoesAbordagens = [
+    { value: "cognitivo-comportamental", label: "Cognitivo-Comportamental" },
+    { value: "psicanalise", label: "Psicanálise" },
+    { value: "humanista", label: "Humanista" },
+  ];
+
   const [profissionais, setProfissionais] = useState({
-    id_profissional:    perfilSalvo?.id_profissional || "",
-    nome:               perfilSalvo?.nome || "",
-    cpf:                perfilSalvo?.cpf || "",
-    telefone:           perfilSalvo?.telefone || "",
-    email:              perfilSalvo?.email || "",
-    data_nascimento:    perfilSalvo
+    id_profissional: perfilSalvo?.id_profissional || "",
+    nome: perfilSalvo?.nome || "",
+    cpf: perfilSalvo?.cpf || "",
+    telefone: perfilSalvo?.telefone || "",
+    email: perfilSalvo?.email || "",
+    data_nascimento: perfilSalvo
       ? formatarDataBrasileira(perfilSalvo.data_nascimento)
       : "",
-    senha:              perfilSalvo?.senha || "",
-    crp:                perfilSalvo?.crp || "",
-    foto:               perfilSalvo?.foto || "",
-    sobre_mim:          perfilSalvo?.sobre_mim || "", 
-    especializacao:     (() => {
-      try {
-        if (!perfilSalvo?.especializacao) return [];
-        return Array.isArray(perfilSalvo.especializacao)
-          ? perfilSalvo.especializacao
-          : JSON.parse(perfilSalvo.especializacao);
-      } catch {
-        return [];
-      }
-    })(),
-    abordagem: (() => {
-      try {
-        if (!perfilSalvo?.abordagem) return [];
-        return Array.isArray(perfilSalvo.abordagem)
-          ? perfilSalvo.abordagem
-          : JSON.parse(perfilSalvo.abordagem);
-      } catch {
-        return [];
-      }
-    })(),
+    senha: perfilSalvo?.senha || "",
+    crp: perfilSalvo?.crp || "",
+    foto: perfilSalvo?.foto || "",
+    sobre_mim: perfilSalvo?.sobre_mim || "",
+    especializacao: parseCampoArray(perfilSalvo?.especializacao),
+    abordagem: parseCampoArray(perfilSalvo?.abordagem),
     valor_consulta: formatarValorConsulta(perfilSalvo?.valor_consulta || ""),
     email_profissional: perfilSalvo?.email_profissional || "",
   });
@@ -55,68 +53,31 @@ function EditarProfissional() {
     async function buscarPerfil() {
       try {
         if (!profissionais.id_profissional) return;
+
         const res = await fetch(
           `http://localhost:4242/editarprofissional/${profissionais.id_profissional}`
         );
         if (!res.ok) throw new Error("Falha ao buscar perfil");
+
         const data = await res.json();
-        // Ajusta data_nascimento para DD/MM/AAAA
         const dataFormatada = formatarDataBrasileira(data.data_nascimento);
+
         setProfissionais({
-          id_profissional:    data.id_profissional,
-          nome:               data.nome,
-          cpf:                data.cpf,
-          telefone:           data.telefone,
-          email:              data.email,
-          data_nascimento:    dataFormatada,
-          senha:              data.senha,
-          crp:                data.crp,
-          foto:               data.foto,
-          sobre_mim:          data.sobre_mim || "",
-          especializacao:     Array.isArray(data.especializacao)
-            ? data.especializacao
-            : JSON.parse(data.especializacao || "[]"),
-          abordagem: Array.isArray(data.abordagem)
-            ? data.abordagem
-            : JSON.parse(data.abordagem || "[]"),
-          valor_consulta:     `R$ ${parseFloat(data.valor_consulta)
-            .toFixed(2)
-            .replace(".", ",")}`,
-          email_profissional: data.email_profissional,
+          ...data,
+          data_nascimento: dataFormatada,
+          especializacao: parseCampoArray(data.especializacao),
+          abordagem: parseCampoArray(data.abordagem),
+          valor_consulta: `R$ ${parseFloat(data.valor_consulta).toFixed(2).replace(".", ",")}`,
         });
-        // Atualiza no localStorage (opcional)
+
         localStorage.setItem("User-Profile", JSON.stringify(data));
       } catch (err) {
         console.error(err);
       }
     }
 
-    // Chama só se tivermos um id_profissional válido
     buscarPerfil();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profissionais.id_profissional]);
-
-  // Controle de exibição do modal de confirmação
-  const [showModal, setShowModal] = useState(false);
-
-  // Controle dos selects (para animar o label “flutuante”)
-  const [hasValueEspecializacao, setHasValueEspecializacao] = useState(
-    profissionais.especializacao.length > 0
-  );
-  const [hasValueAbordagem, setHasValueAbordagem] = useState(
-    profissionais.abordagem.length > 0
-  );
-
-  const opcoesEspecializacao = [
-    { value: "psicologia-clinica", label: "Psicologia Clínica" },
-    { value: "psicopedagogia", label: "Psicopedagogia" },
-    { value: "neuropsicologia", label: "Neuropsicologia" },
-  ];
-  const opcoesAbordagens = [
-    { value: "cognitivo-comportamental", label: "Cognitivo-Comportamental" },
-    { value: "psicanalise", label: "Psicanálise" },
-    { value: "humanista", label: "Humanista" },
-  ];
 
   function formatarDataBrasileira(dataISO) {
     const data = new Date(dataISO);
@@ -127,10 +88,7 @@ function EditarProfissional() {
   }
 
   function formatarDataParaEnvio(dataBR) {
-    if (!dataBR.includes("/")) {
-      // caso já esteja em formato YYYY-MM-DD
-      return dataBR;
-    }
+    if (!dataBR.includes("/")) return dataBR;
     const [dia, mes, ano] = dataBR.split("/");
     return `${ano}-${mes}-${dia}`;
   }
@@ -166,12 +124,19 @@ function EditarProfissional() {
     const numero = (parseInt(somenteNumeros, 10) / 100 || 0).toFixed(2);
     return `R$ ${numero.replace(".", ",")}`;
   }
-  
 
   function formatarValorConsultab(valor) {
     const somenteNumeros = valor.replace(/\D/g, "");
-    const numeroComPonto = (parseInt(somenteNumeros, 10) / 100).toFixed(2);
-    return numeroComPonto;
+    return (parseInt(somenteNumeros, 10) / 100).toFixed(2);
+  }
+
+  function parseCampoArray(campo) {
+    try {
+      if (!campo) return [];
+      return Array.isArray(campo) ? campo : JSON.parse(campo);
+    } catch {
+      return [];
+    }
   }
 
   function transformarParaOpcoesSelecionadas(valoresSalvos, opcoesDisponiveis) {
@@ -180,7 +145,7 @@ function EditarProfissional() {
         ? valoresSalvos
         : JSON.parse(valoresSalvos || "[]");
       return opcoesDisponiveis.filter((opcao) =>
-        valoresArray.some((valor) => valor === opcao.value)
+        valoresArray.includes(opcao.value)
       );
     } catch {
       return [];
@@ -189,31 +154,23 @@ function EditarProfissional() {
 
   const deletarProfissional = async () => {
     try {
-      const response = await fetch("http://localhost:4242/editar-profissional", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id_profissional: perfilSalvo.id_profissional }),
-      });
+      const response = await fetch(
+        "http://localhost:4242/editar-profissional",
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id_profissional: perfilSalvo.id_profissional,
+          }),
+        }
+      );
       if (response.ok) {
         localStorage.removeItem("User-Profile");
         navigate("/");
       }
     } catch (err) {
-      console.log("Falha na conexão: ", err);
+      console.error("Falha na conexão: ", err);
     }
-  };
-
-  const sairProfissional = () => {
-    localStorage.setItem("User Logado", false);
-    localStorage.removeItem("User-Profile");
-    navigate("/");
-  };
-
-  const handleDeletarClick = () => setShowModal(true);
-  const handleCloseModal = () => setShowModal(false);
-  const handleConfirmarDeletar = () => {
-    deletarProfissional();
-    setShowModal(false);
   };
 
   const salvarEdicao = async () => {
@@ -231,6 +188,7 @@ function EditarProfissional() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(profissionalParaEnviar),
       });
+
       if (response.ok) {
         const data = await response.json();
         data.valor_consulta = data.valor_consulta.toFixed(2);
@@ -244,10 +202,22 @@ function EditarProfissional() {
     }
   };
 
-  function navegaParaConsulta() {
+  const sairProfissional = () => {
+    localStorage.setItem("User Logado", false);
+    localStorage.removeItem("User-Profile");
+    navigate("/");
+  };
+
+  const handleDeletarClick = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+  const handleConfirmarDeletar = () => {
+    deletarProfissional();
+    setShowModal(false);
+  };
+
+  const navegaParaConsulta = () => {
     navigate(`/consulta/profissional/${profissionais.id_profissional}`);
   };
-  
 
   return (
     <div className="container">
@@ -266,27 +236,29 @@ function EditarProfissional() {
             <img src={mulher} alt="Foto do perfil" className="imagem-perfil" />
             <h2 className="nome-perfil">{profissionais.nome}</h2>
           </div>
-            <div className="textarea-wrapper" style={{ width: "20rem" }}>
-              <div style={{ position: "relative", width: "100%", minWidth: "200px" }}>
-                <textarea
-                  className="textarea-custom"
-                  placeholder=" "
-                  value={profissionais.sobre_mim}
-                  onChange={(e) =>
-                    setProfissionais((prev) => ({
-                      ...prev,
-                      sobre_mim: e.target.value,
-                    }))
-                  }
-                />
-                <label className="label-custom">Sua descrição...</label>
-              </div>
-          </div>
-            <div className="baixarButton">
-              <button className="botao-baixar" onClick={salvarEdicao}>
-                Salvar
-              </button>
+          <div className="textarea-wrapper" style={{ width: "20rem" }}>
+            <div
+              style={{ position: "relative", width: "100%", minWidth: "200px" }}
+            >
+              <textarea
+                className="textarea-custom"
+                placeholder=" "
+                value={profissionais.sobre_mim}
+                onChange={(e) =>
+                  setProfissionais((prev) => ({
+                    ...prev,
+                    sobre_mim: e.target.value,
+                  }))
+                }
+              />
+              <label className="label-custom">Sua descrição...</label>
             </div>
+          </div>
+          <div className="baixarButton">
+            <button className="botao-baixar" onClick={salvarEdicao}>
+              Salvar
+            </button>
+          </div>
         </div>
         <div className="caixa-comandos-p">
           <div className="cartao-informacao">
@@ -494,7 +466,9 @@ function EditarProfissional() {
                 setHasValueAbordagem(novos.length > 0);
               }}
             />
-            <label className={hasValueAbordagem ? "has-value" : ""}>Abordagem</label>
+            <label className={hasValueAbordagem ? "has-value" : ""}>
+              Abordagem
+            </label>
           </div>
 
           <div className="floating-input-pac">

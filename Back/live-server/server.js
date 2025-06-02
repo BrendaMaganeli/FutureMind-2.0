@@ -37,10 +37,14 @@ io.on('connection', (socket) => {
   });
 
   // Handler para respostas
-  socket.on('answer', (data) => {
-    console.log(`Resposta para ${data.to}`);
-    socket.to(data.to).emit('answer', data.answer);
-  });
+  // ...código anterior permanece igual
+
+socket.on('answer', (data) => {
+  console.log(`Resposta para ${data.to}`);
+  socket.to(data.to).emit('answer', { answer: data.answer });
+});
+
+// ...restante igual
 
   // Handler para ICE candidates
   socket.on('ice-candidate', (data) => {

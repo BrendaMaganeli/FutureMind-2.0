@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Plus, X } from "lucide-react";
+import { Plus, X, Pencil } from "lucide-react";
 import "./CSS/DiarioEmocional.css";
-import { Pencil } from "lucide-react";
 
 const initialData = [
   {
@@ -17,15 +16,18 @@ const initialData = [
   },
 ];
 
-export default function NotesApp() {
+function NotesApp() {
   const [folders, setFolders] = useState(initialData);
   const [selectedFolder, setSelectedFolder] = useState(
     folders.length > 0 ? folders[0] : null
   );
   const [selectedNote, setSelectedNote] = useState(
-    folders.length > 0 && folders[0].notes.length > 0 ? folders[0].notes[0] : null
-  );  
+    folders.length > 0 && folders[0].notes.length > 0
+      ? folders[0].notes[0]
+      : null
+  );
   const [activeTab, setActiveTab] = useState("checklist");
+  const [editingFolderId, setEditingFolderId] = useState(null);
 
   const handleCheck = (type, index) => {
     const updatedNote = { ...selectedNote };
@@ -105,8 +107,6 @@ export default function NotesApp() {
     { value: "checklist", label: "Lista" },
     { value: "imageNote", label: "Nota" },
   ];
-
-  const [editingFolderId, setEditingFolderId] = useState(null);
 
   return (
     <div className="notes-app">
@@ -313,3 +313,5 @@ export default function NotesApp() {
     </div>
   );
 }
+
+export default NotesApp;

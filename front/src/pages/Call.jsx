@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import "./CSS/Call.css";
-
-const socket = io('http://localhost:5000');
+const socket = io('https://futuremind-20-production.up.railway.app');
 
 function VideoConferencia() {
 
@@ -14,7 +13,6 @@ function VideoConferencia() {
     const [videoActive, setVideoActive] = useState(true);
     const [micActive, setMicActive] = useState(true);
     const [callInProgress, setCallInProgress] = useState(false);
-    const [clicked, setClicked] = useState(false);
     const [offer, setOffer] = useState(null);
     const [userId, setUserId] = useState(null);
     const [targetUser, setTargetUser] = useState(null);

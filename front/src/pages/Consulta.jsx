@@ -50,11 +50,8 @@ export default function Consulta() {
   const [anoAtual, setAnoAtual] = useState(hoje.getFullYear());
   const [indiceMesAtual, setIndiceMesAtual] = useState(hoje.getMonth());
 
-  const [mostrarModalReagendamento, setMostrarModalReagendamento] =
-    useState(false);
-  const [indiceMesReagendamento, setIndiceMesReagendamento] = useState(
-    hoje.getMonth()
-  );
+  const [mostrarModalReagendamento, setMostrarModalReagendamento] = useState(false);
+  const [indiceMesReagendamento, setIndiceMesReagendamento] = useState(hoje.getMonth());
   const [anoReagendamento, setAnoReagendamento] = useState(hoje.getFullYear());
   const [dataSelecionada, setDataSelecionada] = useState(null);
   const [horaSelecionada, setHoraSelecionada] = useState(null);
@@ -202,15 +199,7 @@ export default function Consulta() {
       }
       if (!resp.ok) throw new Error("Erro no back-end ao deletar");
 
-      const chave = `${consultaSelecionada.ano}-${consultaSelecionada.mes}-${consultaSelecionada.dia}`;
-      setAgendamentos((prev) => {
-        const copia = { ...prev };
-        copia[chave] = copia[chave].filter(
-          (a) => a.id_consulta !== consultaSelecionada.id_consulta
-        );
-        if (copia[chave].length === 0) delete copia[chave];
-        return copia;
-      });
+      await buscarConsultas();
       fecharDetalhes();
     } catch (err) {
       console.error("Erro ao remover agendamento:", err);
@@ -235,36 +224,7 @@ export default function Consulta() {
         alert("Consulta não encontrada");
         return;
       }
-      if (!resp.ok) throw new Error("Erro no back-end");
-
-      const chaveAntiga = `${consultaSelecionada.ano}-${consultaSelecionada.mes}-${consultaSelecionada.dia}`;
-      const dt = new Date(dataISO);
-      const chaveNova = `${dt.getFullYear()}-${dt.getMonth()}-${dt.getDate()}`;
-      const agendamentoAtualizado = {
-        id_consulta: consultaSelecionada.id_consulta,
-        horario: horaSelecionada,
-        nomePar: consultaSelecionada.nomePar,
-        fotoPar: consultaSelecionada.fotoPar,
-      };
-
-      setAgendamentos((prev) => {
-        const copia = { ...prev };
-        copia[chaveAntiga] = copia[chaveAntiga].filter(
-          (a) => a.id_consulta !== consultaSelecionada.id_consulta
-        );
-        if (copia[chaveAntiga].length === 0) delete copia[chaveAntiga];
-        if (!copia[chaveNova]) copia[chaveNova] = [agendamentoAtualizado];
-        else copia[chaveNova].push(agendamentoAtualizado);
-        return copia;
-      });
-
-      setConsultaSelecionada((prev) => ({
-        ...prev,
-        dia: dt.getDate(),
-        mes: dt.getMonth(),
-        ano: dt.getFullYear(),
-        horario: horaSelecionada,
-      }));
+      if (!resp.ok) throw new Error("Erro no back-end ao reagendar");
 
       await buscarConsultas();
       setMostrarModalReagendamento(false);
@@ -342,8 +302,7 @@ export default function Consulta() {
             className="close-confirmation-c"
             onClick={() => setMensagemConfirmacao("")}
           >
-            {" "}
-            <X size={16} />{" "}
+            <X size={16} />
           </button>
         </div>
       )}
@@ -353,23 +312,17 @@ export default function Consulta() {
       </button>
 
       <section className="calendar-c">
-        <header className="calendar-header-c">
-          {role === "profissional" && (
-            <button onClick={() => trocarMes(-1)} className="setaEsquerda-c">
-              {" "}
-              <ChevronLeft />{" "}
-            </button>
-          )}
+        <div className="calendar-header-c">
+          <button onClick={() => trocarMes(-1)} className="setaEsquerda-c">
+            <ChevronLeft />
+          </button>
           <h2>
             {mesAtual.nome} {anoAtual}
           </h2>
-          {role === "profissional" && (
-            <button onClick={() => trocarMes(1)} className="setaDireita-c">
-              {" "}
-              <ChevronRight />{" "}
-            </button>
-          )}
-        </header>
+          <button onClick={() => trocarMes(1)} className="setaDireita-c">
+            <ChevronRight />
+          </button>
+        </div>
 
         <div className="weekdays-c">
           {"Dom Seg Ter Qua Qui Sex Sab".split(" ").map((d) => (
@@ -385,9 +338,12 @@ export default function Consulta() {
             >
               <span>{diaObj.dia}</span>
               {diaObj.registrosDoDia.map((ag, idx) => (
-                <div key={idx} className="appointment-detail-c">
-                  {" "}
-                  {ag.horario}{" "}
+                <div
+                  key={idx}
+                  className="appointment-detail-c"
+                  onClick={() => aoSelecionarHorario(diaObj, ag)}
+                >
+                  {ag.horario}
                 </div>
               ))}
             </div>
@@ -405,20 +361,18 @@ export default function Consulta() {
       </div>
 
       {consultaSelecionada && (
-        <aside className="schedule-c">
+        <div className="schedule-c">
           <button className="close-button-c" onClick={fecharDetalhes}>
-            {" "}
-            <X size={24} />{" "}
+            <X size={24} />
           </button>
-
           <div className="resumo-card-c">
             <div className="agendamento-info-c">
-              <div className="par-info-c">
+              <div className="profissional-c">
                 {consultaSelecionada.fotoPar && (
                   <img
                     src={consultaSelecionada.fotoPar}
                     alt="Foto"
-                    className="foto-par-c"
+                    className="foto-profissional-c"
                   />
                 )}
                 <div>
@@ -467,7 +421,7 @@ export default function Consulta() {
               </div>
             </div>
           </div>
-        </aside>
+        </div>
       )}
 
       {mostrarModalReagendamento && (
@@ -477,8 +431,7 @@ export default function Consulta() {
               className="modal-close-btn"
               onClick={() => setMostrarModalReagendamento(false)}
             >
-              {" "}
-              <X size={20} />{" "}
+              <X size={20} />
             </button>
             <h2>Reagendamento de consulta</h2>
             <p>Escolha dia e horário:</p>
@@ -498,14 +451,13 @@ export default function Consulta() {
                   }}
                   className="setaE-c"
                 >
-                  {" "}
-                  <ChevronLeft />{" "}
+                  <ChevronLeft />
                 </button>
                 <h3>
-                  {new Date(
-                    anoReagendamento,
-                    indiceMesReagendamento
-                  ).toLocaleString("pt-BR", { month: "long", year: "numeric" })}
+                  {new Date(anoReagendamento, indiceMesReagendamento).toLocaleString(
+                    "pt-BR",
+                    { month: "long", year: "numeric" }
+                  )}
                 </h3>
                 <button
                   onClick={() => {
@@ -520,8 +472,7 @@ export default function Consulta() {
                   }}
                   className="setaD-c"
                 >
-                  {" "}
-                  <ChevronRight />{" "}
+                  <ChevronRight />
                 </button>
               </div>
 

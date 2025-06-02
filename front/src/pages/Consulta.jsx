@@ -50,11 +50,8 @@ export default function Consulta() {
   const [anoAtual, setAnoAtual] = useState(hoje.getFullYear());
   const [indiceMesAtual, setIndiceMesAtual] = useState(hoje.getMonth());
 
-  const [mostrarModalReagendamento, setMostrarModalReagendamento] =
-    useState(false);
-  const [indiceMesReagendamento, setIndiceMesReagendamento] = useState(
-    hoje.getMonth()
-  );
+  const [mostrarModalReagendamento, setMostrarModalReagendamento] = useState(false);
+  const [indiceMesReagendamento, setIndiceMesReagendamento] = useState(hoje.getMonth());
   const [anoReagendamento, setAnoReagendamento] = useState(hoje.getFullYear());
   const [dataSelecionada, setDataSelecionada] = useState(null);
   const [horaSelecionada, setHoraSelecionada] = useState(null);
@@ -67,10 +64,6 @@ export default function Consulta() {
   async function buscarConsultas() {
     try {
       let resp;
-<<<<<<< HEAD
-
-=======
->>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
       if (role === "profissional") {
         const ano = hoje.getFullYear();
         const mes = hoje.getMonth() + 1; // 1..12
@@ -80,47 +73,7 @@ export default function Consulta() {
       } else {
         resp = await fetch(`http://localhost:4242/consulta/${id}`);
       }
-<<<<<<< HEAD
-
-      if (!resp.ok) {
-        throw new Error("Falha ao buscar consultas");
-      }
-      const dados = await resp.json();
-
-      const novoMapa = {};
-      dados.forEach((registro) => {
-        const dt = new Date(registro.data);
-        const a = dt.getFullYear();
-        const m = dt.getMonth();
-        const d = dt.getDate();
-        const chave = `${a}-${m}-${d}`;
-
-        if (!novoMapa[chave]) novoMapa[chave] = [];
-
-        const base = {
-          id_consulta: registro.id_consulta,
-          horario: registro.hora,
-          fotoPar: registro.foto_par || null,
-        };
-
-        if (role === "profissional") {
-          novoMapa[chave].push({ ...base, nomePar: registro.nome_paciente });
-        } else {
-          novoMapa[chave].push({
-            ...base,
-            nomePar: registro.nome_profissional,
-          });
-        }
-      });
-
-      setAgendamentos(novoMapa);
-    } catch (err) {
-      console.error("Erro ao buscar agendamentos:", err);
-    }
-  }, [role, id, anoAtual, indiceMesAtual]);
-=======
       if (!resp.ok) throw new Error("Falha ao buscar consultas");
->>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
 
       const dados = await resp.json();
       const novoMapa = {};
@@ -236,35 +189,17 @@ export default function Consulta() {
   const cancelarConsulta = async () => {
     if (!consultaSelecionada) return;
     try {
-<<<<<<< HEAD
-      const resp = await fetch(`/consulta/${consultaSelecionada.id_consulta}`, {
-        method: "DELETE",
-      });
-=======
       const resp = await fetch(
         `http://localhost:4242/consulta/${consultaSelecionada.id_consulta}`,
         { method: "DELETE" }
       );
->>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
       if (resp.status === 404) {
         alert("Consulta não encontrada");
         return;
       }
       if (!resp.ok) throw new Error("Erro no back-end ao deletar");
 
-<<<<<<< HEAD
-      const chave = `${consultaSelecionada.ano}-${consultaSelecionada.mes}-${consultaSelecionada.dia}`;
-      setAgendamentos((prev) => {
-        const copia = { ...prev };
-        copia[chave] = copia[chave].filter(
-          (a) => a.id_consulta !== consultaSelecionada.id_consulta
-        );
-        if (copia[chave].length === 0) delete copia[chave];
-        return copia;
-      });
-=======
       await buscarConsultas();
->>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
       fecharDetalhes();
     } catch (err) {
       console.error("Erro ao remover agendamento:", err);
@@ -289,40 +224,7 @@ export default function Consulta() {
         alert("Consulta não encontrada");
         return;
       }
-<<<<<<< HEAD
-      if (!resp.ok) throw new Error("Erro no back-end");
-
-      const chaveAntiga = `${consultaSelecionada.ano}-${consultaSelecionada.mes}-${consultaSelecionada.dia}`;
-      const dt = new Date(dataISO);
-      const chaveNova = `${dt.getFullYear()}-${dt.getMonth()}-${dt.getDate()}`;
-      const agendamentoAtualizado = {
-        id_consulta: consultaSelecionada.id_consulta,
-        horario: horaSelecionada,
-        nomePar: consultaSelecionada.nomePar,
-        fotoPar: consultaSelecionada.fotoPar,
-      };
-
-      setAgendamentos((prev) => {
-        const copia = { ...prev };
-        copia[chaveAntiga] = copia[chaveAntiga].filter(
-          (a) => a.id_consulta !== consultaSelecionada.id_consulta
-        );
-        if (copia[chaveAntiga].length === 0) delete copia[chaveAntiga];
-        if (!copia[chaveNova]) copia[chaveNova] = [agendamentoAtualizado];
-        else copia[chaveNova].push(agendamentoAtualizado);
-        return copia;
-      });
-
-      setConsultaSelecionada((prev) => ({
-        ...prev,
-        dia: dt.getDate(),
-        mes: dt.getMonth(),
-        ano: dt.getFullYear(),
-        horario: horaSelecionada,
-      }));
-=======
       if (!resp.ok) throw new Error("Erro no back-end ao reagendar");
->>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
 
       await buscarConsultas();
       setMostrarModalReagendamento(false);
@@ -400,12 +302,7 @@ export default function Consulta() {
             className="close-confirmation-c"
             onClick={() => setMensagemConfirmacao("")}
           >
-<<<<<<< HEAD
-            {" "}
-            <X size={16} />{" "}
-=======
             <X size={16} />
->>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
           </button>
         </div>
       )}
@@ -415,25 +312,6 @@ export default function Consulta() {
       </button>
 
       <section className="calendar-c">
-<<<<<<< HEAD
-        <header className="calendar-header-c">
-          {role === "profissional" && (
-            <button onClick={() => trocarMes(-1)} className="setaEsquerda-c">
-              {" "}
-              <ChevronLeft />{" "}
-            </button>
-          )}
-          <h2>
-            {mesAtual.nome} {anoAtual}
-          </h2>
-          {role === "profissional" && (
-            <button onClick={() => trocarMes(1)} className="setaDireita-c">
-              {" "}
-              <ChevronRight />{" "}
-            </button>
-          )}
-        </header>
-=======
         <div className="calendar-header-c">
           <button onClick={() => trocarMes(-1)} className="setaEsquerda-c">
             <ChevronLeft />
@@ -445,7 +323,6 @@ export default function Consulta() {
             <ChevronRight />
           </button>
         </div>
->>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
 
         <div className="weekdays-c">
           {"Dom Seg Ter Qua Qui Sex Sab".split(" ").map((d) => (
@@ -461,18 +338,12 @@ export default function Consulta() {
             >
               <span>{diaObj.dia}</span>
               {diaObj.registrosDoDia.map((ag, idx) => (
-<<<<<<< HEAD
-                <div key={idx} className="appointment-detail-c">
-                  {" "}
-                  {ag.horario}{" "}
-=======
                 <div
                   key={idx}
                   className="appointment-detail-c"
                   onClick={() => aoSelecionarHorario(diaObj, ag)}
                 >
                   {ag.horario}
->>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
                 </div>
               ))}
             </div>
@@ -490,17 +361,6 @@ export default function Consulta() {
       </div>
 
       {consultaSelecionada && (
-<<<<<<< HEAD
-        <aside className="schedule-c">
-          <button className="close-button-c" onClick={fecharDetalhes}>
-            {" "}
-            <X size={24} />{" "}
-          </button>
-
-          <div className="resumo-card-c">
-            <div className="agendamento-info-c">
-              <div className="par-info-c">
-=======
         <div className="schedule-c">
           <button className="close-button-c" onClick={fecharDetalhes}>
             <X size={24} />
@@ -508,16 +368,11 @@ export default function Consulta() {
           <div className="resumo-card-c">
             <div className="agendamento-info-c">
               <div className="profissional-c">
->>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
                 {consultaSelecionada.fotoPar && (
                   <img
                     src={consultaSelecionada.fotoPar}
                     alt="Foto"
-<<<<<<< HEAD
-                    className="foto-par-c"
-=======
                     className="foto-profissional-c"
->>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
                   />
                 )}
                 <div>
@@ -576,12 +431,7 @@ export default function Consulta() {
               className="modal-close-btn"
               onClick={() => setMostrarModalReagendamento(false)}
             >
-<<<<<<< HEAD
-              {" "}
-              <X size={20} />{" "}
-=======
               <X size={20} />
->>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
             </button>
             <h2>Reagendamento de consulta</h2>
             <p>Escolha dia e horário:</p>
@@ -601,16 +451,6 @@ export default function Consulta() {
                   }}
                   className="setaE-c"
                 >
-<<<<<<< HEAD
-                  {" "}
-                  <ChevronLeft />{" "}
-                </button>
-                <h3>
-                  {new Date(
-                    anoReagendamento,
-                    indiceMesReagendamento
-                  ).toLocaleString("pt-BR", { month: "long", year: "numeric" })}
-=======
                   <ChevronLeft />
                 </button>
                 <h3>
@@ -618,7 +458,6 @@ export default function Consulta() {
                     "pt-BR",
                     { month: "long", year: "numeric" }
                   )}
->>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
                 </h3>
                 <button
                   onClick={() => {
@@ -633,12 +472,7 @@ export default function Consulta() {
                   }}
                   className="setaD-c"
                 >
-<<<<<<< HEAD
-                  {" "}
-                  <ChevronRight />{" "}
-=======
                   <ChevronRight />
->>>>>>> d3b187a6b12bffeac9bbae967a56ec3c1d4add27
                 </button>
               </div>
 

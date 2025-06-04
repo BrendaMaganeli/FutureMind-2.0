@@ -6,6 +6,8 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { triggerAsyncId } from "async_hooks";
+import { resolve4 } from "dns";
 
 // recria __dirname em ESM:
 const __filename = fileURLToPath(import.meta.url);
@@ -730,11 +732,8 @@ app.put('/consulta/:id_consulta', async (req, res) => {
       return res.status(500).json({ error: 'Erro ao atualizar consulta' });
     }
   });
-  
-  
 
 app.put('/pagamento', async (req, res) => {
-
 
     const {id_paciente, chk_plano} = req.body;
 
@@ -781,6 +780,27 @@ app.put('/validacao_planos', async (req, res) => {
     console.error('Erro ao salvar mensagem:', error);
     res.status(500).json({ Error: 'Erro interno do servidor' });
    }
+})
+
+app.post('/verificar_paciente', async (req, res) => {
+ 
+  const { valorEmail, cpf, telefone } = req.body;
+
+  try {
+    const [response] =  await pool.query('SELECT email, cpf, telefone FROM pacientes WHERE email = ? OR cpf = ? OR telefone = ?',
+     [valorEmail, cpf, telefone])
+    
+    if(response.length > 0){
+
+      return res.status(201).json(response.rows);
+    }
+    
+    return res.status(404).json({ Error: 'erro ao inserir dados'})
+  } catch (error) {
+     
+    console.error('Erro ao salvar mensagem:', error);
+    res.status(500).json({ Error: 'Erro interno do servidor' });
+  }
 })
 
 app.listen(4242, () => console.log ('Servidor servindo'));

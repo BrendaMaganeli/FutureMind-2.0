@@ -9,10 +9,8 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 function Pagamento() {
   const navigate = useNavigate();
-  const location = useLocation(); // ← pega o objeto completo de localização
   const { id } = useParams();
-
-  // ← extrai date e time de location.state (caso exista; senão, vazio)
+  const location = useLocation(); 
   const { date: initialDate = "", time: initialTime = "" } = location.state || {};
 
   const [dataSelecionada, setDataSelecionada] = useState(initialDate);
@@ -82,7 +80,6 @@ function Pagamento() {
         const response = await fetch(`http://localhost:4242/pagamento/${id}`);
         if (response.ok) {
           const data = await response.json();
-          // caso o backend retorne { consultas_disponiveis: X }
           setConsultas_disponiveis(data.consultas_disponiveis ?? data);
         }
       } catch (error) {
@@ -94,7 +91,6 @@ function Pagamento() {
 
   const { vim_plano } = useContext(GlobalContext);
 
-  // ← define handleFinalizar antes do return
   const handleFinalizar = async () => {
     if (
       generoDependente.length <= 1 ||
@@ -188,7 +184,7 @@ function Pagamento() {
       setNascimentoDependente("");
       setGeneroDependente("");
     } else {
-      alert("Preencha todos os campos do dependente.");
+
     }
   };
 
@@ -257,12 +253,10 @@ function Pagamento() {
     emailjs
       .send("service_5zq83hw", "template_bec35gi", templateParams, "ms7_9wi7dG_5vMUGt")
       .then((response) => {
-        alert("E-mail enviado com sucesso!");
         navigate("/inicio");
       })
       .catch((error) => {
         console.error("Erro ao enviar e-mail:", error);
-        alert("Erro ao enviar o e-mail. Verifique o console para detalhes.");
       });
   };
 
@@ -297,23 +291,14 @@ function Pagamento() {
   }, [cvvCartao]);
 
   return (
-    <div
-      style={{
-        maxWidth: "1300px",
-        margin: "0 auto",
-        padding: "40px",
-        display: "grid",
-        gridTemplateColumns: "2fr 1fr",
-        gap: "24px",
-      }}
-    >
-      <div>
-        <button onClick={voltar_pagina} className="back-button-pt">
-          <img src={voltar} alt="" style={{ width: "3em" }} />
-        </button>
-        <h2 style={{ fontSize: "24px", fontWeight: "600", marginBottom: "16px" }}>
-          Finalize seu agendamento
-        </h2>
+  <div className="container-principal" style={{maxWidth: "1300px", margin: "0 auto",padding: "40px",display: "grid",gridTemplateColumns: "2fr 1fr",gap: "24px",}}>
+        <div>
+    <div className="header-com-seta">
+      <button onClick={voltar_pagina} className="back-button-pt">
+        <img src={voltar} alt="voltar" style={{ width: "3em" }} />
+      </button>
+      <h2>Finalize seu agendamento</h2>
+    </div>
 
         <p style={{ fontWeight: "500", marginBottom: "8px" }}>Forma de pagamento</p>
         <div className="tabs-container">

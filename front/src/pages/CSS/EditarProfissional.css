@@ -179,6 +179,7 @@
   .voltar-seta{
     padding-top: 1%;
     width: 150%;
+    cursor: pointer;
   }
 
   .funcionalidades-p{

@@ -348,3 +348,41 @@
   font-size: 13px;
   color: #013a63;
 }
+
+.header-com-seta img {
+  display: block;       /* evita gap de baseline */
+}
+
+.header-com-seta button {
+  background: none;     /* se quiser tirar fundo padrão */
+  border: none;         /* sem borda */
+  padding: 0;           /* sem padding */
+  cursor: pointer;      /* mudar cursor, se quiser */
+}
+
+/* … seu CSS existente … */
+
+.header-com-seta {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.header-com-seta h2 {
+  margin: 0;
+  margin-left: 8px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.header-com-seta img {
+  display: block; /* garante que não haja gap abaixo da imagem */
+}
+
+.header-com-seta button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+

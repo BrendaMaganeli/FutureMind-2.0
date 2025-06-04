@@ -54,6 +54,10 @@ function VisualizarProfissional() {
     renderizarPerfil();
   }, []);
 
+  const voltarTelas = () => {
+    navigate("/inicio");
+  };
+
   return (
     <>
       {isInChat ? (
@@ -121,7 +125,7 @@ function VisualizarProfissional() {
 
             <div className="botoes-maior">
               <div className="botoes">
-                <img src={voltar} alt="" />
+                <img onClick={voltarTelas} src={voltar} alt="" />
               </div>
             </div>
 

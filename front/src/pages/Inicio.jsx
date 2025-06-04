@@ -284,7 +284,7 @@ function Inicio() {
                           >
                             {item.nome}
                           </h2>
-                          <p>R$ 50/60 min</p>
+                          <p>{item.valor_consulta!== null && `R$ ${item.valor_consulta}`}</p>
                         </div>
                       </div>
                       <div className="div-especializacao">

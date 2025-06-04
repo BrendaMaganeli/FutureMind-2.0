@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, X, Pencil } from "lucide-react";
 import "./CSS/DiarioEmocional.css";
 

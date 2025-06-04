@@ -208,6 +208,10 @@ function EditarProfissional() {
     navigate("/");
   };
 
+  const voltarTelas = () => {
+    navigate("/inicio");
+  };
+
   const handleDeletarClick = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
   const handleConfirmarDeletar = () => {
@@ -290,7 +294,7 @@ function EditarProfissional() {
 
         <div className="botoes-maior-pro">
           <div className="botoes-pro">
-            <img src={voltar} alt="" className="voltar-seta" />
+            <img onClick={voltarTelas} src={voltar} alt="" className="voltar-seta" />
           </div>
           <div className="botoes-superiores-p">
             <button onClick={handleDeletarClick} className="botao-deletar">

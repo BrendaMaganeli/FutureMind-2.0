@@ -1,6 +1,19 @@
+<<<<<<< HEAD
 const express = require('express');
 const mysql = require('mysql2/promise');
 const cors = require('cors');
+=======
+import express from "express";
+import mysql from "mysql2/promise";
+import cors from "cors";
+import multer from "multer";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+import { triggerAsyncId } from "async_hooks";
+import { resolve4 } from "dns";
+>>>>>>> 1867822c0d84dd17dc4246ac2f337431d256ffae
 
 const app = express();
 
@@ -549,7 +562,7 @@ app.get('/pagamento/:id', async(req, res) => {
 
     try {
         
-      const { id } = req.params; // "id" aqui é o id_paciente que você quer consultar
+      const { id } = req.params; 
           const [rows] = await pool.query(
              'SELECT consultas_disponiveis FROM assinaturas WHERE fk_id_paciente = ?',
              [ id ]
@@ -757,11 +770,8 @@ app.put('/consulta/:id_consulta', async (req, res) => {
       return res.status(500).json({ error: 'Erro ao atualizar consulta' });
     }
   });
-  
-  
 
 app.put('/pagamento', async (req, res) => {
-
 
     const {id_paciente, chk_plano} = req.body;
 
@@ -784,7 +794,39 @@ app.put('/pagamento', async (req, res) => {
     res.status(500).json({ Error: 'Erro interno do servidor' });
    }
    
-})
+});
+
+app.get("/profissional/:id", async (req, res) => {
+  try {
+    const { id } = req.params; 
+
+    const [rows] = await pool.query(
+      `
+      SELECT
+        p.nome,
+        p.crp,
+        p.valor_consulta
+      FROM profissionais AS p
+      WHERE p.id_profissional = ?
+      `,
+      [id]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ erro: "Profissional não encontrado." });
+    }
+
+    const profissional = rows[0];
+    return res.status(200).json({
+      nome: profissional.nome,
+      crp: profissional.crp,
+      valor_consulta: profissional.valor_consulta,
+    });
+  } catch (err) {
+    console.error("Erro no servidor (/profissional/:id):", err);
+    return res.status(500).json({ erro: "Erro interno do servidor." });
+  }
+});
 
 app.put('/validacao_planos', async (req, res) => {
 
@@ -808,6 +850,27 @@ app.put('/validacao_planos', async (req, res) => {
     console.error('Erro ao salvar mensagem:', error);
     res.status(500).json({ Error: 'Erro interno do servidor' });
    }
+})
+
+app.post('/verificar_paciente', async (req, res) => {
+ 
+  const { valorEmail, cpf, telefone } = req.body;
+
+  try {
+    const [response] =  await pool.query('SELECT email, cpf, telefone FROM pacientes WHERE email = ? OR cpf = ? OR telefone = ?',
+     [valorEmail, cpf, telefone])
+    
+    if(response.length > 0){
+
+      return res.status(201).json(response.rows);
+    }
+    
+    return res.status(404).json({ Error: 'erro ao inserir dados'})
+  } catch (error) {
+     
+    console.error('Erro ao salvar mensagem:', error);
+    res.status(500).json({ Error: 'Erro interno do servidor' });
+  }
 })
 
 app.listen(4242, () => console.log ('Servidor servindo'));

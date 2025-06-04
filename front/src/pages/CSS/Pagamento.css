@@ -350,17 +350,16 @@
 }
 
 .header-com-seta img {
-  display: block;       /* evita gap de baseline */
+  display: block;      
 }
 
 .header-com-seta button {
-  background: none;     /* se quiser tirar fundo padrão */
-  border: none;         /* sem borda */
-  padding: 0;           /* sem padding */
-  cursor: pointer;      /* mudar cursor, se quiser */
+  background: none;    
+  border: none;        
+  padding: 0;          
+  cursor: pointer;     
 }
 
-/* … seu CSS existente … */
 
 .header-com-seta {
   display: flex;
@@ -376,7 +375,7 @@
 }
 
 .header-com-seta img {
-  display: block; /* garante que não haja gap abaixo da imagem */
+  display: block; 
 }
 
 .header-com-seta button {
@@ -386,3 +385,11 @@
   cursor: pointer;
 }
 
+.botaoNome{
+  width: 100%;
+  padding: 1%;
+  height: 20%;
+  font-size: 14px;
+  text-align: start;
+  margin-top: 3%;
+}

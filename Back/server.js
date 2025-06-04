@@ -1,22 +1,13 @@
-import express from "express";
-import mysql from "mysql2/promise";
-import cors from "cors";
-import multer from "multer";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
+const express = require('express');
+const mysql = require('mysql2/promise');
+const cors = require('cors');
 
-// recria __dirname em ESM:
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// 👉 Defina o app aqui:
 const app = express();
 
 app.use(cors({ origin: "*" }));
 app.use(express.static("public"));
 app.use(express.json());
+
 const pool = mysql.createPool({
    
     host: 'nozomi.proxy.rlwy.net',
@@ -28,23 +19,6 @@ const pool = mysql.createPool({
     connectionLimit: 10,
     queueLimit: 0
 });
-const uploadDir = path.resolve(__dirname, "uploads");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname); 
-    const idPaciente = req.params.id_paciente;
-    cb(null, `paciente_${idPaciente}${ext}`);
-  },
-});
-
-const upload = multer({ storage });
 
 app.get('/', async(req, res) => {
     try {
@@ -110,7 +84,7 @@ app.post('/cadastro-profissional', async(req, res) => {
             email_profissional
         } = req.body;
 
-        const foto = '../assets/icon-profile.svg';
+        const foto = 'icon_user.svg';
 
         const [rows] = await pool.query('INSERT INTO profissionais (nome, cpf, email, senha, telefone, crp, especializacao, abordagem, foto, data_nascimento, email_profissional) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
             nome,
@@ -189,6 +163,82 @@ app.post('/login', async(req, res) => {
     }
 });
 
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+// Caminho absoluto da pasta uploads
+const uploadDirectory = path.join(__dirname, 'uploads');
+
+// Criação da pasta caso ela não exista
+if (!fs.existsSync(uploadDirectory)) {
+  fs.mkdirSync(uploadDirectory, { recursive: true });
+}
+
+// Configuração do multer para salvar imagens no diretório correto
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDirectory); // Caminho absoluto para a pasta uploads
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`); // Gera um nome único para o arquivo
+  },
+});
+
+const upload = multer({ storage });
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Rota para atualizar a foto do profissional
+app.post('/profissional/foto-perfil', upload.single('foto'), async (req, res) => {
+  const { id_profissional } = req.body;
+  const fotoPath = req.file ? `/uploads/${req.file.filename}` : null;
+
+  if (!id_profissional || !fotoPath) {
+    return res.status(400).json({ Erro: 'ID do profissional ou foto ausente.' });
+  }
+
+  try {
+    const [result] = await pool.query(
+      'UPDATE profissionais SET foto = ? WHERE id_profissional = ?',
+      [fotoPath, id_profissional]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ Erro: 'Profissional não encontrado.' });
+    }
+
+    res.json(result[0]);
+  } catch (err) {
+    console.error(err.message);
+    return res.status(500).json({ Erro: 'Erro ao atualizar profissional.' });
+  }
+});
+
+app.post('/paciente/foto-perfil', upload.single('foto'), async (req, res) => {
+  const { id_paciente } = req.body;
+  const fotoPath = req.file ? `/uploads/${req.file.filename}` : null;
+
+  if (!id_paciente || !fotoPath) {
+    return res.status(400).json({ Erro: 'ID do paciente ou foto ausente.' });
+  }
+
+  try {
+    const [result] = await pool.query(
+      'UPDATE pacientes SET foto = ? WHERE id_paciente = ?',
+      [fotoPath, id_paciente]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ Erro: 'Paciente não encontrado.' });
+    }
+
+    res.json(result[0]);
+  } catch (err) {
+    console.error(err.message);
+    return res.status(500).json({ Erro: 'Erro ao atualizar paciente.' });
+  }
+});
+
 app.delete('/editar-profissional', async(req, res) => {
 
     try {
@@ -261,25 +311,6 @@ app.put('/paciente', async (req, res) => {
     } catch (err) {
       console.error(err);
       res.status(500).json('Erro ao atualizar o paciente');
-    }
-  });
-
-
-  app.post("/upload-foto/:id_paciente", upload.single("foto"), async (req, res) => {
-    try {
-      const { id_paciente } = req.params;
-      // Aqui você já tem acesso a req.file (com informações do arquivo)
-      // Faça o que for necessário: salvar caminho no banco, etc.
-      console.log("Recebi upload de foto do paciente:", id_paciente);
-      console.log("Dados do arquivo:", req.file);
-  
-      // Exemplo: se quiser gravar no banco o caminho do arquivo:
-      // await pool.query(`UPDATE pacientes SET foto_path = ? WHERE id_paciente = ?`, [req.file.filename, id_paciente]);
-  
-      return res.status(200).json({ message: "Upload realizado com sucesso" });
-    } catch (err) {
-      console.error("Erro no upload de foto:", err);
-      return res.status(500).json({ error: "Erro interno ao salvar a foto" });
     }
   });
 
@@ -474,9 +505,6 @@ app.post('/chats/chat/send-message', async (req, res) => {
     }
 });
 
-
-  
-
 app.post('/assinatura', async (req, res) => {
 
   const {data_assinatura, fk_id_paciente, tipo_assinatura, data_fim_assinatura} = req.body;
@@ -602,7 +630,6 @@ app.get('/agendamento/:id/:year/:month', async (req, res) => {
     }
   });
   
-
   app.post('/agendamento/:id', async (req, res) => {
     console.log( req.body);
   

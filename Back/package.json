@@ -14,10 +14,12 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "multer": "^2.0.0",
+    "fs": "^0.0.1-security",
+    "multer": "^2.0.1",
     "mysql2": "^3.14.0",
     "nodemailer": "^7.0.2",
     "nodemon": "^3.1.10",
+    "path": "^0.12.7",
     "socket.io": "^4.8.1",
     "stripe": "^17.4.0-beta.2"
   },

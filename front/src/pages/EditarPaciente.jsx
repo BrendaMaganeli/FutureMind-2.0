@@ -68,25 +68,6 @@ function EditarPaciente() {
       .replace(/(\/\d{4})\d+?$/, "$1");
   }
 
-  useEffect(() => {
-    const fetchImagemPerfil = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:4242/foto/${pacienteLocal.id_paciente}`
-        );
-        if (!response.ok) throw new Error("Erro ao buscar imagem");
-
-        const blob = await response.blob();
-        const imageUrl = URL.createObjectURL(blob);
-        setImagemPreview(imageUrl);
-      } catch (error) {
-        console.error("Erro ao carregar imagem de perfil:", error);
-      }
-    };
-
-    fetchImagemPerfil();
-  }, [pacienteLocal.id_paciente]);
-
   const toggleDiv = () => setIsVisible(true);
   const desativar_div = () => setIsVisible(false);
 
@@ -164,40 +145,42 @@ function EditarPaciente() {
     if (selectedFile) {
       setFotoSelecionada(selectedFile);
       setImagemPreview(URL.createObjectURL(selectedFile));
+      setImage(event);
     }
   };
 
-  const uploadFoto = async (foto, id_paciente) => {
-    const formData = new FormData();
-    formData.append("foto", foto);
+  //fotos
 
-    const response = await fetch(
-      `http://localhost:4242/upload-foto/${id_paciente}`,
-      {
-        method: "POST",
-        body: formData,
+   const onImageChange = async (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      console.log('Arquivo selecionado:', file);
+  
+      const formData = new FormData(); // Corrigir a criação do FormData
+      formData.append('foto', file); // Adicionar o arquivo selecionado
+      formData.append('id_paciente', pacienteLocal.id_paciente);
+  
+      try {
+        const response = await fetch('http://localhost:4242/paciente/foto-perfil', {
+          method: 'POST',
+          body: formData,
+        });
+  
+        if (response.ok) {
+          const data = await response.text();
+          localStorage.setItem('User-Profile', JSON.stringify({...pacienteLocal, foto: `/uploads/${file.filename}`}));
+          console.log('Resposta do servidor:', data);
+          window.location.reload();
+        } else {
+          console.log('Erro no envio da foto:', response.status);
+        }
+      } catch (err) {
+        console.error('Erro:', err.message);
       }
-    );
-
-    if (!response.ok) throw new Error("Erro ao enviar a foto");
-    return response.json();
-  };
-
-  const handleSalvarFoto = async () => {
-    try {
-      await uploadFoto(fotoSelecionada, paciente.id_paciente);
-
-      const response = await fetch(
-        `http://localhost:4242/foto/${paciente.id_paciente}?_=${new Date().getTime()}`
-      );
-      const blob = await response.blob();
-      const imageUrl = URL.createObjectURL(blob);
-      setImagemPreview(imageUrl);
-      setIsVisible(false);
-    } catch (error) {
-      console.error("Erro ao salvar a foto:", error);
     }
   };
+
+  const [image, setImage] = useState(null);
 
   const irParaConsultas = () => {
     navigate(`/consulta/paciente/${paciente.id_paciente}`);
@@ -215,9 +198,10 @@ function EditarPaciente() {
         <aside className="barra-lateral-p">
           <div className="cabecalho-perfil-paciente">
             <img
-              src={imagemPreview || mulher}
+              src={`http://localhost:4242${pacienteLocal.foto}`}
               alt="Foto do perfil"
               className="imagem-perfil"
+              onClick={onImageChange}
             />
             <h2 className="nome-perfil">{pacienteLocal.nome}</h2>
           </div>
@@ -417,7 +401,7 @@ function EditarPaciente() {
                 <div className="container_button_gostei_salvar">
                   <button
                     className="button_gostei_salvar"
-                    onClick={handleSalvarFoto}
+                    onClick={() => onImageChange(image)}
                   >
                     Gostei, Salvar
                   </button>

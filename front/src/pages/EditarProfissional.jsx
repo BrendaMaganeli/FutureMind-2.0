@@ -233,7 +233,7 @@ function EditarProfissional() {
           }}
         >
           <div className="cabecalho-perfil">
-            <img src={mulher} alt="Foto do perfil" className="imagem-perfil" />
+            <img src={perfilSalvo.foto} alt="Foto do perfil" className="imagem-perfil" />
             <h2 className="nome-perfil">{profissionais.nome}</h2>
           </div>
           <div className="textarea-wrapper" style={{ width: "20rem" }}>

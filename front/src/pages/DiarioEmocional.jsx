@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Plus, X, Pencil } from "lucide-react";
 import "./CSS/DiarioEmocional.css";
+import voltar from "../assets/seta-principal.svg";
 
 const initialData = [
   {
@@ -111,6 +112,7 @@ function NotesApp() {
   return (
     <div className="notes-app">
       <div className="folders-sidebar">
+        <img src={voltar} alt="seta-voltar" className="seta-voltar"/>
         <div className="header">
           <h2 className="title">Pastas</h2>
           <button onClick={handleNewFolder} className="btn add-folder">

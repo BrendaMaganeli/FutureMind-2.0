@@ -175,6 +175,28 @@
     color: #013a63;
   }
 
+  
+
+  .floating-select-pro .custom-select__value-container::-webkit-scrollbar{
+    width: 6px;
+    height: 6px;
+  }
+  
+  .floating-select-pro .custom-select__value-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .floating-select-pro .custom-select__value-container::-webkit-scrollbar-thumb {
+    background-color: #5A789F;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  
+  .floating-select-pro .custom-select__value-container.textarea-wrapper::-webkit-scrollbar-thumb:hover {
+    background-color: #466484;
+  }
+  
 
   .voltar-seta{
     padding-top: 1%;
@@ -495,8 +517,6 @@
     border: 1px solid white;
     border-top: transparent;  
     scrollbar-width: none;
-    -webkit-scrollbar-width: 0;
-    -webkit-scrollbar-color: transparent transparent;
   }
   
   .textarea-custom:focus {
@@ -601,26 +621,3 @@
   overflow-y: auto;
 }
 
-.textarea-wrapper::-webkit-scrollbar,
-  .textarea-wrapper::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  
-  .textarea-wrapper::-webkit-scrollbar-track,
-  .textarea-wrapper::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  .textarea-wrapper::-webkit-scrollbar-thumb,
-  .textarea-wrapper::-webkit-scrollbar-thumb {
-    background-color: #5A789F;
-    border-radius: 10px;
-    border: 2px solid transparent;
-    background-clip: content-box;
-  }
-  
-  .textarea-wrapper::-webkit-scrollbar-thumb:hover,
-  .textarea-wrapper::-webkit-scrollbar-thumb:hover {
-    background-color: #466484;
-  }

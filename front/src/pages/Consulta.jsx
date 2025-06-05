@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import "./CSS/Consulta.css";
 import imgConsulta from "../assets/Group 239294.svg";
-import voltar from "../assets/voltar 2.svg";
+import voltar from "../assets/seta-principal.svg";
 
 // Utilitário: gera dados de cada mês (nome, total de dias e dia da semana do dia 1º)
 const obterDadosMes = (ano) => {

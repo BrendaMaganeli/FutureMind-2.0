@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import "./CSS/Telaagendamento.css";
+import "./CSS/TelaAgendamento.css";
 import imgConsulta from "../assets/Group 239294.svg";
 import voltar from "../assets/seta-principal.svg";
 import { useNavigate, useParams } from "react-router-dom";

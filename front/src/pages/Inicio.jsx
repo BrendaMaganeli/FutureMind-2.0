@@ -47,12 +47,28 @@ function Inicio() {
   }, []);
 
   const parseJson = (valor) => {
-    try {
-      return JSON.parse(valor || "[]");
-    } catch {
-      return [];
+  try {
+    let parsed = typeof valor === "string" ? JSON.parse(valor) : valor;
+
+    // Se for um array de strings, converte para objetos com label
+    if (Array.isArray(parsed)) {
+      return parsed.map((item) => {
+        // Se já é objeto com label, mantém
+        if (typeof item === "object" && item.label && item.value) return item;
+
+        // Caso contrário, monta um objeto novo
+        const labelFormatado = item
+          .replace(/-/g, " ")
+          .replace(/\b\w/g, (l) => l.toUpperCase());
+        return { value: item, label: labelFormatado };
+      });
     }
-  };
+
+    return [];
+  } catch (e) {
+    return [];
+  }
+};
 
   const [isHovered, setIsHovered] = useState(false);
 

@@ -1,19 +1,6 @@
-<<<<<<< HEAD
 const express = require('express');
 const mysql = require('mysql2/promise');
 const cors = require('cors');
-=======
-import express from "express";
-import mysql from "mysql2/promise";
-import cors from "cors";
-import multer from "multer";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-import { triggerAsyncId } from "async_hooks";
-import { resolve4 } from "dns";
->>>>>>> 1867822c0d84dd17dc4246ac2f337431d256ffae
 
 const app = express();
 

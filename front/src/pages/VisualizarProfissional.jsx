@@ -82,7 +82,7 @@ function VisualizarProfissional() {
             >
               <div className="cabecalho-perfil">
                 <img
-                  src={profissional.foto}
+                  src={`http://localhost:4242${profissional.foto}`}
                   alt="Foto do perfil"
                   className="imagem-perfil"
                 />

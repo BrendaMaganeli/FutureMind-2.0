@@ -1,7 +1,6 @@
 import "./CSS/EditarPaciente.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import mulher from "../assets/image 8.png";
 import icon_um from "../assets/calendar-check.svg";
 import icon_dois from "../assets/video.svg";
 import icon_tres from "../assets/message-square (1).svg";
@@ -18,6 +17,7 @@ function EditarPaciente() {
   const [showModal, setShowModal] = useState(false);
   const [imagemPreview, setImagemPreview] = useState(null);
   const [fotoSelecionada, setFotoSelecionada] = useState(null);
+  const [foto, setFoto] = useState(`http://localhost:4242${pacienteLocal.foto}`);
 
   const [paciente, setPaciente] = useState({
     id_paciente: pacienteLocal.id_paciente,
@@ -28,6 +28,12 @@ function EditarPaciente() {
     data_nascimento: formatarDataBrasileira(pacienteLocal.data_nascimento),
     senha: pacienteLocal.senha,
   });
+
+  useEffect(() => {
+
+    const pacienteAux = {...pacienteLocal, foto: foto};
+    localStorage.setItem('User-Profile', JSON.stringify(pacienteAux));
+  }, [foto]);
 
   function formatarDataBrasileira(dataISO) {
     const data = new Date(dataISO);
@@ -145,15 +151,15 @@ function EditarPaciente() {
     if (selectedFile) {
       setFotoSelecionada(selectedFile);
       setImagemPreview(URL.createObjectURL(selectedFile));
-      setImage(event);
+      setImage(selectedFile);
     }
   };
 
   //fotos
 
-   const onImageChange = async (event) => {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
+   const onImageChange = async () => {
+    if (image) {
+      const file = image
       console.log('Arquivo selecionado:', file);
   
       const formData = new FormData(); // Corrigir a criação do FormData
@@ -167,9 +173,7 @@ function EditarPaciente() {
         });
   
         if (response.ok) {
-          const data = await response.text();
-          localStorage.setItem('User-Profile', JSON.stringify({...pacienteLocal, foto: `/uploads/${file.filename}`}));
-          console.log('Resposta do servidor:', data);
+          setFoto(imagemPreview);
           window.location.reload();
         } else {
           console.log('Erro no envio da foto:', response.status);
@@ -198,7 +202,7 @@ function EditarPaciente() {
         <aside className="barra-lateral-p">
           <div className="cabecalho-perfil-paciente">
             <img
-              src={`http://localhost:4242${pacienteLocal.foto}`}
+              src={pacienteLocal.foto}
               alt="Foto do perfil"
               className="imagem-perfil"
               onClick={onImageChange}
@@ -401,7 +405,7 @@ function EditarPaciente() {
                 <div className="container_button_gostei_salvar">
                   <button
                     className="button_gostei_salvar"
-                    onClick={() => onImageChange(image)}
+                    onClick={onImageChange}
                   >
                     Gostei, Salvar
                   </button>

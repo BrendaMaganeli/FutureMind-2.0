@@ -232,7 +232,8 @@ app.post('/paciente/foto-perfil', upload.single('foto'), async (req, res) => {
       return res.status(404).json({ Erro: 'Paciente não encontrado.' });
     }
 
-    res.json(result[0]);
+    const resultAux = JSON.stringify(result[0])
+    res.json(resultAux);
   } catch (err) {
     console.error(err.message);
     return res.status(500).json({ Erro: 'Erro ao atualizar paciente.' });

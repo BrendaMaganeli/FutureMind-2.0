@@ -293,7 +293,7 @@ function Inicio() {
                   <SwiperSlide key={index}>
                     <div className="card">
                       <div className="foto-perfilInicio">
-                        <img src={item.foto} alt="" />
+                        <img src={`http://localhost:4242${item.foto}`} alt="" />
                         <div className="perfil-nomeValor">
                           <h2
                             onClick={() => acessarPerfil(item.id_profissional)}

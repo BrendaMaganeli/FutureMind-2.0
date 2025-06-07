@@ -18,7 +18,7 @@ function EditarProfissional() {
   const [hasValueAbordagem, setHasValueAbordagem] = useState(false);
   const [imagemPreview, setImagemPreview] = useState(null);
   const [fotoSelecionada, setFotoSelecionada] = useState(null);
-  const [foto, setFoto] = useState(`http://localhost:4242${perfilSalvo.foto}`);
+  const [foto, setFoto] = useState('');
 
   useEffect(() => {
 
@@ -205,6 +205,7 @@ function EditarProfissional() {
       if (response.ok) {
         const data = await response.json();
         data.valor_consulta = data.valor_consulta.toFixed(2);
+        data.foto = foto;
         localStorage.setItem("User-Profile", JSON.stringify(data));
         window.location.reload();
       } else {
@@ -222,7 +223,7 @@ function EditarProfissional() {
   };
 
   const voltarTelas = () => {
-    navigate("/inicio");
+    navigate(-1);
   };
 
   const handleDeletarClick = () => setShowModal(true);
@@ -232,6 +233,8 @@ function EditarProfissional() {
     setShowModal(false);
   };
 
+  //fotos
+
   const handleImagemChange = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
@@ -240,8 +243,6 @@ function EditarProfissional() {
       setImage(selectedFile);
     }
   };
-
-  //fotos
 
    const onImageChange = async () => {
     if (image) {
@@ -296,7 +297,7 @@ function EditarProfissional() {
           }}
         >
           <div className="cabecalho-perfil">
-            <img src={perfilSalvo.foto} alt="Foto do perfil" className="imagem-perfil" />
+            <img src={foto ? perfilSalvo.foto : `http://localhost:4242${perfilSalvo.foto}`} alt="Foto do perfil" className="imagem-perfil" />
             <h2 className="nome-perfil">{profissionais.nome}</h2>
           </div>
           <div className="textarea-wrapper" style={{ width: "20rem" }}>

@@ -16,10 +16,17 @@ import { GlobalContext } from "../Context/GlobalContext.jsx";
 import Footer from "../Components/Footer.jsx";
 
 function Inicio() {
+
   const [profissionais, setProfissionais] = useState([]);
   const [valorBuscar, setValorBuscar] = useState("");
   const navigate = useNavigate();
   const { setId } = useContext(GlobalContext);
+  const [mostrarLogo, setMostrarLogo] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setMostrarLogo(false), 2500);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const buscaProfissionais = async () => {
@@ -138,7 +145,14 @@ function Inicio() {
   };
 
   return (
-    <div className="container-inicio">
+    <>
+    {
+      mostrarLogo ? (
+        <div className="logo-container">
+          <img src="logo oficial.svg" alt="Logo" className="logo-animada" />
+        </div>
+    ) : (
+      <div className="container-inicio">
       <NavBar />
       <div className="img-fundo">
         <img src={fundo} alt="" />
@@ -178,7 +192,7 @@ function Inicio() {
                     styles={{
                       menuPortal: (base) => ({ ...base, zIndex: 9999 }),
                     }}
-                  />
+                    />
                 </div>
                 <div className="select-filtro">
                   <Select
@@ -197,7 +211,7 @@ function Inicio() {
                     styles={{
                       menuPortal: (base) => ({ ...base, zIndex: 9999 }),
                     }}
-                  />
+                    />
                 </div>
               </div>
             </div>
@@ -278,17 +292,17 @@ function Inicio() {
                           )
                         );
 
-                      const matchAbordagem =
+                        const matchAbordagem =
                         filtrosAplicadosAbordagens.length > 0 &&
                         p.abordagem.some((abo) =>
                           filtrosAplicadosAbordagens.some(
                             (sel) => sel.value === abo.value
                           )
                         );
-
-                      return matchEspecializacao || matchAbordagem;
-                    })
-                  : profissionais
+                        
+                        return matchEspecializacao || matchAbordagem;
+                      })
+                      : profissionais
                 ).map((item, index) => (
                   <SwiperSlide key={index}>
                     <div className="card">
@@ -297,7 +311,7 @@ function Inicio() {
                         <div className="perfil-nomeValor">
                           <h2
                             onClick={() => acessarPerfil(item.id_profissional)}
-                          >
+                            >
                             {item.nome}
                           </h2>
                           <p>{item.valor_consulta!== null && `R$ ${item.valor_consulta}`}</p>
@@ -341,7 +355,7 @@ function Inicio() {
           to="/diarioemocional"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-        >
+          >
           <Lottie
             options={animationOptions}
             height={60}
@@ -349,13 +363,15 @@ function Inicio() {
             isPaused={false}
             speed={0.4}
             isStopped={!isHovered}
-          />
+            />
         </Link>
       </div>
       <div className="footer_inicio">
         <Footer className="footer_inicio" />
       </div>
     </div>
+    )}
+    </>
   );
 }
 

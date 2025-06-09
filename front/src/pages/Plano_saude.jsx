@@ -12,6 +12,7 @@ import "./CSS/Plano_saude.css";
 import { GlobalContext } from "../Context/GlobalContext.jsx";
 
 function Plano_saude() {
+
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("User-Profile"));
 
@@ -30,6 +31,14 @@ function Plano_saude() {
   const [erroSenha, setErroSenha] = useState("");
 
   const [dataAr, setDataAr] = useState();
+
+  const [mostrarLogo, setMostrarLogo] = useState(true);
+  
+    useEffect(() => {
+      const timer = setTimeout(() => setMostrarLogo(false), 2200);
+      return () => clearTimeout(timer);
+    }, []);
+  
 
   const abrirModalPrata = () => (!user ? setMostrarModalLogin(true) : setModalPrataAberto(true));
   const fecharModalPrata = () => setModalPrataAberto(false);
@@ -214,6 +223,15 @@ function Plano_saude() {
   }, [dataAr]);
 
   return (
+    <>
+    {
+      mostrarLogo ? (
+         <div className="logo-container">
+          <div className="logo-elements">
+            <h2 className="loading-animation">Carregando...</h2>    
+          </div>
+        </div>
+      ) : (
     <div className="container-planoSaude">
       <NavBar cor={"rgba(90,120,159, .5)"} />
 
@@ -334,7 +352,7 @@ function Plano_saude() {
                       className="modal-input"
                       value={emailEmpresa}
                       onChange={(e) => setEmailEmpresa(e.target.value)}
-                    />
+                      />
                     <label>E-mail Empresarial</label>
                     {erroEmail && <p className="mensagem-erro">{erroEmail}</p>}
                   </div>
@@ -347,7 +365,7 @@ function Plano_saude() {
                       className="modal-input"
                       value={senhaEmpresa}
                       onChange={(e) => setSenhaEmpresa(e.target.value)}
-                    />
+                      />
                     <label>Senha Empresarial</label>
                     {erroSenha && <p className="mensagem-erro">{erroSenha}</p>}
                   </div>
@@ -394,7 +412,7 @@ function Plano_saude() {
                     <button
                       className="btn-confirmar"
                       onClick={selecionar_plano_prata}
-                    >
+                      >
                       Confirmar
                     </button>
                   </div>
@@ -447,6 +465,8 @@ function Plano_saude() {
         <ModalLogin setMostrarModalLogin={setMostrarModalLogin} />
       )}
     </div>
+  )}
+  </>
   );
 }
 

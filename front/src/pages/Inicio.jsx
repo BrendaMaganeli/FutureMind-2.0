@@ -24,7 +24,7 @@ function Inicio() {
   const [mostrarLogo, setMostrarLogo] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setMostrarLogo(false), 2500);
+    const timer = setTimeout(() => setMostrarLogo(false), 2200);
     return () => clearTimeout(timer);
   }, []);
 
@@ -149,7 +149,9 @@ function Inicio() {
     {
       mostrarLogo ? (
         <div className="logo-container">
-          <img src="logo oficial.svg" alt="Logo" className="logo-animada" />
+          <div className="logo-elements">
+            <h2 className="loading-animation">Carregando...</h2>    
+          </div>
         </div>
     ) : (
       <div className="container-inicio">

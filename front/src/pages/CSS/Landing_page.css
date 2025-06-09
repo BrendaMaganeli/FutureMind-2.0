@@ -714,8 +714,30 @@
   animation: fadeOutContainer 0.5s ease-out 2s forwards;
 }
 
+.logo-elements {
+
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  height: fit-content;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.loading-animation {
+
+  font-family: 'DM Sans', sans-serif;
+  color: #013a63b4;
+  font-size: 125%;
+  position: absolute;
+  top: 65%;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease-out forwards, fadeOut 0.5s ease-out 2s forwards;
+}
+
 .logo-animada {
-  width: 250px;
+  width: 40%;
   height: auto;
   opacity: 0;
   transform: translateY(20px);

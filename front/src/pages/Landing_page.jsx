@@ -42,7 +42,9 @@ function Landing_page() {
     <div>
       {mostrarLogo ? (
         <div className="logo-container">
+          <div className='logo-elements'>
           <img src="logo oficial.svg" alt="Logo" className="logo-animada" />
+          </div>
         </div>
       ) : (
         <>

@@ -841,24 +841,23 @@ app.put('/validacao_planos', async (req, res) => {
 })
 
 app.post('/verificar_paciente', async (req, res) => {
- 
   const { valorEmail, cpf, telefone } = req.body;
 
   try {
-    const [response] =  await pool.query('SELECT email, cpf, telefone FROM pacientes WHERE email = ? OR cpf = ? OR telefone = ?',
-     [valorEmail, cpf, telefone])
-    
-    if(response.length > 0){
+    const [emailQuery] = await pool.query('SELECT 1 FROM pacientes WHERE email = ?', [valorEmail]);
+    const [cpfQuery] = await pool.query('SELECT 1 FROM pacientes WHERE cpf = ?', [cpf]);
+    const [telefoneQuery] = await pool.query('SELECT 1 FROM pacientes WHERE telefone = ?', [telefone]);
 
-      return res.status(201).json(response.rows);
-    }
-    
-    return res.status(404).json({ Error: 'erro ao inserir dados'})
+    return res.status(200).json({
+      emailExiste: emailQuery.length > 0,
+      cpfExiste: cpfQuery.length > 0,
+      telefoneExiste: telefoneQuery.length > 0
+    });
   } catch (error) {
-     
-    console.error('Erro ao salvar mensagem:', error);
+    console.error('Erro ao verificar paciente:', error);
     res.status(500).json({ Error: 'Erro interno do servidor' });
   }
-})
+});
+
 
 app.listen(4242, () => console.log ('Servidor servindo'));

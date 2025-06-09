@@ -27,9 +27,9 @@ function CadastroPaciente() {
   // Estados de senha visível
   const [tipoInput, setTipoInput] = useState("password");
   const [tipoIconSenha, setTipoIconSenha] = useState("icon_nao_ver.png");
-  const [mensagemCpf, setMensagemCpf] = useState('')
-  const [mensagemTelefone, setMensagemTelefone] = useState('')
-  const [mensagemEmail, setMensagemEmail] = useState('')
+  const [mensagemCpf, setMensagemCpf] = useState("");
+  const [mensagemTelefone, setMensagemTelefone] = useState("");
+  const [mensagemEmail, setMensagemEmail] = useState("");
 
   const alternarTipo = () => {
     setTipoInput(tipoInput === "password" ? "text" : "password");
@@ -108,14 +108,26 @@ function CadastroPaciente() {
     }
   };
 
-  const [emailAux, setEmailAux] = useState(false);
-  const [telefoneAux, setTelefoneAux] = useState(false);
-  const [cpfAux, setCpfAux] = useState(false);
-
   const handleCadastro = async (e) => {
-    
     if (e) e.preventDefault();
     let validacoes = true;
+    let data = {};
+    try {
+
+      const response = await fetch("http://localhost:4242/verificar_paciente", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ valorEmail, cpf, telefone }),
+      });
+      
+      if (response.ok) {
+        data = await response.json();
+      }
+    } catch (error) {
+      console.log("erro");
+    }
 
     if (nome.trim().length < 1) {
       setNomeValido(true);
@@ -124,19 +136,30 @@ function CadastroPaciente() {
       setNomeValido(false);
     }
 
-    if (cpf.trim().length < 14 && !cpfAux) {
+    if (cpf.trim().length < 14) {
       setCpfValido(true);
-      setMensagemCpf('Cpf invalido!')
+      setMensagemCpf("CPF inválido!");
+      validacoes = false;
+    } else if (data.cpfExiste) {
+      setCpfValido(true);
+      setMensagemCpf("CPF já cadastrado!");
       validacoes = false;
     } else {
       setCpfValido(false);
+      setMensagemCpf("");
     }
 
-    if (telefone.trim().length < 15 && !telefoneAux) {
+    if (telefone.trim().length < 15) {
       setTelefoneValido(true);
+      setMensagemTelefone("Telefone inválido!");
+      validacoes = false;
+    } else if (data.telefoneExiste) {
+      setTelefoneValido(true);
+      setMensagemTelefone("Telefone já cadastrado!");
       validacoes = false;
     } else {
       setTelefoneValido(false);
+      setMensagemTelefone("");
     }
 
     if (dataNascimento.length === 10) {
@@ -144,7 +167,6 @@ function CadastroPaciente() {
       const nascimento = new Date(ano, mes - 1, dia);
 
       const dataInvalida =
-
         nascimento.getFullYear() !== ano ||
         nascimento.getMonth() !== mes - 1 ||
         nascimento.getDate() !== dia;
@@ -169,14 +191,21 @@ function CadastroPaciente() {
       validacoes = false;
     }
 
-    if (
-      !valorEmail?.trim().endsWith("@gmail.com") &&
-      !valorEmail?.trim().endsWith("@hotmail.com") && !emailAux
-    ) {
+    const emailFormatado =
+      valorEmail.trim().endsWith("@gmail.com") ||
+      valorEmail.trim().endsWith("@hotmail.com");
+
+    if (!emailFormatado) {
       setEmailValido(true);
+      setMensagemEmail("Email inválido!");
+      validacoes = false;
+    } else if (data.emailExiste) {
+      setEmailValido(true);
+      setMensagemEmail("Email já cadastrado!");
       validacoes = false;
     } else {
       setEmailValido(false);
+      setMensagemEmail("");
     }
 
     if (!valorSenha || valorSenha.trim().length < 8) {
@@ -186,60 +215,8 @@ function CadastroPaciente() {
       setSenhaValido(false);
     }
 
-    
-    try {
-      
-      const bd = { valorEmail, cpf, telefone}
-      
-      const response = await fetch('http://localhost:4242/verificar_paciente', {
-       method: 'POST',
-       headers: {
-        'Content-Type': 'application/json'
-       },
-       body: JSON.stringify(bd)
-
-      });
-      
-      if (response.ok) {
-
-        const data = await response.json();
-        
-        if(valorEmail === data.email){
-
-          setEmailAux(true);
-          validacoes = false;
-        }
-        if(cpf === data.cpf){
-
-          setCpfAux(true);
-          setCpfValido(true);
-          setMensagemCpf('Cpf já cadastrado')
-          validacoes = false;
-
-        }else{
-
-          setCpfValido(false);
-        }
-        if(telefone === data.telefone){
-
-          setTelefoneAux(true);
-          
-          validacoes = false;
-        }
-
-      } else {
-
-        setEmailAux(false)
-        setCpfAux(false)
-        setTelefoneAux(false)
-        if (validacoes) {
-          handleFinish();
-        }
-      }
-
-    } catch (error) {
-      
-      console.log('erro')
+    if (validacoes) {
+      await handleFinish();
     }
   };
 
@@ -303,7 +280,7 @@ function CadastroPaciente() {
             />
             <label>Telefone</label>
             <span className={`erro ${telefoneValido ? "visivel" : ""}`}>
-              Telefone inválido
+              {mensagemTelefone}
             </span>
           </div>
 
@@ -337,7 +314,7 @@ function CadastroPaciente() {
             />
             <label>E-mail</label>
             <span className={`erro ${emailValido ? "visivel" : ""}`}>
-              E-mail deve terminar com @gmail.com ou @hotmail.com
+              {mensagemEmail}
             </span>
           </div>
 

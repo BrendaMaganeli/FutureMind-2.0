@@ -57,36 +57,6 @@ function EditarProfissional() {
     email_profissional: perfilSalvo?.email_profissional || "",
   });
 
-  useEffect(() => {
-    async function buscarPerfil() {
-      try {
-        if (!profissionais.id_profissional) return;
-
-        const res = await fetch(
-          `http://localhost:4242/editarprofissional/${profissionais.id_profissional}`
-        );
-        if (!res.ok) throw new Error("Falha ao buscar perfil");
-
-        const data = await res.json();
-        const dataFormatada = formatarDataBrasileira(data.data_nascimento);
-
-        setProfissionais({
-          ...data,
-          data_nascimento: dataFormatada,
-          especializacao: parseCampoArray(data.especializacao),
-          abordagem: parseCampoArray(data.abordagem),
-          valor_consulta: `R$ ${parseFloat(data.valor_consulta).toFixed(2).replace(".", ",")}`,
-        });
-
-        localStorage.setItem("User-Profile", JSON.stringify(data));
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    buscarPerfil();
-  }, [profissionais.id_profissional]);
-
   function formatarDataBrasileira(dataISO) {
     const data = new Date(dataISO);
     const dia = String(data.getDate()).padStart(2, "0");
@@ -297,7 +267,17 @@ function EditarProfissional() {
           }}
         >
           <div className="cabecalho-perfil">
-            <img src={foto ? perfilSalvo.foto : `http://localhost:4242${perfilSalvo.foto}`} alt="Foto do perfil" className="imagem-perfil" />
+            <img
+              src={
+                imagemPreview
+                  ? imagemPreview
+                  : perfilSalvo.foto.startsWith("http")
+                  ? perfilSalvo.foto
+                  : `http://localhost:4242${perfilSalvo.foto}`
+              }
+              alt="Foto do perfil"
+              className="imagem-perfil"
+            />
             <h2 className="nome-perfil">{profissionais.nome}</h2>
           </div>
           <div className="textarea-wrapper" style={{ width: "20rem" }}>

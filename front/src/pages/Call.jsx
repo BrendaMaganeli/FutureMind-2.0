@@ -5,6 +5,7 @@ import "./CSS/Call.css";
 const socket = io('http://localhost:5000');
 
 function VideoConferencia() {
+
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
     const peerConnection = useRef(null);
@@ -20,7 +21,6 @@ function VideoConferencia() {
     const [espelhar, setEspelhar] = useState('mirror');
     const [remoteStream, setRemoteStream] = useState(null);
 
-    // Configuração inicial da mídia
     useEffect(() => {
         navigator.mediaDevices.getUserMedia({ video: true, audio: true })
             .then((stream) => {
@@ -65,13 +65,11 @@ function VideoConferencia() {
             setTargetUser(data.from);
         });
 
-       socket.on("answer", async (data) => {
-  console.log("Resposta recebida:", data);
-  const remoteDesc = new RTCSessionDescription(data.answer);
-  await peerConnection.current.setRemoteDescription(remoteDesc);
+        socket.on("answer", async (data) => {
+        console.log("Resposta recebida:", data);
+        const remoteDesc = new RTCSessionDescription(data.answer);
+        await peerConnection.current.setRemoteDescription(remoteDesc);
 });
-
-
 
         socket.on("ice-candidate", async (data) => {
             if (peerConnection.current && data.candidate) {
@@ -105,34 +103,32 @@ function VideoConferencia() {
 
 
     const setupPeerConnection = () => {
-        const pc = new RTCPeerConnection({
-            iceServers: [
-                { urls: "stun:stun.l.google.com:19302" },
-                { urls: "stun:stun1.l.google.com:19302" },
-                { urls: "stun:stun2.l.google.com:19302" }
-            ]
-        });
+            const pc = new RTCPeerConnection({
+                iceServers: [
+                    { urls: "stun:stun.l.google.com:19302" },
+                    { urls: "stun:stun1.l.google.com:19302" },
+                    { urls: "stun:stun2.l.google.com:19302" }
+                ]
+            });
 
-        // Adiciona as tracks locais
-        localStreamRef.current.getTracks().forEach(track => {
-            pc.addTrack(track, localStreamRef.current);
-        });
+            // Adiciona as tracks locais
+            localStreamRef.current.getTracks().forEach(track => {
+                pc.addTrack(track, localStreamRef.current);
+            });
 
-        pc.onicecandidate = (event) => {
-            if (event.candidate && targetUser) {
-                socket.emit("ice-candidate", {
-                    to: targetUser,
-                    candidate: event.candidate
-                });
-            }
-        };
+            pc.onicecandidate = (event) => {
+                if (event.candidate && targetUser) {
+                    socket.emit("ice-candidate", {
+                        to: targetUser,
+                        candidate: event.candidate
+                    });
+                }
+            };
 
-      pc.ontrack = (event) => {
-    console.log("Track recebida:", event.streams[0]);
-    setRemoteStream(event.streams[0]);
-};
-
-
+        pc.ontrack = (event) => {
+        console.log("Track recebida:", event.streams[0]);
+        setRemoteStream(event.streams[0]);
+    };
 
         pc.oniceconnectionstatechange = () => {
             if (pc.iceConnectionState === 'disconnected') {

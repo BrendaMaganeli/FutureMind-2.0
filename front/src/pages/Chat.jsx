@@ -204,50 +204,60 @@ function Chat({
 
   const socket = useRef();
 
-  useEffect(() => {
-    // Criação do socket apenas uma vez
-    if (!socket.current) {
-      socket.current = io("http://localhost:3001");
+ useEffect(() => {
+  if (!socket.current) {
+    socket.current = io("http://localhost:3001");
 
-      socket.current.on("connect", () => {
-        console.log("Conectado ao Socket.IO!");
-      });
+    socket.current.on("connect", () => {
+      console.log("Conectado ao Socket.IO!");
+    });
 
-      socket.current.on("connect_error", (err) => {
-        console.error("Erro de conexão:", err);
-      });
+    socket.current.on("connect_error", (err) => {
+      console.error("Erro de conexão:", err);
+    });
+  }
+
+  // Entra na sala do chat selecionado
+  if (chatSelected) {
+    const roomId = `chat_${
+      userType === "Profissional"
+        ? user.id_profissional + "_" + chatSelected.id_paciente
+        : user.id_paciente + "_" + chatSelected.id_profissional
+    }`;
+    socket.current.emit("joinRoom", roomId); // Entra na sala
+  }
+
+  // Listener para novas mensagens
+  const handleNewMessage = (savedMessage) => {
+    console.log("Nova mensagem recebida:", savedMessage);
+
+    if (!chatSelected) return;
+
+    const isRelevantMessage =
+      // Profissional recebendo mensagem do paciente atual
+      (userType === "Profissional" &&
+        savedMessage.userType === "Paciente" &&
+        savedMessage.id_paciente === chatSelected.id_paciente &&
+        savedMessage.id_profissional === user.id_profissional) ||
+      // Paciente recebendo mensagem do profissional atual
+      (userType === "Paciente" &&
+        savedMessage.userType === "Profissional" &&
+        savedMessage.id_profissional === chatSelected.id_profissional &&
+        savedMessage.id_paciente === user.id_paciente);
+
+    if (isRelevantMessage) {
+      setMessages((prev) => [...prev, savedMessage]);
     }
+  };
 
-    // Atualiza o listener quando chatSelected muda
-    const handleNewMessage = (savedMessage) => {
-      console.log("Nova mensagem recebida:", savedMessage);
+  socket.current.off("receiveMessage");
+  socket.current.on("receiveMessage", handleNewMessage);
 
-      if (!chatSelected) return;
+  return () => {
+    socket.current?.off("receiveMessage", handleNewMessage);
+  };
+}, [chatSelected, userType, user.id_profissional, user.id_paciente]);
 
-      const isRelevantMessage =
-        // Profissional recebendo do paciente atual
-        (userType === "Profissional" &&
-          savedMessage.userType === "Paciente" &&
-          savedMessage.id_paciente === chatSelected.id_paciente) ||
-        // Paciente recebendo do profissional atual
-        (userType === "Paciente" &&
-          savedMessage.userType === "Profissional" &&
-          savedMessage.id_profissional === chatSelected.id_profissional);
-
-      if (isRelevantMessage) {
-        setMessages((prev) => [...prev, savedMessage]);
-      }
-    };
-
-    // Remove listener antigo e adiciona novo
-    socket.current.off("receiveMessage");
-    socket.current.on("receiveMessage", handleNewMessage);
-
-    return () => {
-      // Limpa apenas o listener, mantendo a conexão
-      socket.current?.off("receiveMessage", handleNewMessage);
-    };
-  }, [chatSelected, userType, user.id_profissional, user.id_paciente]);
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });

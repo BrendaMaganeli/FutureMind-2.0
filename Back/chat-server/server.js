@@ -20,6 +20,10 @@ io.on('connection', (socket) => {
     socket.to(message.roomId).emit('receiveMessage', message);
     socket.emit('receiveMessage', message); // Para o remetente
   });
+
+  socket.on("joinRoom", (roomId) => {
+  socket.join(roomId); // Entra na sala
+});
 });
 
 const PORT = process.env.PORT || 3001;

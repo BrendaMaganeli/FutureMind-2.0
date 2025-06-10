@@ -8,11 +8,11 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 function Pagamento() {
   const navigate = useNavigate();
-  const { id } = useParams(); // aqui, "id" é o ID do profissional
+  const { id } = useParams(); // ID do profissional
   const location = useLocation();
   const { date: initialDate = "", time: initialTime = "" } = location.state || {};
 
-  // ——— Estados de agendamento e formulário de pagamento ———
+  // Estados de agendamento e formulário de pagamento 
   const [dataSelecionada, setDataSelecionada] = useState(initialDate);
   const [horaSelecionada, setHoraSelecionada] = useState(initialTime);
 
@@ -29,26 +29,28 @@ function Pagamento() {
   const [cupom, setCupom] = useState("");
   const [desconto, setDesconto] = useState(0);
 
-  // ——— Validações visuais nos campos ———
+  // Validações visuais nos campos
   const [valida_banco, setValida_banco] = useState(false);
   const [valida_numero_cartao, setValida_numero_cartao] = useState(false);
   const [valida_nome, setValida_nome] = useState(false);
   const [valida_cartao, setValida_cartao] = useState(false);
   const [valida_cvv, setValida_cvv] = useState(false);
 
-  // ——— ADICIONADO: estado para a aba de pagamento (Cartão / Boleto / Pix) ———
+  // Estado para a aba de pagamento (Cartão / Boleto / Pix)
   const [metodoSelecionado, setMetodoSelecionado] = useState("cartao");
 
-  // ——— Contexto global (por exemplo, plano_selecionado) ———
+  // Contexto global 
   const { plano_selecionado, vim_plano } = useContext(GlobalContext);
 
-  // ——— Informações do usuário (paciente) ———
+  // Informações do usuário (paciente)
   const user = JSON.parse(localStorage.getItem("User-Profile"));
 
-  // ——— Novos estados para dados do profissional ———
+  // Novos estados para dados do profissional
   const [profissionalNome, setProfissionalNome] = useState("");
   const [profissionalCRP, setProfissionalCRP] = useState("");
   const [valorConsulta, setValorConsulta] = useState(0);
+  const [cadastrandoPlano, setCadastrandoPlano] = useState(false);
+  const [planoInfo, setPlanoInfo] = useState(null);
 
   // Controle de exibição de modais e agenda
   const [mostrarModal, setMostrarModal] = useState(false);
@@ -62,7 +64,7 @@ function Pagamento() {
   const [nomeDependente, setNomeDependente] = useState("");
   const [nascimentoDependente, setNascimentoDependente] = useState("");
 
-  // ——— Funções utilitárias para formatar campos de cartão ———
+  // Funções utilitárias para formatar campos de cartão
   const formatarNumeroCartao = (valor) => {
     return valor
       .replace(/\D/g, "")
@@ -87,8 +89,40 @@ function Pagamento() {
     }
   };
 
-  // ——— Busca, ao montar o componente, os dados do profissional pelo ID ———
+  // Busca, ao montar o componente, os dados do profissional pelo ID
   useEffect(() => {
+    if (vim_plano) {
+      setCadastrandoPlano(true);
+      // Define o valor e informações do plano baseado no selecionado
+      let valor = 0;
+      let nomePlano = "";
+      
+      switch(plano_selecionado) {
+        case "basico":
+          valor = 189,99;
+          nomePlano = "Plano Prata";
+          break;
+        case "intermediario":
+          valor = 150;
+          nomePlano = "Plano Ouro";
+          break;
+        case "premium":
+          valor = 200;
+          nomePlano = "Plano Empresarial";
+          break;
+        default:
+          valor = 100;
+          nomePlano = "Plano Prata";
+      }
+      
+      setValorConsulta(valor);
+      setPlanoInfo({
+        nome: nomePlano,
+        valor: valor
+      });
+      return;
+    }
+
     const getDadosProfissional = async () => {
       try {
         const response = await fetch(`http://localhost:4242/profissional/${id}`);
@@ -107,9 +141,9 @@ function Pagamento() {
     };
 
     getDadosProfissional();
-  }, [id]);
+  }, [id, vim_plano, plano_selecionado]);
 
-  // ——— useEffect para zerar erros de validação conforme o usuário digita ———
+  // useEffect para zerar erros de validação conforme o usuário digita
   useEffect(() => {
     if (generoDependente.length > 0) setValida_banco(false);
   }, [generoDependente]);
@@ -130,7 +164,7 @@ function Pagamento() {
     if (cvvCartao.length > 0) setValida_cvv(false);
   }, [cvvCartao]);
 
-  // ——— Handlers dos campos de cartão ———
+  // Handlers dos campos de cartão
   const handleNumeroCartaoChange = (e) => {
     setNumeroCartao(formatarNumeroCartao(e.target.value));
     if (!toque_input_numero) setToque_input_numero(true);
@@ -151,12 +185,12 @@ function Pagamento() {
     if (!toque_input_cvv) setToque_input_cvv(true);
   };
 
-  // ——— Função para “voltar” à página anterior ———
+  // Função para "voltar" à página anterior
   const voltar_pagina = () => {
     navigate(-1);
   };
 
-  // ——— Handler para cadastrar um dependente (caso use dependentes) ———
+  // Handler para cadastrar um dependente (caso use dependentes)
   const handleCadastrarDependente = () => {
     if (nomeDependente && nascimentoDependente && generoDependente) {
       const novoId = `dep-${Date.now()}`;
@@ -173,7 +207,7 @@ function Pagamento() {
     }
   };
 
-  // ——— Função para envio de e-mail após finalizar agendamento ———
+  // Função para envio de e-mail após finalizar agendamento
   const sendEmail = () => {
     const templateParams = {
       email: user.email || "não informado",
@@ -199,7 +233,7 @@ function Pagamento() {
       });
   };
 
-  // ——— Função para finalizar agendamento e gravar assinatura/se houver ———
+  // Função para finalizar agendamento e gravar assinatura/se houver
   const handleFinalizar = async () => {
     // Validações básicas
     if (
@@ -218,7 +252,7 @@ function Pagamento() {
     }
 
     try {
-      // Caso o usuário não tenha um plano ainda e vier de “vim_plano”
+      // Caso o usuário não tenha um plano ainda e vier de "vim_plano"
       if (!user.chk_plano && vim_plano) {
         const hoje = new Date();
         const data_assinatura = hoje.toISOString().split("T")[0];
@@ -254,22 +288,22 @@ function Pagamento() {
         });
       }
 
-      // Cria o agendamento associando paciente + data/hora. Opcionalmente, você pode 
-      // querer enviar também o `id` do profissional, mas assumimos que o backend 
-      // já sabe associar paciente→profissional internamente.
-      const agendamentoBody = {
-        id_paciente: user.id_paciente,
-        data: dataSelecionada,
-        hora: horaSelecionada,
-      };
-      const agendamentoResp = await fetch(`http://localhost:4242/agendamento/${id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(agendamentoBody),
-      });
-      if (!agendamentoResp.ok) {
-        console.error("Falha ao registrar agendamento:", await agendamentoResp.text());
-        return;
+      // Se não estiver cadastrando um plano, cria o agendamento
+      if (!cadastrandoPlano) {
+        const agendamentoBody = {
+          id_paciente: user.id_paciente,
+          data: dataSelecionada,
+          hora: horaSelecionada,
+        };
+        const agendamentoResp = await fetch(`http://localhost:4242/agendamento/${id}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(agendamentoBody),
+        });
+        if (!agendamentoResp.ok) {
+          console.error("Falha ao registrar agendamento:", await agendamentoResp.text());
+          return;
+        }
       }
 
       sendEmail();
@@ -279,7 +313,7 @@ function Pagamento() {
     }
   };
 
-  // ——— JSX de retorno ———
+  // JSX de retorno
   return (
     <div
       className="container-principal"
@@ -298,7 +332,7 @@ function Pagamento() {
           <button onClick={voltar_pagina} className="back-button-pt">
             <img src={voltar} alt="voltar" style={{ width: "3em" }} />
           </button>
-          <h2>Finalize seu agendamento</h2>
+          <h2>Finalize seu {cadastrandoPlano ? "plano" : "agendamento"}</h2>
         </div>
 
         {/* ------------ Forma de pagamento (abas Cartão / Boleto / Pix) ------------ */}
@@ -524,7 +558,7 @@ function Pagamento() {
             fontWeight: "600",
           }}
         >
-          Finalizar agendamento
+          Finalizar {cadastrandoPlano ? "plano" : "agendamento"}
         </button>
       </div>
 
@@ -542,7 +576,7 @@ function Pagamento() {
             Resumo
           </p>
 
-          {/* Exibe o valor da consulta vinda do backend */}
+          {/* Exibe o valor da consulta ou do plano */}
           <div
             style={{
               display: "flex",
@@ -551,7 +585,7 @@ function Pagamento() {
               marginTop: "5%",
             }}
           >
-            <span>Consultas</span>
+            <span>{cadastrandoPlano ? (planoInfo?.nome || "Assinatura do plano") : "Consultas"}</span>
             <span>R${valorConsulta.toFixed(2)}</span>
           </div>
 
@@ -586,99 +620,101 @@ function Pagamento() {
             </span>
           </div>
 
-          {/* ================= Dados do profissional agendado ================= */}
-          <div style={{ marginTop: "24px" }}>
-            <p style={{ fontWeight: "500", marginTop: "16px", fontSize: "20px" }}>
-              Agendamentos
-            </p>
+          {/* Mostra informações do profissional APENAS se não estiver cadastrando um plano */}
+          {!cadastrandoPlano && profissionalNome && (
+            <div style={{ marginTop: "24px" }}>
+              <p style={{ fontWeight: "500", marginTop: "16px", fontSize: "20px" }}>
+                Agendamentos
+              </p>
 
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "25px",
-                marginTop: "12px",
-              }}
-            >
-              <img
-                src={mulher}
-                alt={`Foto de ${profissionalNome}`}
-                style={{
-                  borderRadius: "9999px",
-                  width: "60px",
-                  height: "60px",
-                  objectFit: "cover",
-                }}
-              />
-              <div>
-                <p style={{ fontWeight: "500", fontSize: "16px" }}>
-                  {profissionalNome || "Carregando..."}
-                </p>
-                <p style={{ fontSize: "16px", color: "#888" }}>
-                  {profissionalCRP ? `CRP ${profissionalCRP}` : "--"}
-                </p>
-                <p style={{ fontSize: "16px" }}>Atendimento Online</p>
-              </div>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: "10%",
-                borderTop: "1.5px solid #ddd",
-              }}
-            >
               <div
                 style={{
-                  fontSize: "15px",
                   display: "flex",
-                  marginTop: "5%",
-                  gap: "16px",
+                  alignItems: "center",
+                  gap: "25px",
+                  marginTop: "12px",
                 }}
               >
-                <p>
-                  <strong>Data:</strong>{" "}
-                  {dataSelecionada
-                    ? dataSelecionada.split("-").reverse().join("/")
-                    : "--/--/----"}
-                </p>
-                <p>
-                  <strong>Horário:</strong> {horaSelecionada || "--:--"}
-                </p>
+                <img
+                  src={mulher}
+                  alt={`Foto de ${profissionalNome}`}
+                  style={{
+                    borderRadius: "9999px",
+                    width: "60px",
+                    height: "60px",
+                    objectFit: "cover",
+                  }}
+                />
+                <div>
+                  <p style={{ fontWeight: "500", fontSize: "16px" }}>
+                    {profissionalNome}
+                  </p>
+                  <p style={{ fontSize: "16px", color: "#888" }}>
+                    {profissionalCRP ? `CRP ${profissionalCRP}` : "--"}
+                  </p>
+                  <p style={{ fontSize: "16px" }}>Atendimento Online</p>
+                </div>
               </div>
-              <div style={{ display: "flex", gap: "8px", marginTop: "5%" }}>
-                <button
-                  onClick={() => setMostrarAgenda(true)}
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: "10%",
+                  borderTop: "1.5px solid #ddd",
+                }}
+              >
+                <div
                   style={{
-                    backgroundColor: "#013a63",
-                    color: "white",
-                    padding: "12px 20px",
-                    border: "none",
-                    borderRadius: "4px",
-                    fontSize: "16px",
+                    fontSize: "15px",
+                    display: "flex",
+                    marginTop: "5%",
+                    gap: "16px",
                   }}
                 >
-                  Alterar
-                </button>
-                <button
-                  onClick={() => setMostrarModalRemover(true)}
-                  style={{
-                    padding: "8px 16px",
-                    border: "2px solid #ddd",
-                    borderRadius: "4px",
-                    backgroundColor: "transparent",
-                  }}
-                >
-                  Remover
-                </button>
+                  <p>
+                    <strong>Data:</strong>{" "}
+                    {dataSelecionada
+                      ? dataSelecionada.split("-").reverse().join("/")
+                      : "--/--/----"}
+                  </p>
+                  <p>
+                    <strong>Horário:</strong> {horaSelecionada || "--:--"}
+                  </p>
+                </div>
+                <div style={{ display: "flex", gap: "8px", marginTop: "5%" }}>
+                  <button
+                    onClick={() => setMostrarAgenda(true)}
+                    style={{
+                      backgroundColor: "#013a63",
+                      color: "white",
+                      padding: "12px 20px",
+                      border: "none",
+                      borderRadius: "4px",
+                      fontSize: "16px",
+                    }}
+                  >
+                    Alterar
+                  </button>
+                  <button
+                    onClick={() => setMostrarModalRemover(true)}
+                    style={{
+                      padding: "8px 16px",
+                      border: "2px solid #ddd",
+                      borderRadius: "4px",
+                      backgroundColor: "transparent",
+                    }}
+                  >
+                    Remover
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* —— Se o usuário clicar em “Alterar”, mostra inputs para mudar data/hora —— */}
-          {mostrarAgenda && (
+          {/* —— Se o usuário clicar em "Alterar", mostra inputs para mudar data/hora —— */}
+          {mostrarAgenda && !cadastrandoPlano && (
             <div style={{ marginTop: "16px" }}>
               <div className="floating-input-4">
                 <input
@@ -837,7 +873,7 @@ function Pagamento() {
             }}
           >
             <h3 style={{ fontSize: "18px", fontWeight: "600", marginBottom: "16px" }}>
-              Tem certeza que deseja remover este agendamento?
+              Tem certeza que deseja remover este {cadastrandoPlano ? "plano" : "agendamento"}?
             </h3>
             <div style={{ display: "flex", justifyContent: "space-between", gap: "16px" }}>
               <button

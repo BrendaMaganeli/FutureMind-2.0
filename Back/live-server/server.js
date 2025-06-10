@@ -9,7 +9,8 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173"
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"]
   }
 });
 
@@ -18,42 +19,40 @@ let connectedUsers = [];
 io.on('connection', (socket) => {
   console.log(`Usuário conectado: ${socket.id}`);
   
-  // Adiciona à lista de usuários conectados
-  if (!connectedUsers.includes(socket.id)) {
-    connectedUsers.push(socket.id);
-  }
+  // Adiciona o usuário à lista
+  connectedUsers.push(socket.id);
   
-  // Envia lista atualizada para todos
+  // Envia a lista atualizada para todos
   io.emit('users', connectedUsers);
 
-  // Handler para ofertas
+  // Lida com ofertas
   socket.on('offer', (data) => {
     console.log(`Oferta de ${data.from} para ${data.to}`);
-    socket.to(data.to).emit('offer', {
+    io.to(data.to).emit('offer', {
       offer: data.offer,
       from: data.from
     });
   });
 
-  // Handler para respostas
-  // ...código anterior permanece igual
-
-socket.on('answer', (data) => {
-  console.log(`Resposta para ${data.to}`);
-  socket.to(data.to).emit('answer', { answer: data.answer });
-});
-
-// ...restante igual
-
-  // Handler para ICE candidates
-  socket.on('ice-candidate', (data) => {
-    console.log(`ICE candidate para ${data.to}`);
-    socket.to(data.to).emit('ice-candidate', {
-      candidate: data.candidate
+  // Lida com respostas
+  socket.on('answer', (data) => {
+    console.log(`Resposta de ${socket.id} para ${data.to}`);
+    io.to(data.to).emit('answer', {
+      answer: data.answer,
+      from: data.from
     });
   });
 
-  // Handler para desconexão
+  // Lida com ICE candidates
+  socket.on('ice-candidate', (data) => {
+    console.log(`ICE candidate de ${socket.id} para ${data.to}`);
+    io.to(data.to).emit('ice-candidate', {
+      candidate: data.candidate,
+      from: socket.id
+    });
+  });
+
+  // Lida com desconexão
   socket.on('disconnect', () => {
     console.log(`Usuário desconectado: ${socket.id}`);
     connectedUsers = connectedUsers.filter(id => id !== socket.id);

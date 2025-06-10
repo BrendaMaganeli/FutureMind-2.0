@@ -254,8 +254,8 @@ function NotesApp() {
   return (
     <div className="notes-app">
       <div className="folders-sidebar">
-        <img src={voltar} alt="seta-voltar" className="seta-voltar" />
         <div className="header">
+          <img src={voltar} alt="seta-voltar" className="seta-voltar" />
           <h2 className="title">Pastas</h2>
           <button onClick={handleNewFolder} className="btn add-folder">
             <Plus size={16} />
@@ -265,10 +265,10 @@ function NotesApp() {
           {folders.length > 0 ? (
             folders.map((folder) => (
               <div
-                key={folder.id_pasta}
-                className={`folder-item ${
-                  folder.id_pasta === selectedFolder?.id_pasta ? "selected" : ""
-                }`}
+              key={folder.id_pasta}
+              className={`folder-item ${
+                folder.id_pasta === selectedFolder?.id_pasta ? "selected" : ""
+              }`}
                 onClick={() => {
                   setSelectedFolder(folder);
                   setSelectedNote(folder.notes[0] || null);
@@ -276,7 +276,7 @@ function NotesApp() {
               >
                 {editingFolderId === folder.id_pasta ? (
                   <input
-                    className="folder-name-input"
+                  className="folder-name-input"
                     value={folder.nome}
                     onChange={(e) => {
                       const updatedFolders = folders.map((f) =>

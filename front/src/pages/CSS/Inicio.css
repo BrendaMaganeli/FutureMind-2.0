@@ -343,8 +343,8 @@
 }
 
 .card img {
-  width: 20%;
-  height: auto;
+  width: 22%;
+  height: 70px;
   border-radius: 50%;
   object-fit: cover;
 }

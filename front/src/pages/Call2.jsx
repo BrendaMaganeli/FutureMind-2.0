@@ -31,10 +31,7 @@ function VideoConferencia2 () {
     const [callTime, setCallTime] = useState(0);  // segundos transcorridos
     const timerRef = useRef(null);
 
-
-    // Initialize media and socket connections
     useEffect(() => {
-        // Get user media
         const initializeMedia = async () => {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -411,7 +408,7 @@ function VideoConferencia2 () {
             {!callInProgress && (
                 <img
                     className="resposta.carre"
-                    src="/public/carre-resposta.svg"
+                    src="/public/carregando.svg"
                     alt="Waiting for call"
                 />
             )}

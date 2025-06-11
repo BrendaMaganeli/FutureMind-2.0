@@ -1,6 +1,6 @@
  .videoconferencia-container {
   font-family: 'DM Sans', sans-serif;
-  background-color: #121212;
+  background-color: #fff;
   color: #fff;
   display: flex;
   justify-content: center;
@@ -10,6 +10,34 @@
   width: 100%;
   position: relative;
   overflow: hidden;
+}
+
+.connection-status, .users-online-container {
+
+  position: absolute;
+  left: 70%;
+}
+
+.incoming-call {
+
+  position: absolute;
+  left: 50%;
+}
+
+.connection-status {
+
+  background-color: blue;
+}
+
+.users-online-container {
+
+  background-color: #C1DFF4;
+  left: 71%;
+  top: 50%;
+  height: 44%;
+  width: 26%;
+  padding: 3%;
+  border-radius: 16px;
 }
 
 .videoconferencia-container .me-video, .videoconferencia-container .other-video {

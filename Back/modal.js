@@ -61,9 +61,9 @@ app.get('/pastas', async (req, res) => {
     }
 
     const [pasta] = await pool.query(query, params);
-    res.json(pasta);
+    res.json(pasta || []);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json([]);
   }
 });
 
@@ -153,10 +153,19 @@ app.get('/notas', async (req, res) => {
     }
 
     const [nota] = await pool.query(query, params);
-    const notaParseadas = nota.map(nota => ({
-      ...nota,
-      conteudo: JSON.parse(nota.conteudo),
-    }));
+    const notaParseadas = nota.map(nota => {
+      try {
+        return {
+          ...nota,
+          conteudo: JSON.parse(nota.conteudo)
+        };
+      } catch (e) {
+        return {
+          ...nota,
+          conteudo: { checklist: [], imageNote: "" }
+        };
+      }
+    });
 
     res.json(notaParseadas);
   } catch (err) {
@@ -172,7 +181,12 @@ app.post('/notas', async (req, res) => {
       return res.status(400).json({ error: 'É necessário informar o id_pasta' });
     }
 
-    const conteudoStr = JSON.stringify(conteudo);
+    const conteudoPadronizado = {
+      checklist: conteudo?.checklist || [],
+      imageNote: conteudo?.imageNote || ""
+    };
+
+    const conteudoStr = JSON.stringify(conteudoPadronizado);
 
     let query = '';
     let params = [];

@@ -2,247 +2,204 @@ import { useState, useEffect } from "react";
 import { Plus, X, Pencil } from "lucide-react";
 import "./CSS/DiarioEmocional.css";
 import voltar from "../assets/seta-principal.svg";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from 'axios';
 
 function NotesApp() {
-  const idPaciente = 1; // ajuste dinamicamente conforme necessário
-  const idProfissional = null; // ou id do profissional
-
+  const navigate = useNavigate();
+  const { id_paciente, id_profissional } = useParams();
+  
   const [folders, setFolders] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [selectedNote, setSelectedNote] = useState(null);
   const [activeTab, setActiveTab] = useState("checklist");
   const [editingFolderId, setEditingFolderId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Carrega pastas e notas do backend
+  // Carrega pastas ao iniciar
   useEffect(() => {
-    async function carregarPastasENotas() {
+    const fetchFolders = async () => {
       try {
-        const resPastas = await fetch(
-          `http://localhost:4242/pasta?id_paciente=${idPaciente}&id_profissional=${idProfissional}`
-        );
-        const dataPastas = await resPastas.json();
+        const params = id_paciente ? { id_paciente } : { id_profissional };
+        const response = await axios.get('/pastas', { params });
 
-        // Para cada pasta, buscar notas relacionadas
-        const pastasComNotas = await Promise.all(
-          dataPastas.map(async (pasta) => {
-            const resNotas = await fetch(
-              `http://localhost:4242/nota?id_paciente=${idPaciente}&id_profissional=${idProfissional}&id_pasta=${pasta.id_pasta}`
-            );
-            const notas = await resNotas.json();
+        const foldersData = Array.isArray(response.data) ? response.data : [];
 
-            // Parse do conteúdo JSON das notas
-            const notasParseadas = notas.map((nota) => {
-              let conteudo = { checklist: [], imageNote: "" };
-              try {
-                conteudo = JSON.parse(nota.conteudo);
-              } catch {
-                // se der erro, mantém vazio
-              }
-              return {
-                ...nota,
-                checklist: conteudo.checklist || [],
-                imageNote: conteudo.imageNote || "",
-              };
-            });
-
-            return { ...pasta, notes: notasParseadas };
-          })
-        );
-
-        setFolders(pastasComNotas);
-        setSelectedFolder(pastasComNotas[0] || null);
-        setSelectedNote(pastasComNotas[0]?.notes[0] || null);
+        setFolders(foldersData);
+        if (foldersData.length > 0) {
+          setSelectedFolder(foldersData[0]);
+        }
       } catch (err) {
-        console.error("Erro ao carregar pastas e notas:", err);
+        console.error("Erro ao carregar pastas:", err);
+        setFolders([])
+      } finally {
+        setLoading(false);
       }
-    }
+    };
 
-    carregarPastasENotas();
-  }, [idPaciente, idProfissional]);
+    fetchFolders();
+  }, [id_paciente, id_profissional]);
 
-  // Função para atualizar pasta no backend e localmente
-  const updateFolderState = (updatedFolder) => {
-    setFolders((prev) =>
-      prev.map((f) => (f.id_pasta === updatedFolder.id_pasta ? updatedFolder : f))
-    );
-    setSelectedFolder(updatedFolder);
-  };
-
-  // Função para atualizar nota no backend e localmente
-  const updateNoteState = async (updatedNote) => {
-    // Recriar conteúdo JSON para salvar no backend
-    const conteudo = JSON.stringify({
-      checklist: updatedNote.checklist,
-      imageNote: updatedNote.imageNote,
-    });
-
-    try {
-      await fetch(`http://localhost:4242/nota/${updatedNote.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          titulo: updatedNote.titulo,
-          conteudo,
-          id_paciente: idPaciente,
-          id_profissional: idProfissional,
-          id_pasta: updatedNote.id_pasta,
-        }),
-      });
-
-      const updatedFolder = {
-        ...selectedFolder,
-        notes: selectedFolder.notes.map((n) =>
-          n.id === updatedNote.id ? updatedNote : n
-        ),
-      };
-      updateFolderState(updatedFolder);
-      setSelectedNote(updatedNote);
-    } catch (error) {
-      console.error("Erro ao atualizar nota:", error);
-    }
-  };
-
-  // Criar nova pasta
-  const handleNewFolder = async () => {
-    try {
-      const res = await fetch("http://localhost:4242/pasta", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nome: `Nova Pasta`,
-          id_paciente: idPaciente,
-          id_profissional: idProfissional,
-        }),
-      });
-      const novaPasta = await res.json();
-      setFolders((prev) => [novaPasta, ...prev]);
-      setSelectedFolder(novaPasta);
-      setSelectedNote(null);
-    } catch (error) {
-      console.error("Erro ao criar pasta:", error);
-    }
-  };
-
-  // Criar nova nota
-  const handleNewNote = async () => {
-    if (!selectedFolder) return;
-    try {
-      const res = await fetch("http://localhost:4242/nota", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          titulo: "Nova Nota",
-          conteudo: JSON.stringify({ checklist: [], imageNote: "" }),
-          id_paciente: idPaciente,
-          id_profissional: idProfissional,
+  // Carrega notas quando uma pasta é selecionada
+  useEffect(() => {
+    const fetchNotes = async () => {
+      if (!selectedFolder) return;
+      
+      try {
+        const params = {
           id_pasta: selectedFolder.id_pasta,
-        }),
-      });
-      const novaNota = await res.json();
-      novaNota.checklist = [];
-      novaNota.imageNote = "";
-      const updatedFolder = {
-        ...selectedFolder,
-        notes: [novaNota, ...selectedFolder.notes],
-      };
-      updateFolderState(updatedFolder);
-      setSelectedNote(novaNota);
-    } catch (error) {
-      console.error("Erro ao criar nota:", error);
-    }
-  };
-
-  // Deletar pasta
-  const handleDeleteFolder = async (idPasta) => {
-    try {
-      await fetch(`http://localhost:4242/pasta/${idPasta}`, {
-        method: "DELETE",
-      });
-      const updatedFolders = folders.filter((f) => f.id_pasta !== idPasta);
-      setFolders(updatedFolders);
-      if (selectedFolder?.id_pasta === idPasta) {
-        setSelectedFolder(updatedFolders[0] || null);
-        setSelectedNote(updatedFolders[0]?.notes[0] || null);
+          ...(id_paciente ? { id_paciente } : { id_profissional })
+        };
+        
+        const response = await axios.get('/notas', { params });
+        const notesWithParsedContent = response.data.map(note => ({
+          ...note,
+          checklist: note.conteudo?.checklist || [],
+          imageNote: note.conteudo?.imageNote || ""
+        }));
+        
+        if (notesWithParsedContent.length > 0) {
+          setSelectedNote(notesWithParsedContent[0]);
+        } else {
+          setSelectedNote(null);
+        }
+      } catch (err) {
+        console.error("Erro ao carregar notas:", err);
       }
-    } catch (error) {
-      console.error("Erro ao deletar pasta:", error);
-    }
-  };
+    };
 
-  // Deletar nota
-  const handleDeleteNote = async (idNota) => {
-    try {
-      await fetch(`http://localhost:4242/nota/${idNota}`, {
-        method: "DELETE",
-      });
-      const updatedNotes = selectedFolder.notes.filter((n) => n.id !== idNota);
-      const updatedFolder = { ...selectedFolder, notes: updatedNotes };
-      updateFolderState(updatedFolder);
-      setSelectedNote(updatedNotes[0] || null);
-    } catch (error) {
-      console.error("Erro ao deletar nota:", error);
-    }
-  };
+    fetchNotes();
+  }, [selectedFolder, id_paciente, id_profissional]);
 
-  // Toggle checklist item done
-  const handleCheck = (index) => {
+  function voltarTela() {
+    navigate(-1);
+  }
+
+  const handleCheck = (type, index) => {
     const updatedNote = { ...selectedNote };
-    updatedNote.checklist[index].done = !updatedNote.checklist[index].done;
+    updatedNote[type][index].done = !updatedNote[type][index].done;
     updateNoteState(updatedNote);
   };
 
-  // Adicionar item na checklist
-  const handleAddItem = () => {
+  const handleAddItem = (type) => {
     const updated = {
       ...selectedNote,
-      checklist: [...selectedNote.checklist, { text: "", done: false }],
+      [type]: [...selectedNote[type], { text: "", done: false }],
     };
     updateNoteState(updated);
   };
 
-  // Atualizar título da nota
-  const handleTitleChange = (e) => {
-    const updated = { ...selectedNote, titulo: e.target.value };
-    updateNoteState(updated);
-  };
-
-  // Atualizar texto do item checklist
-  const handleChecklistTextChange = (index, value) => {
-    const updated = { ...selectedNote };
-    updated.checklist[index].text = value;
-    updateNoteState(updated);
-  };
-
-  // Excluir item checklist
-  const handleDeleteChecklistItem = (index) => {
-    const updated = { ...selectedNote };
-    updated.checklist.splice(index, 1);
-    updateNoteState(updated);
-  };
-
-  // Atualizar texto da nota livre (imageNote)
-  const handleImageNoteChange = (e) => {
-    const updated = { ...selectedNote, imageNote: e.target.value };
-    updateNoteState(updated);
-  };
-
-  // Alterar nome da pasta localmente e no backend
-  const handleRenameFolder = async (idPasta, novoNome) => {
+  const handleNewNote = async () => {
     try {
-      await fetch(`http://localhost:4242/pasta/${idPasta}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome: novoNome }),
-      });
+      const newNoteData = {
+        titulo: "Nova Nota",
+        conteudo: { checklist: [], imageNote: "" },
+        id_pasta: selectedFolder.id_pasta,
+        ...(id_paciente ? { id_paciente } : { id_profissional })
+      };
+
+      const response = await axios.post('/notas', newNoteData);
+      const newNote = {
+        ...response.data,
+        checklist: [],
+        imageNote: ""
+      };
+
+      setSelectedFolder(prev => ({
+        ...prev,
+        notes: [newNote, ...prev.notes]
+      }));
+      setSelectedNote(newNote);
+    } catch (err) {
+      console.error("Erro ao criar nota:", err);
+    }
+  };
+
+  const handleNewFolder = async () => {
+    try {
+      const newFolderData = {
+        nome: `Nova Pasta ${folders.length + 1}`,
+        ...(id_paciente ? { id_paciente } : { id_profissional })
+      };
+
+      const response = await axios.post('/pastas', newFolderData);
+      const newFolder = {
+        ...response.data,
+        notes: []
+      };
+
+      setFolders([newFolder, ...folders]);
+      setSelectedFolder(newFolder);
+      setSelectedNote(null);
+    } catch (err) {
+      console.error("Erro ao criar pasta:", err);
+    }
+  };
+
+  const handleDeleteFolder = async (folderId) => {
+    try {
+      await axios.delete(`/pastas/${folderId}`);
+      const updatedFolders = folders.filter((f) => f.id_pasta !== folderId);
+      setFolders(updatedFolders);
+      
+      if (selectedFolder?.id_pasta === folderId) {
+        setSelectedFolder(updatedFolders[0] || null);
+        setSelectedNote(updatedFolders[0]?.notes[0] || null);
+      }
+    } catch (err) {
+      console.error("Erro ao deletar pasta:", err);
+    }
+  };
+
+  const handleDeleteNote = async (noteId) => {
+    try {
+      await axios.delete(`/notas/${noteId}`);
+      const updatedNotes = selectedFolder.notes.filter((n) => n.id_nota !== noteId);
+      const updatedFolder = { ...selectedFolder, notes: updatedNotes };
+      
+      setSelectedFolder(updatedFolder);
+      setSelectedNote(updatedNotes[0] || null);
+    } catch (err) {
+      console.error("Erro ao deletar nota:", err);
+    }
+  };
+
+  const updateNoteState = async (updatedNote) => {
+    try {
+      const noteData = {
+        titulo: updatedNote.titulo,
+        conteudo: {
+          checklist: updatedNote.checklist,
+          imageNote: updatedNote.imageNote
+        }
+      };
+
+      await axios.put(`/notas/${updatedNote.id_nota}`, noteData);
+      
+      const updatedFolder = {
+        ...selectedFolder,
+        notes: selectedFolder.notes.map((n) =>
+          n.id_nota === updatedNote.id_nota ? updatedNote : n
+        ),
+      };
+      
+      setSelectedFolder(updatedFolder);
+      setSelectedNote(updatedNote);
+    } catch (err) {
+      console.error("Erro ao atualizar nota:", err);
+    }
+  };
+
+  const updateFolderName = async (folderId, newName) => {
+    try {
+      await axios.put(`/pastas/${folderId}`, { nome: newName });
       const updatedFolders = folders.map((f) =>
-        f.id_pasta === idPasta ? { ...f, nome: novoNome } : f
+        f.id_pasta === folderId ? { ...f, nome: newName } : f
       );
       setFolders(updatedFolders);
-      if (selectedFolder?.id_pasta === idPasta) {
-        setSelectedFolder({ ...selectedFolder, nome: novoNome });
-      }
-    } catch (error) {
-      console.error("Erro ao renomear pasta:", error);
+      setEditingFolderId(null);
+    } catch (err) {
+      console.error("Erro ao atualizar pasta:", err);
     }
   };
 
@@ -251,199 +208,216 @@ function NotesApp() {
     { value: "imageNote", label: "Nota" },
   ];
 
-  return (
-    <div className="notes-app">
-      <div className="folders-sidebar">
-        <div className="header">
-          <img src={voltar} alt="seta-voltar" className="seta-voltar" />
-          <h2 className="title">Pastas</h2>
-          <button onClick={handleNewFolder} className="btn add-folder">
-            <Plus size={16} />
-          </button>
-        </div>
-        <div className="folders-list">
-          {folders.length > 0 ? (
-            folders.map((folder) => (
-              <div
-              key={folder.id_pasta}
-              className={`folder-item ${
-                folder.id_pasta === selectedFolder?.id_pasta ? "selected" : ""
-              }`}
-                onClick={() => {
-                  setSelectedFolder(folder);
-                  setSelectedNote(folder.notes[0] || null);
-                }}
-              >
-                {editingFolderId === folder.id_pasta ? (
-                  <input
-                  className="folder-name-input"
-                    value={folder.nome}
-                    onChange={(e) => {
-                      const updatedFolders = folders.map((f) =>
-                        f.id_pasta === folder.id_pasta
-                          ? { ...f, nome: e.target.value }
-                          : f
-                      );
-                      setFolders(updatedFolders);
-                    }}
-                    onBlur={() => {
-                      setEditingFolderId(null);
-                      const pastaEditada = folders.find(
-                        (f) => f.id_pasta === folder.id_pasta
-                      );
-                      handleRenameFolder(folder.id_pasta, pastaEditada.nome);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        setEditingFolderId(null);
-                        const pastaEditada = folders.find(
-                          (f) => f.id_pasta === folder.id_pasta
-                        );
-                        handleRenameFolder(folder.id_pasta, pastaEditada.nome);
-                      }
-                    }}
-                    autoFocus
-                  />
-                ) : (
-                  <>
-                    <div className="tit-pasta">
-                      <span>{folder.nome}</span>
-                    </div>
-                    <div className="edit-nome-pasta">
-                      <button
-                        className="edit-btn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setEditingFolderId(folder.id_pasta);
-                        }}
-                      >
-                        <Pencil size={14} />
-                      </button>
-                    </div>
-                  </>
-                )}
-                <div className="excluir-pasta">
-                  <button
-                    className="delete-btnn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteFolder(folder.id_pasta);
-                    }}
-                  >
-                    <X size={14} />
-                  </button>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="empty-message">Sem pastas</div>
-          )}
-        </div>
+  if (loading) return <div>Carregando...</div>;
 
-        <div className="header">
-          <h2 className="title">Notas</h2>
-          <button onClick={handleNewNote} className="btn add-note">
-            <Plus size={16} />
-          </button>
-        </div>
-        <div className="notes-list">
-          {selectedFolder?.notes?.length > 0 ? (
-            selectedFolder.notes.map((note) => (
-              <div
-                key={note.id}
-                className={`note-item ${
-                  selectedNote?.id === note.id ? "selected" : ""
-                }`}
-                onClick={() => setSelectedNote(note)}
-              >
-                <span className="note-text">{note.titulo}</span>
-                <button
-                  className="delete-btnn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDeleteNote(note.id);
-                  }}
-                >
-                  <X size={14} />
-                </button>
-              </div>
-            ))
-          ) : (
-            <div className="empty-message">Sem notas</div>
-          )}
-        </div>
-      </div>
+  console.log('Folders data:', folders);
 
-      <div className="note-details">
-        {selectedNote && (
-          <div>
-            <input
-              className="note-title-input"
-              value={selectedNote.titulo}
-              onChange={handleTitleChange}
-            />
-
-            <div className="custom-tabs-slider">
-              <div
-                className="slider-c"
-                style={{
-                  left: `${tabs.findIndex((tab) => tab.value === activeTab) * 50}%`,
-                }}
-              />
-              {tabs.map((tab) => (
-                <button
-                  key={tab.value}
-                  onClick={() => setActiveTab(tab.value)}
-                  className={`tab-button ${activeTab === tab.value ? "active" : ""}`}
-                >
-                  {tab.label}
-                </button>
-              ))}
+  return (
+    <div className="notes-app">
+      <div className="folders-sidebar">
+        <div className="header">
+        <img src={voltar} alt="seta-voltar" onClick={voltarTela} className="seta-voltar"/>
+          <h2 className="title">Pastas</h2>
+          <button onClick={handleNewFolder} className="btn add-folder">
+            <Plus size={16} />
+          </button>
+        </div>
+        {/* Substitua o código atual por este: */}
+<div className="folders-list">
+  {Array.isArray(folders) && folders.length > 0 ? (
+    folders.map((folder) => (
+      <div
+        key={folder.id_pasta}
+        className={`folder-item ${
+          selectedFolder?.id_pasta === folder.id_pasta ? "selected" : ""
+        }`}
+        onClick={() => {
+          setSelectedFolder(folder);
+          setSelectedNote(null); // Reset da nota selecionada
+        }}
+      >
+        {editingFolderId === folder.id_pasta ? (
+          <input
+            className="folder-name-input"
+            value={folder.nome}
+            onChange={(e) => {
+              const updatedFolders = folders.map((f) =>
+                f.id_pasta === folder.id_pasta ? { ...f, nome: e.target.value } : f
+              );
+              setFolders(updatedFolders);
+            }}
+            onBlur={() => updateFolderName(folder.id_pasta, folder.nome)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") updateFolderName(folder.id_pasta, folder.nome);
+            }}
+            autoFocus
+          />
+        ) : (
+          <>
+            <div className="tit-pasta">
+              <span>{folder.nome}</span>
             </div>
-
-            {activeTab === "checklist" && (
-              <div className="div-list">
-                {selectedNote.checklist.map((item, i) => (
-                  <div key={i} className="checklist-item">
-                    <input
-                      type="checkbox"
-                      checked={item.done}
-                      className="check-c"
-                      onChange={() => handleCheck(i)}
-                    />
-                    <div className="input-wrapper">
-                      <input
-                        value={item.text}
-                        onChange={(e) => handleChecklistTextChange(i, e.target.value)}
-                        className="input-item"
-                      />
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDeleteChecklistItem(i)}
-                      >
-                        <X size={14} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-                <button onClick={handleAddItem} className="add-item-button">
-                  + Adicionar item
-                </button>
-              </div>
-            )}
-
-            {activeTab === "imageNote" && (
-              <textarea
-                className="note-textarea"
-                value={selectedNote.imageNote}
-                onChange={handleImageNoteChange}
-              />
-            )}
-          </div>
+            <div className="edit-nome-pasta">
+              <button
+                className="edit-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditingFolderId(folder.id_pasta);
+                }}
+              >
+                <Pencil size={14} />
+              </button>
+            </div>
+          </>
         )}
+        <div className="excluir-pasta">
+          <button
+            className="delete-btnn"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDeleteFolder(folder.id_pasta);
+            }}
+          >
+            <X size={14} />
+          </button>
+        </div>
       </div>
-    </div>
-  );
+    ))
+  ) : (
+    <div className="empty-message">Sem pastas</div>
+  )}
+</div>
+
+        <div className="header">
+          <h2 className="title">Notas</h2>
+          <button onClick={handleNewNote} className="btn add-note">
+            <Plus size={16} />
+          </button>
+        </div>
+        <div className="notes-list">
+          {selectedFolder?.notes?.length > 0 ? (
+            selectedFolder.notes.map((note) => (
+              <div
+                key={note.id_nota}
+                className={`note-item ${
+                  selectedNote?.id_nota === note.id_nota ? "selected" : ""
+                }`}
+                onClick={() => setSelectedNote(note)}
+              >
+                <span className="note-text">{note.titulo}</span>
+                <button
+                  className="delete-btnn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteNote(note.id_nota);
+                  }}
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            ))
+          ) : (
+            <div className="empty-message">Sem notas</div>
+          )}
+        </div>
+      </div>
+
+      <div className="note-details">
+        {selectedNote && (
+          <div>
+            <input
+              className="note-title-input"
+              value={selectedNote.titulo}
+              onChange={(e) => {
+                const updated = { ...selectedNote, titulo: e.target.value };
+                updateNoteState(updated);
+              }}
+            />
+
+            <div className="custom-tabs-slider">
+              <div
+                className="slider-c"
+                style={{
+                  left: `${
+                    tabs.findIndex((tab) => tab.value === activeTab) * 50
+                  }%`,
+                }}
+              />
+              {tabs.map((tab) => (
+                <button
+                  key={tab.value}
+                  onClick={() => setActiveTab(tab.value)}
+                  className={`tab-button ${
+                    activeTab === tab.value ? "active" : ""
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {activeTab === "checklist" && (
+              <div className="div-list">
+                {selectedNote.checklist.map((item, i) => (
+                  <div key={i} className="checklist-item">
+                    <input
+                      type="checkbox"
+                      checked={item.done}
+                      className="check-c"
+                      onChange={() => handleCheck("checklist", i)}
+                    />
+                    <div className="input-wrapper">
+                      <input
+                        value={item.text}
+                        onChange={(e) => {
+                          const updated = { ...selectedNote };
+                          updated.checklist[i].text = e.target.value;
+                          updateNoteState(updated);
+                        }}
+                        className="input-item"
+                      />
+                      <button
+                        className="delete-btn"
+                        onClick={() => {
+                          const updated = { ...selectedNote };
+                          updated.checklist.splice(i, 1);
+                          updateNoteState(updated);
+                        }}
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                <button
+                  onClick={() => handleAddItem("checklist")}
+                  className="btn add-item"
+                >
+                  Add Item
+                </button>
+              </div>
+            )}
+
+            {activeTab === "imageNote" && (
+              <div>
+                <textarea
+                  value={selectedNote.imageNote}
+                  onChange={(e) => {
+                    const updated = {
+                      ...selectedNote,
+                      imageNote: e.target.value,
+                    };
+                    updateNoteState(updated);
+                  }}
+                  className="textarea-note"
+                />
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default NotesApp;

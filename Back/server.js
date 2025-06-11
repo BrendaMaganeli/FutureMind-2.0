@@ -859,5 +859,46 @@ app.post('/verificar_paciente', async (req, res) => {
   }
 });
 
+app.post('/verificar_profissional_um', async (req, res) => {
+
+  const {valorCRP, telefone, cpf} = req.body;
+
+  try {
+    const [crpQuery] = await pool.query('SELECT 1 FROM profissionais WHERE crp = ?', [valorCRP]);
+    const [cpfQuery] = await pool.query('SELECT 1 FROM profissionais WHERE cpf = ?', [cpf]);
+    const [telefoneQuery] = await pool.query('SELECT 1 FROM profissionais WHERE telefone = ?', [telefone]);
+    
+    return res.status(200).json({
+      crpExisteProf: crpQuery.length > 0,
+      cpfExisteProf: cpfQuery.length > 0,
+      telefoneExisteProf: telefoneQuery.length > 0
+    });
+
+  } catch (error) {
+    console.error('Erro ao verificar profissional:', error);
+    res.status(500).json({ Error: 'Erro interno do servidor' });
+  }
+});
+
+app.post('/verificar_profissional_dois'), async (req, res) =>{
+
+   const {valorEmail, email_profissional} = req.body
+   
+   try {
+   
+    const [emailQuery] = await pool.query('SELECT 1 FROM profissionais WHERE email = ?', [valorEmail]);
+    const [usuarioQuery] = await pool.query('SELECT 1 FROM profissionais WHERE email_profissional = ?', [email_profissional]);
+    
+    return res.status(200).json({
+      emailExisteProf: emailQuery.length > 0,
+      usuarioExisteProf: usuarioQuery.length > 0
+    });
+
+  } catch (error) {
+    console.error('Erro ao verificar profissional:', error);
+    res.status(500).json({ Error: 'Erro interno do servidor' });
+  }
+}
+
 
 app.listen(4242, () => console.log ('Servidor servindo'));

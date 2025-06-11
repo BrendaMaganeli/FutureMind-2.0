@@ -50,6 +50,8 @@ function CadastroProfissional2() {
 
   const inputRef = useRef(null);
   const [caretPos, setCaretPos] = useState(null);
+  const [usuarioMensagem, setUsuarioMensagem] = useState('')
+  const [emailMensagem, setEmailMensagem ] = useState('')
 
   const DOMINIO = "@futuremind.com.br";
 
@@ -118,8 +120,27 @@ function CadastroProfissional2() {
     );
   };
 
-  const handleCadastro = () => {
+  const handleCadastro = async () => {
     let erro = false;
+    let data
+
+     try {
+        const response = await fetch("http://localhost:4242/verificar_profissional_dois", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ valorEmail, email_profissional: prefixoEmailProfissional }),
+      });
+
+      if(response.ok){
+
+        data = await response.json();
+      }
+
+      } catch (error) {
+        console.log('erro')
+      }
 
     if (especializacoes.length === 0) {
       setEspecializacaoValida(false);
@@ -140,9 +161,12 @@ function CadastroProfissional2() {
       !valorEmail?.endsWith("@hotmail.com")
     ) {
       setEmailValido(true);
+      setEmailMensagem('E-mail deve terminar com @gmail.com ou @hotmail.com')
       erro = true;
-    } else {
-      setEmailValido(false);
+    } else if(data.emailExisteProf){
+      setEmailValido(true);
+      setEmailMensagem('Email já cadastrado!')
+      erro = true;
     }
 
     if (
@@ -264,7 +288,7 @@ function CadastroProfissional2() {
               />
               <label>E-mail</label>
               <span className={`erro ${emailValido ? "visivel" : ""}`}>
-                E-mail deve terminar com @gmail.com ou @hotmail.com
+                {emailMensagem}
               </span>
             </div>
 

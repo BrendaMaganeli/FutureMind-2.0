@@ -113,7 +113,6 @@ function CadastroPaciente() {
     let validacoes = true;
     let data = {};
     try {
-
       const response = await fetch("http://localhost:4242/verificar_paciente", {
         method: "POST",
         headers: {
@@ -121,7 +120,7 @@ function CadastroPaciente() {
         },
         body: JSON.stringify({ valorEmail, cpf, telefone }),
       });
-      
+
       if (response.ok) {
         data = await response.json();
       }
@@ -208,7 +207,7 @@ function CadastroPaciente() {
       setMensagemEmail("");
     }
 
-    if (!valorSenha || valorSenha.trim().length < 8) {
+    if (!valorSenha || valorSenha.trim().length < 4) {
       setSenhaValido(true);
       validacoes = false;
     } else {
@@ -322,6 +321,7 @@ function CadastroPaciente() {
             <input
               type={tipoInput}
               value={valorSenha}
+              maxLength={8}
               onChange={(e) => {
                 setValorSenha(e.target.value);
                 setSenhaValido(false);
@@ -331,7 +331,7 @@ function CadastroPaciente() {
             />
             <label>Senha</label>
             <span className={`erro ${senhaValido ? "visivel" : ""}`}>
-              Mínimo 8 caracteres
+              Senha deve ter no minimo 4 caracteres!
             </span>
             <img
               src={tipoIconSenha}

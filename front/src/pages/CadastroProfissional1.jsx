@@ -19,11 +19,17 @@ function CadastroProfissional1() {
   const [dataNascimento, setDataNascimento] = useState(
     profissional.data_nascimento
   );
+
+  // validar ValorCRP, telefone, cpf 
+
   const [dataNascimentoValido, setDataNascimentoValido] = useState(false);
   const [cpf, setCpf] = useState(profissional.cpf);
   const [cpfValido, setCpfValido] = useState(false);
   const [valorConsulta, setValorConsulta] = useState("");
   const [valorConsultaValido, setValorConsultaValido] = useState(false);
+  const [mensagemCrp, setMensagemCrp] = useState('')
+  const [mensagemTelefone, setMensagemTelefone] = useState('')
+  const [mensagemCpf, setMensagemCpf] = useState('')
 
   const converterParaFormatoBanco = (data) => {
     if (!data || data.split("/").length !== 3) return "";
@@ -31,34 +37,34 @@ function CadastroProfissional1() {
     return `${ano}-${mes.padStart(2, "0")}-${dia.padStart(2, "0")}`;
   };
 
-  // const formatarValorConsultaB = (valor) => {
-  //   if (!valor) return "";
+  const formatarValorConsultaB = (valor) => {
+    if (!valor) return "";
   
-  //   const numerico = valor
-  //     .replace("R$", "")
-  //     .replace(/\s/g, "")
-  //     .replace(/\./g, "")
-  //     .replace(",", ".");
+    const numerico = valor
+      .replace("R$", "")
+      .replace(/\s/g, "")
+      .replace(/\./g, "")
+      .replace(",", ".");
   
-  //   const valorFloat = parseFloat(numerico);
+    const valorFloat = parseFloat(numerico);
   
-  //   return isNaN(valorFloat) ? "" : valorFloat.toFixed(2);
-  // };
+    return isNaN(valorFloat) ? "" : valorFloat.toFixed(2);
+  };
   
-  // const formatarValorConsulta = (valor) => {
-  //   if (!valor) return "";
+  const formatarValorConsulta = (valor) => {
+    if (!valor) return "";
   
-  //   const numeros = valor.replace(/\D/g, "");
+    const numeros = valor.replace(/\D/g, "");
   
-  //   const valorComZeros = numeros.padStart(3, "0");
+    const valorComZeros = numeros.padStart(3, "0");
   
-  //   const reais = valorComZeros.slice(0, -2);
-  //   const centavos = valorComZeros.slice(-2);
+    const reais = valorComZeros.slice(0, -2);
+    const centavos = valorComZeros.slice(-2);
   
-  //   const reaisFormatado = reais.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    const reaisFormatado = reais.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   
-  //   return `R$ ${reaisFormatado},${centavos}`;
-  // };
+    return `R$ ${reaisFormatado},${centavos}`;
+  };
   
 
   useEffect(() => {
@@ -106,8 +112,26 @@ function CadastroProfissional1() {
     return value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, "");
   };
 
-  const handleCadastro = () => {
+  const handleCadastro = async () => {
     let validacoes = true;
+    let data 
+      try {
+        const response = await fetch("http://localhost:4242/verificar_profissional_um", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ valorCRP, cpf, telefone }),
+      });
+
+      if(response.ok){
+
+        data = await response.json();
+      }
+
+      } catch (error) {
+        console.log('erro')
+      }
 
     if (nome.trim().length < 1) {
       setNomeValido(true);
@@ -116,24 +140,45 @@ function CadastroProfissional1() {
       setNomeValido(false);
     }
 
-    if (valorCRP.trim().length < 6 || !/^\d{2,3}\/\d{4,5}$/.test(valorCRP)) {
+    if (valorCRP.trim().length < 8 || !/^\d{2,3}\/\d{4,5}$/.test(valorCRP)) {
       setCrpValido(true);
+      setMensagemCrp('Crp invalido!')
       validacoes = false;
-    } else {
+    } else if(data.crpExisteProf) {
+
+      setCrpValido(true)
+      setMensagemCrp('Crp já cadastrado!')
+      validacoes = false
+
+    }else{
+
       setCrpValido(false);
     }
 
     if (cpf.trim().length < 14) {
       setCpfValido(true);
+      setMensagemCpf('Cpf invalido!')
       validacoes = false;
-    } else {
+    } else if(data.cpfExisteProf){
+      setCpfValido(true);
+      setMensagemCpf('Cpf já cadastrado !')
+      validacoes = false
+    }else{
+
       setCpfValido(false);
     }
 
     if (telefone.trim().length < 15) {
       setTelefoneValido(true);
+      setMensagemTelefone('Telefone invalido!')
       validacoes = false;
-    } else {
+    } else if(data.telefoneExisteProf) {
+      setTelefoneValido(true);
+      setMensagemTelefone('Telefone já cadastrado!')
+      validacoes = false
+
+    }else{
+      
       setTelefoneValido(false);
     }
 
@@ -223,7 +268,7 @@ function CadastroProfissional1() {
             />
             <label>CRP</label>
             <span className={`erro ${crpValido ? "visivel" : ""}`}>
-              CRP inválido
+              {mensagemCrp}
             </span>
           </div>
 
@@ -240,7 +285,7 @@ function CadastroProfissional1() {
             />
             <label>Telefone</label>
             <span className={`erro ${telefoneValido ? "visivel" : ""}`}>
-              Telefone inválido
+              {mensagemTelefone}
             </span>
           </div>
 
@@ -274,7 +319,7 @@ function CadastroProfissional1() {
             />
             <label>CPF</label>
             <span className={`erro ${cpfValido ? "visivel" : ""}`}>
-              CPF inválido
+              {mensagemCpf}
             </span>
           </div>
 

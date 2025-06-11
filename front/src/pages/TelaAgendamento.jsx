@@ -126,7 +126,7 @@ export default function AgendaConsultas() {
     if (!selected.day || !selected.time) return;
 
     const dateISO = `${currentYear}-${String(currentMonthIndex + 1).padStart(2, "0")}-${String(selected.day).padStart(2, "0")}`;
-    navigate(`/pagamento/${id}`, {
+    navigate(`/pagamento/${id}?vim_agendamento=true`, {
       state: { date: dateISO, time: selected.time },
     });
   }

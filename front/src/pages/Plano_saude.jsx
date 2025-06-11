@@ -19,6 +19,7 @@ function Plano_saude() {
   const { plano_selecionado, setPlano_selecionado, setVim_plano, setVim_agendamento } =
     useContext(GlobalContext);
 
+
   const [modalAberto, setModalAberto] = useState(false);
   const [modalPrataAberto, setModalPrataAberto] = useState(false);
   const [modalOuroAberto, setModalOuroAberto] = useState(false);
@@ -126,7 +127,7 @@ function Plano_saude() {
       setTimeout(() => {
         setCarregandoPlano(false);
         fecharModalPrata();
-        navigate(`/pagamento/${user.id_paciente}`);
+        navigate(`/pagamento/${user.id_paciente}?vim_plano=true`);
       }, 1500);
       setVim_plano(true);
       setVim_agendamento(false);
@@ -143,7 +144,7 @@ function Plano_saude() {
       setTimeout(() => {
         setCarregandoPlano(false);
         fecharModalOuro();
-        navigate(`/pagamento/${user.id_paciente}`);
+        navigate(`/pagamento/${user.id_paciente}?vim_plano=true`);
       }, 1500);
       setVim_plano(true);
       setVim_agendamento(false);
@@ -265,7 +266,7 @@ function Plano_saude() {
           <p className="texto_numero">Pacientes atendidos</p>
         </div>
         <div className="media_pesquisa">
-          <h1 className="numeros">+15</h1>
+          <h1 className="numeros">+15.000</h1>
           <p className="texto_numero">Especialistas disponíveis</p>
         </div>
         <div className="media_pesquisa_10">

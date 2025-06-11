@@ -8,14 +8,20 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 function Pagamento() {
   const navigate = useNavigate();
-  const { id } = useParams(); // ID do profissional
+  const { id } = useParams();
   const location = useLocation();
   const { date: initialDate = "", time: initialTime = "" } = location.state || {};
+  
+  // Verificação da origem via URL
+  const searchParams = new URLSearchParams(location.search);
+  const vimPlanoQuery = searchParams.get('vim_plano') === 'true';
+  const vimAgendamentoQuery = searchParams.get('vim_agendamento') === 'true';
 
-  // Estados de agendamento e formulário de pagamento 
+  // Estados de agendamento e formulário de pagamento
   const [dataSelecionada, setDataSelecionada] = useState(initialDate);
   const [horaSelecionada, setHoraSelecionada] = useState(initialTime);
 
+  // Estados do formulário de pagamento
   const [toque_input_numero, setToque_input_numero] = useState(false);
   const [toque_input_validade, setToque_input_validade] = useState(false);
   const [toque_input_cvv, setToque_input_cvv] = useState(false);
@@ -29,42 +35,60 @@ function Pagamento() {
   const [cupom, setCupom] = useState("");
   const [desconto, setDesconto] = useState(0);
 
-  // Validações visuais nos campos
+  // Validações visuais
   const [valida_banco, setValida_banco] = useState(false);
   const [valida_numero_cartao, setValida_numero_cartao] = useState(false);
   const [valida_nome, setValida_nome] = useState(false);
   const [valida_cartao, setValida_cartao] = useState(false);
   const [valida_cvv, setValida_cvv] = useState(false);
 
-  // Estado para a aba de pagamento (Cartão / Boleto / Pix)
   const [metodoSelecionado, setMetodoSelecionado] = useState("cartao");
 
-  // Contexto global 
-  const { plano_selecionado, vim_plano } = useContext(GlobalContext);
+  const { plano_selecionado, vim_plano, vim_agendamento, setVim_plano, setVim_agendamento } = useContext(GlobalContext);
 
-  // Informações do usuário (paciente)
   const user = JSON.parse(localStorage.getItem("User-Profile"));
 
-  // Novos estados para dados do profissional
+
   const [profissionalNome, setProfissionalNome] = useState("");
   const [profissionalCRP, setProfissionalCRP] = useState("");
   const [valorConsulta, setValorConsulta] = useState(0);
-  const [cadastrandoPlano, setCadastrandoPlano] = useState(false);
   const [planoInfo, setPlanoInfo] = useState(null);
 
-  // Controle de exibição de modais e agenda
+
+  const [cadastrandoPlano, setCadastrandoPlano] = useState(() => {
+    if (vimPlanoQuery) return true;
+    if (vimAgendamentoQuery) return false;
+    
+
+    if (vim_plano) return true;
+    if (vim_agendamento) return false;
+    
+
+    const savedOrigin = localStorage.getItem('pagamentoOrigin');
+    return savedOrigin === 'plano';
+  });
+
+  // Persistir origem no localStorage
+  useEffect(() => {
+    const origin = cadastrandoPlano ? 'plano' : 'agendamento';
+    localStorage.setItem('pagamentoOrigin', origin);
+    
+    // Atualizar contexto global
+    setVim_plano(cadastrandoPlano);
+    setVim_agendamento(!cadastrandoPlano);
+  }, [cadastrandoPlano, setVim_plano, setVim_agendamento]);
+
+  // Modais e dependentes
   const [mostrarModal, setMostrarModal] = useState(false);
   const [mostrarAgenda, setMostrarAgenda] = useState(false);
   const [mostrarModalRemover, setMostrarModalRemover] = useState(false);
-
-  // Dependentes (se houver)
   const [dependentes, setDependentes] = useState([
     { value: "evelyn", label: "Evelyn Lohanny Santos Da Silva" },
   ]);
   const [nomeDependente, setNomeDependente] = useState("");
   const [nascimentoDependente, setNascimentoDependente] = useState("");
 
-  // Funções utilitárias para formatar campos de cartão
+  // Funções de formatação
   const formatarNumeroCartao = (valor) => {
     return valor
       .replace(/\D/g, "")
@@ -78,7 +102,9 @@ function Pagamento() {
     if (somenteNumeros.length <= 2) {
       return somenteNumeros;
     }
-    return somenteNumeros.substring(0, 2) + "/" + somenteNumeros.substring(2, 4);
+    return (
+      somenteNumeros.substring(0, 2) + "/" + somenteNumeros.substring(2, 4)
+    );
   };
 
   const aplicarCupom = () => {
@@ -89,17 +115,21 @@ function Pagamento() {
     }
   };
 
-  // Busca, ao montar o componente, os dados do profissional pelo ID
+  // Buscar dados do profissional ou plano
   useEffect(() => {
-    if (vim_plano) {
-      setCadastrandoPlano(true);
-      // Define o valor e informações do plano baseado no selecionado
+    // Limpar origem se navegação direta sem ID
+    if (!id) {
+      localStorage.removeItem('pagamentoOrigin');
+      return;
+    }
+
+    if (cadastrandoPlano) {
       let valor = 0;
       let nomePlano = "";
-      
-      switch(plano_selecionado) {
+
+      switch (plano_selecionado) {
         case "basico":
-          valor = 189,99;
+          valor = 189.99;
           nomePlano = "Plano Prata";
           break;
         case "intermediario":
@@ -114,36 +144,37 @@ function Pagamento() {
           valor = 100;
           nomePlano = "Plano Prata";
       }
-      
+
       setValorConsulta(valor);
       setPlanoInfo({
         nome: nomePlano,
-        valor: valor
+        valor: valor,
       });
-      return;
-    }
+    } else {
+      const getDadosProfissional = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:4242/profissional/${id}`
+          );
+          if (!response.ok) {
+            console.error("Falha ao buscar profissional:", response.statusText);
+            return;
+          }
+          const data = await response.json();
 
-    const getDadosProfissional = async () => {
-      try {
-        const response = await fetch(`http://localhost:4242/profissional/${id}`);
-        if (!response.ok) {
-          console.error("Falha ao buscar profissional:", response.statusText);
-          return;
+          setProfissionalNome(data.nome || "");
+          setProfissionalCRP(data.crp || "");
+          setValorConsulta(data.valor_consulta != null ? data.valor_consulta : 0);
+        } catch (err) {
+          console.error("Erro no fetch /profissional/:id →", err);
         }
-        const data = await response.json();
+      };
 
-        setProfissionalNome(data.nome || "");
-        setProfissionalCRP(data.crp || "");
-        setValorConsulta(data.valor_consulta != null ? data.valor_consulta : 0);
-      } catch (err) {
-        console.error("Erro no fetch /profissional/:id →", err);
-      }
-    };
+      getDadosProfissional();
+    }
+  }, [id, cadastrandoPlano, plano_selecionado]);
 
-    getDadosProfissional();
-  }, [id, vim_plano, plano_selecionado]);
-
-  // useEffect para zerar erros de validação conforme o usuário digita
+  // Efeitos para validação
   useEffect(() => {
     if (generoDependente.length > 0) setValida_banco(false);
   }, [generoDependente]);
@@ -164,7 +195,7 @@ function Pagamento() {
     if (cvvCartao.length > 0) setValida_cvv(false);
   }, [cvvCartao]);
 
-  // Handlers dos campos de cartão
+  // Handlers dos campos
   const handleNumeroCartaoChange = (e) => {
     setNumeroCartao(formatarNumeroCartao(e.target.value));
     if (!toque_input_numero) setToque_input_numero(true);
@@ -185,12 +216,10 @@ function Pagamento() {
     if (!toque_input_cvv) setToque_input_cvv(true);
   };
 
-  // Função para "voltar" à página anterior
   const voltar_pagina = () => {
     navigate(-1);
   };
 
-  // Handler para cadastrar um dependente (caso use dependentes)
   const handleCadastrarDependente = () => {
     if (nomeDependente && nascimentoDependente && generoDependente) {
       const novoId = `dep-${Date.now()}`;
@@ -199,7 +228,6 @@ function Pagamento() {
         label: nomeDependente,
       };
       setDependentes((prev) => [...prev, novoDependente]);
-      setPacienteSelecionado(novoId);
       setMostrarModal(false);
       setNomeDependente("");
       setNascimentoDependente("");
@@ -207,7 +235,6 @@ function Pagamento() {
     }
   };
 
-  // Função para envio de e-mail após finalizar agendamento
   const sendEmail = () => {
     const templateParams = {
       email: user.email || "não informado",
@@ -224,8 +251,14 @@ function Pagamento() {
     };
 
     emailjs
-      .send("service_5zq83hw", "template_bec35gi", templateParams, "ms7_9wi7dG_5vMUGt")
+      .send(
+        "service_5zq83hw",
+        "template_bec35gi",
+        templateParams,
+        "ms7_9wi7dG_5vMUGt"
+      )
       .then(() => {
+        localStorage.removeItem('pagamentoOrigin'); // Limpar ao finalizar
         navigate("/inicio");
       })
       .catch((error) => {
@@ -233,9 +266,8 @@ function Pagamento() {
       });
   };
 
-  // Função para finalizar agendamento e gravar assinatura/se houver
   const handleFinalizar = async () => {
-    // Validações básicas
+    // Validações
     if (
       generoDependente.length <= 1 ||
       numeroCartao.length !== 19 ||
@@ -252,8 +284,8 @@ function Pagamento() {
     }
 
     try {
-      // Caso o usuário não tenha um plano ainda e vier de "vim_plano"
-      if (!user.chk_plano && vim_plano) {
+      // Lógica para planos
+      if (cadastrandoPlano) {
         const hoje = new Date();
         const data_assinatura = hoje.toISOString().split("T")[0];
         const data_fim = new Date(hoje);
@@ -275,45 +307,54 @@ function Pagamento() {
 
         if (!assinaturaResp.ok) {
           const err = await assinaturaResp.json();
-          alert("Erro ao processar assinatura: " + (err.Error || assinaturaResp.statusText));
+          alert(
+            "Erro ao processar assinatura: " +
+              (err.Error || assinaturaResp.statusText)
+          );
           return;
         }
 
+        // Atualizar usuário localmente e no servidor
         user.chk_plano = true;
         localStorage.setItem("User-Profile", JSON.stringify(user));
         await fetch("http://localhost:4242/pagamento", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id_paciente: user.id_paciente, chk_plano: true }),
+          body: JSON.stringify({
+            id_paciente: user.id_paciente,
+            chk_plano: true,
+          }),
         });
-      }
-
-      // Se não estiver cadastrando um plano, cria o agendamento
-      if (!cadastrandoPlano) {
+      } else {
+        // Lógica para agendamento
         const agendamentoBody = {
           id_paciente: user.id_paciente,
           data: dataSelecionada,
           hora: horaSelecionada,
         };
-        const agendamentoResp = await fetch(`http://localhost:4242/agendamento/${id}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(agendamentoBody),
-        });
+        const agendamentoResp = await fetch(
+          `http://localhost:4242/agendamento/${id}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(agendamentoBody),
+          }
+        );
         if (!agendamentoResp.ok) {
-          console.error("Falha ao registrar agendamento:", await agendamentoResp.text());
+          console.error(
+            "Falha ao registrar agendamento:",
+            await agendamentoResp.text()
+          );
           return;
         }
       }
 
       sendEmail();
-      navigate("/inicio");
     } catch (err) {
       console.error("Erro inesperado em handleFinalizar:", err);
     }
   };
 
-  // JSX de retorno
   return (
     <div
       className="container-principal"
@@ -336,7 +377,9 @@ function Pagamento() {
         </div>
 
         {/* ------------ Forma de pagamento (abas Cartão / Boleto / Pix) ------------ */}
-        <p style={{ fontWeight: "500", marginBottom: "8px" }}>Forma de pagamento</p>
+        <p style={{ fontWeight: "500", marginBottom: "8px" }}>
+          Forma de pagamento
+        </p>
         <div className="tabs-container">
           <div
             className="slider"
@@ -418,7 +461,9 @@ function Pagamento() {
               />
               <label>Nome como aparece no cartão</label>
             </div>
-            <p className={`error-text ${valida_nome ? "show" : ""}`}>Nome obrigatório!</p>
+            <p className={`error-text ${valida_nome ? "show" : ""}`}>
+              Nome obrigatório!
+            </p>
 
             {/* Validade e CVV */}
             <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
@@ -449,7 +494,9 @@ function Pagamento() {
                   />
                   <label>CVV</label>
                 </div>
-                <p className={`error-text ${valida_cvv ? "show" : ""}`}>CVV inválido!</p>
+                <p className={`error-text ${valida_cvv ? "show" : ""}`}>
+                  CVV inválido!
+                </p>
               </div>
             </div>
           </div>
@@ -562,7 +609,7 @@ function Pagamento() {
         </button>
       </div>
 
-      {/* ========================== COLUNA DIREITA (Resumo e dados do profissional) ========================== */}
+      {/* ========================== COLUNA DIREITA ========================== */}
       <div>
         <div
           style={{
@@ -576,7 +623,6 @@ function Pagamento() {
             Resumo
           </p>
 
-          {/* Exibe o valor da consulta ou do plano */}
           <div
             style={{
               display: "flex",
@@ -585,11 +631,14 @@ function Pagamento() {
               marginTop: "5%",
             }}
           >
-            <span>{cadastrandoPlano ? (planoInfo?.nome || "Assinatura do plano") : "Consultas"}</span>
+            <span>
+              {cadastrandoPlano
+                ? planoInfo?.nome || "Assinatura do plano"
+                : "Consultas"}
+            </span>
             <span>R${valorConsulta.toFixed(2)}</span>
           </div>
 
-          {/* Se houver desconto, mostra aqui */}
           {desconto > 0 && (
             <div
               style={{
@@ -614,16 +663,24 @@ function Pagamento() {
               justifyContent: "flex-end",
             }}
           >
-            <p style={{ fontSize: "14px", marginRight: "4%" }}>Valor a ser pago </p>
+            <p style={{ fontSize: "14px", marginRight: "4%" }}>
+              Valor a ser pago{" "}
+            </p>
             <span style={{ fontSize: "22px" }}>
               R${(valorConsulta - desconto).toFixed(2)}
             </span>
           </div>
 
-          {/* Mostra informações do profissional APENAS se não estiver cadastrando um plano */}
+          {/* Renderização condicional para agendamentos ou plano */}
           {!cadastrandoPlano && profissionalNome && (
             <div style={{ marginTop: "24px" }}>
-              <p style={{ fontWeight: "500", marginTop: "16px", fontSize: "20px" }}>
+              <p
+                style={{
+                  fontWeight: "500",
+                  marginTop: "16px",
+                  fontSize: "20px",
+                }}
+              >
                 Agendamentos
               </p>
 
@@ -713,7 +770,6 @@ function Pagamento() {
             </div>
           )}
 
-          {/* —— Se o usuário clicar em "Alterar", mostra inputs para mudar data/hora —— */}
           {mostrarAgenda && !cadastrandoPlano && (
             <div style={{ marginTop: "16px" }}>
               <div className="floating-input-4">
@@ -754,7 +810,7 @@ function Pagamento() {
         </div>
       </div>
 
-      {/* =================== MODAIS (Cadastrar dependente / Confirmar remoção) =================== */}
+      {/* Modais */}
       {mostrarModal && (
         <div
           style={{
@@ -872,10 +928,23 @@ function Pagamento() {
               maxWidth: "400px",
             }}
           >
-            <h3 style={{ fontSize: "18px", fontWeight: "600", marginBottom: "16px" }}>
-              Tem certeza que deseja remover este {cadastrandoPlano ? "plano" : "agendamento"}?
+            <h3
+              style={{
+                fontSize: "18px",
+                fontWeight: "600",
+                marginBottom: "16px",
+              }}
+            >
+              Tem certeza que deseja remover este{" "}
+              {cadastrandoPlano ? "plano" : "agendamento"}?
             </h3>
-            <div style={{ display: "flex", justifyContent: "space-between", gap: "16px" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "16px",
+              }}
+            >
               <button
                 onClick={() => {
                   window.location.href = "/";

@@ -20,11 +20,11 @@
 
 .videoconferencia-container .me-video {
   position: absolute;
-  top: 5%;
-  left: 80%;
+  z-index: 10;
   width: 15%;
   height: 20%;
   border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
 .videoconferencia-container .other-video {
@@ -80,6 +80,7 @@
   border: none;
   font-size: 16px;
   cursor: pointer;
+  z-index: 11;
 }
 
 .videoconferencia-container .barra-config {
@@ -96,6 +97,7 @@
   border-radius: 20px;
   gap: 40px;
   justify-content: center;
+  z-index: 11;
 }
 
 .videoconferencia-container .barra-config img {
@@ -237,4 +239,17 @@
   font-size: 130%;
   font-family: 'DM Sans', sans-serif;
   font-weight: 200;
+}
+
+.videoconferencia-container .call-timer {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-family: monospace;
+    z-index: 20;
 }

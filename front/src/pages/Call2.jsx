@@ -8,7 +8,8 @@ const socket = io('http://localhost:5000', {
   timeout: 10000
 });
 
-function VideoConferencia() {
+function VideoConferencia2 () {
+
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
     const peerConnection = useRef(null);
@@ -24,6 +25,12 @@ function VideoConferencia() {
     const [isCaller, setIsCaller] = useState(false);
     const [connectionStatus, setConnectionStatus] = useState("Disconnected");
     const [error, setError] = useState(null);
+    const [dragging, setDragging] = useState(false);
+    const [position, setPosition] = useState({ x: 1100, y: 20 });
+    const dragOffset = useRef({ x: 0, y: 0 });
+    const [callTime, setCallTime] = useState(0);  // segundos transcorridos
+    const timerRef = useRef(null);
+
 
     // Initialize media and socket connections
     useEffect(() => {
@@ -142,6 +149,31 @@ function VideoConferencia() {
             endCall();
         };
     }, []);
+
+    useEffect(() => {
+    if (callInProgress) {
+        // inicia / retoma o cronômetro
+        timerRef.current = setInterval(() => {
+            setCallTime(prev => prev + 1);
+        }, 1000);
+    } else {
+        // pausa e zera quando a chamada termina
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+        setCallTime(0);
+    }
+
+    // limpeza se o componente desmontar
+    return () => clearInterval(timerRef.current);
+    }, [callInProgress]);
+
+    const formatTime = (totalSeconds) => {
+        const hrs  = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+        const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+        const secs = String(totalSeconds % 60).padStart(2, '0');
+        return `${hrs}:${mins}:${secs}`;
+    };
+
 
     const setupPeerConnection = () => {
         try {
@@ -278,6 +310,10 @@ function VideoConferencia() {
         setIncomingOffer(null);
         setTargetUser(null);
         setIsCaller(false);
+
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+        setCallTime(0);
     };
 
     const toggleVideo = () => {
@@ -300,6 +336,43 @@ function VideoConferencia() {
         }
     };
 
+    const handleMouseDown = (e) => {
+        setDragging(true);
+        const rect = e.target.getBoundingClientRect();
+        dragOffset.current = {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top,
+        };
+    };
+
+    const handleMouseMove = (e) => {
+        if (dragging) {
+            setPosition({
+                x: e.clientX - dragOffset.current.x,
+                y: e.clientY - dragOffset.current.y,
+            });
+        }
+    };
+
+    const handleMouseUp = () => {
+        setDragging(false);
+    };
+
+    useEffect(() => {
+        if (dragging) {
+            window.addEventListener("mousemove", handleMouseMove);
+            window.addEventListener("mouseup", handleMouseUp);
+        } else {
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mouseup", handleMouseUp);
+        }
+
+        return () => {
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mouseup", handleMouseUp);
+        };
+    }, [dragging]);
+
     return (
         <div className="videoconferencia-container">
             {error && (
@@ -318,12 +391,18 @@ function VideoConferencia() {
                 className={`me-video ${espelhar}`} 
                 autoPlay 
                 playsInline 
+                onMouseDown={handleMouseDown}
+                style={{
+                    left: position.x,
+                    top: position.y,
+                    cursor: dragging ? "grabbing" : "grab"
+                }}
                 muted
             />
 
             <video 
                 ref={remoteVideoRef} 
-                className={`other-video`} 
+                className={`other-video ${espelhar}`} 
                 autoPlay 
                 playsInline 
                 style={{ display: callInProgress ? "block" : "none" }}
@@ -335,6 +414,12 @@ function VideoConferencia() {
                     src="/public/carre-resposta.svg"
                     alt="Waiting for call"
                 />
+            )}
+
+            {callInProgress && (
+                <div className="call-timer">
+                    {formatTime(callTime)}
+                </div>
             )}
 
             <div className="barra-config">
@@ -405,4 +490,4 @@ function VideoConferencia() {
     );
 }
 
-export default VideoConferencia;
+export default VideoConferencia2;

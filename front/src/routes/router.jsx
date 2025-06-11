@@ -20,6 +20,7 @@ import Termos from "../pages/Termos.jsx";
 import Consulta from "../pages/Consulta.jsx";
 import Text_modal from "../pages/Text_modal.jsx";
 import VideoConferencia from "../pages/Call.jsx";
+import VideoConferencia2 from "../pages/Call2.jsx";
 
 const router = createBrowserRouter([
   {
@@ -102,6 +103,10 @@ const router = createBrowserRouter([
   {
     path: '/live/:id',
     element: <VideoConferencia />
+  },
+  {
+    path: '/live2/:id',
+    element: <VideoConferencia2 />
   }
 ]);
 

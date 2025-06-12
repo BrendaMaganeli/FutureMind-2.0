@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import "./CSS/Call.css";
 
-const socket = io('http://futuremind-20-production.up.railway.app', {
+const socket = io('https://futuremind-20-production.up.railway.app', {
   reconnectionAttempts: 5,
   reconnectionDelay: 1000,
   timeout: 10000

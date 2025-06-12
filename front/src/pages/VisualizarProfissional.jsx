@@ -103,7 +103,7 @@ function VisualizarProfissional() {
                 </div>
                 <div
                   onClick={() =>
-                    navigate(`/live/${profissional.id_profissional}`)
+                    navigate(`/live2/${profissional.id_profissional}`)
                   }
                   className="topicos"
                 >

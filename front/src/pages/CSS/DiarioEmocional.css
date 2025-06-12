@@ -1,3 +1,5 @@
+/* const user = JSON.parse(localStorage.getItem("User-Profile")); */
+
 .notes-app {
     display: flex;
     height: 100vh;

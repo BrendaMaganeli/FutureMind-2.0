@@ -140,7 +140,7 @@ export default function AgendaConsultas() {
   }
 
   function navega(params) {
-    navigate(`/inicio`);
+    navigate(-1);
   }
 
   return (

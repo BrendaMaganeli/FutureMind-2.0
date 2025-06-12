@@ -9,7 +9,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "https://futuremindtech.vercel.app",
     methods: ["GET", "POST"]
   }
 });

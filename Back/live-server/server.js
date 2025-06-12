@@ -4,15 +4,12 @@ const { Server } = require('socket.io');
 const cors = require('cors');
 
 const app = express();
-app.use(cors({
-
-  origin: "https://futuremindtech.vercel.app"
-}));
+app.use(cors());
 
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://futuremindtech.vercel.app",
+    origin: "*",
     methods: ["GET", "POST"]
   }
 });

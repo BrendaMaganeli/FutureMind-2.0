@@ -177,9 +177,9 @@ function VideoConferencia2 () {
             const pc = new RTCPeerConnection({
                 iceServers: [
                     {
-                    urls: 'turn:seu-ip-ou-dominio:3478',
-                    username: 'usuario',
-                    credential: 'senha123',
+                    urls: 'relay1.expressturn.com:3480',
+                    username: '000000002065129162',
+                    credential: 'vCxR0rq7wtXcOLu30ME4BD4mhmE=',
                 },
                     { urls: "stun:stun.l.google.com:19302" }
                 ]

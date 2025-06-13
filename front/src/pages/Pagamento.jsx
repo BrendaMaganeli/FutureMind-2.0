@@ -48,32 +48,26 @@ function Pagamento() {
 
   const user = JSON.parse(localStorage.getItem("User-Profile"));
 
-
   const [profissionalNome, setProfissionalNome] = useState("");
   const [profissionalCRP, setProfissionalCRP] = useState("");
   const [valorConsulta, setValorConsulta] = useState(0);
   const [planoInfo, setPlanoInfo] = useState(null);
 
-
   const [cadastrandoPlano, setCadastrandoPlano] = useState(() => {
     if (vimPlanoQuery) return true;
     if (vimAgendamentoQuery) return false;
     
-
     if (vim_plano) return true;
     if (vim_agendamento) return false;
     
-
     const savedOrigin = localStorage.getItem('pagamentoOrigin');
     return savedOrigin === 'plano';
   });
 
-  // Persistir origem no localStorage
   useEffect(() => {
     const origin = cadastrandoPlano ? 'plano' : 'agendamento';
     localStorage.setItem('pagamentoOrigin', origin);
     
-    // Atualizar contexto global
     setVim_plano(cadastrandoPlano);
     setVim_agendamento(!cadastrandoPlano);
   }, [cadastrandoPlano, setVim_plano, setVim_agendamento]);
@@ -108,8 +102,8 @@ function Pagamento() {
   };
 
   const aplicarCupom = () => {
-    if (cupom.trim().toLowerCase() === "desconto10") {
-      setDesconto(valorConsulta * 0.1);
+    if (cupom.trim().toLowerCase() === "descontosocial") {
+      setDesconto(valorConsulta * 0.5);
     } else {
       setDesconto(0);
     }
@@ -117,7 +111,6 @@ function Pagamento() {
 
   // Buscar dados do profissional ou plano
   useEffect(() => {
-    // Limpar origem se navegação direta sem ID
     if (!id) {
       localStorage.removeItem('pagamentoOrigin');
       return;
@@ -128,20 +121,20 @@ function Pagamento() {
       let nomePlano = "";
 
       switch (plano_selecionado) {
-        case "basico":
+        case "prata":
           valor = 189.99;
           nomePlano = "Plano Prata";
           break;
-        case "intermediario":
-          valor = 150;
+        case "ouro":
+          valor = 459.99;
           nomePlano = "Plano Ouro";
           break;
-        case "premium":
+        case "empresarial":
           valor = 200;
           nomePlano = "Plano Empresarial";
           break;
         default:
-          valor = 100;
+          valor = 189.99;
           nomePlano = "Plano Prata";
       }
 
@@ -258,7 +251,7 @@ function Pagamento() {
         "ms7_9wi7dG_5vMUGt"
       )
       .then(() => {
-        localStorage.removeItem('pagamentoOrigin'); // Limpar ao finalizar
+        localStorage.removeItem('pagamentoOrigin');
         navigate("/inicio");
       })
       .catch((error) => {

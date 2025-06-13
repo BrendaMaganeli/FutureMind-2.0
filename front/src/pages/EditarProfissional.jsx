@@ -20,6 +20,27 @@ function EditarProfissional() {
   const [fotoSelecionada, setFotoSelecionada] = useState(null);
   const [foto, setFoto] = useState('');
 
+  const [formData, setFormData] = useState({
+    id_profissional: perfilSalvo?.id_profissional || "",
+    nome: perfilSalvo?.nome || "",
+    cpf: perfilSalvo?.cpf || "",
+    telefone: perfilSalvo?.telefone || "",
+    email: perfilSalvo?.email || "",
+    data_nascimento: perfilSalvo
+      ? formatarDataBrasileira(perfilSalvo.data_nascimento)
+      : "",
+    senha: perfilSalvo?.senha || "",
+    crp: perfilSalvo?.crp || "",
+    foto: perfilSalvo?.foto || "",
+    sobre_mim: perfilSalvo?.sobre_mim || "",
+    especializacao: parseCampoArray(perfilSalvo?.especializacao),
+    abordagem: parseCampoArray(perfilSalvo?.abordagem),
+    valor_consulta: formatarValorConsulta(perfilSalvo?.valor_consulta || ""),
+    email_profissional: perfilSalvo?.email_profissional || "",
+});
+
+const [profissionais, setProfissionais] = useState(formData);
+
   useEffect(() => {
 
     const profissionalAux = {...perfilSalvo, foto: foto};
@@ -38,24 +59,6 @@ function EditarProfissional() {
     { value: "humanista", label: "Humanista" },
   ];
 
-  const [profissionais, setProfissionais] = useState({
-    id_profissional: perfilSalvo?.id_profissional || "",
-    nome: perfilSalvo?.nome || "",
-    cpf: perfilSalvo?.cpf || "",
-    telefone: perfilSalvo?.telefone || "",
-    email: perfilSalvo?.email || "",
-    data_nascimento: perfilSalvo
-      ? formatarDataBrasileira(perfilSalvo.data_nascimento)
-      : "",
-    senha: perfilSalvo?.senha || "",
-    crp: perfilSalvo?.crp || "",
-    foto: perfilSalvo?.foto || "",
-    sobre_mim: perfilSalvo?.sobre_mim || "",
-    especializacao: parseCampoArray(perfilSalvo?.especializacao),
-    abordagem: parseCampoArray(perfilSalvo?.abordagem),
-    valor_consulta: formatarValorConsulta(perfilSalvo?.valor_consulta || ""),
-    email_profissional: perfilSalvo?.email_profissional || "",
-  });
 
   function formatarDataBrasileira(dataISO) {
     const data = new Date(dataISO);
@@ -156,35 +159,34 @@ function EditarProfissional() {
     }
   };
 
-  const salvarEdicao = async () => {
-    try {
-      const profissionalParaEnviar = {
-        ...profissionais,
-        data_nascimento: formatarDataParaEnvio(profissionais.data_nascimento),
-        abordagem: JSON.stringify(profissionais.abordagem),
-        especializacao: JSON.stringify(profissionais.especializacao),
-        valor_consulta: formatarValorConsultab(profissionais.valor_consulta),
-      };
+const salvarEdicao = async () => {
+  try {
+    const profissionalParaEnviar = {
+      ...formData,
+      data_nascimento: formatarDataParaEnvio(formData.data_nascimento),
+      abordagem: JSON.stringify(formData.abordagem),
+      especializacao: JSON.stringify(formData.especializacao),
+      valor_consulta: formatarValorConsultab(formData.valor_consulta),
+    };
 
-      const response = await fetch("http://localhost:4242/editarprofissional", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(profissionalParaEnviar),
-      });
+    const response = await fetch("http://localhost:4242/editarprofissional", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(profissionalParaEnviar),
+    });
 
-      if (response.ok) {
-        const data = await response.json();
-        data.valor_consulta = data.valor_consulta.toFixed(2);
-        data.foto = foto;
-        localStorage.setItem("User-Profile", JSON.stringify(data));
-        window.location.reload();
-      } else {
-        console.error("Erro ao salvar:", response.statusText);
-      }
-    } catch (err) {
-      console.error("Erro na requisição:", err);
+    if (response.ok) {
+      const data = await response.json();
+      data.valor_consulta = data.valor_consulta.toFixed(2);
+      data.foto = foto;
+      localStorage.setItem("User-Profile", JSON.stringify(data));
+      setProfissionais(data); // Atualiza o estado de exibição com os dados salvos
+      window.location.reload();
     }
-  };
+  } catch (err) {
+    console.error("Erro na requisição:", err);
+  }
+};
 
   const sairProfissional = () => {
     localStorage.setItem("User Logado", false);
@@ -351,10 +353,10 @@ function EditarProfissional() {
             <input
               type="text"
               placeholder=" "
-              value={profissionais.nome}
+              value={formData.nome}
               required
               onChange={(e) =>
-                setProfissionais((prev) => ({ ...prev, nome: e.target.value }))
+                setFormData((prev) => ({ ...prev, nome: e.target.value }))
               }
             />
             <label>Nome Completo</label>

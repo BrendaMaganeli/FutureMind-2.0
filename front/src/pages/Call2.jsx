@@ -190,7 +190,11 @@ function VideoConferencia2() {
                             'stun:stun.l.google.com:19302',
                             'stun:stun1.l.google.com:19302',
                             'stun:stun2.l.google.com:19302',
-                        ]
+                            'turn:relay1.expressturn.com:3480',
+                            'turn:relay1.expressturn.com:3480'
+                        ],
+                        username: '000000002065129162',
+                        credential: 'vCxR0rq7wtXcOLu30ME4BD4mhmE=',
                     }
                 ],
                 iceTransportPolicy: 'all'

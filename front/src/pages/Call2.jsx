@@ -4,7 +4,7 @@ import "./CSS/Call.css";
 
 const user = localStorage.getItem('User-Profile');
 
-const socket = io('http://10.28.146.215:5000', {
+const socket = io('http://172.20.10.13:5000', {
   auth: {
     name: user?.nome || 'Lucas'
   },

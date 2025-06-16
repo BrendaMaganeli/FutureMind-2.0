@@ -1,45 +1,3 @@
-// const multer = require('multer');
-// const path = require('path');
-
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//       cb(null, 'public/uploads/');
-//   },
-//   filename: (req, file, cb) => {
-//       const ext = path.extname(file.originalname);
-//       const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${ext}`;
-//       cb(null, uniqueName);
-//   }
-// });
-
-// const upload = multer({ storage });
-
-// app.post('/upload-foto/:id_paciente', upload.single('foto'), async (req, res) => {
-//   try {
-//     const { id_paciente } = req.params;
-//     const foto = req.file;
-
-//     if (!foto) {
-//       return res.status(400).json({ erro: 'Nenhuma foto enviada' });
-//     }
-
-//     const [result] = await pool.execute(
-//       'UPDATE pacientes SET foto_perfil = ? WHERE id_paciente = ?',
-//       [`/uploads/${foto.filename}`, id_paciente]
-//     );    
-
-//     res.status(200).json({ mensagem: 'Foto enviada com sucesso' });
-//   } catch (error) {
-//     console.error('Erro ao enviar foto:', error);
-//     res.status(500).json({ erro: 'Erro interno ao enviar foto' });
-//   }
-// });
-
-
-
-
-
-
 
 // Pastas
 
@@ -71,38 +29,34 @@ app.post('/pastas', async (req, res) => {
   const { id_paciente, id_profissional, nome } = req.body;
 
   try {
-    let query = '';
-    let params = [];
-
-    if (id_paciente) {
-      query = 'INSERT INTO pasta (id_paciente, nome) VALUES (?, ?)';
-      params = [id_paciente, nome];
-    } else if (id_profissional) {
-      query = 'INSERT INTO pasta (id_profissional, nome) VALUES (?, ?)';
-      params = [id_profissional, nome];
-    } else {
-      return res.status(400).json({ error: 'É necessário informar id_paciente ou id_profissional' });
+    if (!nome || (!id_paciente && !id_profissional)) {
+      return res.status(400).json({ error: 'Dados inválidos' });
     }
 
-    const [result] = await pool.query(query, params);
-    res.status(201).json({ id: result.insertId, nome });
+    const [result] = await pool.query(
+      'INSERT INTO pasta (nome, id_paciente, id_profissional) VALUES (?, ?, ?)',
+      [nome, id_paciente || null, id_profissional || null]
+    );
+
+    res.status(201).json({ id_pasta: result.insertId, nome, id_paciente, id_profissional });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-app.put('/pastas/:id', async (req, res) => {
-  const { id } = req.params;
+
+app.put('/pastas/:id_pasta', async (req, res) => {
+  const { id_pasta } = req.params;
   const { nome } = req.body;
 
   try {
-    const [result] = await pool.query('UPDATE pasta SET nome = ? WHERE id_pasta = ?', [nome, id]);
+    const [result] = await pool.query('UPDATE pasta SET nome = ? WHERE id_pasta = ?', [nome, id_pasta]);
 
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Pasta não encontrada' });
     }
 
-    res.json({ id, nome });
+    res.json({ id_pasta, nome });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -154,18 +108,15 @@ app.get('/notas', async (req, res) => {
 
     const [nota] = await pool.query(query, params);
     const notaParseadas = nota.map(nota => {
+      let conteudoObj;
       try {
-        return {
-          ...nota,
-          conteudo: JSON.parse(nota.conteudo)
-        };
-      } catch (e) {
-        return {
-          ...nota,
-          conteudo: { checklist: [], imageNote: "" }
-        };
+        conteudoObj = JSON.parse(nota.conteudo);
+      } catch {
+        conteudoObj = { checklist: [], imageNote: "" };
       }
+      return { ...nota, conteudo: conteudoObj };
     });
+    
 
     res.json(notaParseadas);
   } catch (err) {
@@ -202,14 +153,14 @@ app.post('/notas', async (req, res) => {
     }
 
     const [result] = await pool.query(query, params);
-    res.status(201).json({ id: result.insertId, titulo, conteudo, id_pasta });
+    res.status(201).json({ id_nota: result.insertId, titulo, conteudo, id_pasta });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-app.put('/notas/:id', async (req, res) => {
-  const { id } = req.params;
+app.put('/notas/:id_nota', async (req, res) => {
+  const { id_nota } = req.params;
   const { titulo, conteudo } = req.body;
 
   try {
@@ -217,14 +168,14 @@ app.put('/notas/:id', async (req, res) => {
 
     const [result] = await pool.query(
       'UPDATE nota SET titulo = ?, conteudo = ? WHERE id_nota = ?',
-      [titulo, conteudoStr, id]
+      [titulo, conteudoStr, id_nota]
     );
 
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Nota não encontrada' });
     }
 
-    res.json({ id, titulo, conteudo });
+    res.json({ id_nota, titulo, conteudo });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -10,40 +10,39 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "*",
-    methods: ["GET", "POST"]
-  }
+    methods: ["GET", "POST"],
+  },
 });
 
 let connectedUsers = [];
 
 io.on('connection', (socket) => {
   console.log(`Usuário conectado: ${socket.id}`);
-  
   connectedUsers.push(socket.id);
-  
   io.emit('users', connectedUsers);
 
+  // WebRTC Signaling
   socket.on('offer', (data) => {
-    console.log(`Oferta de ${data.from} para ${data.to}`);
+    console.log(`Offer de ${data.from} para ${data.to}`);
     io.to(data.to).emit('offer', {
       offer: data.offer,
-      from: data.from
+      from: data.from,
     });
   });
 
   socket.on('answer', (data) => {
-    console.log(`Resposta de ${socket.id} para ${data.to}`);
+    console.log(`Answer de ${data.from} para ${data.to}`);
     io.to(data.to).emit('answer', {
       answer: data.answer,
-      from: data.from
+      from: data.from,
     });
   });
 
   socket.on('ice-candidate', (data) => {
-    console.log(`ICE candidate de ${socket.id} para ${data.to}`);
+    console.log(`ICE Candidate de ${socket.id} para ${data.to}`);
     io.to(data.to).emit('ice-candidate', {
       candidate: data.candidate,
-      from: socket.id
+      from: socket.id,
     });
   });
 
@@ -54,5 +53,5 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = 5000;
-server.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

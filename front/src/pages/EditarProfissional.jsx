@@ -35,7 +35,7 @@ function EditarProfissional() {
     sobre_mim: perfilSalvo?.sobre_mim || "",
     especializacao: parseCampoArray(perfilSalvo?.especializacao),
     abordagem: parseCampoArray(perfilSalvo?.abordagem),
-    valor_consulta: formatarValorConsulta(perfilSalvo?.valor_consulta || ""),
+    valor_consulta: perfilSalvo?.valor_consulta  ? formatarValorConsulta(perfilSalvo.valor_consulta.toString()) : "R$ 0,00",
     email_profissional: perfilSalvo?.email_profissional || "",
 });
 
@@ -106,10 +106,13 @@ const [profissionais, setProfissionais] = useState(formData);
     return `R$ ${numero.replace(".", ",")}`;
   }
 
-  function formatarValorConsultab(valor) {
-    const somenteNumeros = valor.replace(/\D/g, "");
-    return (parseInt(somenteNumeros, 10) / 100).toFixed(2);
-  }
+function formatarValorConsultab(valor) {
+  if (typeof valor !== "string") return "0.00";
+  // Remove "R$", espaços e converte vírgula para ponto
+  const valorLimpo = valor.replace("R$", "").trim().replace(",", ".");
+  // Converte para número e formata com 2 casas decimais
+  return parseFloat(valorLimpo).toFixed(2);
+}
 
   function parseCampoArray(campo) {
     try {
@@ -160,13 +163,16 @@ const [profissionais, setProfissionais] = useState(formData);
   };
 
 const salvarEdicao = async () => {
+
+  const valorConsultaNumerico = formatarValorConsultab(formData.valor_consulta);
+
   try {
     const profissionalParaEnviar = {
       ...formData,
       data_nascimento: formatarDataParaEnvio(formData.data_nascimento),
       abordagem: JSON.stringify(formData.abordagem),
       especializacao: JSON.stringify(formData.especializacao),
-      valor_consulta: formatarValorConsultab(formData.valor_consulta),
+      valor_consulta: valorConsultaNumerico, // Já está formatado como string numérica
     };
 
     const response = await fetch("http://localhost:4242/editarprofissional", {
@@ -289,11 +295,11 @@ const salvarEdicao = async () => {
               <textarea
                 className="textarea-custom"
                 placeholder=" "
-                value={profissionais.sobre_mim}
-                onChange={(e) =>
-                  setProfissionais((prev) => ({
+                value={formData.sobre_mim}
+                onChange={(e) => 
+                  setFormData(prev => ({
                     ...prev,
-                    sobre_mim: e.target.value,
+                    sobre_mim: e.target.value
                   }))
                 }
               />
@@ -363,46 +369,44 @@ const salvarEdicao = async () => {
           </div>
 
           <div className="floating-input-pac">
-            <input
-              type="text"
-              placeholder=" "
-              value={profissionais.cpf}
-              required
-              onChange={(e) =>
-                setProfissionais((prev) => ({
-                  ...prev,
-                  cpf: aplicarMascaraCPF(e.target.value),
-                }))
-              }
-            />
-            <label>CPF</label>
-          </div>
+          <input
+            type="text"
+            placeholder=" "
+            value={formData.cpf}
+            required
+            onChange={(e) => 
+              setFormData(prev => ({
+                ...prev, 
+                cpf: aplicarMascaraCPF(e.target.value)
+              }))
+            }
+          />
+          <label>CPF</label>
+        </div>
+
+        <div className="floating-input-pac">
+          <input
+            type="text"
+            placeholder=" "
+            value={formData.telefone}
+            required
+            onChange={(e) => 
+              setFormData(prev => ({
+                ...prev, 
+                telefone: aplicarMascaraTelefone(e.target.value)
+              }))
+            }
+          />
+          <label>Telefone</label>
+        </div>
 
           <div className="floating-input-pac">
             <input
               type="text"
               placeholder=" "
-              value={profissionais.telefone}
+              value={formData.email}
               required
-              onChange={(e) =>
-                setProfissionais((prev) => ({
-                  ...prev,
-                  telefone: aplicarMascaraTelefone(e.target.value),
-                }))
-              }
-            />
-            <label>Telefone</label>
-          </div>
-
-          <div className="floating-input-pac">
-            <input
-              type="text"
-              placeholder=" "
-              value={profissionais.email}
-              required
-              onChange={(e) =>
-                setProfissionais((prev) => ({ ...prev, email: e.target.value }))
-              }
+              onChange={(e) => setFormData(prev => ({...prev, email: e.target.value}))}
             />
             <label>E-mail</label>
           </div>
@@ -411,54 +415,50 @@ const salvarEdicao = async () => {
             <input
               type="text"
               placeholder=" "
-              value={profissionais.data_nascimento}
+              value={formData.data_nascimento}
               required
-              onChange={(e) =>
-                setProfissionais((prev) => ({
-                  ...prev,
-                  data_nascimento: aplicarMascaraData(e.target.value),
+              onChange={(e) => 
+                setFormData(prev => ({
+                  ...prev, 
+                  data_nascimento: aplicarMascaraData(e.target.value)
                 }))
               }
             />
             <label>Data de Nascimento</label>
           </div>
 
-          <div className="floating-input-pac">
-            <input
-              type="password"
-              placeholder=" "
-              value={profissionais.senha}
-              required
-              onChange={(e) =>
-                setProfissionais((prev) => ({ ...prev, senha: e.target.value }))
-              }
-            />
-            <label>Senha</label>
-          </div>
+        <div className="floating-input-pac">
+          <input
+            type="password"
+            placeholder=" "
+            value={formData.senha}
+            required
+            onChange={(e) => setFormData(prev => ({...prev, senha: e.target.value}))}
+          />
+          <label>Senha</label>
+        </div>
+
+        <div className="floating-input-pac">
+          <input
+            type="text"
+            placeholder=" "
+            value={formData.crp}
+            required
+            maxLength={8}
+            onChange={(e) => setFormData(prev => ({...prev, crp: e.target.value}))}
+          />
+          <label>CRP</label>
+        </div>
 
           <div className="floating-input-pac">
             <input
               type="text"
               placeholder=" "
-              value={profissionais.crp}
-              required
-              maxLength={8}
-              onChange={(e) =>
-                setProfissionais((prev) => ({ ...prev, crp: e.target.value }))
-              }
-            />
-            <label>CRP</label>
-          </div>
-
-          <div className="floating-input-pac">
-            <input
-              type="text"
-              placeholder=" "
-              value={profissionais.valor_consulta}
+              value={formData.valor_consulta}
               required
               onChange={(e) => {
                 const formatado = formatarValorConsulta(e.target.value);
-                setProfissionais((prev) => ({
+                setFormData((prev) => ({
                   ...prev,
                   valor_consulta: formatado,
                 }));
@@ -475,14 +475,14 @@ const salvarEdicao = async () => {
               classNamePrefix="custom-select"
               options={opcoesEspecializacao}
               value={transformarParaOpcoesSelecionadas(
-                profissionais.especializacao,
+                formData.especializacao,
                 opcoesEspecializacao
               )}
               onChange={(selectedOptions) => {
                 const novos = selectedOptions.map((opt) => opt.value);
-                setProfissionais((prev) => ({
+                setFormData(prev => ({
                   ...prev,
-                  especializacao: novos,
+                  especializacao: novos
                 }));
                 setHasValueEspecializacao(novos.length > 0);
               }}
@@ -500,14 +500,14 @@ const salvarEdicao = async () => {
               classNamePrefix="custom-select"
               options={opcoesAbordagens}
               value={transformarParaOpcoesSelecionadas(
-                profissionais.abordagem,
+                formData.abordagem,
                 opcoesAbordagens
               )}
               onChange={(selectedOptions) => {
                 const novos = selectedOptions.map((opt) => opt.value);
-                setProfissionais((prev) => ({
+                setFormData(prev => ({
                   ...prev,
-                  abordagem: novos,
+                  abordagem: novos
                 }));
                 setHasValueAbordagem(novos.length > 0);
               }}
@@ -521,12 +521,12 @@ const salvarEdicao = async () => {
             <input
               type="text"
               placeholder=" "
-              value={profissionais.email_profissional}
+              value={formData.email_profissional}
               required
-              onChange={(e) =>
-                setProfissionais((prev) => ({
-                  ...prev,
-                  email_profissional: e.target.value,
+              onChange={(e) => 
+                setFormData(prev => ({
+                  ...prev, 
+                  email_profissional: e.target.value
                 }))
               }
             />

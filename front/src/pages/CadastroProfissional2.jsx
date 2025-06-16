@@ -139,19 +139,20 @@ function CadastroProfissional2() {
       }
 
       } catch (error) {
-        console.log('erro')
+         
+        console.log(error)
       }
 
-    if (especializacoes.length === 0) {
+    if (especializacoes.length === 0 || undefined) {
       setEspecializacaoValida(false);
-      erro = true;
+      erro = false;
     } else {
       setEspecializacaoValida(true);
     }
 
-    if (abordagens.length === 0) {
+    if (abordagens.length === 0 || undefined) {
       setAbordagemValida(false);
-      erro = true;
+      erro = false;
     } else {
       setAbordagemValida(true);
     }
@@ -163,7 +164,7 @@ function CadastroProfissional2() {
       setEmailValido(true);
       setEmailMensagem('E-mail deve terminar com @gmail.com ou @hotmail.com')
       erro = true;
-    } else if(data.emailExisteProf){
+    } else if(data?.emailExisteProf){
       setEmailValido(true);
       setEmailMensagem('Email já cadastrado!')
       erro = true;
@@ -171,56 +172,62 @@ function CadastroProfissional2() {
 
     if (
       !prefixoEmailProfissional.includes(".") ||
-      prefixoEmailProfissional.includes("@")
+      prefixoEmailProfissional.includes("@") 
     ) {
       setPrefixoEmailProfissionalValido(true);
+      setUsuarioMensagem('Nome de usuario deve conter um "."')
       erro = true;
+    }else if(data.usuarioExisteProf){
+
+      setPrefixoEmailProfissionalValido(true);
+      setUsuarioMensagem('Usuario já cadastrado!')
+      
     } else {
       setPrefixoEmailProfissionalValido(false);
     }
 
-    if (!valorSenha || valorSenha.trim().length < 8) {
+    if ( valorSenha.trim().length < 8 || valorSenha.trim().length == 0 || undefined) {
       setSenhaValido(true);
       erro = true;
     } else {
       setSenhaValido(false);
     }
-
-    if (!erro) req();
-  };
-
-  const req = async () => {
-    try {
-      const response = await fetch(
-        "https://futuremind-2-0-mw60.onrender.com/cadastro-profissional",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(profissional),
+    
+    const req = async () => {
+      try {
+        const response = await fetch(
+          "https://futuremind-2-0-mw60.onrender.com/cadastro-profissional",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(profissional),
+          }
+        );
+  
+        if (response.ok) {
+          setProfissional({
+            nome: "",
+            cpf: "",
+            telefone: "",
+            data_nascimento: "",
+            especializacao: [],
+            senha: "",
+            foto: "../assets/icon-profile.svg",
+            abordagem: [],
+            email: "",
+            email_profissional: "@futuremind.com",
+            crp: "",
+            valor_consulta: null,
+          });
+          navigate("/login");
         }
-      );
-
-      if (response.ok) {
-        setProfissional({
-          nome: "",
-          cpf: "",
-          telefone: "",
-          data_nascimento: "",
-          especializacao: [],
-          senha: "",
-          foto: "../assets/icon-profile.svg",
-          abordagem: [],
-          email: "",
-          email_profissional: "@futuremind.com",
-          crp: "",
-          valor_consulta: null,
-        });
-        navigate("/login");
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
-    }
+    };
+    req()
   };
+
 
   return (
     <div className="container-profissional">
@@ -330,7 +337,7 @@ function CadastroProfissional2() {
             <span
               className={`erro ${prefixoEmailProfissionalValido ? "visivel" : ""}`}
             >
-              Seu usuário deve ter um "."
+              {usuarioMensagem}
             </span>
           </div>
         </div>

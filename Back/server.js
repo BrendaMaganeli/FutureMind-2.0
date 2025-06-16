@@ -880,7 +880,7 @@ app.post('/verificar_profissional_um', async (req, res) => {
   }
 });
 
-app.post('/verificar_profissional_dois'), async (req, res) =>{
+app.post('/verificar_profissional_dois', async (req, res) => {
 
    const {valorEmail, email_profissional} = req.body
    
@@ -898,7 +898,7 @@ app.post('/verificar_profissional_dois'), async (req, res) =>{
     console.error('Erro ao verificar profissional:', error);
     res.status(500).json({ Error: 'Erro interno do servidor' });
   }
-}
+});
 
 
 app.listen(4242, () => console.log ('Servidor servindo'));

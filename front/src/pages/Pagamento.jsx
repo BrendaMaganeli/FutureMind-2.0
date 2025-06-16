@@ -11,7 +11,10 @@ function Pagamento() {
   const { id } = useParams();
   const location = useLocation();
   const { date: initialDate = "", time: initialTime = "" } = location.state || {};
-  
+  const [foto, setFoto] = useState({
+    profissional: "", 
+  });
+    
   // Verificação da origem via URL
   const searchParams = new URLSearchParams(location.search);
   const vimPlanoQuery = searchParams.get('vim_plano') === 'true';
@@ -146,9 +149,7 @@ function Pagamento() {
     } else {
       const getDadosProfissional = async () => {
         try {
-          const response = await fetch(
-            `http://localhost:4242/profissional/${id}`
-          );
+          const response = await fetch(`http://localhost:4242/profissional/${id}`);
           if (!response.ok) {
             console.error("Falha ao buscar profissional:", response.statusText);
             return;
@@ -158,13 +159,20 @@ function Pagamento() {
           setProfissionalNome(data.nome || "");
           setProfissionalCRP(data.crp || "");
           setValorConsulta(data.valor_consulta != null ? data.valor_consulta : 0);
+          
+          // Adicione esta linha para armazenar a foto do profissional
+          setFoto(prev => ({
+            ...prev,
+            profissional: data.foto?.startsWith("http") 
+              ? data.foto 
+              : `http://localhost:4242${data.foto}`
+          }));
         } catch (err) {
           console.error("Erro no fetch /profissional/:id →", err);
         }
       };
-
       getDadosProfissional();
-    }
+     }
   }, [id, cadastrandoPlano, plano_selecionado]);
 
   // Efeitos para validação
@@ -685,16 +693,16 @@ function Pagamento() {
                   marginTop: "12px",
                 }}
               >
-                <img
-                  src={mulher}
-                  alt={`Foto de ${profissionalNome}`}
-                  style={{
-                    borderRadius: "9999px",
-                    width: "60px",
-                    height: "60px",
-                    objectFit: "cover",
-                  }}
-                />
+              <img
+                src={foto.profissional || mulher} // Usa mulher como fallback
+                alt={`Foto de ${profissionalNome}`}
+                style={{
+                  borderRadius: "9999px",
+                  width: "60px",
+                  height: "60px",
+                  objectFit: "cover",
+                }}
+              />
                 <div>
                   <p style={{ fontWeight: "500", fontSize: "16px" }}>
                     {profissionalNome}

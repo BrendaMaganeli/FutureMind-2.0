@@ -4,7 +4,7 @@ import "./CSS/Call.css";
 
 const user = localStorage.getItem('User-Profile');
 
-const socket = io('http://localhost:5000', {
+const socket = io('https://futuremind-20-production.up.railway.app', {
   auth: {
     name: user?.nome ? user?.nome : 'Lucas'
   },

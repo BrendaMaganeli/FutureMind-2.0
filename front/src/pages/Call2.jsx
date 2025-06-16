@@ -2,7 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import "./CSS/Call.css";
 
-const socket = io('https://futuremind-20-production.up.railway.app', {
+const user = localStorage.getItem('User-Profile');
+
+const socket = io('http://localhost:5000', {
+  auth: {
+    name: user.nome
+  },
   reconnectionAttempts: 5,
   reconnectionDelay: 1000,
   timeout: 10000
@@ -20,7 +25,7 @@ function VideoConferencia2 () {
     const [callInProgress, setCallInProgress] = useState(false);
     const [incomingOffer, setIncomingOffer] = useState(null);
     const [targetUser, setTargetUser] = useState(null);
-    const [onlineUsers, setOnlineUsers] = useState([]);
+    const [onlineUsers, setOnlineUsers] = useState([{}]);
     const [espelhar, setEspelhar] = useState('mirror');
     const [isCaller, setIsCaller] = useState(false);
     const [connectionStatus, setConnectionStatus] = useState("Disconnected");
@@ -88,9 +93,8 @@ function VideoConferencia2 () {
         socket.on("reconnect_attempt", handleReconnectAttempt);
         socket.on("reconnect_failed", handleReconnectFailed);
 
-        // WebRTC signaling handlers
         socket.on("users", (users) => {
-            setOnlineUsers(users.filter(u => u !== socket.id));
+            setOnlineUsers(users);
         });
 
         socket.on("offer", (data) => {
@@ -461,6 +465,11 @@ function VideoConferencia2 () {
                 </button>
             )}
 
+            {callInProgress && (
+                <button className="start-call-button" onClick={endCall}>
+                    End Call
+                </button>
+            )}
             {incomingOffer && !callInProgress && (
                 <div className="incoming-call">
                     <button className="end-call-button" onClick={endCall}>
@@ -475,13 +484,13 @@ function VideoConferencia2 () {
             <div className="users-online-container">
                 <h4>Online Users ({onlineUsers.length})</h4>
                 {onlineUsers.map((user) => (
-                    <div key={user} className="user-item">
-                        <span>ID: {user}</span>
+                    <div key={user.id} className="user-item">
+                        <span>ID: {user.name}</span>
                         <button
-                            onClick={() => setTargetUser(user)}
+                            onClick={() => setTargetUser(user.id)}
                             disabled={callInProgress || incomingOffer}
                         >
-                            {targetUser === user ? "Selected" : "Select"}
+                            {targetUser === user.id ? "Selected" : "Select"}
                         </button>
                     </div>
                 ))}

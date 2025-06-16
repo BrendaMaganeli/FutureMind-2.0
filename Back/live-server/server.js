@@ -18,8 +18,9 @@ let connectedUsers = [];
 
 io.on('connection', (socket) => {
   console.log(`Usuário conectado: ${socket.id}`);
-  
-  connectedUsers.push(socket.id);
+  const { name } = socket.handshake.auth;
+  const user = {name: name || 'Antonio', id: socket.id}
+  connectedUsers.push(user);
   
   io.emit('users', connectedUsers);
 
@@ -48,10 +49,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log(`Usuário desconectado: ${socket.id}`);
-    connectedUsers = connectedUsers.filter(id => id !== socket.id);
-    io.emit('users', connectedUsers);
-  });
+  console.log(`Usuário desconectado: ${socket.id}`);
+  connectedUsers = connectedUsers.filter(user => user.id !== socket.id);
+  io.emit('users', connectedUsers);
+});
+
 });
 
 const PORT = 5000;

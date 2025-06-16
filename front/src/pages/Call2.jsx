@@ -6,7 +6,7 @@ const user = localStorage.getItem('User-Profile');
 
 const socket = io('http://localhost:5000', {
   auth: {
-    name: user.nome
+    name: user.nome ? user.nome : 'Lucas'
   },
   reconnectionAttempts: 5,
   reconnectionDelay: 1000,

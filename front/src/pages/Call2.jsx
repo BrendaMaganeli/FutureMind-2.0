@@ -10,11 +10,11 @@ const socket = io('http://localhost:5000', {
   },
   reconnectionAttempts: 5,
   reconnectionDelay: 1000,
-  timeout: 10000
+  timeout: 10000,
+  transports: ['websocket']
 });
 
-function VideoConferencia2 () {
-
+function VideoConferencia2() {
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
     const peerConnection = useRef(null);
@@ -33,14 +33,15 @@ function VideoConferencia2 () {
     const [dragging, setDragging] = useState(false);
     const [position, setPosition] = useState({ x: 1100, y: 20 });
     const dragOffset = useRef({ x: 0, y: 0 });
-    const [callTime, setCallTime] = useState(0);  // segundos transcorridos
+    const [callTime, setCallTime] = useState(0);
     const timerRef = useRef(null);
+    const [iceGatheringState, setIceGatheringState] = useState('');
 
     useEffect(() => {
         const initializeMedia = async () => {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: true, 
+                    video: { width: 1280, height: 720 }, 
                     audio: true 
                 });
                 localStreamRef.current = stream;
@@ -55,7 +56,6 @@ function VideoConferencia2 () {
 
         initializeMedia();
 
-        // Socket.IO event handlers with error handling
         const handleConnect = () => {
             setConnectionStatus("Connected");
             setError(null);
@@ -125,14 +125,24 @@ function VideoConferencia2 () {
                     await peerConnection.current.addIceCandidate(
                         new RTCIceCandidate(data.candidate)
                     );
+                    console.log("ICE candidate added successfully");
                 } catch (error) {
                     console.error("Error adding ICE candidate:", error);
+                    setError("Falha na conexão de rede. Tentando reconectar...");
+                    setTimeout(() => {
+                        if (callInProgress) {
+                            startCall();
+                        }
+                    }, 2000);
                 }
             }
         });
 
+        socket.onAny((event, ...args) => {
+            console.log(`Socket event: ${event}`, args);
+        });
+
         return () => {
-            // Cleanup socket listeners
             socket.off("connect", handleConnect);
             socket.off("connect_error", handleConnectError);
             socket.off("disconnect", handleDisconnect);
@@ -143,7 +153,6 @@ function VideoConferencia2 () {
             socket.off("answer");
             socket.off("ice-candidate");
 
-            // Cleanup media
             if (localStreamRef.current) {
                 localStreamRef.current.getTracks().forEach(track => track.stop());
             }
@@ -152,54 +161,58 @@ function VideoConferencia2 () {
     }, []);
 
     useEffect(() => {
-    if (callInProgress) {
-        // inicia / retoma o cronômetro
-        timerRef.current = setInterval(() => {
-            setCallTime(prev => prev + 1);
-        }, 1000);
-    } else {
-        // pausa e zera quando a chamada termina
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-        setCallTime(0);
-    }
+        if (callInProgress) {
+            timerRef.current = setInterval(() => {
+                setCallTime(prev => prev + 1);
+            }, 1000);
+        } else {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+            setCallTime(0);
+        }
 
-    // limpeza se o componente desmontar
-    return () => clearInterval(timerRef.current);
+        return () => clearInterval(timerRef.current);
     }, [callInProgress]);
 
     const formatTime = (totalSeconds) => {
-        const hrs  = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+        const hrs = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
         const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
         const secs = String(totalSeconds % 60).padStart(2, '0');
         return `${hrs}:${mins}:${secs}`;
     };
-
 
     const setupPeerConnection = () => {
         try {
             const pc = new RTCPeerConnection({
                 iceServers: [
                     {
-                    urls: 'turn:relay1.expressturn.com:3480',
-                    username: '000000002065129162',
-                    credential: 'vCxR0rq7wtXcOLu30ME4BD4mhmE=',
-                },
-                    { urls: "stun:stun.l.google.com:19302" }
-                ]
+                        urls: [
+                            'stun:stun.l.google.com:19302',
+                            'stun:stun1.l.google.com:19302',
+                            'stun:stun2.l.google.com:19302',
+                            'turn:relay1.expressturn.com:3478?transport=udp',
+                            'turn:relay1.expressturn.com:3478?transport=tcp'
+                        ],
+                        username: '000000002065129162',
+                        credential: 'vCxR0rq7wtXcOLu30ME4BD4mhmE=',
+                    }
+                ],
+                iceTransportPolicy: 'all'
             });
 
-            // Add local stream tracks
             localStreamRef.current.getTracks().forEach(track => {
                 pc.addTrack(track, localStreamRef.current);
             });
 
             pc.onicecandidate = (event) => {
+                console.log('ICE candidate:', event.candidate);
                 if (event.candidate && targetUser) {
                     socket.emit("ice-candidate", {
                         to: targetUser,
                         candidate: event.candidate
                     });
+                } else if (!event.candidate) {
+                    console.log('No more ICE candidates');
                 }
             };
 
@@ -210,11 +223,21 @@ function VideoConferencia2 () {
             };
 
             pc.oniceconnectionstatechange = () => {
+                console.log('ICE Connection State:', pc.iceConnectionState);
                 if (pc.iceConnectionState === 'disconnected' || 
                     pc.iceConnectionState === 'failed') {
-                    setError("Conexão com o parceiro perdida.");
-                    endCall();
+                    setError("Problema na conexão. Tentando reconectar...");
+                    setTimeout(() => {
+                        if (callInProgress) {
+                            startCall();
+                        }
+                    }, 2000);
                 }
+            };
+
+            pc.onicegatheringstatechange = () => {
+                console.log('ICE gathering state:', pc.iceGatheringState);
+                setIceGatheringState(pc.iceGatheringState);
             };
 
             pc.onnegotiationneeded = async () => {
@@ -237,7 +260,7 @@ function VideoConferencia2 () {
             return pc;
         } catch (error) {
             console.error("Error setting up peer connection:", error);
-            setError("Falha ao configurar conexão P2P");
+            setError(`Falha ao configurar conexão P2P: ${error.message}`);
             return null;
         }
     };
@@ -252,7 +275,17 @@ function VideoConferencia2 () {
             setIsCaller(true);
             peerConnection.current = setupPeerConnection();
             
-            const offer = await peerConnection.current.createOffer();
+            const offerTimeout = setTimeout(() => {
+                if (!callInProgress) {
+                    setError("Tempo esgotado ao tentar conectar");
+                    endCall();
+                }
+            }, 30000);
+
+            const offer = await peerConnection.current.createOffer({
+                offerToReceiveAudio: 1,
+                offerToReceiveVideo: 1
+            });
             await peerConnection.current.setLocalDescription(offer);
 
             socket.emit("offer", {
@@ -263,6 +296,7 @@ function VideoConferencia2 () {
 
             setCallInProgress(true);
             setError(null);
+            clearTimeout(offerTimeout);
         } catch (error) {
             console.error("Error starting call:", error);
             setError("Falha ao iniciar chamada");
@@ -387,7 +421,7 @@ function VideoConferencia2 () {
             )}
 
             <div className="connection-status">
-                Status: {connectionStatus}
+                Status: {connectionStatus} | ICE: {iceGatheringState}
             </div>
 
             <video 

@@ -12,34 +12,14 @@ const io = new Server(server, {
     origin: "*",
     methods: ["GET", "POST"],
   },
-  pingInterval: 5000,  // Aumenta a frequência de ping
-  pingTimeout: 10000,
-  upgradeTimeout: 30000,
-  allowUpgrades: false, // Mantém WebSocket
-  perMessageDeflate: {
-    threshold: 1024, // Tamanho mínimo para compressão
-    zlibDeflateOptions: {
-      level: 3
-    }
-  }
 });
 
 let connectedUsers = [];
 
 io.on('connection', (socket) => {
   const { name } = socket.handshake.auth;
-  console.log(`Novo usuário conectado: ${name} (${socket.id})`);
-  
-  // Atualize o formato do usuário para manter consistência
-  const newUser = {
-    id: socket.id,
-    name: name || 'Usuário Anônimo'
-  };
-  
-  // Adicione o novo usuário à lista
-  connectedUsers.push(newUser);
-  
-  // Notifique todos sobre a nova lista de usuários
+  const user = {name: name || 'Antonio', id: socket.id}
+  connectedUsers.push(user);
   io.emit('users', connectedUsers);
 
   // WebRTC Signaling

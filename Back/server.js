@@ -900,5 +900,4 @@ app.post('/verificar_profissional_dois', async (req, res) => {
   }
 });
 
-
 app.listen(4242, () => console.log ('Servidor servindo'));

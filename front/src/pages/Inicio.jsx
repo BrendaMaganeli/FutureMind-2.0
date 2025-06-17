@@ -22,6 +22,7 @@ function Inicio() {
   const navigate = useNavigate();
   const { setId } = useContext(GlobalContext);
   const [mostrarLogo, setMostrarLogo] = useState(true);
+  const user = JSON.parse(localStorage.getItem('User-Profile'));
 
   useEffect(() => {
     const timer = setTimeout(() => setMostrarLogo(false), 2200);
@@ -162,7 +163,7 @@ function Inicio() {
 
       <div className="filter-profissionais-div">
         <div className="filter-profissionais-text">
-          <h1>Encontre seu profissional</h1>
+          <h1>{ !user ? 'Encontre seu profissional' : `Olá, ${user.nome}`}</h1>
         </div>
 
         <div className="filter-background">

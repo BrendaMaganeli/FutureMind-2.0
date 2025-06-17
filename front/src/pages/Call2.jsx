@@ -27,6 +27,7 @@ function VideoConferencia2() {
     const [incomingOffer, setIncomingOffer] = useState(null);
     const [targetUser, setTargetUser] = useState(null);
     const [onlineUsers, setOnlineUsers] = useState([{}]);
+    const [configBarVisible, setConfigBarVisible] = useState(true);
     const [espelhar, setEspelhar] = useState('mirror');
     const [isCaller, setIsCaller] = useState(false);
     const [connectionStatus, setConnectionStatus] = useState("Disconnected");
@@ -461,38 +462,56 @@ function VideoConferencia2() {
                 </div>
             )}
 
-            <div className="barra-config">
-                {callInProgress ? (
-                    <img src="/public/phone.png" alt="End call" onClick={endCall} />
-                ) : null}
-                
-                <div className="ppp" style={{ display: "flex", flexDirection: "column" }}>
-                    <img
-                        onClick={toggleVideo}
-                        src={videoActive ? "/public/video-active.png" : "/public/video-desactive.png"}
-                        alt={videoActive ? "Video On" : "Video Off"}
-                    />
-                    <p style={{ color: videoActive ? "white" : "#013a63" }}>Video</p>
-                </div>
-                
-                <div className="ppp" style={{ display: "flex", flexDirection: "column" }}>
-                    <img
-                        onClick={toggleAudio}
-                        src={micActive ? "/public/mic.png" : "/public/mute.png"}
-                        alt={micActive ? "Mic On" : "Mic Off"}
-                    />
-                    <p style={{ color: micActive ? "white" : "#013a63" }}>Audio</p>
-                </div>
-                
-                <div className="ppp" style={{ display: "flex", flexDirection: "column" }}>
-                    <img
-                        onClick={() => setEspelhar(espelhar === 'mirror' ? '' : 'mirror')}
-                        src={espelhar === 'mirror' ? "/public/espelho 1.svg" : "/public/espelho (1) 1.svg"}
-                        alt={espelhar === 'mirror' ? "Mirror On" : "Mirror Off"}
-                    />
-                    <p style={{ color: espelhar === 'mirror' ? "white" : "#013a63" }}>Mirror</p>
-                </div>
-            </div>
+<div className={`barra-config-container ${configBarVisible ? '' : 'hidden'}`}>
+    <div className="barra-config">
+        {callInProgress ? (
+            <img src="/public/phone.png" alt="End call" onClick={endCall} />
+        ) : null}
+        
+        <div className="ppp" style={{ display: "flex", flexDirection: "column" }}>
+            <img
+                onClick={toggleVideo}
+                src={videoActive ? "/public/video-active.png" : "/public/video-desactive.png"}
+                alt={videoActive ? "Video On" : "Video Off"}
+            />
+            <p style={{ color: videoActive ? "white" : "#013a63" }}>Video</p>
+        </div>
+        
+        <div className="ppp" style={{ display: "flex", flexDirection: "column" }}>
+            <img
+                onClick={toggleAudio}
+                src={micActive ? "/public/mic.png" : "/public/mute.png"}
+                alt={micActive ? "Mic On" : "Mic Off"}
+            />
+            <p style={{ color: micActive ? "white" : "#013a63" }}>Audio</p>
+        </div>
+        
+        <div className="ppp" style={{ display: "flex", flexDirection: "column" }}>
+            <img
+                onClick={() => setEspelhar(espelhar === 'mirror' ? '' : 'mirror')}
+                src={espelhar === 'mirror' ? "/public/espelho 1.svg" : "/public/espelho (1) 1.svg"}
+                alt={espelhar === 'mirror' ? "Mirror On" : "Mirror Off"}
+            />
+            <p style={{ color: espelhar === 'mirror' ? "white" : "#013a63" }}>Mirror</p>
+        </div>
+        
+        <button 
+            className="toggle-config-bar" 
+            onClick={() => setConfigBarVisible(false)}
+        >
+            ×
+        </button>
+    </div>
+    
+</div>
+    {!configBarVisible && (
+        <button 
+            className="show-config-bar" 
+            onClick={() => setConfigBarVisible(true)}
+        >
+            ☰
+        </button>
+    )}
 
             {!callInProgress && !incomingOffer && (
                 <button className="start-call-button" onClick={startCall}>

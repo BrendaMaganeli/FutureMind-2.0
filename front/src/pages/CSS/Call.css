@@ -133,6 +133,44 @@
   z-index: 11;
 }
 
+
+.barra-config-container.hidden .barra-config {
+  transform: translateX(-200%);
+  transition: 1s;
+}
+
+.toggle-config-bar, .show-config-bar {
+  background: none;
+  border: none;
+  color: #013a63;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 10px;
+  transition: opacity 0.3s ease;
+}
+
+.toggle-config-bar:hover, .show-config-bar:hover {
+  opacity: 0.8;
+}
+
+.show-config-bar {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.videoconferencia-container .barra-config img {
+
+  cursor: pointer;
+}
+
 .videoconferencia-container .barra-config img {
 
   cursor: pointer;

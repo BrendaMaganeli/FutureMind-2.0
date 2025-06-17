@@ -7,6 +7,8 @@ import icon_tres from "../assets/message-square (1).svg";
 import Arvore from "../assets/Group 239274.svg";
 import voltar from "../assets/seta-principal.svg";
 import "./CSS/EditarProfissional.css";
+import icon from "../assets/iconusu.svg";
+
 
 function EditarProfissional() {
   const navigate = useNavigate();
@@ -18,7 +20,13 @@ function EditarProfissional() {
   const [hasValueAbordagem, setHasValueAbordagem] = useState(false);
   const [imagemPreview, setImagemPreview] = useState(null);
   const [fotoSelecionada, setFotoSelecionada] = useState(null);
-  const [foto, setFoto] = useState('');
+  const [foto, setFoto] = useState(
+    perfilSalvo.foto?.includes('http') 
+      ? perfilSalvo.foto 
+      : perfilSalvo.foto 
+        ? `http://localhost:4242${perfilSalvo.foto}` 
+        : icon
+  );
 
   const [formData, setFormData] = useState({
     id_profissional: perfilSalvo?.id_profissional || "",
@@ -276,15 +284,10 @@ const salvarEdicao = async () => {
         >
           <div className="cabecalho-perfil">
             <img
-              src={
-                imagemPreview
-                  ? imagemPreview
-                  : perfilSalvo.foto.startsWith("http")
-                  ? perfilSalvo.foto
-                  : `http://localhost:4242${perfilSalvo.foto}`
-              }
+              src={foto}
               alt="Foto do perfil"
               className="imagem-perfil"
+              onClick={onImageChange}
             />
             <h2 className="nome-perfil">{profissionais.nome}</h2>
           </div>

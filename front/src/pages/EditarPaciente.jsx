@@ -7,6 +7,7 @@ import icon_tres from "../assets/message-square (1).svg";
 import logo from "../assets/logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
 import Arvore from "../assets/Group 239274.svg";
+import icon from "../assets/iconusu.svg";
 
 function EditarPaciente() {
   const navigate = useNavigate();
@@ -17,7 +18,13 @@ function EditarPaciente() {
   const [showModal, setShowModal] = useState(false);
   const [imagemPreview, setImagemPreview] = useState(null);
   const [fotoSelecionada, setFotoSelecionada] = useState(null);
-  const [foto, setFoto] = useState(`http://localhost:4242${pacienteLocal.foto}`);
+  const [foto, setFoto] = useState(
+    pacienteLocal.foto?.includes('http') 
+      ? pacienteLocal.foto 
+      : pacienteLocal.foto 
+        ? `http://localhost:4242${pacienteLocal.foto}` 
+        : icon
+  );
 
   const [paciente, setPaciente] = useState({
     id_paciente: pacienteLocal.id_paciente,
@@ -202,7 +209,7 @@ function EditarPaciente() {
         <aside className="barra-lateral-p">
           <div className="cabecalho-perfil-paciente">
             <img
-              src={pacienteLocal.foto}
+              src={foto}
               alt="Foto do perfil"
               className="imagem-perfil"
               onClick={onImageChange}

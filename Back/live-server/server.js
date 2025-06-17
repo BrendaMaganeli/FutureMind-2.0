@@ -18,8 +18,18 @@ let connectedUsers = [];
 
 io.on('connection', (socket) => {
   const { name } = socket.handshake.auth;
-  const user = {name: name || 'Antonio', id: socket.id}
-  connectedUsers.push(user);
+  console.log(`Novo usuário conectado: ${name} (${socket.id})`);
+  
+  // Atualize o formato do usuário para manter consistência
+  const newUser = {
+    id: socket.id,
+    name: name || 'Usuário Anônimo'
+  };
+  
+  // Adicione o novo usuário à lista
+  connectedUsers.push(newUser);
+  
+  // Notifique todos sobre a nova lista de usuários
   io.emit('users', connectedUsers);
 
   // WebRTC Signaling

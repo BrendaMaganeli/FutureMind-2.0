@@ -15,6 +15,7 @@ const socket = io('http://192.168.11.96:5000', {
 });
 
 function VideoConferencia2() {
+
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
     const peerConnection = useRef(null);

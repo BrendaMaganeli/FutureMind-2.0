@@ -5,192 +5,235 @@ import imgConsulta from "../assets/Group 239294.svg";
 import voltar from "../assets/seta-principal.svg";
 import { useNavigate, useParams } from "react-router-dom";
 
-const getMonthData = (year) => {
-  const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
-  const daysInMonth = [
-    31,
-    isLeapYear ? 29 : 28,
-    31,
-    30,
-    31,
-    30,
-    31,
-    31,
-    30,
-    31,
-    30,
-    31,
+// Calcula os dados do mês (número de dias, nome e dia da semana que começa)
+const calcularDadosDoMes = (ano) => {
+  const ehAnoBissexto = ano % 4 === 0 && (ano % 100 !== 0 || ano % 400 === 0);
+  const diasPorMes = [
+    31, ehAnoBissexto ? 29 : 28, 31, 30, 31, 30, 
+    31, 31, 30, 31, 30, 31
   ];
-  return daysInMonth.map((days, index) => ({
-    name: new Date(year, index).toLocaleString("default", { month: "long" }),
-    days,
-    start: new Date(year, index, 1).getDay(),
+  
+  return diasPorMes.map((dias, indice) => ({
+    nome: new Date(ano, indice).toLocaleString("default", { month: "long" }),
+    dias,
+    inicio: new Date(ano, indice, 1).getDay(),
   }));
 };
 
-export default function AgendaConsultas() {
-  const today = new Date();
-  const navigate = useNavigate();
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [currentMonthIndex, setCurrentMonthIndex] = useState(today.getMonth());
-  const [appointments, setAppointments] = useState({});
-  const [selected, setSelected] = useState({ day: null, time: null });
-  const [confirmationMessage, setConfirmationMessage] = useState("");
-  const key = `${currentYear}-${currentMonthIndex}-${selected.day}`;
-  const agendados = appointments[key] || [];
-  const months = getMonthData(currentYear);
-  const month = months[currentMonthIndex];
-  const prevMonth = months[(currentMonthIndex + 11) % 12];
-  const days = Array.from({ length: 42 }, (_, i) => {
-    let date,
-      isCurrentMonth = true,
-      isUnavailable = false,
-      appointmentsForDay = [];
+// Verifica se um horário específico já passou
+const verificarSeHorarioPassou = (ano, mes, dia, horario) => {
+  const agora = new Date();
+  const [horas, minutos] = horario.split(':').map(Number);
+  const dataAgendamento = new Date(ano, mes, dia, horas, minutos);
+  return dataAgendamento < agora;
+};
 
-    if (i < month.start) {
-      date = prevMonth.days - (month.start - i - 1);
-      isCurrentMonth = false;
-      isUnavailable = true;
-    } else if (i >= month.start + month.days) {
-      date = i - (month.start + month.days) + 1;
-      isCurrentMonth = false;
-      isUnavailable = true;
-    } else {
-      date = i - month.start + 1;
-      const key = `${currentYear}-${currentMonthIndex}-${date}`;
-      appointmentsForDay = appointments[key] || [];
-      isUnavailable = appointmentsForDay.length > 0;
+// Verifica se uma data já passou (é anterior ao dia atual)
+const verificarSeDataPassou = (ano, mes, dia) => {
+  const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+  return new Date(ano, mes, dia) < hoje;
+};
+
+// Componente principal de agendamento
+function AgendaConsultas() {
+  // Estado e hooks iniciais
+  const hoje = new Date();
+  const navegar = useNavigate();
+  const { id } = useParams();
+  const usuario = JSON.parse(localStorage.getItem("User-Profile"));
+
+  // Estados do componente
+  const [anoAtual, setAnoAtual] = useState(hoje.getFullYear());
+  const [indiceMesAtual, setIndiceMesAtual] = useState(hoje.getMonth());
+  const [consultasAgendadas, setConsultasAgendadas] = useState({});
+  const [slotSelecionado, setSlotSelecionado] = useState({ dia: null, horario: null });
+  const [mensagemConfirmacao, setMensagemConfirmacao] = useState("");
+
+  // Dados derivados do estado
+  const meses = calcularDadosDoMes(anoAtual);
+  const mesAtual = meses[indiceMesAtual];
+  const mesAnterior = meses[(indiceMesAtual + 11) % 12];
+  const chaveAgendamento = `${anoAtual}-${indiceMesAtual}-${slotSelecionado.dia}`;
+  const horariosAgendados = consultasAgendadas[chaveAgendamento] || [];
+
+  // Gera os dias do calendário para exibição
+  const diasDoCalendario = Array.from({ length: 42 }, (_, indice) => {
+    let dia, ehMesAtual = true, estaIndisponivel = false, 
+        ehDataPassada = false, consultasDoDia = [];
+
+    // Dias do mês anterior
+    if (indice < mesAtual.inicio) {
+      dia = mesAnterior.dias - (mesAtual.inicio - indice - 1);
+      ehMesAtual = false;
+      estaIndisponivel = true;
+    } 
+    // Dias do próximo mês
+    else if (indice >= mesAtual.inicio + mesAtual.dias) {
+      dia = indice - (mesAtual.inicio + mesAtual.dias) + 1;
+      ehMesAtual = false;
+      estaIndisponivel = true;
+    } 
+    // Dias do mês atual
+    else {
+      dia = indice - mesAtual.inicio + 1;
+      const chaveDia = `${anoAtual}-${indiceMesAtual}-${dia}`;
+      consultasDoDia = consultasAgendadas[chaveDia] || [];
+      ehDataPassada = verificarSeDataPassou(anoAtual, indiceMesAtual, dia);
+      estaIndisponivel = consultasDoDia.length > 0 || ehDataPassada;
     }
-    return { id: i, date, isCurrentMonth, isUnavailable, appointmentsForDay };
+
+    return { 
+      id: indice, 
+      dia, 
+      ehMesAtual, 
+      estaIndisponivel, 
+      ehDataPassada,
+      consultasDoDia 
+    };
   });
 
-  const { id } = useParams();
-  const user = JSON.parse(localStorage.getItem("User-Profile"));
-
+  // Busca os agendamentos do médico na API
   useEffect(() => {
-    const year = currentYear;
-    const monthSQL = currentMonthIndex + 1;
-
-    fetch(`http://localhost:4242/agendamento/${id}/${year}/${monthSQL}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Erro ao buscar agendamento");
-        return res.json();
-      })
-      .then((data) => {
-        const map = {};
-        data.forEach((a) => {
-          const day = new Date(a.data).getDate();
-          const key = `${year}-${currentMonthIndex}-${day}`;
-          if (!map[key]) {
-            map[key] = [];
-          }
-          map[key].push(a.hora);
-        });
-        setAppointments(map);
-      })
-      .catch((err) => console.error(err));
-  }, [currentYear, currentMonthIndex, id]);
-
-  function handleChangeMonth(direction) {
-    setCurrentMonthIndex((prev) => {
-      let newMonth = prev + direction;
-      let newYear = currentYear;
-      if (newMonth < 0) {
-        newMonth = 11;
-        newYear--;
-      } else if (newMonth > 11) {
-        newMonth = 0;
-        newYear++;
+    const buscarConsultasAgendadas = async () => {
+      try {
+        const mesSQL = indiceMesAtual + 1;
+        const resposta = await fetch(
+          `http://localhost:4242/agendamento/${id}/${anoAtual}/${mesSQL}`
+        );
+        
+        if (!resposta.ok) throw new Error("Falha ao buscar agendamentos");
+        
+        const dados = await resposta.json();
+        const mapaConsultas = dados.reduce((acumulador, consulta) => {
+          const dia = new Date(consulta.data).getDate();
+          const chave = `${anoAtual}-${indiceMesAtual}-${dia}`;
+          acumulador[chave] = acumulador[chave] || [];
+          acumulador[chave].push(consulta.hora);
+          return acumulador;
+        }, {});
+        
+        setConsultasAgendadas(mapaConsultas);
+      } catch (erro) {
+        console.error("Erro ao buscar consultas:", erro);
       }
-      setCurrentYear(newYear);
-      return newMonth;
+    };
+
+    buscarConsultasAgendadas();
+  }, [anoAtual, indiceMesAtual, id]);
+
+  // Navegação entre meses
+  const navegarEntreMeses = (direcao) => {
+    setIndiceMesAtual((mesAnterior) => {
+      let novoMes = mesAnterior + direcao;
+      let novoAno = anoAtual;
+      
+      if (novoMes < 0) {
+        novoMes = 11;
+        novoAno--;
+      } else if (novoMes > 11) {
+        novoMes = 0;
+        novoAno++;
+      }
+      
+      setAnoAtual(novoAno);
+      return novoMes;
     });
-  }
+  };
 
-  function handleDayClick(day) {
-    if (day.isCurrentMonth) {
-      setSelected({ day: day.date, time: null });
+  // Seleção de dia no calendário
+  const selecionarDia = (dia) => {
+    if (dia.ehMesAtual && !dia.ehDataPassada) {
+      setSlotSelecionado({ dia: dia.dia, horario: null });
     }
-  }
+  };
 
-  function handleTimeClick(time) {
-    const key = `${currentYear}-${currentMonthIndex}-${selected.day}`;
-    const agendados = appointments[key] || [];
+  // Seleção de horário disponível
+  const selecionarHorario = (horario) => {
+    const horarioPassou = verificarSeHorarioPassou(
+      anoAtual, 
+      indiceMesAtual, 
+      slotSelecionado.dia, 
+      horario
+    );
 
-    if (!agendados.includes(time)) {
-      setSelected((prev) => ({ ...prev, time }));
+    if (!horariosAgendados.includes(horario) && !horarioPassou) {
+      setSlotSelecionado(anterior => ({ ...anterior, horario }));
     }
-  }
+  };
 
-  function confirmar() {
-    if (!selected.day || !selected.time) return;
+  // Confirmação do agendamento
+  const confirmarAgendamento = () => {
+    if (!slotSelecionado.dia || !slotSelecionado.horario) return;
 
-    const dateISO = `${currentYear}-${String(currentMonthIndex + 1).padStart(2, "0")}-${String(selected.day).padStart(2, "0")}`;
-    navigate(`/pagamento/${id}?vim_agendamento=true`, {
-      state: { date: dateISO, time: selected.time },
+    const dataFormatada = `${anoAtual}-${String(indiceMesAtual + 1).padStart(2, "0")}-${String(slotSelecionado.dia).padStart(2, "0")}`;
+    
+    navegar(`/pagamento/${id}?vim_agendamento=true`, {
+      state: { date: dataFormatada, time: slotSelecionado.horario },
     });
-  }
+  };
 
-  function handleClose() {
-    setSelected({ day: null, time: null });
-  }
+  // Fechar painel de agendamento
+  const fecharPainelAgendamento = () => setSlotSelecionado({ dia: null, horario: null });
+  
+  // Fechar mensagem de confirmação
+  const fecharMensagemConfirmacao = () => setMensagemConfirmacao("");
+  
+  // Voltar para página anterior
+  const voltarPaginaAnterior = () => navegar(-1);
 
-  function closeConfirmation() {
-    setConfirmationMessage("");
-  }
+  // Horários disponíveis para agendamento
+  const horariosDisponiveis = [
+    "14:30", "17:30", "13:00", 
+    "16:10", "11:00", "19:20", "13:30"
+  ];
 
-  function navega(params) {
-    navigate(-1);
-  }
-
+  // Renderização do componente
   return (
     <div className="container-agenda">
-      {confirmationMessage && (
+      {mensagemConfirmacao && (
         <div className="confirmation-message">
-          <span>{confirmationMessage}</span>
-          <button className="close-confirmation" onClick={closeConfirmation}>
+          <span>{mensagemConfirmacao}</span>
+          <button className="close-confirmation" onClick={fecharMensagemConfirmacao}>
             <X size={16} />
           </button>
         </div>
       )}
 
       <button className="back-button-c">
-        <img src={voltar} alt="Voltar" onClick={navega} />
+        <img src={voltar} alt="Voltar" onClick={voltarPaginaAnterior} />
       </button>
 
       <div className="calendar">
         <div className="calendar-header">
-          <button
-            onClick={() => handleChangeMonth(-1)}
-            className="setaEsquerda"
-          >
+          <button onClick={() => navegarEntreMeses(-1)} className="setaEsquerda">
             <ChevronLeft />
           </button>
           <h2>
-            {month.name} {currentYear}
+            {mesAtual.nome} {anoAtual}
           </h2>
-          <button onClick={() => handleChangeMonth(1)} className="setadireita">
+          <button onClick={() => navegarEntreMeses(1)} className="setadireita">
             <ChevronRight />
           </button>
         </div>
 
         <div className="weekdays">
-          {"Dom Seg Ter Qua Qui Sex Sab".split(" ").map((d) => (
-            <div key={d}>{d}</div>
+          {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"].map((diaSemana) => (
+            <div key={diaSemana}>{diaSemana}</div>
           ))}
         </div>
 
         <div className="days-grid">
-          {days.map((day) => (
+          {diasDoCalendario.map((dia) => (
             <div
-              key={day.id}
-              className={`day ${day.isUnavailable ? "unavailable" : ""}`}
-              onClick={() => handleDayClick(day)}
+              key={dia.id}
+              className={`day ${dia.estaIndisponivel ? "unavailable" : ""} ${dia.ehDataPassada ? "past-date" : ""}`}
+              onClick={() => selecionarDia(dia)}
             >
-              <span>{day.date}</span>
-              {day.appointmentsForDay.map((appt, i) => (
-                <div key={i} className="appointment-detail">
-                  {appt}
+              <span>{dia.dia}</span>
+              {dia.consultasDoDia.map((consulta, indice) => (
+                <div key={indice} className="appointment-detail">
+                  {consulta}
                 </div>
               ))}
             </div>
@@ -203,19 +246,24 @@ export default function AgendaConsultas() {
         <img src={imgConsulta} alt="Imagem de consulta" />
       </div>
 
-      {selected.day && (
+      {slotSelecionado.dia && (
         <div className="schedule">
-          <button className="close-button" onClick={handleClose}>
+          <button className="close-button" onClick={fecharPainelAgendamento}>
             <X size={24} />
           </button>
           <h1>
-            Horários disponíveis para {selected.day} de {month.name}
+            Horários disponíveis para {slotSelecionado.dia} de {mesAtual.nome}
           </h1>
 
           <div className="form-group">
             <label>Convênio</label>
             <select>
               <option>Selecione o convênio</option>
+              <option>Particular</option>
+              <option>Unimed</option>
+              <option>Bradesco Saúde</option>
+              <option>SulAmérica</option>
+              <option>Amil</option>
             </select>
           </div>
 
@@ -223,32 +271,34 @@ export default function AgendaConsultas() {
             <label>Procedimento</label>
             <select>
               <option>Selecione o procedimento</option>
+              <option>Consulta médica</option>
+              <option>Exame físico</option>
+              <option>Acompanhamento</option>
+              <option>Retorno</option>
             </select>
           </div>
 
           <h3>Horários</h3>
           <div className="times">
-            {[
-              "14:30",
-              "17:30",
-              "13:00",
-              "16:10",
-              "11:00",
-              "19:20",
-              "13:30",
-            ].map((time) => {
-              const key = `${currentYear}-${currentMonthIndex}-${selected.day}`;
-              const agendados = appointments[key] || [];
-              const isAgendado = agendados.includes(time);
+            {horariosDisponiveis.map((horario) => {
+              const estaAgendado = horariosAgendados.includes(horario);
+              const horarioPassou = verificarSeHorarioPassou(
+                anoAtual, 
+                indiceMesAtual, 
+                slotSelecionado.dia, 
+                horario
+              );
 
               return (
                 <button
-                  key={time}
-                  className={`time-button ${selected.time === time ? "selected-time" : ""}`}
-                  onClick={() => handleTimeClick(time)}
-                  disabled={isAgendado}
+                  key={horario}
+                  className={`time-button ${slotSelecionado.horario === horario ? "selected-time" : ""} ${horarioPassou ? "expired-time" : ""}`}
+                  onClick={() => selecionarHorario(horario)}
+                  disabled={estaAgendado || horarioPassou}
+                  title={horarioPassou ? "Este horário já passou" : estaAgendado ? "Horário já agendado" : ""}
                 >
-                  {time}
+                  {horario}
+                  {horarioPassou && <span className="expired-badge">✕</span>}
                 </button>
               );
             })}
@@ -256,8 +306,8 @@ export default function AgendaConsultas() {
 
           <button
             className="confirm-button"
-            onClick={confirmar}
-            disabled={!selected.time}
+            onClick={confirmarAgendamento}
+            disabled={!slotSelecionado.horario}
           >
             Confirmar agendamento
           </button>
@@ -266,3 +316,5 @@ export default function AgendaConsultas() {
     </div>
   );
 }
+
+export default AgendaConsultas;

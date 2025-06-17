@@ -12,6 +12,16 @@ const io = new Server(server, {
     origin: "*",
     methods: ["GET", "POST"],
   },
+  pingInterval: 5000,  // Aumenta a frequência de ping
+  pingTimeout: 10000,
+  upgradeTimeout: 30000,
+  allowUpgrades: false, // Mantém WebSocket
+  perMessageDeflate: {
+    threshold: 1024, // Tamanho mínimo para compressão
+    zlibDeflateOptions: {
+      level: 3
+    }
+  }
 });
 
 let connectedUsers = [];

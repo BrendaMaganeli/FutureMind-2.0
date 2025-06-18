@@ -12,7 +12,7 @@
   overflow: hidden;
 }
 
-.connection-status, .users-online-container {
+.connection-status {
 
   position: absolute;
   left: 70%;
@@ -31,18 +31,27 @@
 
 .users-online-container {
 
+  position: absolute;
   background-color: #C1DFF4;
   left: 71%;
-  top: 50%;
+  top: 55%;
   height: 44%;
   width: 26%;
   padding: 3%;
   border-radius: 16px;
+  transform: translateY(-0%);
+  transition: 1s;
 }
 
 .users-online-container .user-item span {
 
   width: 30%;
+}
+
+.users-online-container.hidden {
+
+  transform: translateY(150%);
+  transition: 1s;
 }
 
 .videoconferencia-container .me-video, .videoconferencia-container .other-video {
@@ -120,33 +129,37 @@
 
   position: absolute;
   display: flex;
-  left: 3%;
-  top: 14%;
-  width: 2%;
-  height: 70%;
-  background-color: #5a7da0;
+  top: 0;
+  left: 0;
+  width: 5%;
+  height: 100vh;
+  background-color: white;
   flex-direction: column;
   padding: 1.8%;
-  border-radius: 20px;
   gap: 40px;
+  border-right: 1px solid #BEBEBE;
   justify-content: center;
   z-index: 11;
+  box-shadow: 1px 1px 10px #e2e2e2;
 }
-
 
 .barra-config-container.hidden .barra-config {
   transform: translateX(-200%);
   transition: 1s;
 }
 
-.toggle-config-bar, .show-config-bar {
+.barra-config-container .barra-config {
+  transform: translateX(-0%);
+  transition: 1s;
+}
+
+.toggle-config-bar {
   background: none;
   border: none;
-  color: #013a63;
-  font-size: 20px;
+  color: white;
   cursor: pointer;
-  padding: 0 10px;
   transition: opacity 0.3s ease;
+  font-size: 80%;
 }
 
 .toggle-config-bar:hover, .show-config-bar:hover {
@@ -292,6 +305,33 @@
 
   justify-content: center;
   align-items: center;
+}
+
+.videoconferencia-container .ppp-2:hover {
+
+   opacity: 100%;
+   transition: 1s;
+   background-color: #3333331f;
+}
+
+.videoconferencia-container .ppp-2 {
+
+  display: flex;
+   justify-content: center;
+   align-items: center;
+   position: absolute;
+   left: 2%;
+   top: 50%;
+   cursor: pointer;
+   opacity: 70%;
+   padding: 1%;
+   border-radius: 50%;
+}
+
+.videoconferencia-container .ppp-2 img {
+
+  width: 35px;
+  height: 35px;
 }
 
 .videoconferencia-container .ppp img {

@@ -33,11 +33,12 @@ function VideoConferencia2() {
     const [connectionStatus, setConnectionStatus] = useState("Disconnected");
     const [error, setError] = useState(null);
     const [dragging, setDragging] = useState(false);
-    const [position, setPosition] = useState({ x: 1100, y: 20 });
+    const [position, setPosition] = useState({ x: 1245, y: 40 });
     const dragOffset = useRef({ x: 0, y: 0 });
     const [callTime, setCallTime] = useState(0);
     const timerRef = useRef(null);
     const [iceGatheringState, setIceGatheringState] = useState('');
+    const [salaDeEspera, setSalaDeEspera] = useState(false);
 
     useEffect(() => {
         const initializeMedia = async () => {
@@ -415,13 +416,6 @@ function VideoConferencia2() {
 
     return (
         <div className="videoconferencia-container">
-            {error && (
-                <div className="error-message">
-                    {error}
-                    <button onClick={() => setError(null)}>×</button>
-                </div>
-            )}
-
             <div className="connection-status">
                 Status: {connectionStatus} | ICE: {iceGatheringState}
             </div>
@@ -471,46 +465,57 @@ function VideoConferencia2() {
         <div className="ppp" style={{ display: "flex", flexDirection: "column" }}>
             <img
                 onClick={toggleVideo}
-                src={videoActive ? "/public/video-active.png" : "/public/video-desactive.png"}
+                src={!videoActive ? "/public/cam blue.svg" : "/public/cam grey.svg"}
                 alt={videoActive ? "Video On" : "Video Off"}
             />
-            <p style={{ color: videoActive ? "white" : "#013a63" }}>Video</p>
+            <p style={{ color: videoActive ? "#BEBEBE" : "#5A7DA0" }}>Video</p>
         </div>
         
         <div className="ppp" style={{ display: "flex", flexDirection: "column" }}>
             <img
                 onClick={toggleAudio}
-                src={micActive ? "/public/mic.png" : "/public/mute.png"}
+                src={!micActive ? "/public/audio blue.svg" : "/public/audio grey.svg"}
                 alt={micActive ? "Mic On" : "Mic Off"}
             />
-            <p style={{ color: micActive ? "white" : "#013a63" }}>Audio</p>
+            <p style={{ color: micActive ? "#BEBEBE" : "#5A7DA0" }}>Audio</p>
         </div>
         
         <div className="ppp" style={{ display: "flex", flexDirection: "column" }}>
             <img
                 onClick={() => setEspelhar(espelhar === 'mirror' ? '' : 'mirror')}
-                src={espelhar === 'mirror' ? "/public/espelho 1.svg" : "/public/espelho (1) 1.svg"}
+                src={espelhar !== 'mirror' ? "/public/espelho blue 1.svg" : "/public/espelho grey.svg"}
                 alt={espelhar === 'mirror' ? "Mirror On" : "Mirror Off"}
             />
-            <p style={{ color: espelhar === 'mirror' ? "white" : "#013a63" }}>Mirror</p>
+            <p style={{ color: espelhar === 'mirror' ? "#BEBEBE" : "#5A7DA0" }}>Mirror</p>
         </div>
-        
-        <button 
-            className="toggle-config-bar" 
-            onClick={() => setConfigBarVisible(false)}
-        >
-            ×
-        </button>
+
+        <div className="ppp" style={{ display: "flex", flexDirection: "column" }}>
+            <img
+                onClick={() => setSalaDeEspera(salaDeEspera ? false : true)}
+                src={salaDeEspera ? "/public/pacientes blue (2) 1.svg" : "/public/pacientes grey 1.svg"}
+                alt={salaDeEspera ? "Sala de Espera Aberta" : "Sala de Espera Fechada"}
+            />
+            <p style={{ color: salaDeEspera ? "#5a7da0" : "#CFCFCF" }}>Pacientes</p>
+        </div>
+
+        <div className="ppp" style={{ display: "flex", flexDirection: "column" }}>
+            <img
+                onClick={() => setConfigBarVisible(false)}
+                src="/public/botao-fechar (1) 1.svg"
+                alt="Fechar Barra de Configurações"
+            />
+            <p style={{color: "#CFCFCF" }}>Esconder</p>
+        </div>
     </div>
     
 </div>
     {!configBarVisible && (
-        <button 
-            className="show-config-bar" 
+        <div 
+            className="ppp-2"
             onClick={() => setConfigBarVisible(true)}
         >
-            ☰
-        </button>
+            <img src='/public/proximo 1.svg' />
+        </div>
     )}
 
             {!callInProgress && !incomingOffer && (
@@ -535,8 +540,8 @@ function VideoConferencia2() {
                 </div>
             )}
 
-            <div className="users-online-container">
-                <h4>Online Users ({onlineUsers.length})</h4>
+            <div className={`users-online-container ${salaDeEspera ? '' : 'hidden'}`}>
+                <h4>Usuários Online ({onlineUsers.length})</h4>
                 {onlineUsers.map((user) => (
                     <div key={user.id} className="user-item">
                         <span>ID: {user.name}</span>

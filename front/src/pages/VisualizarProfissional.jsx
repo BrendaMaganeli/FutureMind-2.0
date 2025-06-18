@@ -36,13 +36,20 @@ function VisualizarProfissional() {
 
       if (response.ok) {
         const data = await response.json();
-        const especializacoes = JSON.parse(data.especializacao || "[]");
-        const abordagens = JSON.parse(data.abordagem || "[]");
+        
+        // Verifica se os dados são strings e faz o parse
+        const especializacoes = typeof data.especializacao === 'string' 
+          ? JSON.parse(data.especializacao || "[]") 
+          : data.especializacao || [];
+        
+        const abordagens = typeof data.abordagem === 'string'
+          ? JSON.parse(data.abordagem || "[]")
+          : data.abordagem || [];
 
         setProfissional({
           ...data,
-          especializacoes,
-          abordagens,
+          especializacoes: Array.isArray(especializacoes) ? especializacoes : [],
+          abordagens: Array.isArray(abordagens) ? abordagens : [],
         });
       }
     } catch (err) {
@@ -151,7 +158,7 @@ function VisualizarProfissional() {
                   <div className="corpo-informacao">
                     {profissional.especializacoes?.map((item, index) => (
                       <p className="abordagens-especializacoes" key={index}>
-                        {item.label}
+                        {typeof item === 'object' ? item.label : item}
                       </p>
                     ))}
                   </div>
@@ -164,7 +171,7 @@ function VisualizarProfissional() {
                   <div className="corpo-informacao">
                     {profissional.abordagens?.map((item, index) => (
                       <p className="abordagens-especializacoes" key={index}>
-                        {item.label}
+                        {typeof item === 'object' ? item.label : item}
                       </p>
                     ))}
                   </div>

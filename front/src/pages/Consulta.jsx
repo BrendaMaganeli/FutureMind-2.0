@@ -1,5 +1,4 @@
 // src/pages/Consulta.jsx
-
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
@@ -7,7 +6,7 @@ import "./CSS/Consulta.css";
 import imgConsulta from "../assets/Group 239294.svg";
 import voltar from "../assets/seta-principal.svg";
 
-// Utilitário: gera dados de cada mês (nome, total de dias e dia da semana do dia 1º)
+// Utilitários
 const obterDadosMes = (ano) => {
   const bissexto = ano % 4 === 0 && (ano % 100 !== 0 || ano % 400 === 0);
   const diasNoMes = [
@@ -31,7 +30,6 @@ const obterDadosMes = (ano) => {
   }));
 };
 
-// Utilitário: converte "DD/MM" + ano em ISO "YYYY-MM-DD"
 const paraDataISO = (dataStr, ano) => {
   const [diaStr, mesStr] = dataStr.split("/");
   const dia = String(parseInt(diaStr, 10)).padStart(2, "0");
@@ -39,36 +37,68 @@ const paraDataISO = (dataStr, ano) => {
   return `${ano}-${mes}-${dia}`;
 };
 
+const hoje = new Date();
+const horaAtual = hoje.getHours();
+const minutoAtual = hoje.getMinutes();
+
 export default function Consulta() {
+  // Hooks e parâmetros
   const { role, id } = useParams();
   const navigate = useNavigate();
-  const hoje = new Date();
 
+  // Estados
   const [agendamentos, setAgendamentos] = useState({});
   const [consultaSelecionada, setConsultaSelecionada] = useState(null);
-
   const [anoAtual, setAnoAtual] = useState(hoje.getFullYear());
   const [indiceMesAtual, setIndiceMesAtual] = useState(hoje.getMonth());
-
   const [mostrarModalReagendamento, setMostrarModalReagendamento] = useState(false);
-
-  const [dataSelecionada, setDataSelecionada] = useState(null); // "DD/MM"
+  const [dataSelecionada, setDataSelecionada] = useState(null);
   const [horaSelecionada, setHoraSelecionada] = useState(null);
-
   const [mensagemConfirmacao, setMensagemConfirmacao] = useState("");
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(null);
-
-  // Estado para controlar navegação de semanas (0 = semana atual, 1 = próxima semana, -1 = semana anterior, etc.)
   const [semanaOffset, setSemanaOffset] = useState(0);
 
-  // Função que busca consultas do back-end conforme role
+  // Dados do calendário
+  const mesesDoAno = obterDadosMes(anoAtual);
+  const mesAtual = mesesDoAno[indiceMesAtual];
+  const mesAnterior = mesesDoAno[(indiceMesAtual + 11) % 12];
+
+  // Grade de dias do calendário principal
+  const gradeDias = Array.from({ length: 42 }, (_, i) => {
+    let dia, mesCorrente, indisponivel, registrosDoDia = [];
+
+    if (i < mesAtual.inicio) {
+      dia = mesAnterior.totalDias - (mesAtual.inicio - i - 1);
+      mesCorrente = false;
+      indisponivel = true;
+    } else if (i >= mesAtual.inicio + mesAtual.totalDias) {
+      dia = i - (mesAtual.inicio + mesAtual.totalDias) + 1;
+      mesCorrente = false;
+      indisponivel = true;
+    } else {
+      dia = i - mesAtual.inicio + 1;
+      mesCorrente = true;
+      const chave = `${anoAtual}-${indiceMesAtual}-${dia}`;
+      registrosDoDia = agendamentos[chave] || [];
+      indisponivel = registrosDoDia.length === 0;
+    }
+
+    return { id: `${id}-${i}`, dia, mesCorrente, indisponivel, registrosDoDia };
+  });
+
+  // Efeitos
+  useEffect(() => {
+    buscarConsultas();
+  }, [role, id]);
+
+  // Funções da API
   async function buscarConsultas() {
     try {
       let resp;
       if (role === "profissional") {
         const ano = hoje.getFullYear();
-        const mes = hoje.getMonth() + 1; // 1..12
+        const mes = hoje.getMonth() + 1;
         resp = await fetch(
           `http://localhost:4242/consulta/profissional/${id}/${ano}/${mes}`
         );
@@ -83,7 +113,7 @@ export default function Consulta() {
       dados.forEach((registro) => {
         const dt = new Date(registro.data);
         const a = dt.getFullYear();
-        const m = dt.getMonth(); // 0..11
+        const m = dt.getMonth();
         const d = dt.getDate();
         const chave = `${a}-${m}-${d}`;
 
@@ -112,48 +142,7 @@ export default function Consulta() {
     }
   }
 
-  // Chama buscarConsultas na montagem e sempre que role ou id mudarem
-  useEffect(() => {
-    buscarConsultas();
-  }, [role, id]);
-
-  if (loading) {
-    return <div>Carregando consultas...</div>;
-  }
-  if (erro) {
-    return <div style={{ color: "red" }}>Erro: {erro}</div>;
-  }
-
-  // Dados do calendário principal
-  const mesesDoAno = obterDadosMes(anoAtual);
-  const mesAtual = mesesDoAno[indiceMesAtual];
-  const mesAnterior = mesesDoAno[(indiceMesAtual + 11) % 12];
-
-  // Gera as 42 células do calendário principal
-  const gradeDias = Array.from({ length: 42 }, (_, i) => {
-    let dia, mesCorrente, indisponivel, registrosDoDia = [];
-
-    if (i < mesAtual.inicio) {
-      dia = mesAnterior.totalDias - (mesAtual.inicio - i - 1);
-      mesCorrente = false;
-      indisponivel = true;
-    } else if (i >= mesAtual.inicio + mesAtual.totalDias) {
-      dia = i - (mesAtual.inicio + mesAtual.totalDias) + 1;
-      mesCorrente = false;
-      indisponivel = true;
-    } else {
-      dia = i - mesAtual.inicio + 1;
-      mesCorrente = true;
-      const chave = `${anoAtual}-${indiceMesAtual}-${dia}`;
-      registrosDoDia = agendamentos[chave] || [];
-      // Se não houver registros, a célula está indisponível
-      indisponivel = registrosDoDia.length === 0;
-    }
-
-    return { id: `${id}-${i}`, dia, mesCorrente, indisponivel, registrosDoDia };
-  });
-
-  // Navega entre meses no calendário principal (para profissional)
+  // Funções de navegação
   const trocarMes = (direcao) => {
     setIndiceMesAtual((prev) => {
       let novoMes = prev + direcao;
@@ -170,7 +159,7 @@ export default function Consulta() {
     });
   };
 
-  // Ao clicar num horário em uma célula, abre detalhes
+  // Funções de manipulação de consulta
   const aoSelecionarHorario = (diaObj, agendamento) => {
     setConsultaSelecionada({
       dia: diaObj.dia,
@@ -183,12 +172,10 @@ export default function Consulta() {
     setHoraSelecionada(null);
   };
 
-  // Fecha o cartão de detalhes
   const fecharDetalhes = () => {
     setConsultaSelecionada(null);
   };
 
-  // Cancela consulta (DELETE) e refaz o fetch
   const cancelarConsulta = async () => {
     if (!consultaSelecionada) return;
     try {
@@ -210,12 +197,12 @@ export default function Consulta() {
     }
   };
 
-  // Confirma reagendamento (PUT) e refaz o fetch
   const confirmarReagendamento = async () => {
     if (!consultaSelecionada || !dataSelecionada || !horaSelecionada) return;
-    // Precisamos converter "DD/MM" + ano da semana exibida para ISO:
-    const anoParaISO = hoje.getFullYear(); // vamos usar o ano atual no ISO
+    
+    const anoParaISO = hoje.getFullYear();
     const dataISO = paraDataISO(dataSelecionada, anoParaISO);
+    
     try {
       const resp = await fetch(
         `http://localhost:4242/consulta/${consultaSelecionada.id_consulta}`,
@@ -243,22 +230,18 @@ export default function Consulta() {
     }
   };
 
-  // Gera dinamicamente a grade de dias (7 dias) para reagendar,
-  // com base no semanaOffset (0 = semana atual, 1 = próxima semana, etc.)
+  // Funções de renderização do modal de reagendamento
   const renderizarGradeReagendamento = () => {
-    const horarios = ["08:00", "09:00", "10:00", "11:00"];
+    const horarios = ["11:00", "13:00", "13:30", "14:30", "16:10", "17:30", "19:20"];
 
-    // Calcula a data base para a semana atual + offset
     const referencia = new Date(hoje);
     referencia.setDate(hoje.getDate() + semanaOffset * 7);
 
-    // Achar segunda-feira daquela semana
-    const diaSemanaRef = referencia.getDay(); // 0 (domingo) a 6 (sábado)
+    const diaSemanaRef = referencia.getDay();
     const diffParaSegunda = diaSemanaRef === 0 ? -6 : 1 - diaSemanaRef;
     const monday = new Date(referencia);
     monday.setDate(referencia.getDate() + diffParaSegunda);
 
-    // Monta os 7 dias a partir da segunda-feira
     const diasSemana = Array.from({ length: 7 }, (_, i) => {
       const data = new Date(monday);
       data.setDate(monday.getDate() + i);
@@ -269,42 +252,75 @@ export default function Consulta() {
         month: "2-digit",
       });
 
-      return { diaSemana, dataStr, diaNum: data.getDate(), mesNum: data.getMonth() };
+      const hoje = new Date();
+      hoje.setHours(0, 0, 0, 0);
+      const diaPassado = data < hoje;
+
+      return { 
+        diaSemana, 
+        dataStr, 
+        dataObj: data,
+        diaPassado 
+      };
     });
 
     return (
       <div className="calendar-grid">
-        {diasSemana.map(({ diaSemana, dataStr, diaNum, mesNum }) => (
-          <div key={dataStr} className="calendar-day">
-            <strong>{diaSemana}</strong>
-            <span>{dataStr}</span>
-            {horarios.map((h) => (
-              <button
-                key={`${dataStr}-${h}`}
-                className={`hour-btn ${
-                  dataSelecionada === dataStr && horaSelecionada === h
-                    ? "selected"
-                    : ""
-                }`}
-                onClick={() => {
-                  setDataSelecionada(dataStr);
-                  setHoraSelecionada(h);
-                }}
-              >
-                {h}
-              </button>
-            ))}
-          </div>
-        ))}
+        {diasSemana.map(({ diaSemana, dataStr, dataObj, diaPassado }) => {
+          const ehHoje = dataObj.getDate() === hoje.getDate() && 
+                        dataObj.getMonth() === hoje.getMonth() && 
+                        dataObj.getFullYear() === hoje.getFullYear();
+
+          return (
+            <div 
+              key={dataStr} 
+              className={`calendar-day ${diaPassado ? 'past-day' : ''}`}
+            >
+              <strong>{diaSemana}</strong>
+              <span>{dataStr}</span>
+              {horarios.map((h) => {
+                const [horaStr, minutoStr] = h.split(':');
+                const hora = parseInt(horaStr, 10);
+                const minuto = parseInt(minutoStr, 10);
+                
+                const horarioPassado = ehHoje && (
+                  hora < horaAtual || 
+                  (hora === horaAtual && minuto <= minutoAtual)
+                );
+                
+                const desabilitado = diaPassado || horarioPassado;
+
+                return (
+                  <button
+                    key={`${dataStr}-${h}`}
+                    className={`hour-btn ${
+                      dataSelecionada === dataStr && horaSelecionada === h
+                        ? "selected"
+                        : ""
+                    } ${desabilitado ? 'disabled-hour' : ''}`}
+                    onClick={() => {
+                      if (!desabilitado) {
+                        setDataSelecionada(dataStr);
+                        setHoraSelecionada(h);
+                      }
+                    }}
+                    disabled={desabilitado}
+                  >
+                    {h}
+                  </button>
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
     );
   };
 
-  // Monta título da modal de reagendamento: exibir o intervalo de datas da semana
   const obterTituloSemana = () => {
     const referencia = new Date(hoje);
     referencia.setDate(hoje.getDate() + semanaOffset * 7);
-    // Encontrar segunda e domingo dessa semana
+    
     const diaSemanaRef = referencia.getDay();
     const diffParaSegunda = diaSemanaRef === 0 ? -6 : 1 - diaSemanaRef;
     const monday = new Date(referencia);
@@ -318,6 +334,7 @@ export default function Consulta() {
     return `${formatDate(monday)} - ${formatDate(sunday)}`;
   };
 
+  // Renderização principal
   return (
     <div className="container-agenda-c">
       {mensagemConfirmacao && (
@@ -466,6 +483,7 @@ export default function Consulta() {
                 <button
                   onClick={() => setSemanaOffset((prev) => prev - 1)}
                   className="setaE-c"
+                  disabled={semanaOffset <= -1}
                 >
                   <ChevronLeft />
                 </button>

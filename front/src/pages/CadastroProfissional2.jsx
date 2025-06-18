@@ -213,6 +213,7 @@ function CadastroProfissional2() {
       setSenhaValidado(false)
     }
 
+<<<<<<< HEAD
     // if(prefixoEmailProfissional.includes('.') || prefixoEmailProfissional.length < 2){
 
     //    setMensagemUsuario('Seu usuario deve conter um "." antes do "@" !')
@@ -221,6 +222,26 @@ function CadastroProfissional2() {
     //   setMensagemUsuario('Usuario jà cadastrado!')
     //   setUsuarioValido(true)
     // }else{
+=======
+    if (valorSenha.trim().length < 8) {
+      setErroSenha(true);
+      erro = true;
+    } else {
+      setErroSenha(false);
+    }
+
+      
+    if (!erro) {
+      try {
+        const response = await fetch(
+          "https://futuremind-2-0-mw60.onrender.com/cadastro-profissional",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(profissional),
+          }
+        );
+>>>>>>> dc440ad57429b2b0097f4af6f6ee751a5b3af8db
 
     //   setUsuarioValido(false)
     //   setMensagemUsuario('')

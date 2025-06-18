@@ -1,5 +1,5 @@
 import "./CSS/EditarPaciente.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import icon_um from "../assets/calendar-check.svg";
 import icon_dois from "../assets/video.svg";
@@ -11,38 +11,41 @@ import icon from "../assets/iconusu.svg";
 
 function EditarPaciente() {
   const navigate = useNavigate();
+  const pacienteSalvo = JSON.parse(localStorage.getItem("User-Profile"));
 
-  const pacienteLocal = JSON.parse(localStorage.getItem("User-Profile"));
+  // Estados para edição (alterações temporárias)
+  const [pacienteEditado, setPacienteEditado] = useState({
+    id_paciente: pacienteSalvo?.id_paciente || "",
+    nome: pacienteSalvo?.nome || "",
+    cpf: pacienteSalvo?.cpf || "",
+    telefone: pacienteSalvo?.telefone || "",
+    email: pacienteSalvo?.email || "",
+    data_nascimento: pacienteSalvo?.data_nascimento || "",
+    senha: pacienteSalvo?.senha || "",
+  });
 
+  // Estado para a data formatada (exibição)
+  const [dataNascimentoFormatada, setDataNascimentoFormatada] = useState(
+    formatarDataBrasileira(pacienteSalvo?.data_nascimento)
+  );
+
+  // Outros estados
   const [isVisible, setIsVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [imagemPreview, setImagemPreview] = useState(null);
-  const [fotoSelecionada, setFotoSelecionada] = useState(null);
+  const [image, setImage] = useState(null);
   const [foto, setFoto] = useState(
-    pacienteLocal.foto?.includes('http') 
-      ? pacienteLocal.foto 
-      : pacienteLocal.foto 
-        ? `http://localhost:4242${pacienteLocal.foto}` 
-        : icon
+    pacienteSalvo?.foto 
+      ? pacienteSalvo.foto.includes('http') 
+        ? pacienteSalvo.foto 
+        : `http://localhost:4242${pacienteSalvo.foto}`
+      : icon
   );
 
-  const [paciente, setPaciente] = useState({
-    id_paciente: pacienteLocal.id_paciente,
-    nome: pacienteLocal.nome,
-    cpf: pacienteLocal.cpf,
-    telefone: pacienteLocal.telefone,
-    email: pacienteLocal.email,
-    data_nascimento: formatarDataBrasileira(pacienteLocal.data_nascimento),
-    senha: pacienteLocal.senha,
-  });
-
-  useEffect(() => {
-
-    const pacienteAux = {...pacienteLocal, foto: foto};
-    localStorage.setItem('User-Profile', JSON.stringify(pacienteAux));
-  }, [foto]);
-
   function formatarDataBrasileira(dataISO) {
+    if (!dataISO) return "";
+    if (dataISO.includes('/')) return dataISO;
+    
     const data = new Date(dataISO);
     const dia = String(data.getDate()).padStart(2, "0");
     const mes = String(data.getMonth() + 1).padStart(2, "0");
@@ -87,7 +90,7 @@ function EditarPaciente() {
   const deletarPaciente = async () => {
     try {
       const response = await fetch(
-        `http://localhost:4242/paciente/${paciente.id_paciente}`,
+        `http://localhost:4242/paciente/${pacienteEditado.id_paciente}`,
         {
           method: "DELETE",
           headers: {
@@ -122,8 +125,8 @@ function EditarPaciente() {
   const salvarEdicao = async () => {
     try {
       const pacienteParaEnviar = {
-        ...paciente,
-        data_nascimento: formatarDataParaEnvio(paciente.data_nascimento),
+        ...pacienteEditado,
+        data_nascimento: formatarDataParaEnvio(dataNascimentoFormatada)
       };
 
       const response = await fetch(`http://localhost:4242/paciente`, {
@@ -134,67 +137,66 @@ function EditarPaciente() {
         body: JSON.stringify(pacienteParaEnviar),
       });
 
-      const data = await response.json();
-
       if (response.ok) {
-        localStorage.setItem(
-          "User-Profile",
-          JSON.stringify({
-            ...paciente,
-            data_nascimento: pacienteParaEnviar.data_nascimento,
-          })
-        );
-        window.location.reload();
-      } else {
-        console.error("Erro ao salvar:", data);
+        const data = await response.json();
+        const updatedProfile = {
+          ...data,
+          foto: foto
+        };
+        
+        localStorage.setItem("User-Profile", JSON.stringify(updatedProfile));
+        setPacienteEditado(updatedProfile);
+        setDataNascimentoFormatada(formatarDataBrasileira(data.data_nascimento));
       }
     } catch (err) {
-      console.error("Erro na requisição:", err);
+      console.error("Erro ao salvar:", err);
     }
   };
 
   const handleImagemChange = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
-      setFotoSelecionada(selectedFile);
       setImagemPreview(URL.createObjectURL(selectedFile));
       setImage(selectedFile);
     }
   };
 
-  //fotos
+  const onImageChange = async () => {
+    if (!image) return;
 
-   const onImageChange = async () => {
-    if (image) {
-      const file = image
-      console.log('Arquivo selecionado:', file);
-  
-      const formData = new FormData(); // Corrigir a criação do FormData
-      formData.append('foto', file); // Adicionar o arquivo selecionado
-      formData.append('id_paciente', pacienteLocal.id_paciente);
-  
-      try {
-        const response = await fetch('http://localhost:4242/paciente/foto-perfil', {
-          method: 'POST',
-          body: formData,
-        });
-  
-        if (response.ok) {
-          setFoto(imagemPreview);
-          window.location.reload();
-        } else {
-          console.log('Erro no envio da foto:', response.status);
-        }
-      } catch (err) {
-        console.error('Erro:', err.message);
+    const formData = new FormData();
+    formData.append('foto', image);
+    formData.append('id_paciente', pacienteEditado.id_paciente);
+
+    try {
+      const response = await fetch('http://localhost:4242/paciente/foto-perfil', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const fotoUrl = data.foto.includes('http') 
+          ? data.foto 
+          : `http://localhost:4242${data.foto}`;
+        
+        setFoto(fotoUrl);
+        const updatedProfile = {
+          ...pacienteEditado,
+          foto: fotoUrl
+        };
+        localStorage.setItem('User-Profile', JSON.stringify(updatedProfile));
+        setPacienteEditado(updatedProfile);
+        setImagemPreview(null);
+        setIsVisible(false);
       }
+    } catch (err) {
+      console.error('Erro:', err);
     }
   };
 
-  const [image, setImage] = useState(null);
-
   const irParaConsultas = () => {
-    navigate(`/consulta/paciente/${paciente.id_paciente}`);
+    navigate(`/consulta/paciente/${pacienteEditado.id_paciente}`);
   };
 
   return (
@@ -214,7 +216,7 @@ function EditarPaciente() {
               className="imagem-perfil"
               onClick={onImageChange}
             />
-            <h2 className="nome-perfil">{pacienteLocal.nome}</h2>
+            <h2 className="nome-perfil">{pacienteEditado.nome}</h2>
           </div>
           <div className="caixa-comandos-paciente">
             <div className="cartao-informacao">
@@ -272,10 +274,10 @@ function EditarPaciente() {
               <input
                 type="text"
                 placeholder=" "
-                value={paciente.nome}
+                value={pacienteEditado.nome}
                 required
                 onChange={(e) =>
-                  setPaciente({ ...paciente, nome: e.target.value })
+                  setPacienteEditado({ ...pacienteEditado, nome: e.target.value })
                 }
               />
               <label>Nome Completo</label>
@@ -284,11 +286,11 @@ function EditarPaciente() {
               <input
                 type="text"
                 placeholder=" "
-                value={paciente.cpf}
+                value={pacienteEditado.cpf}
                 required
                 onChange={(e) =>
-                  setPaciente({
-                    ...paciente,
+                  setPacienteEditado({
+                    ...pacienteEditado,
                     cpf: aplicarMascaraCPF(e.target.value),
                   })
                 }
@@ -299,11 +301,11 @@ function EditarPaciente() {
               <input
                 type="text"
                 placeholder=" "
-                value={paciente.telefone}
+                value={pacienteEditado.telefone}
                 required
                 onChange={(e) =>
-                  setPaciente({
-                    ...paciente,
+                  setPacienteEditado({
+                    ...pacienteEditado,
                     telefone: aplicarMascaraTelefone(e.target.value),
                   })
                 }
@@ -314,10 +316,10 @@ function EditarPaciente() {
               <input
                 type="text"
                 placeholder=" "
-                value={paciente.email}
+                value={pacienteEditado.email}
                 required
                 onChange={(e) =>
-                  setPaciente({ ...paciente, email: e.target.value })
+                  setPacienteEditado({ ...pacienteEditado, email: e.target.value })
                 }
               />
               <label>E-mail</label>
@@ -326,14 +328,12 @@ function EditarPaciente() {
               <input
                 type="text"
                 placeholder=" "
-                value={paciente.data_nascimento}
+                value={dataNascimentoFormatada}
                 required
-                onChange={(e) =>
-                  setPaciente({
-                    ...paciente,
-                    data_nascimento: aplicarMascaraData(e.target.value),
-                  })
-                }
+                onChange={(e) => {
+                  const valorFormatado = aplicarMascaraData(e.target.value);
+                  setDataNascimentoFormatada(valorFormatado);
+                }}
               />
               <label>Data de Nascimento</label>
             </div>
@@ -341,10 +341,10 @@ function EditarPaciente() {
               <input
                 type="password"
                 placeholder=" "
-                value={paciente.senha}
+                value={pacienteEditado.senha}
                 required
                 onChange={(e) =>
-                  setPaciente({ ...paciente, senha: e.target.value })
+                  setPacienteEditado({ ...pacienteEditado, senha: e.target.value })
                 }
               />
               <label>Senha</label>

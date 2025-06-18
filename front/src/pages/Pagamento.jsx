@@ -37,6 +37,7 @@ function Pagamento() {
 
   const [cupom, setCupom] = useState("");
   const [desconto, setDesconto] = useState(0);
+  const [cupomInvalido, setCupomInvalido] = useState(false);
 
   // Validações visuais
   const [valida_banco, setValida_banco] = useState(false);
@@ -94,21 +95,47 @@ function Pagamento() {
       .slice(0, 19);
   };
 
+  const validarValidadeCartao = (validade) => {
+    if (!validade || validade.length !== 5) return false;
+    
+    const [mesStr, anoStr] = validade.split('/');
+    const mes = parseInt(mesStr, 10);
+    const ano = parseInt(anoStr, 10);
+    
+    if (mes < 1 || mes > 12) return false;
+    
+    const agora = new Date();
+    const anoAtual = agora.getFullYear() % 100;
+    const mesAtual = agora.getMonth() + 1;
+    
+    if (ano < anoAtual) return false;
+    if (ano === anoAtual && mes < mesAtual) return false;
+    
+    return true;
+  };
+
   const formatarValidade = (valor) => {
     const somenteNumeros = valor.replace(/\D/g, "");
-    if (somenteNumeros.length <= 2) {
-      return somenteNumeros;
+    const numerosLimitados = somenteNumeros.slice(0, 4);
+    
+    if (numerosLimitados.length <= 2) {
+      return numerosLimitados;
     }
+    
     return (
-      somenteNumeros.substring(0, 2) + "/" + somenteNumeros.substring(2, 4)
+      numerosLimitados.substring(0, 2) + "/" + numerosLimitados.substring(2, 4)
     );
   };
 
   const aplicarCupom = () => {
     if (cupom.trim().toLowerCase() === "descontosocial") {
       setDesconto(valorConsulta * 0.5);
+      setCupomInvalido(false);
     } else {
       setDesconto(0);
+      if (cupom.trim() !== "") {
+        setCupomInvalido(true);
+      }
     }
   };
 
@@ -160,7 +187,6 @@ function Pagamento() {
           setProfissionalCRP(data.crp || "");
           setValorConsulta(data.valor_consulta != null ? data.valor_consulta : 0);
           
-          // Adicione esta linha para armazenar a foto do profissional
           setFoto(prev => ({
             ...prev,
             profissional: data.foto?.startsWith("http") 
@@ -208,12 +234,14 @@ function Pagamento() {
   };
 
   const handleValidade = (e) => {
-    setValidadeCartao(formatarValidade(e.target.value));
+    const valorFormatado = formatarValidade(e.target.value);
+    setValidadeCartao(valorFormatado);
     if (!toque_input_validade) setToque_input_validade(true);
+    setValida_cartao(!validarValidadeCartao(valorFormatado));
   };
 
   const handleCvv = (e) => {
-    setCvvCartao(e.target.value);
+    setCvvCartao(e.target.value.replace(/\D/g, "").slice(0, 3));
     if (!toque_input_cvv) setToque_input_cvv(true);
   };
 
@@ -273,13 +301,13 @@ function Pagamento() {
       generoDependente.length <= 1 ||
       numeroCartao.length !== 19 ||
       nomeCartao.length === 0 ||
-      validadeCartao.length !== 5 ||
+      !validarValidadeCartao(validadeCartao) ||
       cvvCartao.length !== 3
     ) {
       if (generoDependente.length <= 1) setValida_banco(true);
       if (numeroCartao.length !== 19) setValida_numero_cartao(true);
       if (nomeCartao.length === 0) setValida_nome(true);
-      if (validadeCartao.length !== 5) setValida_cartao(true);
+      if (!validarValidadeCartao(validadeCartao)) setValida_cartao(true);
       if (cvvCartao.length !== 3) setValida_cvv(true);
       return;
     }
@@ -480,7 +508,9 @@ function Pagamento() {
                   <label>Validade</label>
                 </div>
                 <p className={`error-text ${valida_cartao ? "show" : ""}`}>
-                  Validade incorreta
+                  {validadeCartao.length !== 5 
+                    ? "Formato inválido (MM/AA)" 
+                    : "Data de validade expirada ou inválida"}
                 </p>
               </div>
               <div style={{ flex: 1 }}>
@@ -554,7 +584,10 @@ function Pagamento() {
               type="text"
               placeholder=" "
               value={cupom}
-              onChange={(e) => setCupom(e.target.value)}
+              onChange={(e) => {
+                setCupom(e.target.value);
+                setCupomInvalido(false);
+              }}
               required
             />
             <label>Inserir código de desconto</label>
@@ -576,6 +609,16 @@ function Pagamento() {
             Aplicar
           </button>
         </div>
+        {cupomInvalido && (
+          <p style={{ 
+            color: "#d9534f", 
+            marginTop: "-16px", 
+            marginBottom: "16px",
+            fontSize: "14px"
+          }}>
+            Cupom inválido!
+          </p>
+        )}
 
         {/* ------------ Quem será atendido? ------------ */}
         <div
@@ -694,7 +737,7 @@ function Pagamento() {
                 }}
               >
               <img
-                src={foto.profissional || mulher} // Usa mulher como fallback
+                src={foto.profissional || mulher}
                 alt={`Foto de ${profissionalNome}`}
                 style={{
                   borderRadius: "9999px",

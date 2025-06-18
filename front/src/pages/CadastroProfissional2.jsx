@@ -207,15 +207,8 @@ function CadastroProfissional2() {
     } else {
       setErroSenha(false);
     }
-    console.log("Dados atuais:", {
-      especializacoes,
-      abordagens,
-      valorEmail,
-      valorSenha,
-      prefixoEmailProfissional,
-    });
 
-    // Só envia se não houve erros
+      
     if (!erro) {
       try {
         const response = await fetch(

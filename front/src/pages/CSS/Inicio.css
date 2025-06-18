@@ -525,6 +525,7 @@
   word-break: break-word;
   box-sizing: border-box;
   scrollbar-gutter: stable both-edges;
+  color: #013a63;
 }
 
 .textSobremim::-webkit-scrollbar {
@@ -556,6 +557,7 @@
   color: #546e7aaf;
   width: 100%;
   margin-right: 2%;
+  color: #013a63;
 }
 
 .crp-inicio {

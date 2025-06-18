@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Plus, X, Pencil } from "lucide-react";
 import "./CSS/DiarioEmocional.css";
 import voltar from "../assets/seta-principal.svg";
+import { useNavigate } from "react-router-dom";
 
 const initialData = [
   {
@@ -18,6 +19,7 @@ const initialData = [
 ];
 
 function NotesApp() {
+  const navigate = useNavigate();
   const [folders, setFolders] = useState(initialData);
   const [selectedFolder, setSelectedFolder] = useState(
     folders.length > 0 ? folders[0] : null
@@ -109,10 +111,14 @@ function NotesApp() {
     { value: "imageNote", label: "Nota" },
   ];
 
+function navegar() {
+    navigate(`/inicio`)
+}
+
   return (
     <div className="notes-app">
       <div className="folders-sidebar">
-        <img src={voltar} alt="seta-voltar" className="seta-voltar"/>
+        <img src={voltar} alt="seta-voltar" className="seta-voltar" onClick={navegar}/>
         <div className="header">
           <h2 className="title">Pastas</h2>
           <button onClick={handleNewFolder} className="btn add-folder">

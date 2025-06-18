@@ -18,6 +18,17 @@ export const GlobalContextProvider = ({ children }) => {
     valor_consulta: 0.0,
   });
 
+  // const [profissional, setProfissional] = useState(() => {
+  //   return JSON.parse(localStorage.getItem("Profissional")) || null;
+  // });
+
+  // useEffect(() => {
+  //   if (profissional) {
+  //     localStorage.setItem("Profissional", JSON.stringify(profissional));
+  //   } else {
+  //     localStorage.removeItem("Profissional");
+  //   }
+  // }, [profissional]);
   const [paciente, setPaciente] = useState({
     nome_completo: "",
     cpf: "",

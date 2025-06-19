@@ -81,12 +81,13 @@ app.post('/cadastro-profissional', async(req, res) => {
             especializacao,
             abordagem,
             data_nascimento,
-            email_profissional
+            email_profissional,
+            valor_consulta
         } = req.body;
 
         const foto = 'icon_user.svg';
 
-        const [rows] = await pool.query('INSERT INTO profissionais (nome, cpf, email, senha, telefone, crp, especializacao, abordagem, foto, data_nascimento, email_profissional) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+        const [rows] = await pool.query('INSERT INTO profissionais (nome, cpf, email, senha, telefone, crp, especializacao, abordagem, foto, data_nascimento, email_profissional, valor_consulta) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
             nome,
             cpf,
             email,
@@ -97,7 +98,8 @@ app.post('/cadastro-profissional', async(req, res) => {
             abordagem,
             foto,
             data_nascimento,
-            email_profissional
+            email_profissional,
+            valor_consulta
         ]);
 
         if (rows.affectedRows > 0) {

@@ -178,7 +178,7 @@ function Inicio() {
 
       <div className="filter-profissionais-div">
         <div className="filter-profissionais-text">
-          <h1>{ !user ? 'Encontre seu profissional' : `Olá, ${user.nome}!`}</h1>
+          <h1>{ !user ? 'Encontre seu profissional' : `Olá, ${user.nome.split(' ')[0]}!`}</h1>
           <img src='hello (1).png' />
         </div>
 

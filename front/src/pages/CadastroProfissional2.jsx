@@ -70,14 +70,14 @@ function CadastroProfissional2() {
   useEffect(() => {
     setProfissional((prev) => ({
       ...prev,
-      especializacao: especializacoes,
+      especializacao: JSON.stringify(especializacoes),
     }));
   }, [especializacoes]);
 
   useEffect(() => {
     setProfissional((prev) => ({
       ...prev,
-      abordagem: abordagens,
+      abordagem: JSON.stringify(abordagens),
     }));
   }, [abordagens]);
 

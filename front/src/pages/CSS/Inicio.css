@@ -30,9 +30,20 @@
 }
 
 .filter-profissionais-text {
+  display: flex;
   width: 100%;
   color: #013a63;
   padding: 0 0 0 10px;
+  justify-content: start;
+  align-items: center;
+  gap: 5px;
+  cursor: default;
+}
+
+.filter-profissionais-text img {
+
+  width: 25px;
+  height: 25px;
 }
 
 .filter-background {

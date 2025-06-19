@@ -23,9 +23,18 @@ function Inicio() {
   const { setId } = useContext(GlobalContext);
   const [mostrarLogo, setMostrarLogo] = useState(true);
   const user = JSON.parse(localStorage.getItem('User-Profile'));
+  const { paginaAnterior, setPaginaAnterior } = useContext(GlobalContext);
 
   useEffect(() => {
-    const timer = setTimeout(() => setMostrarLogo(false), 2200);
+
+    setTimeout(() => {
+
+      setPaginaAnterior('Inicio');
+    }, 2300);
+  }, [])
+
+  useEffect(() => {
+    const timer = setTimeout(() => setMostrarLogo(false), paginaAnterior === 'Login' || paginaAnterior === 'Perfil' ? 2200 : 500);
     return () => clearTimeout(timer);
   }, []);
 
@@ -151,7 +160,13 @@ function Inicio() {
       mostrarLogo ? (
         <div className="logo-container">
           <div className="logo-elements">
-            <h2 className="loading-animation">Carregando...</h2>    
+            {
+              (paginaAnterior==='Perfil' && !user) || paginaAnterior==='Login'
+              ?
+              <img src="logo oficial.svg" alt="Logo" className="logo-animada" />
+              :
+              <h2 className="loading-animation">Carregando...</h2>    
+            }
           </div>
         </div>
     ) : (
@@ -163,7 +178,8 @@ function Inicio() {
 
       <div className="filter-profissionais-div">
         <div className="filter-profissionais-text">
-          <h1>{ !user ? 'Encontre seu profissional' : `Olá, ${user.nome}`}</h1>
+          <h1>{ !user ? 'Encontre seu profissional' : `Olá, ${user.nome}!`}</h1>
+          <img src='hello (1).png' />
         </div>
 
         <div className="filter-background">

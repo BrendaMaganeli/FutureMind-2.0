@@ -36,7 +36,7 @@ function Plano_saude() {
   const [mostrarLogo, setMostrarLogo] = useState(true);
   
     useEffect(() => {
-      const timer = setTimeout(() => setMostrarLogo(false), 2200);
+      const timer = setTimeout(() => setMostrarLogo(false), 500);
       return () => clearTimeout(timer);
     }, []);
   

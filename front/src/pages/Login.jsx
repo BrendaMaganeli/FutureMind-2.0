@@ -7,7 +7,7 @@ import { GlobalContext } from "../Context/GlobalContext";
 
 function Login() {
   const navigate = useNavigate();
-  const { setUserLogado, setUser } = useContext(GlobalContext);
+  const { setUserLogado, setUser, setPaginaAnterior } = useContext(GlobalContext);
 
   const [valorEmail, setValorEmail] = useState("");
   const [valorSenha, setValorSenha] = useState("");
@@ -47,6 +47,7 @@ function Login() {
       if (response.ok) {
         setUserLogado(true);
         setUser(data);
+        setPaginaAnterior('Login');
         navigate("/inicio");
       }
     } catch (err) {

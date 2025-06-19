@@ -110,6 +110,7 @@ export const GlobalContextProvider = ({ children }) => {
   const [plano_selecionado, setPlano_selecionado] = useState('')
   const [vim_plano, setVim_plano] = useState(false)
   const [vim_agendamento, setVim_agendamento] = useState(false)
+  const [paginaAnterior, setPaginaAnterior] = useState('');
 
   return (
     <GlobalContext.Provider
@@ -193,7 +194,9 @@ export const GlobalContextProvider = ({ children }) => {
         vim_plano, 
         setVim_plano,
         vim_agendamento,
-        setVim_agendamento
+        setVim_agendamento,
+        paginaAnterior,
+        setPaginaAnterior
       }}
     >
       {children}

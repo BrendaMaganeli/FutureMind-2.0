@@ -41,11 +41,24 @@
   border-radius: 16px;
   transform: translateY(-0%);
   transition: 1s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.users-online-container .user-item {
+  
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 15%;
 }
 
 .users-online-container .user-item span {
 
-  width: 30%;
+  width: 15%;
+  font-size: 18px;
+  color: #5a7da0;
 }
 
 .users-online-container.hidden {
@@ -111,6 +124,7 @@
 } 
 
 .videoconferencia-container .start-call-button {
+  display: flex;
   position: absolute;
   bottom: 20px;
   left: 50%;
@@ -123,6 +137,12 @@
   font-size: 16px;
   cursor: pointer;
   z-index: 11;
+  gap: 5px;
+}
+
+.videoconferencia-container .start-call-button img {
+
+  width: 15px;
 }
 
 .videoconferencia-container .barra-config {
@@ -135,12 +155,13 @@
   height: 100vh;
   background-color: white;
   flex-direction: column;
-  padding: 1.8%;
-  gap: 40px;
   border-right: 1px solid #BEBEBE;
-  justify-content: center;
+  justify-content: start;
+  align-items: center;
   z-index: 11;
   box-shadow: 1px 1px 10px #e2e2e2;
+  padding: 0;
+  margin: 0;
 }
 
 .barra-config-container.hidden .barra-config {
@@ -200,7 +221,7 @@
   border-radius: 12px;
   overflow: hidden;
   background: #f9f9f9;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.videoconferencia-container .1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   left: 20%;
   top: 14%;
 }
@@ -305,27 +326,43 @@
 
   justify-content: center;
   align-items: center;
+  width: 100%;
+  padding: 20%;
+}
+
+.videoconferencia-container .ppp:hover {
+
+  background-color: #33333311;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
 }
 
 .videoconferencia-container .ppp-2:hover {
 
    opacity: 100%;
-   transition: 1s;
-   background-color: #3333331f;
+   transition: opacity 0.3s ease;
+   background-color: #3333332c;
 }
 
 .videoconferencia-container .ppp-2 {
 
-  display: flex;
+   display: flex;
    justify-content: center;
    align-items: center;
    position: absolute;
-   left: 2%;
-   top: 50%;
+   left: 0;
+   top: 0;
+   width: 4%;
+   height: 100vh;
    cursor: pointer;
-   opacity: 70%;
+   opacity: 0%;
    padding: 1%;
-   border-radius: 50%;
+}
+
+.videoconferencia-container .ppp-2:active {
+
+  transform: translateX(-150%);
+  transition: 1s;
 }
 
 .videoconferencia-container .ppp-2 img {
@@ -364,4 +401,49 @@
     font-family: monospace;
     z-index: 20;
     font-family: 'DM Sans', sans-serif;
+}
+
+.videoconferencia-container .sair-button {
+
+  width: 100%;
+  opacity: 80%;
+  height: 22%;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  padding: 0;
+  margin: 0;
+}
+
+.videoconferencia-container .sair-button-interno:hover {
+
+  opacity: 100%;
+  transition: 1s;
+  cursor: pointer;
+}
+
+.videoconferencia-container .sair-button img {
+
+  width: 35px;
+}
+
+.videoconferencia-container .sair-button-interno {
+  
+  display: flex;
+  width: 100%;
+  height: 40%;
+  justify-content: center;
+  align-items: end;
+  opacity: 50%;
+}
+
+.videoconferencia-container .select-name {
+
+  background-color: #5a7da0;
+  color: white;
+  font-size: 12px;
+  padding: 2% 5% 2% 5%;
+  border: 1px;
+  border-radius: 4px;
+  box-shadow: 1px 1px 10px #bebebe;
 }

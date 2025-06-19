@@ -14,6 +14,13 @@ html {
   font-family: "DM Sans", serif;
 }
 
+.conversas img {
+
+  border-radius: 50%;
+  width: 35px;
+  height: 45px;
+}
+
 @media screen and (max-width: 600px) {
   .container-chats {
     display: flex;
@@ -995,7 +1002,10 @@ html {
   }
 
   .barra-top .img-foto img {
-    width: 42%;
+
+    border-radius: 50%;
+    width: 50%;
+    height: 45px;
   }
 
   .barra-top .nome-user-chat {

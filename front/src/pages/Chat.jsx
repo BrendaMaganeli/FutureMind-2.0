@@ -143,7 +143,13 @@ function Chat({
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
   const [inptvalue, setInptvalue] = useState("");
+  const [mostrarLogo, setMostrarLogo] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+      const timer = setTimeout(() => setMostrarLogo(false), 500);
+      return () => clearTimeout(timer);
+    }, []);
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
@@ -478,6 +484,15 @@ function Chat({
   };
 
   return (
+    <>
+    {
+      mostrarLogo ? (
+        <div className="logo-container">
+          <div className="logo-elements">
+              <h2 className="loading-animation">Carregando...</h2>    
+          </div>
+        </div>
+    ) : (
     <div className={`container-chats ${theme} ${fontSize}`}>
       <div className="barra-lateral-chat">
         <div className="barra-cima">
@@ -492,7 +507,7 @@ function Chat({
             onClick={() => setVisibleSettings(!visibleSettings)}
             src={config}
             alt=""
-          />
+            />
           {visibleSettings && (
             <div className="settings" ref={settingsRef}>
               <div className="config" onClick={toggleFontSize}>
@@ -521,18 +536,18 @@ function Chat({
                 value={busca}
                 type="text"
                 placeholder="Busque por conversas..."
-              />
+                />
             </div>
           </div>
           <div className="boxs-pesquisa">
             {filters.map((item, index) => (
               <div
-                onClick={() => click(index)}
-                className={
+              onClick={() => click(index)}
+              className={
                   item.active ? "box-pesquisa-checked" : "box-pesquisa"
                 }
                 key={index}
-              >
+                >
                 {item.text}
               </div>
             ))}
@@ -551,8 +566,8 @@ function Chat({
                 setHoverElement(null);
                 setOpenModal(null);
               }}
-            >
-              <img src={item.foto} alt="" />
+              >
+              <img src={`http://localhost:4242${item.foto}`} alt="" />
               <div className="nome">
                 <p>{item.nome}</p>
               </div>
@@ -563,10 +578,10 @@ function Chat({
                       hoverElement === index
                         ? setOpenModal(index)
                         : setOpenModal(null)
-                    }
-                    src="more.png"
-                    alt=""
-                  />
+                      }
+                      src="more.png"
+                      alt=""
+                      />
                 </div>
               )}
               {openModal === index && hoverElement === index && (
@@ -578,13 +593,13 @@ function Chat({
                       setChatSelected(null);
                       setIsChatSelected("chat-not-selected");
                     }}
-                  >
+                    >
                     Ocultar
                   </button>
                   <button
                     className="btn-excluir"
                     onClick={() => excluiChat(item, index)}
-                  >
+                    >
                     Excluir
                   </button>
                 </div>
@@ -607,7 +622,7 @@ function Chat({
         <div className={`chat ${isChatSelected}`}>
           <div className="barra-top">
             <div className="img-foto">
-              <img src={chatSelected.foto} alt="" />
+              <img src={`http://localhost:4242${chatSelected.foto}`} alt="" />
             </div>
             <div className="nome-user-chat">
               <h5>{chatSelected.nome}</h5>
@@ -624,7 +639,7 @@ function Chat({
                 src={close}
                 className="icon-chat-p-3"
                 alt=""
-              />
+                />
             </div>
           </div>
           <div style={{ height: "83%", overflowY: "auto" }}>
@@ -644,12 +659,12 @@ function Chat({
               </div>
               {messages.map((msg, index) => (
                 <div
-                  key={index}
-                  className={
-                    msg.mensageiro === userType
-                      ? "message-right"
-                      : "message-left"
-                  }
+                key={index}
+                className={
+                  msg.mensageiro === userType
+                  ? "message-right"
+                  : "message-left"
+                }
                 >
                   {msg.mensageiro === !userType && (
                     <div className="image-message-right">
@@ -662,15 +677,15 @@ function Chat({
                     }
                     onMouseLeave={() => {
                       msg.mensageiro === userType &&
-                        (setHoverMessage(null),
-                        setOpenModalMessage(openModalMessage));
+                      (setHoverMessage(null),
+                      setOpenModalMessage(openModalMessage));
                     }}
                     className={
                       msg.mensageiro === userType
-                        ? "text-message-right"
-                        : "text-message-left"
+                      ? "text-message-right"
+                      : "text-message-left"
                     }
-                  >
+                    >
                     {msg.mensagem}
                     {hoverMessage === index && (
                       <div className="config-msg">
@@ -678,7 +693,7 @@ function Chat({
                           onClick={() => setOpenModalMessage(index)}
                           src="more (1).png"
                           alt=""
-                        />
+                          />
                       </div>
                     )}
                   </div>
@@ -691,7 +706,7 @@ function Chat({
                           setChatSelected(null);
                           setIsChatSelected("chat-not-selected");
                         }}
-                      >
+                        >
                         Ocultar
                       </button>
                       <button
@@ -719,7 +734,7 @@ function Chat({
                 placeholder="Envie uma mensagem..."
                 value={inptvalue}
                 onChange={(e) => setInptvalue(e.target.value)}
-              />
+                />
             </div>
             <div className="icons-chat-inpt">
               <button type="submit">
@@ -735,6 +750,8 @@ function Chat({
         </div>
       )}
     </div>
+    )}
+    </>
   );
 }
 

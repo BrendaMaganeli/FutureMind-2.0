@@ -12,7 +12,6 @@ function NotesApp({ userId, isProfessional }) {
   const [editingFolderId, setEditingFolderId] = useState(null);
   const [loading, setLoading] = useState(true);
 
-<<<<<<< HEAD
   // Buscar pastas ao carregar o componente
   useEffect(() => {
     const fetchFolders = async () => {
@@ -31,21 +30,6 @@ function NotesApp({ userId, isProfessional }) {
         setLoading(false);
       }
     };
-=======
-function NotesApp() {
-  const navigate = useNavigate();
-  const [folders, setFolders] = useState(initialData);
-  const [selectedFolder, setSelectedFolder] = useState(
-    folders.length > 0 ? folders[0] : null
-  );
-  const [selectedNote, setSelectedNote] = useState(
-    folders.length > 0 && folders[0].notes.length > 0
-      ? folders[0].notes[0]
-      : null
-  );
-  const [activeTab, setActiveTab] = useState("checklist");
-  const [editingFolderId, setEditingFolderId] = useState(null);
->>>>>>> aef41d39cf7bf2f71d0dc115499b1ec06d9c6269
 
     fetchFolders();
   }, [userId, isProfessional]);
@@ -124,7 +108,6 @@ function NotesApp() {
       nome: `Nova Pasta ${folders.length + 1}`
     };
 
-<<<<<<< HEAD
     try {
       const response = await fetch('/pastas', {
         method: 'POST',
@@ -134,86 +117,6 @@ function NotesApp() {
           ...newFolder
         })
       });
-=======
-function navegar() {
-    navigate(`/inicio`)
-}
-
-  return (
-    <div className="notes-app">
-      <div className="folders-sidebar">
-        <img src={voltar} alt="seta-voltar" className="seta-voltar" onClick={navegar}/>
-        <div className="header">
-          <h2 className="title">Pastas</h2>
-          <button onClick={handleNewFolder} className="btn add-folder">
-            <Plus size={16} />
-          </button>
-        </div>
-        <div className="folders-list">
-          {folders.length > 0 ? (
-            folders.map((folder) => (
-              <div
-                key={folder.id}
-                className={`folder-item ${
-                  folder.id === selectedFolder?.id ? "selected" : ""
-                }`}
-                onClick={() => {
-                  setSelectedFolder(folder);
-                  setSelectedNote(folder.notes[0] || null);
-                }}
-              >
-                {editingFolderId === folder.id ? (
-                  <input
-                    className="folder-name-input"
-                    value={folder.name}
-                    onChange={(e) => {
-                      const updatedFolders = folders.map((f) =>
-                        f.id === folder.id ? { ...f, name: e.target.value } : f
-                      );
-                      setFolders(updatedFolders);
-                    }}
-                    onBlur={() => setEditingFolderId(null)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") setEditingFolderId(null);
-                    }}
-                    autoFocus
-                  />
-                ) : (
-                  <>
-                    <div className="tit-pasta">
-                      <span>{folder.name}</span>
-                    </div>
-                    <div className="edit-nome-pasta">
-                      <button
-                        className="edit-btn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setEditingFolderId(folder.id);
-                        }}
-                      >
-                        <Pencil size={14} />
-                      </button>
-                    </div>
-                  </>
-                )}
-                <div className="excluir-pasta">
-                  <button
-                    className="delete-btnn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteFolder(folder.id);
-                    }}
-                  >
-                    <X size={14} />
-                  </button>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="empty-message">Sem pastas</div>
-          )}
-        </div>
->>>>>>> aef41d39cf7bf2f71d0dc115499b1ec06d9c6269
 
       const createdFolder = await response.json();
       setFolders([createdFolder, ...folders]);

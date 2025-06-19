@@ -5,6 +5,7 @@ import icon_tres from "../assets/message-square (1).svg";
 import logo from "../assets/logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
 import Arvore from "../assets/Arvore-perfil.svg";
+import ModalLogin from "../Components/ModalLogin";
 
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -12,8 +13,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import Chat from "./Chat";
 
 function VisualizarProfissional() {
+
+  const user = JSON.parse(localStorage.getItem('User-Profile'));
   const [profissional, setProfissional] = useState({});
   const [isInChat, setIsInChat] = useState(false);
+  const [modalLogin, setModalLogin] = useState(false);
 
   const { id } = useParams();
   const [idChatSelected, setIdChatSelected] = useState(id);
@@ -106,11 +110,24 @@ function VisualizarProfissional() {
               <div className="funcionalidades">
                 <div className="topicos">
                   <img src={icon_um} alt="" />
-                  <p onClick={encaminhaAgendamento}>Agende sua consulta</p>
+                  <p onClick={() => {
+                      user 
+                      ? 
+                      encaminhaAgendamento 
+                      : 
+                      setModalLogin(true);
+                    }
+                  }
+                  >Agende sua consulta</p>
                 </div>
                 <div
-                  onClick={() =>
-                    navigate(`/live2/${id}`)
+                  onClick={() => {
+                      user 
+                      ?
+                      navigate(`/live/${id}`)
+                      :
+                      setModalLogin(true);
+                    }
                   }
                   className="topicos"
                 >
@@ -119,7 +136,16 @@ function VisualizarProfissional() {
                 </div>
                 <div className="topicos">
                   <img src={icon_tres} alt="" />
-                  <p onClick={encaminharChat}>Chat</p>
+                  <p onClick={() => {
+
+                      user
+                      ?
+                      encaminharChat
+                      :
+                      setModalLogin(true);
+                    }
+                  }
+                  >Chat</p>
                 </div>
               </div>
             </div>
@@ -185,6 +211,10 @@ function VisualizarProfissional() {
           </main>
         </div>
       )}
+      {
+        modalLogin &&
+        <ModalLogin setMostrarModalLogin={setModalLogin} />
+      }
     </>
   );
 }

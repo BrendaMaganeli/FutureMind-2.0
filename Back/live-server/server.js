@@ -37,7 +37,7 @@ io.on('connection', (socket) => {
   };
   
   // Adicione o novo usuário à lista
-  connectedUsers.push(newUser);
+ if (!connectedUsers.some(user => user.name === newUser.name)) connectedUsers.push(newUser);
   
   // Notifique todos sobre a nova lista de usuários
   io.emit('users', connectedUsers);

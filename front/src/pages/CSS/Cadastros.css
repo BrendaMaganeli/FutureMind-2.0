@@ -500,3 +500,21 @@
   font-size: 13px;
   color: #013a63;
 }
+.com_erros{
+  display: flex;
+  height: 30px;
+  align-items: center;
+  color: #d9534f;
+}
+.sem_erro {
+ display: flex;
+ color: white;
+ justify-content: center;
+ height: 30px;
+ font-size: 0.9em;
+ padding-left: 5px;
+ min-height: 18px;
+ visibility: hidden;
+ opacity: 0;
+ transition: opacity 0.3s ease;
+}

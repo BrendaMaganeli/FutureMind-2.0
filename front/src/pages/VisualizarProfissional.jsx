@@ -108,17 +108,16 @@ function VisualizarProfissional() {
                 </div>
               </div>
               <div className="funcionalidades">
-                <div className="topicos">
-                  <img src={icon_um} alt="" />
-                  <p onClick={() => {
+                <div className="topicos" onClick={() => {
                       user 
                       ? 
-                      encaminhaAgendamento 
+                      navigate(`/agendamento/${id}`) 
                       : 
                       setModalLogin(true);
                     }
-                  }
-                  >Agende sua consulta</p>
+                  }>
+                  <img src={icon_um} alt="" />
+                  <p>Agende sua consulta</p>
                 </div>
                 <div
                   onClick={() => {

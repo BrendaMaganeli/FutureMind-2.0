@@ -16,7 +16,7 @@ const opcoesEspecializacao = [
   { value: "psicologia-clinica", label: "Psicologia Clínica" },
   { value: "psicopedagogia", label: "Psicopedagogia" },
   { value: "neuropsicologia", label: "Neuropsicologia" },
-]
+];
 
 const opcoesAbordagens = [
   { value: "cognitivo-comportamental", label: "Cognitivo-Comportamental" },
@@ -28,20 +28,23 @@ function CadastroProfissional2() {
   const navigate = useNavigate();
   const { profissional, setProfissional } = useContext(GlobalContext);
 
-  const [especializacoes, setEspecializacoes] = useState(profissional.especializacao);
+  const [especializacoes, setEspecializacoes] = useState(
+    profissional.especializacao
+  );
   const [abordagens, setAbordagens] = useState(profissional.abordagem);
   const [valorEmail, setValorEmail] = useState(profissional.email);
   const [valorSenha, setValorSenha] = useState(profissional.senha);
-  const [prefixoEmailProfissional, setPrefixoEmailProfissional] = useState(profissional.email_profissional);
+  const [prefixoEmailProfissional, setPrefixoEmailProfissional] = useState(
+    profissional.email_profissional
+  );
 
-
-  const [espValidado, setEspValidado] = useState(false)
-  const [aboValidado, setAboValidado] = useState(false)
-  const [emailValidado, setEmailValidado] = useState(false)
-  const [mensagemEmail, setMensagemEmail] = useState('')
-  const [senhaValidado, setSenhaValidado] = useState(false)
-  const [usuarioValidado, setUsuarioValido] = useState(false)
-  const [usuarioMensgaem, setMensagemUsuario] = useState(false)
+  const [espValidado, setEspValidado] = useState(false);
+  const [aboValidado, setAboValidado] = useState(false);
+  const [emailValidado, setEmailValidado] = useState(false);
+  const [mensagemEmail, setMensagemEmail] = useState("");
+  const [senhaValidado, setSenhaValidado] = useState(false);
+  const [usuarioValidado, setUsuarioValido] = useState(false);
+  const [usuarioMensgaem, setMensagemUsuario] = useState(false);
 
   const [tipoInput, setTipoInput] = useState("password");
   const [tipoIconSenha, setTipoIconSenha] = useState("icon_nao_ver.png");
@@ -88,7 +91,7 @@ function CadastroProfissional2() {
 
   const handlePrefixoChange = (e) => {
     let val = e.target.value;
-    if (val.endsWith(DOMINIO)) val = val.slice(0, -DOMINIO.length);
+    if (val.endsWith(DOMINIO)) val = val.slice(0, -DOMINIO?.length);
     if (val.includes("@")) return;
 
     setCaretPos(e.target.selectionStart);
@@ -98,13 +101,11 @@ function CadastroProfissional2() {
   const indentificadorEmail = (e) => {
     const valor = e.target.value;
     setValorEmail(valor);
-
   };
 
   const indentificadorSenha = (e) => {
     const valor = e.target.value;
     setValorSenha(valor);
-
   };
 
   const alternarTipo = () => {
@@ -115,33 +116,29 @@ function CadastroProfissional2() {
   };
 
   useEffect(() => {
-
-    if (especializacoes.length > 0) {
-
-      setEspValidado(false)
+    if (especializacoes?.length > 0) {
+      setEspValidado(false);
     }
-  }, [especializacoes])
+  }, [especializacoes]);
 
   useEffect(() => {
-
-    if (abordagens.length > 0) {
-
-      setAboValidado(false)
+    if (abordagens?.length > 0) {
+      setAboValidado(false);
     }
-  }, [abordagens])
+  }, [abordagens]);
 
   useEffect(() => {
-
-    setEmailValidado(false)
-
-  }, [valorEmail])
+    setEmailValidado(false);
+  }, [valorEmail]);
 
   useEffect(() => {
-
-    setSenhaValidado(false)
-
-  }, [valorSenha])
-
+    setSenhaValidado(false);
+  }, [valorSenha]);
+ 
+    useEffect(() => {
+    setUsuarioValido(false);
+  }, [prefixoEmailProfissional]);
+  
 
   const handleCadastro = async () => {
     let erro = false;
@@ -163,7 +160,7 @@ function CadastroProfissional2() {
 
       if (response.ok) {
         data = await response.json();
-        console.log(data)
+        console.log(data);
       } else {
         console.error("Erro na verificação do profissional");
         return;
@@ -175,56 +172,48 @@ function CadastroProfissional2() {
 
     // validações
 
-    if (especializacoes.length == 0) {
-
-      setEspValidado(true)
+    if (especializacoes?.length == 0) {
+      setEspValidado(true);
     } else {
-
-      setEspValidado(false)
+      setEspValidado(false);
     }
 
-    if (abordagens.length == 0) {
-
-      setAboValidado(true)
+    if (abordagens?.length == 0) {
+      setAboValidado(true);
     } else {
-
-      setAboValidado(false)
+      setAboValidado(false);
     }
 
-    if (!valorEmail.includes('@gmail.com') && !valorEmail.includes('@hotmail.com')) {
-
-      setEmailValidado(true)
-      setMensagemEmail('Use um email valido!')
+    if (
+      !valorEmail.includes("@gmail.com") &&
+      !valorEmail.includes("@hotmail.com")
+    ) {
+      setEmailValidado(true);
+      setMensagemEmail("Use um email valido!");
     } else if (data.emailExisteProf) {
-
-      setEmailValidado(true)
-      setMensagemEmail('Email já cadastrado!')
-    }
-    else {
-      setMensagemEmail('')
-      setEmailValidado(false)
-    }
-
-    if (valorSenha.length != 8) {
-
-      setSenhaValidado(true)
-
+      setEmailValidado(true);
+      setMensagemEmail("Email já cadastrado!");
     } else {
-      setSenhaValidado(false)
+      setMensagemEmail("");
+      setEmailValidado(false);
     }
 
-    // if(prefixoEmailProfissional.includes('.') || prefixoEmailProfissional.length < 2){
+    if (valorSenha?.length != 8) {
+      setSenhaValidado(true);
+    } else {
+      setSenhaValidado(false);
+    }
 
-    //    setMensagemUsuario('Seu usuario deve conter um "." antes do "@" !')
-    //    setUsuarioValido(true)
-    // }else if(data.usuarioExisteProf){
-    //   setMensagemUsuario('Usuario jà cadastrado!')
-    //   setUsuarioValido(true)
-    // }else{
-
-    //   setUsuarioValido(false)
-    //   setMensagemUsuario('')
-    // }
+    if (!prefixoEmailProfissional.includes(".")) {
+      setMensagemUsuario('Seu usuario deve conter um "." antes do "@" !');
+      setUsuarioValido(true);
+    } else if (data.usuarioExisteProf) {
+      setMensagemUsuario("Usuario jà cadastrado!");
+      setUsuarioValido(true);
+    } else {
+      setUsuarioValido(false);
+      setMensagemUsuario("");
+    }
 
     try {
       const response = await fetch(
@@ -256,8 +245,7 @@ function CadastroProfissional2() {
     } catch (err) {
       console.log("Erro ao cadastrar profissional:", err);
     }
-  }
-
+  };
 
   return (
     <div className="container-profissional">
@@ -282,7 +270,6 @@ function CadastroProfissional2() {
               isMulti
               onChange={(opcoes) => {
                 setEspecializacoes(opcoes || []);
-
               }}
               menuPortalTarget={document.body}
               styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
@@ -301,7 +288,6 @@ function CadastroProfissional2() {
               isMulti
               onChange={(opcoes) => {
                 setAbordagens(opcoes || []);
-
               }}
               menuPortalTarget={document.body}
               styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
@@ -342,7 +328,6 @@ function CadastroProfissional2() {
                 alt="Mostrar senha"
                 className="icone-senha"
                 onClick={alternarTipo}
-
               />
               <div className={`com_erros ${!senhaValidado ? "sem_erro" : ""}`}>
                 senha deve ter 8 caracteres!
@@ -363,9 +348,9 @@ function CadastroProfissional2() {
               required
             />
             <label>Usuário</label>
-            {/* <div className={`com_erros ${!usuarioValidado ? "sem_erro" : ""}`}>
+            <div className={`com_erros ${!usuarioValidado ? "sem_erro" : ""}`}>
               {usuarioMensgaem}
-            </div> */}
+            </div>
           </div>
         </div>
 

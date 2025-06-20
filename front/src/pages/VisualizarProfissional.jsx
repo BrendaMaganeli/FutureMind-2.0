@@ -109,7 +109,7 @@ function VisualizarProfissional() {
               </div>
               <div className="funcionalidades">
                 <div className="topicos" onClick={() => {
-                      user 
+                      user.id_paciente 
                       ? 
                       navigate(`/agendamento/${id}`) 
                       : 
@@ -121,7 +121,7 @@ function VisualizarProfissional() {
                 </div>
                 <div
                   onClick={() => {
-                      user 
+                      user.id_paciente 
                       ?
                       navigate(`/live/${id}`)
                       :
@@ -137,7 +137,7 @@ function VisualizarProfissional() {
                   <img src={icon_tres} alt="" />
                   <p onClick={() => {
 
-                      user
+                      user.id_paciente
                       ?
                       encaminharChat
                       :

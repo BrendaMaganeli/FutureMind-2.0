@@ -3,17 +3,26 @@ import { useNavigate } from 'react-router-dom';
 import io from "socket.io-client";
 import "./CSS/Call.css";
 
-const user = localStorage.getItem('User-Profile');
+const rawUser = localStorage.getItem('User-Profile');
+let socket;
 
-const socket = io('http://192.168.0.153:5000', {
-  auth: {
-    name: user?.nome || 'Lucas'
-  },
-  reconnectionAttempts: 5,
-  reconnectionDelay: 1000,
-  timeout: 10000,
-  transports: ['websocket']
-});
+if (rawUser) {
+  try {
+    const user = JSON.parse(rawUser);
+
+    socket = io('http://192.168.15.9:5000', {
+      auth: {
+        name: user?.nome
+      },
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      timeout: 10000,
+      transports: ['websocket']
+    });
+  } catch (error) {
+    console.error("Erro ao parsear o user do localStorage:", error);
+  }
+}
 
 function VideoConferencia() {
 
@@ -22,13 +31,12 @@ function VideoConferencia() {
     const peerConnection = useRef(null);
     const localStreamRef = useRef(null);
     const navigate = useNavigate();
-
     const [videoActive, setVideoActive] = useState(true);
     const [micActive, setMicActive] = useState(true);
     const [callInProgress, setCallInProgress] = useState(false);
     const [incomingOffer, setIncomingOffer] = useState(null);
     const [targetUser, setTargetUser] = useState(null);
-    const [onlineUsers, setOnlineUsers] = useState([{}]);
+    const [onlineUsers, setOnlineUsers] = useState([]);
     const [configBarVisible, setConfigBarVisible] = useState(true);
     const [espelhar, setEspelhar] = useState('mirror');
     const [isCaller, setIsCaller] = useState(false);
@@ -99,7 +107,7 @@ function VideoConferencia() {
         socket.on("reconnect_failed", handleReconnectFailed);
 
         socket.on("users", (users) => {
-            setOnlineUsers(users);
+            setOnlineUsers(users.filter((user) => user.name !== JSON.parse(rawUser).nome));
         });
 
         socket.on("offer", (data) => {
@@ -146,6 +154,12 @@ function VideoConferencia() {
         socket.onAny((event, ...args) => {
             console.log(`Socket event: ${event}`, args);
         });
+
+        socket.on("name-taken", (data) => {
+           alert(data.message); // ou mostre na interface do seu jeito
+           socket.disconnect();
+        });
+
 
         return () => {
             socket.off("connect", handleConnect);
@@ -338,7 +352,16 @@ function VideoConferencia() {
         }
     };
 
-    const endCall = () => {
+    const endCall = (reason = '') => {
+        // Notifica o outro participante
+        if (targetUser && socket.current) {
+            socket.current.emit('end-call', {
+                to: targetUser,
+                reason: reason
+            });
+        }
+
+        // Limpeza local
         if (peerConnection.current) {
             peerConnection.current.close();
             peerConnection.current = null;
@@ -353,9 +376,7 @@ function VideoConferencia() {
         setIncomingOffer(null);
         setTargetUser(null);
         setIsCaller(false);
-
         clearInterval(timerRef.current);
-        timerRef.current = null;
         setCallTime(0);
     };
 
@@ -487,13 +508,17 @@ function VideoConferencia() {
             <p style={{ color: espelhar === 'mirror' ? "#BEBEBE" : "#5A7DA0" }}>Mirror</p>
         </div>
 
+        {
+        
+        JSON.parse(rawUser).id_profissional &&
         <div className="ppp" onClick={() => setSalaDeEspera(salaDeEspera ? false : true)} style={{ display: "flex", flexDirection: "column" }}>
             <img
                 src={salaDeEspera ? "/public/pacientes blue (2) 1.svg" : "/public/pacientes grey 1.svg"}
                 alt={salaDeEspera ? "Sala de Espera Aberta" : "Sala de Espera Fechada"}
-            />
+                />
             <p style={{ color: salaDeEspera ? "#5a7da0" : "#CFCFCF" }}>Pacientes</p>
         </div>
+        }
 
         <div className="ppp" onClick={() => setConfigBarVisible(false)} style={{ display: "flex", flexDirection: "column" }}>
             <img
@@ -514,14 +539,14 @@ function VideoConferencia() {
         </div>
     )}
 
-            {!callInProgress && !incomingOffer && (
+            {!callInProgress && !incomingOffer && JSON.parse(rawUser).id_profissional && (
                 <button className="start-call-button" onClick={startCall}>
                     Iniciar Chamada
                     <img src='/public/phone.png' />
                 </button>
             )}
 
-            {callInProgress && (
+            {callInProgress &&  (
                 <button style={{background: 'red'}} className="start-call-button" onClick={endCall}>
                     Encerrar Chamada
                     <img src='/public/phone.png' />
@@ -537,9 +562,9 @@ function VideoConferencia() {
                     </button>
                 </div>
             )}
-
+            
             <div className={`users-online-container ${salaDeEspera ? '' : 'hidden'}`}>
-                <h4>Usuários Online ({onlineUsers.length})</h4>
+                <h4>Pacientes em espera ({onlineUsers.length})</h4>
                 {onlineUsers.map((user) => (
                     <div key={user.id} className="user-item">
                         <span>{user.name}</span>

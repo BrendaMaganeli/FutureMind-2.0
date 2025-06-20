@@ -326,7 +326,7 @@ const salvarEdicao = async () => {
               <img src={icon_um} alt="" />
               <p onClick={navegaParaConsulta}>Suas Consultas</p>
             </div>
-            <div className="topicos">
+            <div className="topicos" onClick={() => navigate(`/live/${perfilSalvo.id_profissional}`)}>
               <img src={icon_dois} alt="" />
               <p>Vídeo Chamada</p>
             </div>

@@ -154,7 +154,7 @@ function Plano_saude() {
   };
 
   const navega = () => {
-    if (user) navigate("/inicio");
+    navigate("/inicio");
   };
 
   useEffect(() => {

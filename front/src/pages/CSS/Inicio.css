@@ -323,6 +323,7 @@ background-color: #5A789F;
   align-items: center;
   width: 100%;
   height: 82vh;
+  position: relative;
 }
 
 .swiper-profi .swiper-slide {
@@ -729,7 +730,6 @@ background-color: #5A789F;
   color: #7ba6dd; /* cor ao passar o mouse ou ao focar */
 }
 
-
 .footer_inicio{
   
   top: 199.3%;
@@ -737,4 +737,12 @@ background-color: #5A789F;
   z-index: 999;
   width: 100%;
   height: 220px;
+}
+
+.swiper-pagination {
+  max-width: 25%;
+  overflow-x: hidden;
+  white-space: nowrap;
+  position: absolute;
+  margin-left: 37%;
 }

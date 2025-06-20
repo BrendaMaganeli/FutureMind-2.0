@@ -6,6 +6,7 @@ import "aos/dist/aos.css";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer.jsx";
 import "./CSS/Landing_page.css";
+import ModalSair from "../Components/ModalSair.jsx";
 
 const estiloCaixa = {
   position: "absolute",
@@ -22,6 +23,8 @@ const estiloCaixa = {
 function Landing_page() {
   const [mostrarLogo, setMostrarLogo] = useState(true);
   const [aberto, setAberto] = useState(false);
+  const [mostrarModalSair, setMostrarModalSair] = useState(false);
+  const user = JSON.parse(localStorage.getItem('User-Profile'));
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -93,7 +96,7 @@ function Landing_page() {
                   </p>
                 </div>
                 <div className="container_button_comece_ja">
-                  <button className="button_comece_ja" onClick={abrir}>
+                  <button className="button_comece_ja" onClick={!user ? abrir : () => setMostrarModalSair(true)}>
                     Comece já
                   </button>
                 </div>
@@ -258,6 +261,10 @@ function Landing_page() {
           <Footer />
         </>
       )}
+      {
+        mostrarModalSair &&
+        <ModalSair setMostrarModalSair={setMostrarModalSair} setMostrarModalCadastro={setAberto} />
+      }
     </div>
   );
 }

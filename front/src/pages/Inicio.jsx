@@ -23,6 +23,7 @@ function Inicio() {
   const { setId } = useContext(GlobalContext);
   const [mostrarLogo, setMostrarLogo] = useState(true);
   const user = JSON.parse(localStorage.getItem('User-Profile'));
+  const userName = user?.nome.split(' ')[0];
   const { paginaAnterior, setPaginaAnterior } = useContext(GlobalContext);
 
   useEffect(() => {
@@ -178,8 +179,11 @@ function Inicio() {
 
       <div className="filter-profissionais-div">
         <div className="filter-profissionais-text">
-          <h1>{ !user ? 'Encontre seu profissional' : `Olá, ${user.nome.split(' ')[0]}!`}</h1>
-          <img src='hello (1).png' />
+          <h1>{ !user ? 'Encontre seu profissional.' : `Olá, ${userName}!`}</h1>
+          {
+            user &&
+            <img src='hello (1).png' />
+          }
         </div>
 
         <div className="filter-background">

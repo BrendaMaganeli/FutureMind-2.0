@@ -9,70 +9,51 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
-  pingInterval: 5000,  // Aumenta a frequência de ping
-  pingTimeout: 10000,
-  upgradeTimeout: 30000,
-  allowUpgrades: false, // Mantém WebSocket
-  perMessageDeflate: {
-    threshold: 1024, // Tamanho mínimo para compressão
-    zlibDeflateOptions: {
-      level: 3
-    }
+    origin: "*", // ou o seu front-end (ex: http://localhost:3000)
+    methods: ["GET", "POST"]
   }
 });
 
-let connectedUsers = [];
+const onlineUsers = {}; // { socket.id: nome }
 
 io.on('connection', (socket) => {
-  const { name } = socket.handshake.auth;
-  console.log(`Novo usuário conectado: ${name} (${socket.id})`);
-  
-  // Atualize o formato do usuário para manter consistência
-  const newUser = {
-    id: socket.id,
-    name: name || 'Usuário Anônimo'
-  };
-  
-  // Adicione o novo usuário à lista
- if (!connectedUsers.some(user => user.name === newUser.name)) connectedUsers.push(newUser);
-  
-  // Notifique todos sobre a nova lista de usuários
-  io.emit('users', connectedUsers);
+  const name = socket.handshake.auth?.name;
 
-  // WebRTC Signaling
-  socket.on('offer', (data) => {
-    console.log(`Offer de ${data.from} para ${data.to}`);
-    io.to(data.to).emit('offer', {
-      offer: data.offer,
-      from: data.from,
-    });
+  if (!name) return;
+  const nameAlreadyExists = Object.values(onlineUsers).includes(name);
+
+  if (nameAlreadyExists) {
+    console.log(`[Conexão recusada] Nome duplicado: ${name}`);
+    socket.emit("name-taken", { message: "Nome já está em uso" });
+    socket.disconnect(); // Desconecta o usuário
+    return;
+  }
+
+  console.log(`[Conectado] ID: ${socket.id} | Nome: ${name}`);
+  onlineUsers[socket.id] = name;
+
+  // Envia a lista de usuários atualizada
+  io.emit("users", Object.entries(onlineUsers).map(([id, name]) => ({ id, name })));
+
+  socket.on("offer", ({ to, offer, from }) => {
+    io.to(to).emit("offer", { offer, from });
   });
 
-  socket.on('answer', (data) => {
-    console.log(`Answer de ${data.from} para ${data.to}`);
-    io.to(data.to).emit('answer', {
-      answer: data.answer,
-      from: data.from,
-    });
+  socket.on("answer", ({ to, answer, from }) => {
+    io.to(to).emit("answer", { answer, from });
   });
 
-  socket.on('ice-candidate', (data) => {
-    console.log(`ICE Candidate de ${socket.id} para ${data.to}`);
-    io.to(data.to).emit('ice-candidate', {
-      candidate: data.candidate,
-      from: socket.id,
-    });
+  socket.on("ice-candidate", ({ to, candidate }) => {
+    io.to(to).emit("ice-candidate", { candidate });
   });
 
-  socket.on('disconnect', () => {
-    console.log(`Usuário desconectado: ${socket.id}`);
-    connectedUsers = connectedUsers.filter(user => user.id !== socket.id);
-    io.emit('users', connectedUsers);
+  socket.on("disconnect", () => {
+    console.log(`[Desconectado] ${socket.id}`);
+    delete onlineUsers[socket.id];
+    io.emit("users", Object.entries(onlineUsers).map(([id, name]) => ({ id, name })));
   });
 });
 
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(5000, () => {
+  console.log("Servidor Socket.IO rodando na porta 5000");
+});

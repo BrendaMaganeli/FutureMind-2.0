@@ -15,6 +15,7 @@
   justify-content: center;
   align-items: center;
   padding-top: 2.5%;
+  z-index: 999;
 }
 
 .container_logo img {
@@ -77,6 +78,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 999;
 }
 
 .container-icon img {

@@ -20,8 +20,29 @@
 
 .incoming-call {
 
+  display: flex;
   position: absolute;
-  left: 50%;
+  left: 42%;
+  top: 80%;
+  gap: 5px;
+}
+
+.incoming-call .end-call-button, .incoming-call .accept-call-button {
+
+  background-color: #5a7da0;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 11;
+}
+
+.incoming-call .end-call-button:hover, .incoming-call .accept-call-button:hover {
+
+  background-color: #013a63;
+  transition: 0.5s;
 }
 
 .connection-status {
@@ -52,6 +73,15 @@
   justify-content: start;
   align-items: center;
   gap: 15%;
+}
+
+.users-online-container h4 {
+
+  color: #013a63;
+  background-color: #013a6350;
+  padding: 2%;
+  width: fit-content;
+  border-radius: 5px;
 }
 
 .users-online-container .user-item span {
@@ -138,6 +168,12 @@
   cursor: pointer;
   z-index: 11;
   gap: 5px;
+}
+
+.videoconferencia-container .start-call-button:hover {
+
+  background-color: #013a63;
+  transition: 0.5s;
 }
 
 .videoconferencia-container .start-call-button img {

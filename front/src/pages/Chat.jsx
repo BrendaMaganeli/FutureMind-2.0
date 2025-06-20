@@ -144,6 +144,7 @@ function Chat({
   const messagesEndRef = useRef(null);
   const [inptvalue, setInptvalue] = useState("");
   const [mostrarLogo, setMostrarLogo] = useState(true);
+  const [profissionais, setProfissionais] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -207,6 +208,22 @@ function Chat({
       }
     }
   };
+
+  useEffect(() => {
+      const buscaProfissionais = async () => {
+        try {
+          const response = await fetch("https://futuremind-2-0.onrender.com");
+  
+          if (response.ok) {
+            const data = await response.json();  
+            setProfissionais(data);
+          }
+        } catch (err) {
+          console.log("Erro ao buscar profissionais:", err);
+        }
+      };
+      buscaProfissionais()
+    }, []);
 
   const socket = useRef();
 
@@ -280,7 +297,7 @@ function Chat({
       return;
     }
 
-    const filtrados = chats.filter((chat) =>
+    const filtrados = profissionais.filter((chat) =>
       chat.nome.toLowerCase().includes(termo)
     );
     setResult(filtrados || []);
@@ -554,7 +571,8 @@ function Chat({
           </div>
         </div>
         <div className="conversas">
-          {(useResult ? result : chats).map((item, index) => (
+          {
+          (useResult ? result : chats).map((item, index) => (
             <div
               key={index}
               className="chat-barra"

@@ -567,7 +567,7 @@ function VideoConferencia() {
                 <h4>Pacientes em espera ({onlineUsers.length})</h4>
                 {onlineUsers.map((user) => (
                     <div key={user.id} className="user-item">
-                        <span>{user.name}</span>
+                        <span>{user.name.split(' ')[0]}</span>
                         <button
                             onClick={() => setTargetUser(user.id)}
                             disabled={callInProgress || incomingOffer}

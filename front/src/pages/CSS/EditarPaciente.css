@@ -407,3 +407,37 @@ input[type="file"]:hover {
   cursor: pointer;
   font-size: 18px;
 }
+
+
+
+.quadrado_fotos label {
+  display: block;
+  padding: 10px;
+  background:#5a789f;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 10px;
+}
+
+
+.botao-selecionar-imagem {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+
+#imagem {
+  display: none;
+}
+
+.quadrado_fotos {
+  text-align: center;
+  margin-top: 20px;
+}

@@ -13,7 +13,7 @@ function EditarPaciente() {
   const navigate = useNavigate();
   const pacienteSalvo = JSON.parse(localStorage.getItem("User-Profile"));
 
-  // Estados para edição (alterações temporárias)
+  // Estados para edição
   const [pacienteEditado, setPacienteEditado] = useState({
     id_paciente: pacienteSalvo?.id_paciente || "",
     nome: pacienteSalvo?.nome || "",
@@ -24,7 +24,17 @@ function EditarPaciente() {
     senha: pacienteSalvo?.senha || "",
   });
 
-  // Estado para a data formatada (exibição)
+  // Estado para exibição (não muda até salvar)
+  const [pacienteExibido, setPacienteExibido] = useState({
+    nome: pacienteSalvo?.nome || "",
+    foto: pacienteSalvo?.foto 
+      ? pacienteSalvo.foto.startsWith('http') 
+        ? pacienteSalvo.foto 
+        : `http://localhost:4242${pacienteSalvo.foto}`
+      : icon
+  });
+
+  // Estado para a data formatada
   const [dataNascimentoFormatada, setDataNascimentoFormatada] = useState(
     formatarDataBrasileira(pacienteSalvo?.data_nascimento)
   );
@@ -34,13 +44,6 @@ function EditarPaciente() {
   const [showModal, setShowModal] = useState(false);
   const [imagemPreview, setImagemPreview] = useState(null);
   const [image, setImage] = useState(null);
-  const [foto, setFoto] = useState(
-    pacienteSalvo?.foto 
-      ? pacienteSalvo.foto.includes('http') 
-        ? pacienteSalvo.foto 
-        : `http://localhost:4242${pacienteSalvo.foto}`
-      : icon
-  );
 
   function formatarDataBrasileira(dataISO) {
     if (!dataISO) return "";
@@ -103,9 +106,13 @@ function EditarPaciente() {
         localStorage.setItem("User Logado", false);
         localStorage.removeItem("User-Profile");
         navigate("/");
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erro ao deletar paciente");
       }
     } catch (err) {
-      console.log("Falha na conexão: ", err);
+      console.error("Falha na conexão: ", err);
+      console.log(`Erro ao deletar paciente: ${err.message}`);
     }
   };
 
@@ -141,28 +148,51 @@ function EditarPaciente() {
         const data = await response.json();
         const updatedProfile = {
           ...data,
-          foto: foto
+          foto: pacienteExibido.foto
         };
         
         localStorage.setItem("User-Profile", JSON.stringify(updatedProfile));
         setPacienteEditado(updatedProfile);
+        setPacienteExibido({
+          ...pacienteExibido,
+          nome: pacienteEditado.nome
+        });
         setDataNascimentoFormatada(formatarDataBrasileira(data.data_nascimento));
+        console.log("Dados atualizados com sucesso!");
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erro ao salvar dados");
       }
     } catch (err) {
       console.error("Erro ao salvar:", err);
+      console.log(`Erro ao salvar dados: ${err.message}`);
     }
   };
 
   const handleImagemChange = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
+      if (selectedFile.size > 5 * 1024 * 1024) {
+        console.log("A imagem deve ter no máximo 5MB");
+        return;
+      }
+      
+      const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      if (!validTypes.includes(selectedFile.type)) {
+        console.log("Por favor, selecione uma imagem JPEG, PNG ou GIF");
+        return;
+      }
+
       setImagemPreview(URL.createObjectURL(selectedFile));
       setImage(selectedFile);
     }
   };
 
   const onImageChange = async () => {
-    if (!image) return;
+    if (!image) {
+      console.log('Por favor, selecione uma imagem primeiro');
+      return;
+    }
 
     const formData = new FormData();
     formData.append('foto', image);
@@ -174,24 +204,33 @@ function EditarPaciente() {
         body: formData,
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        const fotoUrl = data.foto.includes('http') 
-          ? data.foto 
-          : `http://localhost:4242${data.foto}`;
-        
-        setFoto(fotoUrl);
-        const updatedProfile = {
-          ...pacienteEditado,
-          foto: fotoUrl
-        };
-        localStorage.setItem('User-Profile', JSON.stringify(updatedProfile));
-        setPacienteEditado(updatedProfile);
-        setImagemPreview(null);
-        setIsVisible(false);
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Erro ao atualizar foto');
       }
+
+      const fotoUrl = `http://localhost:4242${data.foto}`;
+      
+      setPacienteExibido({
+        ...pacienteExibido,
+        foto: fotoUrl
+      });
+      
+      const updatedProfile = {
+        ...pacienteEditado,
+        foto: fotoUrl
+      };
+      
+      localStorage.setItem('User-Profile', JSON.stringify(updatedProfile));
+      setPacienteEditado(updatedProfile);
+      setImagemPreview(null);
+      setIsVisible(false);
+      console.log("Foto atualizada com sucesso!");
+      
     } catch (err) {
       console.error('Erro:', err);
+      console.log(`Erro ao enviar imagem: ${err.message}`);
     }
   };
 
@@ -211,12 +250,11 @@ function EditarPaciente() {
         <aside className="barra-lateral-p">
           <div className="cabecalho-perfil-paciente">
             <img
-              src={foto}
+              src={pacienteExibido.foto}
               alt="Foto do perfil"
               className="imagem-perfil"
-              onClick={onImageChange}
             />
-            <h2 className="nome-perfil">{pacienteEditado.nome}</h2>
+            <h2 className="nome-perfil">{pacienteExibido.nome}</h2>
           </div>
           <div className="caixa-comandos-paciente">
             <div className="cartao-informacao">
@@ -367,8 +405,15 @@ function EditarPaciente() {
           <div className="container_oculta_corpo_geral">
             <div className="container_oculta_corpo_esquerda">
               <div className="quadrado_fotos">
-                <img className="fotos_editar" src="icone_usuario.svg" alt="" />
-                <input type="file" id="imagem" onChange={handleImagemChange} />
+                <label htmlFor="imagem" className="botao-selecionar-imagem">
+                  + Selecionar Imagem
+                </label>
+                <input 
+                  type="file" 
+                  id="imagem" 
+                  accept="image/jpeg, image/png, image/gif"
+                  onChange={handleImagemChange} 
+                />
               </div>
             </div>
             <div className="container_oculta_corpo_direita">
@@ -385,7 +430,7 @@ function EditarPaciente() {
                     style={{
                       backgroundImage: imagemPreview
                         ? `url(${imagemPreview})`
-                        : "none",
+                        : pacienteExibido.foto ? `url(${pacienteExibido.foto})` : "none",
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       borderRadius: "50%",
@@ -413,8 +458,9 @@ function EditarPaciente() {
                   <button
                     className="button_gostei_salvar"
                     onClick={onImageChange}
+                    disabled={!image}
                   >
-                    Gostei, Salvar
+                    Salvar
                   </button>
                 </div>
               </div>
@@ -427,12 +473,13 @@ function EditarPaciente() {
         <div className="modal">
           <div className="modal-content">
             <h3>Tem certeza de que deseja deletar sua conta?</h3>
-            <div className="buttons">
-              <button onClick={handleConfirmarDeletar} className="modal-btn-1">
-                Sim
-              </button>
-              <button onClick={handleCloseModal} className="modal-btn-1">
+            <p>Todos os seus dados serão permanentemente removidos.</p>
+            <div className="modal-buttons">
+              <button onClick={handleCloseModal} className="modal-btn-cancelar">
                 Cancelar
+              </button>
+              <button onClick={handleConfirmarDeletar} className="modal-btn-confirmar">
+                Confirmar
               </button>
             </div>
           </div>

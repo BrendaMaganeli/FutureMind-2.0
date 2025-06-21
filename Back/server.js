@@ -20,6 +20,40 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+// Certifique-se que o diretório de uploads existe
+const uploadDir = path.join(__dirname, 'public', 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, `patient-${Date.now()}${path.extname(file.originalname)}`);
+  }
+});
+
+const upload = multer({ 
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  fileFilter: (req, file, cb) => {
+    const filetypes = /jpeg|jpg|png|gif/;
+    const mimetype = filetypes.test(file.mimetype);
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb(new Error('Apenas imagens são permitidas!'));
+  }
+});
+
 app.get('/', async(req, res) => {
     try {
         const [rows] = await pool.query('SELECT * FROM profissionais');
@@ -165,30 +199,6 @@ app.post('/login', async(req, res) => {
     }
 });
 
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-
-// Caminho absoluto da pasta uploads
-const uploadDirectory = path.join(__dirname, 'uploads');
-
-// Criação da pasta caso ela não exista
-if (!fs.existsSync(uploadDirectory)) {
-  fs.mkdirSync(uploadDirectory, { recursive: true });
-}
-
-// Configuração do multer para salvar imagens no diretório correto
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDirectory); // Caminho absoluto para a pasta uploads
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`); // Gera um nome único para o arquivo
-  },
-});
-
-const upload = multer({ storage });
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Rota para atualizar a foto do profissional
 app.post('/profissional/foto-perfil', upload.single('foto'), async (req, res) => {
@@ -217,30 +227,42 @@ app.post('/profissional/foto-perfil', upload.single('foto'), async (req, res) =>
 });
 
 app.post('/paciente/foto-perfil', upload.single('foto'), async (req, res) => {
-  const { id_paciente } = req.body;
-  const fotoPath = req.file ? `/uploads/${req.file.filename}` : null;
-
-  if (!id_paciente || !fotoPath) {
-    return res.status(400).json({ Erro: 'ID do paciente ou foto ausente.' });
-  }
-
   try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Nenhuma imagem enviada' });
+    }
+
+    const { id_paciente } = req.body;
+    if (!id_paciente) {
+      return res.status(400).json({ error: 'ID do paciente é obrigatório' });
+    }
+
+    const fotoPath = `/uploads/${req.file.filename}`;
+    
+    // Atualize o banco de dados
     const [result] = await pool.query(
       'UPDATE pacientes SET foto = ? WHERE id_paciente = ?',
       [fotoPath, id_paciente]
     );
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ Erro: 'Paciente não encontrado.' });
+      return res.status(404).json({ error: 'Paciente não encontrado' });
     }
 
-    const resultAux = JSON.stringify(result[0])
-    res.json(resultAux);
-  } catch (err) {
-    console.error(err.message);
-    return res.status(500).json({ Erro: 'Erro ao atualizar paciente.' });
+    res.json({ 
+      success: true,
+      foto: fotoPath,
+      message: 'Foto atualizada com sucesso'
+    });
+
+  } catch (error) {
+    console.error('Erro no upload:', error);
+    res.status(500).json({ error: 'Erro ao processar a imagem' });
   }
 });
+
+// Certifique-se de servir arquivos estáticos
+app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
 app.delete('/editar-profissional', async(req, res) => {
 

@@ -6,6 +6,34 @@ import voltar from "../assets/seta-principal.svg";
 import emailjs from "@emailjs/browser";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
+// Horários fixos disponíveis para agendamento
+const HORARIOS_DISPONIVEIS = ["11:00", "13:00", "13:30", "14:30", "16:10", "17:30", "19:20"];
+
+// Utilitários de data/hora
+const isPastDate = (dateString) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const selectedDate = new Date(dateString);
+  return selectedDate < today;
+};
+
+const isPastTime = (dateString, timeString) => {
+  if (!dateString || !timeString) return false;
+  
+  const today = new Date();
+  const selectedDate = new Date(dateString);
+  
+  if (selectedDate.toDateString() !== today.toDateString()) {
+    return false;
+  }
+  
+  const [hours, minutes] = timeString.split(':').map(Number);
+  const nowHours = today.getHours();
+  const nowMinutes = today.getMinutes();
+  
+  return hours < nowHours || (hours === nowHours && minutes <= nowMinutes);
+};
+
 function Pagamento() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -68,15 +96,7 @@ function Pagamento() {
     return savedOrigin === 'plano';
   });
 
-  useEffect(() => {
-    const origin = cadastrandoPlano ? 'plano' : 'agendamento';
-    localStorage.setItem('pagamentoOrigin', origin);
-    
-    setVim_plano(cadastrandoPlano);
-    setVim_agendamento(!cadastrandoPlano);
-  }, [cadastrandoPlano, setVim_plano, setVim_agendamento]);
-
-  // Modais e dependentes
+  // Estados para controle de UI
   const [mostrarModal, setMostrarModal] = useState(false);
   const [mostrarAgenda, setMostrarAgenda] = useState(false);
   const [mostrarModalRemover, setMostrarModalRemover] = useState(false);
@@ -86,7 +106,15 @@ function Pagamento() {
   const [nomeDependente, setNomeDependente] = useState("");
   const [nascimentoDependente, setNascimentoDependente] = useState("");
 
-  // Funções de formatação
+  useEffect(() => {
+    const origin = cadastrandoPlano ? 'plano' : 'agendamento';
+    localStorage.setItem('pagamentoOrigin', origin);
+    
+    setVim_plano(cadastrandoPlano);
+    setVim_agendamento(!cadastrandoPlano);
+  }, [cadastrandoPlano, setVim_plano, setVim_agendamento]);
+
+  // Formatação de campos
   const formatarNumeroCartao = (valor) => {
     return valor
       .replace(/\D/g, "")
@@ -201,7 +229,7 @@ function Pagamento() {
      }
   }, [id, cadastrandoPlano, plano_selecionado]);
 
-  // Efeitos para validação
+  // Validações em tempo real
   useEffect(() => {
     if (generoDependente.length > 0) setValida_banco(false);
   }, [generoDependente]);
@@ -786,17 +814,23 @@ function Pagamento() {
                 </div>
                 <div style={{ display: "flex", gap: "8px", marginTop: "5%" }}>
                   <button
-                    onClick={() => setMostrarAgenda(true)}
+                    onClick={() => {
+                      if (!isPastDate(dataSelecionada)) {
+                        setMostrarAgenda(true);
+                      }
+                    }}
                     style={{
-                      backgroundColor: "#013a63",
+                      backgroundColor: isPastDate(dataSelecionada) ? "#cccccc" : "#013a63",
                       color: "white",
                       padding: "12px 20px",
                       border: "none",
                       borderRadius: "4px",
                       fontSize: "16px",
+                      cursor: isPastDate(dataSelecionada) ? "not-allowed" : "pointer",
                     }}
+                    disabled={isPastDate(dataSelecionada)}
                   >
-                    Alterar
+                    {isPastDate(dataSelecionada) ? "Consulta passada" : "Alterar"}
                   </button>
                   <button
                     onClick={() => setMostrarModalRemover(true)}
@@ -820,20 +854,51 @@ function Pagamento() {
                 <input
                   type="date"
                   value={dataSelecionada}
-                  onChange={(e) => setDataSelecionada(e.target.value)}
+                  onChange={(e) => {
+                    setDataSelecionada(e.target.value);
+                    if (isPastDate(e.target.value)) {
+                      setHoraSelecionada("");
+                    }
+                  }}
+                  min={new Date().toISOString().split('T')[0]}
                   required
+                  className={isPastDate(dataSelecionada) ? "input-error" : ""}
                 />
                 <label>Nova data</label>
+                {isPastDate(dataSelecionada) && (
+                  <div className="error-message">
+                    <span>Não é possível agendar para datas passadas</span>
+                  </div>
+                )}
               </div>
+              
               <div className="floating-input-4" style={{ marginTop: "8px" }}>
-                <input
-                  type="time"
+                <select
                   value={horaSelecionada}
                   onChange={(e) => setHoraSelecionada(e.target.value)}
                   required
-                />
+                  disabled={!dataSelecionada || isPastDate(dataSelecionada)}
+                  className={isPastTime(dataSelecionada, horaSelecionada) ? "input-error" : ""}
+                >
+                  <option value="" disabled>Selecione um horário</option>
+                  {HORARIOS_DISPONIVEIS.map(horario => (
+                    <option 
+                      key={horario} 
+                      value={horario}
+                      disabled={isPastTime(dataSelecionada, horario)}
+                    >
+                      {horario}
+                    </option>
+                  ))}
+                </select>
                 <label>Novo horário</label>
+                {isPastTime(dataSelecionada, horaSelecionada) && (
+                  <div className="error-message">
+                    <span>⚠️ Este horário já passou para a data selecionada</span>
+                  </div>
+                )}
               </div>
+              
               <button
                 onClick={() => setMostrarAgenda(false)}
                 style={{
@@ -846,6 +911,12 @@ function Pagamento() {
                   borderRadius: "4px",
                   fontWeight: "600",
                 }}
+                disabled={
+                  !dataSelecionada || 
+                  !horaSelecionada ||
+                  isPastDate(dataSelecionada) ||
+                  isPastTime(dataSelecionada, horaSelecionada)
+                }
               >
                 Confirmar alteração
               </button>

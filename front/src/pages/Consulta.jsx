@@ -41,6 +41,20 @@ const hoje = new Date();
 const horaAtual = hoje.getHours();
 const minutoAtual = hoje.getMinutes();
 
+const verificarConsultaPassada = (consulta) => {
+  const [horaConsulta, minutoConsulta] = consulta.horario.split(':').map(Number);
+  
+  const dataConsulta = new Date(
+    consulta.ano,
+    consulta.mes,
+    consulta.dia,
+    horaConsulta,
+    minutoConsulta
+  );
+  
+  return dataConsulta < hoje;
+};
+
 export default function Consulta() {
   // Hooks e parâmetros
   const { role, id } = useParams();
@@ -445,20 +459,30 @@ export default function Consulta() {
               <div className="botoes-c">
                 {role === "paciente" ? (
                   <>
-                    <button
-                      className="alterar-c"
-                      onClick={() => setMostrarModalReagendamento(true)}
-                    >
-                      Alterar
-                    </button>
+                    {!verificarConsultaPassada(consultaSelecionada) ? (
+                      <>
+                        <button
+                          className="alterar-c"
+                          onClick={() => setMostrarModalReagendamento(true)}
+                        >
+                          Alterar
+                        </button>
+                        <button className="remover-c" onClick={cancelarConsulta}>
+                          Remover
+                        </button>
+                      </>
+                    ) : (
+                      <div className="consulta-passada-mensagem">
+                        Esta consulta já ocorreu e não pode ser alterada ou cancelada.
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  !verificarConsultaPassada(consultaSelecionada) && (
                     <button className="remover-c" onClick={cancelarConsulta}>
                       Remover
                     </button>
-                  </>
-                ) : (
-                  <button className="remover-c" onClick={cancelarConsulta}>
-                    Remover
-                  </button>
+                  )
                 )}
               </div>
             </div>

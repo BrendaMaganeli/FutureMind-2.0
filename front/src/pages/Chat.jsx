@@ -216,7 +216,7 @@ function Chat({
 
       const buscaProfissionais = async () => {
         try {
-          const response = await fetch("https://futuremind-2-0.onrender.com");
+          const response = await fetch("https://futuremind-2-0-mw60.onrender.com");
           
           if (response.ok) {
             const data = await response.json();  
@@ -231,7 +231,7 @@ function Chat({
 
       const buscaPacientes = async () => {
         try {
-          const response = await fetch("https://futuremind-2-0.onrender.com/pacientes");
+          const response = await fetch("https://futuremind-2-0-mw60.onrender.com/pacientes");
           
           if (response.ok) {
             const data = await response.json();  
@@ -335,7 +335,7 @@ function Chat({
     }
 
     const filtrados = pacientes.filter((chat) =>
-      chat.nome.toLowerCase().includes(termo)
+      chat.nome?.toLowerCase().includes(termo)
     );
     setResult(filtrados || []);
     setUseResult(true);
@@ -493,12 +493,25 @@ function Chat({
   };
 
   const ocultaChat = (index) => {
+
     const chatsAux = [...chats];
-    const ocultedChat = chatsAux[index];
-    chatsAux.splice(index, 1);
-    setChats(chatsAux);
+    const ocultosAux = [...ocultos];
+
+    // if (ocultosAux.includes(chatsAux[index])) {
+
+      // const filter = ocultosAux.filter((oculto) => oculto?.id_profissional === chatsAux?.id_profissional || oculto?.id_paciente === chatsAux?.id_paciente);
+      // const foundIndex = ocultosAux.indexOf(filter) && ocultosAux.indexOf(filter);
+      // console.log(foundIndex);
+      // ocultosAux.splice(foundIndex, 1);
+      setOcultos(ocultosAux);
+    // } else {
+
+      const ocultedChat = chatsAux[index];
+      chatsAux.splice(index, 1);
+      setChats(chatsAux);
+      setOcultos((prev) => [...prev, ocultedChat]);
+    // }
     setOpenModal(null);
-    setOcultos((prev) => [...prev, ocultedChat]);
   };
   const excluiChat = async (chat, index) => {
     try {
@@ -645,11 +658,9 @@ function Chat({
                     className="btn-ocultar"
                     onClick={() => {
                       ocultaChat(index);
-                      setChatSelected(null);
-                      setIsChatSelected("chat-not-selected");
                     }}
                     >
-                    Ocultar
+                    {!ocultos.includes(item) ? 'Ocultar' : 'Desocultar'}
                   </button>
                   <button
                     className="btn-excluir"
@@ -684,7 +695,7 @@ function Chat({
             </div>
             <div className="icons-chat">
               <div className="icons-chat-p">
-                <img src={cam} className="icon-chat-p-1" alt="" />
+                <img src={cam} onClick={() => navigate(`/live/${chatSelected?.id_profissional || chatSelected?.id_paciente}`)} className="icon-chat-p-1" alt="" />
                 <img src={block} className="icon-chat-p-2" alt="" />
               </div>
               <img
@@ -699,12 +710,15 @@ function Chat({
           </div>
           <div style={{ height: "83%", overflowY: "auto" }}>
             <div className="messages-div">
-              <div className="acess-profile-div">
-                <div className="user-name">@jana.silvaa</div>
-                <div className="btn-acess">
-                  <b onClick={encaminharPerfil}>Acessar perfil</b>
+              {
+                userType === 'Paciente' &&
+                <div className="acess-profile-div">
+                  <div className="user-name">@jana.silvaa</div>
+                  <div className="btn-acess">
+                    <b onClick={encaminharPerfil}>Acessar perfil</b>
+                  </div>
                 </div>
-              </div>
+              }
               <div className="arvore-chat">
                 {theme === "light" ? (
                   <img src={arvoreAzul} alt="" />

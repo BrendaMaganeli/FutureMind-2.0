@@ -1245,12 +1245,12 @@ html {
     height: 100%;
     justify-content: end;
     align-items: center;
-    padding: 0 35px 0 0;
-    gap: 15px;
+    padding: 1.5%;
   }
 
   .icons-chat-inpt img:hover {
     transform: scale(1.1);
+    opacity: 70%;
     cursor: pointer;
     transition: 0.3s;
   }
@@ -1263,11 +1263,6 @@ html {
   .icons-chat-inpt .hand-click {
     width: 25%;
     padding: 1%;
-    border-radius: 30px;
-  }
-
-  .icons-chat-inpt .hand-click:hover {
-    background-color: rgba(158, 158, 158, 0.527);
   }
 
   .barra-bottom img {

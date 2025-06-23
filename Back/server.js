@@ -65,6 +65,17 @@ app.get('/', async(req, res) => {
     }
 });
 
+app.get('/pacientes', async(req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM pacientes');
+
+        res.status(200).json(rows);
+    } catch (err) {
+        console.error('Erro ao buscar profissionais:', err);
+        res.status(500).json('erro servidor');
+    }
+});
+
 app.post('/cadastro-paciente', async(req, res) => {
 
     try {

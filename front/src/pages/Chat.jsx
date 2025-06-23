@@ -98,7 +98,7 @@ function Chat({
 
           if (!dado) return console.log("erro N");
 
-          const response = await fetch(`https://futuremind-2-0.onrender.com/chats/chat`, {
+          const response = await fetch(`http://localhost:4242/chats/chat`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -111,6 +111,8 @@ function Chat({
 
             setMessages(data);
           } else {
+
+            setMessages([]);
             console.log("erro");
           }
         } catch (error) {
@@ -118,10 +120,7 @@ function Chat({
         }
       };
 
-      const idAux =
-        userType === "Profissional"
-          ? chatSelected.id_paciente
-          : chatSelected.id_profissional;
+      const idAux = userType === "Profissional" ? chatSelected.id_paciente : chatSelected.id_profissional;
       fetchMessages(idAux);
     }
   }, [chatSelected]);
@@ -146,6 +145,7 @@ function Chat({
   const [inptvalue, setInptvalue] = useState("");
   const [mostrarLogo, setMostrarLogo] = useState(true);
   const [profissionais, setProfissionais] = useState([]);
+  const [pacientes, setPacientes] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -211,10 +211,13 @@ function Chat({
   };
 
   useEffect(() => {
+
+    if (userType==='Paciente') {
+
       const buscaProfissionais = async () => {
         try {
           const response = await fetch("https://futuremind-2-0.onrender.com");
-  
+          
           if (response.ok) {
             const data = await response.json();  
             setProfissionais(data);
@@ -224,13 +227,29 @@ function Chat({
         }
       };
       buscaProfissionais()
+    } else {
+
+      const buscaPacientes = async () => {
+        try {
+          const response = await fetch("https://futuremind-2-0.onrender.com/pacientes");
+          
+          if (response.ok) {
+            const data = await response.json();  
+            setPacientes(data);
+          }
+        } catch (err) {
+          console.log("Erro ao buscar profissionais:", err);
+        }
+      };
+      buscaPacientes()
+    }
     }, []);
 
   const socket = useRef();
 
  useEffect(() => {
   if (!socket.current) {
-    socket.current = io("http://localhost:3001");
+    socket.current = io("https://backend-futuremind.onrender.com");
 
     socket.current.on("connect", () => {
       console.log("Conectado ao Socket.IO!");
@@ -304,6 +323,23 @@ function Chat({
     setResult(filtrados || []);
     setUseResult(true);
   }
+  
+  function buscaPaciente(e) {
+    const termo = e.target.value;
+    setBusca(termo.toLowerCase());
+
+    if (termo === "") {
+      setResult([]);
+      setUseResult(false);
+      return;
+    }
+
+    const filtrados = pacientes.filter((chat) =>
+      chat.nome.toLowerCase().includes(termo)
+    );
+    setResult(filtrados || []);
+    setUseResult(true);
+  }
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -362,7 +398,7 @@ function Chat({
   const fetchSendMessage = async (message) => {
     try {
       const response = await fetch(
-        "https://futuremind-2-0.onrender.com/chats/chat/send-message",
+        "http://localhost:4242/chats/chat/send-message",
         {
           method: "POST",
           headers: {
@@ -439,7 +475,7 @@ function Chat({
 
       if (!data) return console.log("Erro ao carregar dados");
 
-      const response = await fetch("https://futuremind-2-0.onrender.com/chats/mensagens", {
+      const response = await fetch("http://localhost:4242/chats/mensagens", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -482,7 +518,7 @@ function Chat({
 
       if (!data) return console.log("Erro ao carregar dados");
 
-      const response = await fetch("https://futuremind-2-0.onrender.com/chats", {
+      const response = await fetch("http://localhost:4242/chats", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -550,7 +586,7 @@ function Chat({
             <div className="div-lupa-input">
               <img src={lupa} alt="Lupa pesquisa" />
               <input
-                onChange={buscaProfissional}
+                onChange={userType === 'Paciente' ? buscaProfissional : buscaPaciente}
                 value={busca}
                 type="text"
                 placeholder="Busque por conversas..."
@@ -586,7 +622,7 @@ function Chat({
                 setOpenModal(null);
               }}
               >
-              <img src={item.foto ? `https://futuremind-2-0.onrender.com${item.foto}` : icon} alt="" />
+              <img src={item.foto ? `http://localhost:4242${item.foto}` : icon} alt="" />
               <div className="nome">
                 <p>{item.nome.split(' ')[0]}</p>
               </div>
@@ -641,7 +677,7 @@ function Chat({
         <div className={`chat ${isChatSelected}`}>
           <div className="barra-top">
             <div className="img-foto">
-              <img src={chatSelected.foto ? `https://futuremind-2-0.onrender.com${chatSelected.foto}` : icon} alt="" />
+              <img src={chatSelected.foto ? `http://localhost:4242${chatSelected.foto}` : icon} alt="" />
             </div>
             <div className="nome-user-chat">
               <h5>{chatSelected.nome.split(' ')[0]}</h5>
@@ -687,7 +723,7 @@ function Chat({
                 >
                   {msg.mensageiro === !userType && (
                     <div className="image-message-right">
-                      <img src={user.foto ? `https://futuremind-2-0.onrender.com${user.foto}` : icon} alt="" />
+                      <img src={user.foto ? `http://localhost:4242${user.foto}` : icon} alt="" />
                     </div>
                   )}
                   <div
@@ -738,7 +774,7 @@ function Chat({
                   )}
                   {msg.mensageiro === userType && (
                     <div className="image-message-left">
-                      <img src={chatSelected.foto ? `https://futuremind-2-0.onrender.com${chatSelected.foto}` : icon} alt="" />
+                      <img src={chatSelected.foto ? `http://localhost:4242${chatSelected.foto}` : icon} alt="" />
                     </div>
                   )}
                 </div>
@@ -757,7 +793,7 @@ function Chat({
             </div>
             <div className="icons-chat-inpt">
               <button type="submit">
-                <img src="message (1).png" className="hand-click" alt="" />
+                <img src="send-message.png" className="hand-click" alt="" />
               </button>
             </div>
           </form>

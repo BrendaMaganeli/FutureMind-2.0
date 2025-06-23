@@ -190,6 +190,7 @@ function Plano_saude() {
     pegar_data_fim();
   }, []);
 
+
   useEffect(() => {
     if (!dataAr?.data_fim_assinaturas) return;
 
@@ -291,7 +292,7 @@ function Plano_saude() {
         </div>
       </div>
 
-      {(!user?.chk_plano || user?.id_profissional) && (
+      {user?.id_paciente && !user?.chk_plano && (
         <>
           <div className="container-planos">
             <h1 className="titulo-planos">Escolha seu plano</h1>

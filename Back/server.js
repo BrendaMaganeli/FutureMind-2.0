@@ -852,28 +852,25 @@ app.get("/profissional/:id", async (req, res) => {
 });
 
 app.put('/validacao_planos', async (req, res) => {
-
-  const {id_paciente, chk_plano} = req.body;
-  
+  const { id_paciente, chk_plano } = req.body;
+    const chkPlanoNum = chk_plano ? 1 : 0;
   try {
-    
     const [response] = await pool.query(
-        `UPDATE pacientes SET chk_plano=? WHERE id_paciente=?`,
-        [chk_plano, id_paciente]
+      `UPDATE pacientes SET chk_plano = ?, data_fim_assinaturas = ? WHERE id_paciente = ?`,
+      [chkPlanoNum, '', id_paciente]
     );
 
-    if(response.affectedRows > 0){
-
-        return res.status(201).json({ success: true});
+    if (response.affectedRows > 0) {
+      return res.status(200).json({ success: true });
     }
-    return res.status(404).json({ Error: 'erro ao inserir dados'})
 
-   } catch (error) {
-     
-    console.error('Erro ao salvar mensagem:', error);
-    res.status(500).json({ Error: 'Erro interno do servidor' });
-   }
-})
+    return res.status(404).json({ error: 'Paciente não encontrado.' });
+
+  } catch (error) {
+    console.error('Erro ao atualizar plano:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
 
 app.post('/verificar_paciente', async (req, res) => {
   const { valorEmail, cpf, telefone } = req.body;

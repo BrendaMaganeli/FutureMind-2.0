@@ -17,6 +17,9 @@ function Login() {
 
   const [tipoInput, setTipoInput] = useState("password");
   const [tipoIconSenha, setTipoIconSenha] = useState("icon_nao_ver.png");
+  
+  const [mensagemSenha, setMensagemSenha] = useState("")
+  const [mensagemEmail, setMensagemEmail] = useState("")
 
   const alternarTipo = () => {
     if (tipoInput === "password") {
@@ -42,33 +45,45 @@ function Login() {
         }
       );
 
-      const data = await response.json();
-
+      
       if (response.ok) {
+        const data = await response.json();
         setUserLogado(true);
         setUser(data);
         setPaginaAnterior('Login');
         navigate("/inicio");
+      } else {
+        
+        const data = await response.json();
+        console.log(data);  
+        
+        if(data == 'Paciente não encontrado' || data == 'Profissional não encontrado'){
+          
+           setEmailValido(true)
+           setMensagemEmail('Email não cadastrado!')
+           setSenhaValido(true)
+           setMensagemSenha('')
+
+        }else{
+           
+          setEmailValido(false)
+          setMensagemEmail('')
+
+        }
+
+        if(data == 'Senha incorreta'){
+         
+          setSenhaValido(true)
+          setMensagemSenha('senha incorreta!')
+          
+        }
       }
+
     } catch (err) {
       console.log("Erro no servidor", err);
     }
   };
 
-  const handleCadastro = () => {
-    let validacoes = true;
-
-    if (!valorSenha || valorSenha.trim().length < 8) {
-      setSenhaValido(true);
-      validacoes = false;
-    } else {
-      setSenhaValido(false);
-    }
-
-    if (validacoes) {
-      handleLogin();
-    }
-  };
 
   return (
     <div className="container-profissional">
@@ -95,8 +110,8 @@ function Login() {
               required
             />
             <label>E-mail</label>
-            <span className={`erro ${emailValido ? "visivel" : ""}`}>
-              E-mail deve terminar com @gmail.com ou @hotmail.com
+            <span className={`com_erros ${!emailValido ? "sem_erro" : ""}`}>
+              {mensagemEmail}
             </span>
           </div>
 
@@ -104,6 +119,7 @@ function Login() {
             <input
               type={tipoInput}
               value={valorSenha}
+              maxLength={8}
               onChange={(e) => {
                 setValorSenha(e.target.value);
                 setSenhaValido(false);
@@ -112,8 +128,8 @@ function Login() {
               required
             />
             <label>Senha</label>
-            <span className={`erro ${senhaValido ? "visivel" : ""}`}>
-              Mínimo 8 caracteres
+            <span className={`com_erros ${!senhaValido ? "sem_erro" : ""}`}>
+              {mensagemSenha}
             </span>
             <img
               src={tipoIconSenha}
@@ -125,7 +141,7 @@ function Login() {
         </div>
 
         <div className="container_button_login">
-          <button className="botao-login" onClick={handleCadastro}>
+          <button className="botao-login" onClick={handleLogin}>
             Realizar Login
           </button>
         </div>

@@ -71,7 +71,7 @@ app.get('/pacientes', async(req, res) => {
 
         res.status(200).json(rows);
     } catch (err) {
-        console.error('Erro ao buscar profissionais:', err);
+        console.error('Erro ao buscar pacientes:', err);
         res.status(500).json('erro servidor');
     }
 });

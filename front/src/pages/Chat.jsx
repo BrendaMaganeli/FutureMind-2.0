@@ -238,7 +238,7 @@ function Chat({
             setPacientes(data);
           }
         } catch (err) {
-          console.log("Erro ao buscar profissionais:", err);
+          console.log("Erro ao buscar pacientes:", err);
         }
       };
       buscaPacientes()

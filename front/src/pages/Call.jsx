@@ -14,7 +14,7 @@ if (rawUser) {
 
     // Para redes diferentes, o servidor precisa ser acessível publicamente
     // Substitua pelo seu IP público ou domínio
-    socket = io("https://localhost:5000", {
+    socket = io('https://futuremind-20-production.up.railway.app', {
       // Use HTTPS para redes diferentes
       auth: {
         name: user?.nome,

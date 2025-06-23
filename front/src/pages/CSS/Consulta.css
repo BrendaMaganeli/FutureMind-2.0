@@ -584,3 +584,14 @@
   background: #cccccc;
   cursor: not-allowed;
 }
+
+
+.consulta-passada-mensagem {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  color: #6c757d;
+  text-align: center;
+  font-size: 0.9rem;
+}

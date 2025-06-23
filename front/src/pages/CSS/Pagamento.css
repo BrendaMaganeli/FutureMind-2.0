@@ -393,3 +393,68 @@
   text-align: start;
   margin-top: 3%;
 }
+
+/* Estilos para validação */
+.input-error {
+  border-color: #ff4444 !important;
+  background-color: #fff9f9;
+}
+
+.error-message {
+  color: #ff4444;
+  font-size: 0.8rem;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.error-message span {
+  display: flex;
+  align-items: center;
+}
+
+/* Estilo para inputs desabilitados */
+input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* Melhorias visuais para os inputs */
+.floating-input-4 input {
+  transition: all 0.3s ease;
+}
+
+.floating-input-4 input:focus {
+  border-color: #013a63;
+  box-shadow: 0 0 0 2px rgba(1, 58, 99, 0.2);
+}
+
+.floating-input-4 select {
+  width: 118%;
+  padding: 12px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.floating-input-4 select:focus {
+  border-color: #013a63;
+  box-shadow: 0 0 0 2px rgba(1, 58, 99, 0.2);
+  outline: none;
+}
+
+.floating-input-4 select.input-error {
+  border-color: #ff4444;
+  background-color: #fff9f9;
+}
+
+.floating-input-4 select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.floating-input-4 option:disabled {
+  color: #ccc;
+}

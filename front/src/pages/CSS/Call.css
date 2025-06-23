@@ -22,16 +22,16 @@
 
   display: flex;
   position: absolute;
-  left: 42%;
+  transform: translateX(-10%);
   top: 90%;
   gap: 5px;
 }
 
 .incoming-call .end-call-button, .incoming-call .accept-call-button {
 
-  background-color: #5a7da0;
+  background-color: #0bbe02;
   color: white;
-  padding: 10px 20px;
+  padding: 6% 10% 6% 10%;
   border-radius: 5px;
   border: none;
   font-size: 16px;
@@ -41,7 +41,7 @@
 
 .incoming-call .end-call-button:hover, .incoming-call .accept-call-button:hover {
 
-  background-color: #013a63;
+  filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.5));
   transition: 0.5s;
 }
 
@@ -53,13 +53,14 @@
 .users-online-container {
 
   position: absolute;
-  background-color: #C1DFF4;
+  background-color: #FFFF;
   left: 71%;
   top: 55%;
   height: 44%;
   width: 26%;
-  padding: 3%;
+  padding: 2%;
   border-radius: 16px;
+  filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.5));
   transform: translateY(-0%);
   transition: 1s;
   display: flex;
@@ -70,18 +71,21 @@
 .users-online-container .user-item {
   
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
   align-items: center;
   gap: 15%;
+  padding: 2%;
+  border-bottom: 1px solid #c6c6c6;
 }
 
 .users-online-container h4 {
 
   color: #013a63;
-  background-color: #013a6350;
+  background-color: #ffff;
   padding: 2%;
   width: fit-content;
   border-radius: 5px;
+  font-size: 130%;
 }
 
 .users-online-container .user-item span {
@@ -173,6 +177,7 @@
 .videoconferencia-container .start-call-button:hover {
 
   background-color: #013a63;
+  filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.5));
   transition: 0.5s;
 }
 
@@ -475,11 +480,16 @@
 
 .videoconferencia-container .select-name {
 
-  background-color: #5a7da0;
+  background-color: #0bbe02;
   color: white;
   font-size: 12px;
   padding: 2% 5% 2% 5%;
   border: 1px;
   border-radius: 4px;
   box-shadow: 1px 1px 10px #bebebe;
+}
+
+.videoconferencia-container .select-name.red {
+
+  background-color: #d30000;
 }

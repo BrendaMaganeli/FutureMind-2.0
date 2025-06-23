@@ -14,10 +14,7 @@ import { GlobalContext } from "../Context/GlobalContext.jsx";
 function Plano_saude() {
 
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("User-Profile"));
-
-  const { plano_selecionado, setPlano_selecionado, setVim_plano, setVim_agendamento } =
-    useContext(GlobalContext);
+  const { plano_selecionado, setPlano_selecionado, setVim_plano, setVim_agendamento, user, setUser } = useContext(GlobalContext);
 
 
   const [modalAberto, setModalAberto] = useState(false);

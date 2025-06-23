@@ -1,5 +1,5 @@
 import "./CSS/EditarPaciente.css";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import icon_um from "../assets/calendar-check.svg";
 import icon_dois from "../assets/video.svg";
@@ -8,35 +8,36 @@ import logo from "../assets/logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
 import Arvore from "../assets/Group 239274.svg";
 import icon from "../assets/iconusu.svg";
+import { GlobalContext } from "../Context/GlobalContext";
 
 function EditarPaciente() {
   const navigate = useNavigate();
-  const pacienteSalvo = JSON.parse(localStorage.getItem("User-Profile"));
+  const { user, setUser } = useContext(GlobalContext);
 
   // Estados para edição
   const [pacienteEditado, setPacienteEditado] = useState({
-    id_paciente: pacienteSalvo?.id_paciente || "",
-    nome: pacienteSalvo?.nome || "",
-    cpf: pacienteSalvo?.cpf || "",
-    telefone: pacienteSalvo?.telefone || "",
-    email: pacienteSalvo?.email || "",
-    data_nascimento: pacienteSalvo?.data_nascimento || "",
-    senha: pacienteSalvo?.senha || "",
+    id_paciente: user?.id_paciente || "",
+    nome: user?.nome || "",
+    cpf: user?.cpf || "",
+    telefone: user?.telefone || "",
+    email: user?.email || "",
+    data_nascimento: user?.data_nascimento || "",
+    senha: user?.senha || "",
   });
 
   // Estado para exibição (não muda até salvar)
   const [pacienteExibido, setPacienteExibido] = useState({
-    nome: pacienteSalvo?.nome || "",
-    foto: pacienteSalvo?.foto 
-      ? pacienteSalvo.foto.startsWith('http') 
-        ? pacienteSalvo.foto 
-        : `http://localhost:4242${pacienteSalvo.foto}`
+    nome: user?.nome || "",
+    foto: user?.foto 
+      ? user.foto.startsWith('http') 
+        ? user.foto 
+        : `http://localhost:4242${user.foto}`
       : icon
   });
 
   // Estado para a data formatada
   const [dataNascimentoFormatada, setDataNascimentoFormatada] = useState(
-    formatarDataBrasileira(pacienteSalvo?.data_nascimento)
+    formatarDataBrasileira(user?.data_nascimento)
   );
 
   // Outros estados
@@ -104,7 +105,7 @@ function EditarPaciente() {
 
       if (response.ok) {
         localStorage.setItem("User Logado", false);
-        localStorage.removeItem("User-Profile");
+        setUser(null);
         navigate("/");
       } else {
         const errorData = await response.json();
@@ -118,7 +119,7 @@ function EditarPaciente() {
 
   const sairPaciente = () => {
     localStorage.setItem("User Logado", false);
-    localStorage.removeItem("User-Profile");
+    setUser(null);
     navigate("/");
   };
 
@@ -151,7 +152,7 @@ function EditarPaciente() {
           foto: pacienteExibido.foto
         };
         
-        localStorage.setItem("User-Profile", JSON.stringify(updatedProfile));
+        setUser(JSON.stringify(updatedProfile));
         setPacienteEditado(updatedProfile);
         setPacienteExibido({
           ...pacienteExibido,
@@ -221,8 +222,8 @@ function EditarPaciente() {
         ...pacienteEditado,
         foto: fotoUrl
       };
-      
-      localStorage.setItem('User-Profile', JSON.stringify(updatedProfile));
+
+      setUser(JSON.stringify(updatedProfile));
       setPacienteEditado(updatedProfile);
       setImagemPreview(null);
       setIsVisible(false);

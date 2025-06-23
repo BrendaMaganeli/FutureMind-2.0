@@ -6,15 +6,15 @@ import logo from "../assets/logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
 import Arvore from "../assets/Arvore-perfil.svg";
 import ModalLogin from "../Components/ModalLogin";
-
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
 import Chat from "./Chat";
+import { useContext } from "react";
+import { GlobalContext } from "../Context/GlobalContext";
 
 function VisualizarProfissional() {
 
-  const user = JSON.parse(localStorage.getItem('User-Profile'));
+  const { user } = useContext(GlobalContext);
   const [profissional, setProfissional] = useState({});
   const [isInChat, setIsInChat] = useState(false);
   const [modalLogin, setModalLogin] = useState(false);

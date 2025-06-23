@@ -1,10 +1,14 @@
+import { useContext } from 'react';
 import './CSS/ModalLogin.css';
+import { GlobalContext } from '../Context/GlobalContext';
 
 function ModalSair({setMostrarModalSair, setMostrarModalCadastro}) {
 
+    const { setUser } = useContext(GlobalContext);
+
     const sairConta = () => {
 
-        localStorage.removeItem('User-Profile');
+        setUser(null);
         setMostrarModalSair(false);
         setMostrarModalCadastro(true);
     }

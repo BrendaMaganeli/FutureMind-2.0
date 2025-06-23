@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal, Box } from "@mui/material";
 import AOS from "aos";
@@ -7,6 +7,7 @@ import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer.jsx";
 import "./CSS/Landing_page.css";
 import ModalSair from "../Components/ModalSair.jsx";
+import { GlobalContext } from "../Context/GlobalContext.jsx";
 
 const estiloCaixa = {
   position: "absolute",
@@ -24,7 +25,7 @@ function Landing_page() {
   const [mostrarLogo, setMostrarLogo] = useState(true);
   const [aberto, setAberto] = useState(false);
   const [mostrarModalSair, setMostrarModalSair] = useState(false);
-  const user = JSON.parse(localStorage.getItem('User-Profile'));
+  const { user } = useContext(GlobalContext);
   const navigate = useNavigate();
 
   useEffect(() => {

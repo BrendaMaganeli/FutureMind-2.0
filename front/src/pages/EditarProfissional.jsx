@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Select from "react-select";
 import icon_um from "../assets/calendar-check.svg";
 import icon_dois from "../assets/video.svg";
@@ -8,12 +8,13 @@ import Arvore from "../assets/Group 239274.svg";
 import voltar from "../assets/seta-principal.svg";
 import "./CSS/EditarProfissional.css";
 import icon from "../assets/iconusu.svg";
+import { GlobalContext } from "../Context/GlobalContext";
 
 
 function EditarProfissional() {
   const navigate = useNavigate();
 
-  const perfilSalvo = JSON.parse(localStorage.getItem("User-Profile"));
+  const { user, setUser } = useContext(GlobalContext);
 
   const [showModal, setShowModal] = useState(false);
   const [hasValueEspecializacao, setHasValueEspecializacao] = useState(false);
@@ -21,38 +22,38 @@ function EditarProfissional() {
   const [imagemPreview, setImagemPreview] = useState(null);
   const [fotoSelecionada, setFotoSelecionada] = useState(null);
   const [foto, setFoto] = useState(
-    perfilSalvo.foto?.includes('http') 
-      ? perfilSalvo.foto 
-      : perfilSalvo.foto 
-        ? `http://localhost:4242${perfilSalvo.foto}` 
+    user.foto?.includes('http') 
+      ? user.foto 
+      : user.foto 
+        ? `http://localhost:4242${user.foto}` 
         : icon
   );
 
   const [formData, setFormData] = useState({
-    id_profissional: perfilSalvo?.id_profissional || "",
-    nome: perfilSalvo?.nome || "",
-    cpf: perfilSalvo?.cpf || "",
-    telefone: perfilSalvo?.telefone || "",
-    email: perfilSalvo?.email || "",
-    data_nascimento: perfilSalvo
-      ? formatarDataBrasileira(perfilSalvo.data_nascimento)
+    id_profissional: user?.id_profissional || "",
+    nome: user?.nome || "",
+    cpf: user?.cpf || "",
+    telefone: user?.telefone || "",
+    email: user?.email || "",
+    data_nascimento: user
+      ? formatarDataBrasileira(user.data_nascimento)
       : "",
-    senha: perfilSalvo?.senha || "",
-    crp: perfilSalvo?.crp || "",
-    foto: perfilSalvo?.foto || "",
-    sobre_mim: perfilSalvo?.sobre_mim || "",
-    especializacao: parseCampoArray(perfilSalvo?.especializacao),
-    abordagem: parseCampoArray(perfilSalvo?.abordagem),
-    valor_consulta: perfilSalvo?.valor_consulta  ? formatarValorConsulta(perfilSalvo.valor_consulta.toString()) : "R$ 0,00",
-    email_profissional: perfilSalvo?.email_profissional || "",
+    senha: user?.senha || "",
+    crp: user?.crp || "",
+    foto: user?.foto || "",
+    sobre_mim: user?.sobre_mim || "",
+    especializacao: parseCampoArray(user?.especializacao),
+    abordagem: parseCampoArray(user?.abordagem),
+    valor_consulta: user?.valor_consulta  ? formatarValorConsulta(user.valor_consulta.toString()) : "R$ 0,00",
+    email_profissional: user?.email_profissional || "",
 });
 
 const [profissionais, setProfissionais] = useState(formData);
 
   useEffect(() => {
 
-    const profissionalAux = {...perfilSalvo, foto: foto};
-    localStorage.setItem('User-Profile', JSON.stringify(profissionalAux));
+    const profissionalAux = {...user, foto: foto};
+    setUser(profissionalAux);
   }, [foto]);
 
   const opcoesEspecializacao = [
@@ -157,12 +158,12 @@ function formatarValorConsultab(valor) {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            id_profissional: perfilSalvo.id_profissional,
+            id_profissional: user.id_profissional,
           }),
         }
       );
       if (response.ok) {
-        localStorage.removeItem("User-Profile");
+        setUser(null);
         navigate("/");
       }
     } catch (err) {
@@ -193,7 +194,7 @@ const salvarEdicao = async () => {
       const data = await response.json();
       data.valor_consulta = data.valor_consulta.toFixed(2);
       data.foto = foto;
-      localStorage.setItem("User-Profile", JSON.stringify(data));
+      setUser(JSON.stringify(data));
       setProfissionais(data); // Atualiza o estado de exibição com os dados salvos
       window.location.reload();
     }
@@ -204,7 +205,7 @@ const salvarEdicao = async () => {
 
   const sairProfissional = () => {
     localStorage.setItem("User Logado", false);
-    localStorage.removeItem("User-Profile");
+    setUser(null);
     navigate("/");
   };
 
@@ -237,7 +238,7 @@ const salvarEdicao = async () => {
   
       const formData = new FormData(); // Corrigir a criação do FormData
       formData.append('foto', file); // Adicionar o arquivo selecionado
-      formData.append('id_profissional', perfilSalvo.id_profissional);
+      formData.append('id_profissional', user.id_profissional);
   
       try {
         const response = await fetch('http://localhost:4242/profissional/foto-perfil', {
@@ -326,7 +327,7 @@ const salvarEdicao = async () => {
               <img src={icon_um} alt="" />
               <p onClick={navegaParaConsulta}>Suas Consultas</p>
             </div>
-            <div className="topicos" onClick={() => navigate(`/live/${perfilSalvo.id_profissional}`)}>
+            <div className="topicos" onClick={() => navigate(`/live/${user.id_profissional}`)}>
               <img src={icon_dois} alt="" />
               <p>Vídeo Chamada</p>
             </div>

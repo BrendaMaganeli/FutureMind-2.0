@@ -36,8 +36,6 @@ function AgendaConsultas() {
   const hoje = new Date();
   const navegar = useNavigate();
   const { id } = useParams();
-  const usuario = JSON.parse(localStorage.getItem("User-Profile"));
-
   const [anoAtual, setAnoAtual] = useState(hoje.getFullYear());
   const [indiceMesAtual, setIndiceMesAtual] = useState(hoje.getMonth());
   const [consultasAgendadas, setConsultasAgendadas] = useState({});

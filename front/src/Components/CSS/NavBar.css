@@ -82,5 +82,8 @@
 }
 
 .container-icon img {
-  width: 70%;
+
+  width: 52px;
+  height: 45px;
+  border-radius: 50%;
 }

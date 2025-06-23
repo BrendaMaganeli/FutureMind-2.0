@@ -2,15 +2,17 @@ import voltar from "../assets/seta-principal.svg";
 import config from "../assets/settings.svg";
 import help from "../assets/help 1.svg";
 import lupa from "../assets/search 1.svg";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import close from "../assets/close-2.svg";
 import cam from "../assets/cam-recorder (1) 1.svg";
 import block from "../assets/blocked 1.svg";
 import arvoreAzul from "../assets/Arvore Azul.svg";
 import arvoreBranca from "../assets/Arvore Branca.svg";
+import icon from "../assets/icon-profile.svg";
 import io from "socket.io-client";
 import "./CSS/Chat.css";
+import { GlobalContext } from "../Context/GlobalContext";
 
 function Chat({
   idChatSelected,
@@ -22,22 +24,21 @@ function Chat({
   const [chatSelected, setChatSelected] = useState(
     idChatSelected ? profissionalSelected : null
   );
-  const user = JSON.parse(localStorage.getItem("User-Profile"));
+  const { user } = useContext(GlobalContext);
   const userType = user.id_paciente ? "Paciente" : "Profissional";
 
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const userLocal = JSON.parse(localStorage.getItem("User-Profile"));
 
-        if (!userLocal) {
-          console.log("Usuário não encontrado no localStorage");
+        if (!user) {
+          console.log("Usuário não encontrado");
           return;
         }
 
         const data = {
-          fk_id: userLocal.id_profissional || userLocal.id_paciente,
-          userType: userLocal.id_profissional ? "Profissional" : "Paciente",
+          fk_id: user.id_profissional || user.id_paciente,
+          userType: user.id_profissional ? "Profissional" : "Paciente",
         };
 
         const response = await fetch(
@@ -97,7 +98,7 @@ function Chat({
 
           if (!dado) return console.log("erro N");
 
-          const response = await fetch(`http://localhost:4242/chats/chat`, {
+          const response = await fetch(`https://futuremind-2-0.onrender.com/chats/chat`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -361,7 +362,7 @@ function Chat({
   const fetchSendMessage = async (message) => {
     try {
       const response = await fetch(
-        "http://localhost:4242/chats/chat/send-message",
+        "https://futuremind-2-0.onrender.com/chats/chat/send-message",
         {
           method: "POST",
           headers: {
@@ -438,7 +439,7 @@ function Chat({
 
       if (!data) return console.log("Erro ao carregar dados");
 
-      const response = await fetch("http://localhost:4242/chats/mensagens", {
+      const response = await fetch("https://futuremind-2-0.onrender.com/chats/mensagens", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -481,7 +482,7 @@ function Chat({
 
       if (!data) return console.log("Erro ao carregar dados");
 
-      const response = await fetch("http://localhost:4242/chats", {
+      const response = await fetch("https://futuremind-2-0.onrender.com/chats", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -585,9 +586,9 @@ function Chat({
                 setOpenModal(null);
               }}
               >
-              <img src={`http://localhost:4242${item.foto}`} alt="" />
+              <img src={item.foto ? `https://futuremind-2-0.onrender.com${item.foto}` : icon} alt="" />
               <div className="nome">
-                <p>{item.nome}</p>
+                <p>{item.nome.split(' ')[0]}</p>
               </div>
               {hoverElement === index && (
                 <div className="config-chat">
@@ -640,10 +641,10 @@ function Chat({
         <div className={`chat ${isChatSelected}`}>
           <div className="barra-top">
             <div className="img-foto">
-              <img src={`http://localhost:4242${chatSelected.foto}`} alt="" />
+              <img src={chatSelected.foto ? `https://futuremind-2-0.onrender.com${chatSelected.foto}` : icon} alt="" />
             </div>
             <div className="nome-user-chat">
-              <h5>{chatSelected.nome}</h5>
+              <h5>{chatSelected.nome.split(' ')[0]}</h5>
             </div>
             <div className="icons-chat">
               <div className="icons-chat-p">
@@ -686,7 +687,7 @@ function Chat({
                 >
                   {msg.mensageiro === !userType && (
                     <div className="image-message-right">
-                      <img src={user.foto} alt="" />
+                      <img src={user.foto ? `https://futuremind-2-0.onrender.com${user.foto}` : icon} alt="" />
                     </div>
                   )}
                   <div
@@ -737,7 +738,7 @@ function Chat({
                   )}
                   {msg.mensageiro === userType && (
                     <div className="image-message-left">
-                      <img src={user.foto} alt="" />
+                      <img src={chatSelected.foto ? `https://futuremind-2-0.onrender.com${chatSelected.foto}` : icon} alt="" />
                     </div>
                   )}
                 </div>

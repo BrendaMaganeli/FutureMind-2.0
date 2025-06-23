@@ -22,9 +22,8 @@ function Inicio() {
   const navigate = useNavigate();
   const { setId } = useContext(GlobalContext);
   const [mostrarLogo, setMostrarLogo] = useState(true);
-  const user = JSON.parse(localStorage.getItem('User-Profile'));
-  const userName = user?.nome.split(' ')[0];
-  const { paginaAnterior, setPaginaAnterior } = useContext(GlobalContext);
+  const { paginaAnterior, setPaginaAnterior, user } = useContext(GlobalContext);
+  const userName = user?.nome?.split(' ')[0];
 
   useEffect(() => {
 

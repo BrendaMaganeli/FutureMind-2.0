@@ -10,7 +10,7 @@ if (rawUser) {
   try {
     const user = JSON.parse(rawUser);
 
-    socket = io('http://192.168.15.9:5000', {
+    socket = io('http://192.168.1.16:5000', {
       auth: {
         name: user?.nome
       },
@@ -539,7 +539,7 @@ function VideoConferencia() {
         </div>
     )}
 
-            {!callInProgress && !incomingOffer && JSON.parse(rawUser).id_profissional && (
+            {!callInProgress && !incomingOffer && JSON.parse(rawUser).id_profissional && targetUser && (
                 <button className="start-call-button" onClick={startCall}>
                     Iniciar Chamada
                     <img src='/public/phone.png' />
@@ -547,14 +547,14 @@ function VideoConferencia() {
             )}
 
             {callInProgress &&  (
-                <button style={{background: 'red'}} className="start-call-button" onClick={endCall}>
+                <button style={{backgroundColor: '#d30000'}} className="start-call-button" onClick={endCall}>
                     Encerrar Chamada
                     <img src='/public/phone.png' />
                 </button>
             )}
             {incomingOffer && !callInProgress && (
                 <div className="incoming-call">
-                    <button className="end-call-button" onClick={endCall}>
+                    <button className="end-call-button" style={{backgroundColor: '#d30000'}} onClick={endCall}>
                         Recusar
                     </button>
                     <button className="accept-call-button" onClick={acceptCall}>
@@ -567,13 +567,13 @@ function VideoConferencia() {
                 <h4>Pacientes em espera ({onlineUsers.length})</h4>
                 {onlineUsers.map((user) => (
                     <div key={user.id} className="user-item">
-                        <span>{user.name.split(' ')[0]}</span>
+                        <span>{user.name?.split(' ')[0]}</span>
                         <button
-                            onClick={() => setTargetUser(user.id)}
+                            onClick={() => !targetUser ? setTargetUser(user.id) : setTargetUser(null)}
                             disabled={callInProgress || incomingOffer}
-                            className="select-name"
+                            className={targetUser === user.id ? "select-name red" : "select-name"}
                         >
-                            {targetUser === user.id ? "Ok" : "Adicionar"}
+                            {targetUser === user.id ? "Remover" : "Adicionar"}
                         </button>
                     </div>
                 ))}

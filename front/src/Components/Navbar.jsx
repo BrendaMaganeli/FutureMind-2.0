@@ -1,5 +1,5 @@
 import icon from "../assets/icon-profile.svg";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState, useRef, useContext } from "react";
 import ModalLogin from "./ModalLogin";
 import "./CSS/NavBar.css";
@@ -10,9 +10,8 @@ function Navbar({ cor }) {
   const [underlineStyle, setUnderlineStyle] = useState({});
   const linksRef = useRef([]);
   const [mostrarModalLogin, setMostrarModalLogin] = useState(false);
-  const navigate = useNavigate();
 
-  const profissional = JSON.parse(localStorage.getItem('User-Profile'));
+  const { user } = useContext(GlobalContext);
 
   useEffect(() => {
     const activeLink = linksRef.current.find((link) =>
@@ -28,7 +27,7 @@ function Navbar({ cor }) {
 
   const handleClick = () => {
 
-    if (!profissional) {
+    if (!user) {
 
       setMostrarModalLogin(true);
     }
@@ -46,13 +45,13 @@ function Navbar({ cor }) {
         <NavLink to="/inicio" end ref={el => linksRef.current[0] = el}>Profissionais</NavLink>
         
         <NavLink to="/planoSaude" ref={el => linksRef.current[2] = el}>Planos</NavLink>
-        <a onClick={handleClick} href={profissional && '/chats'} ref={el => linksRef.current[3] = el}>
+        <a onClick={handleClick} href={user && '/chats'} ref={el => linksRef.current[3] = el}>
           Chats <img src="logo_chat.svg" alt="Chat" className='chatbalao' />
         </a>
       </div>
       <div className="container-icon">
-        <Link to={profissional?.id_profissional ? "/editarprofissional" : profissional?.id_paciente ? '/paciente' : "/login"}>
-          <img src={icon} alt="Perfil" />
+        <Link to={user?.id_profissional ? "/editarprofissional" : user?.id_paciente ? '/paciente' : "/login"}>
+          <img src={user?.foto.startsWith('http') ? user?.foto : user?.foto ? `http://localhost:4242${user?.foto}` : icon} alt="Perfil" />
         </Link>
       </div>
       {mostrarModalLogin && 

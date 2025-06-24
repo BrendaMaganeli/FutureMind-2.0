@@ -814,112 +814,20 @@ function Pagamento() {
                 </div>
                 <div style={{ display: "flex", gap: "8px", marginTop: "5%" }}>
                   <button
-                    onClick={() => {
-                      if (!isPastDate(dataSelecionada)) {
-                        setMostrarAgenda(true);
-                      }
-                    }}
-                    style={{
-                      backgroundColor: isPastDate(dataSelecionada) ? "#cccccc" : "#013a63",
-                      color: "white",
-                      padding: "12px 20px",
-                      border: "none",
-                      borderRadius: "4px",
-                      fontSize: "16px",
-                      cursor: isPastDate(dataSelecionada) ? "not-allowed" : "pointer",
-                    }}
-                    disabled={isPastDate(dataSelecionada)}
-                  >
-                    {isPastDate(dataSelecionada) ? "Consulta passada" : "Alterar"}
-                  </button>
-                  <button
                     onClick={() => setMostrarModalRemover(true)}
                     style={{
-                      padding: "8px 16px",
-                      border: "2px solid #ddd",
-                      borderRadius: "4px",
-                      backgroundColor: "transparent",
+                      padding: "13px 29px",
+                      border: "none",
+                      borderRadius: "6px",
+                      backgroundColor: "rgb(1, 58, 99)",
+                      // fontSize: "15px",
+                      color: "white",
                     }}
                   >
                     Remover
                   </button>
                 </div>
               </div>
-            </div>
-          )}
-
-          {mostrarAgenda && !cadastrandoPlano && (
-            <div style={{ marginTop: "16px" }}>
-              <div className="floating-input-4">
-                <input
-                  type="date"
-                  value={dataSelecionada}
-                  onChange={(e) => {
-                    setDataSelecionada(e.target.value);
-                    if (isPastDate(e.target.value)) {
-                      setHoraSelecionada("");
-                    }
-                  }}
-                  min={new Date().toISOString().split('T')[0]}
-                  required
-                  className={isPastDate(dataSelecionada) ? "input-error" : ""}
-                />
-                <label>Nova data</label>
-                {isPastDate(dataSelecionada) && (
-                  <div className="error-message">
-                    <span>Não é possível agendar para datas passadas</span>
-                  </div>
-                )}
-              </div>
-              
-              <div className="floating-input-4" style={{ marginTop: "8px" }}>
-                <select
-                  value={horaSelecionada}
-                  onChange={(e) => setHoraSelecionada(e.target.value)}
-                  required
-                  disabled={!dataSelecionada || isPastDate(dataSelecionada)}
-                  className={isPastTime(dataSelecionada, horaSelecionada) ? "input-error" : ""}
-                >
-                  <option value="" disabled>Selecione um horário</option>
-                  {HORARIOS_DISPONIVEIS.map(horario => (
-                    <option 
-                      key={horario} 
-                      value={horario}
-                      disabled={isPastTime(dataSelecionada, horario)}
-                    >
-                      {horario}
-                    </option>
-                  ))}
-                </select>
-                <label>Novo horário</label>
-                {isPastTime(dataSelecionada, horaSelecionada) && (
-                  <div className="error-message">
-                    <span>⚠️ Este horário já passou para a data selecionada</span>
-                  </div>
-                )}
-              </div>
-              
-              <button
-                onClick={() => setMostrarAgenda(false)}
-                style={{
-                  width: "100%",
-                  marginTop: "16px",
-                  backgroundColor: "#013a63",
-                  color: "white",
-                  padding: "12px",
-                  border: "none",
-                  borderRadius: "4px",
-                  fontWeight: "600",
-                }}
-                disabled={
-                  !dataSelecionada || 
-                  !horaSelecionada ||
-                  isPastDate(dataSelecionada) ||
-                  isPastTime(dataSelecionada, horaSelecionada)
-                }
-              >
-                Confirmar alteração
-              </button>
             </div>
           )}
         </div>

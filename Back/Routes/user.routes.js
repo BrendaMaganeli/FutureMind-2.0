@@ -299,40 +299,41 @@ router.put('/editarprofissional', async (req, res) => {
   }
 });
 
-router.post('/cadastro-paciente', async(req, res) => {
+router.post('/cadastro-paciente', async (req, res) => {
+  try {
+      const {
+          Nome_completo,
+          cpf,
+          Email,
+          Senha,
+          Telefone,
+          Idade
+      } = req.body;
 
-    try {
+      // Verifica se o e-mail já está cadastrado
+      const [verificaEmail] = await pool.query('SELECT * FROM pacientes WHERE email = ?', [Email]);
+      if (verificaEmail.length > 0) {
+          return res.status(409).json({ error: 'E-mail já cadastrado' });
+      }
 
-        const {
-            Nome_completo,
-            cpf,
-            Email,
-            Senha,
-            Telefone,
-            Idade
-        } = req.body;
+      const [rows] = await pool.query('INSERT INTO pacientes (nome, data_nascimento, cpf, email, telefone, senha) VALUES (?, ?, ?, ?, ?, ?)', [
+          Nome_completo,
+          Idade, // deve ser data no formato YYYY-MM-DD
+          cpf,
+          Email,
+          Telefone,
+          Senha
+      ]);
 
-        const [rows] = await pool.query('INSERT INTO pacientes (nome, data_nascimento, cpf, email, telefone, senha) VALUES (?, ?, ?, ?, ?, ?)', [
-            Nome_completo,
-            Idade,
-            cpf,
-            Email,
-            Telefone,
-            Senha
-        ]);
-
-        if (rows.affectedRows > 0) {
-
-            res.status(201).json(rows);
-        } else {
-
-            res.status(400).json('Erro');
-        }
-    } catch (error) {
-        
-        res.status(500).json('Servidor crashou');
-        console.log(error);
-    }
+      if (rows.affectedRows > 0) {
+          res.status(201).json(rows);
+      } else {
+          res.status(400).json('Erro');
+      }
+  } catch (error) {
+      res.status(500).json('Servidor crashou');
+      console.log(error);
+  }
 });
 
 router.post('/cadastro-profissional', async(req, res) => {

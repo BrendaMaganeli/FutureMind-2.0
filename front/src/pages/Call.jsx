@@ -10,7 +10,7 @@ if (rawUser) {
   try {
     const user = JSON.parse(rawUser);
 
-    socket = io('http://10.28.146.66:5000', {
+    socket = io('http://192.168.86.96:5000', {
       auth: {
         name: user?.nome
       },
@@ -236,8 +236,24 @@ function VideoConferencia() {
             };
 
             pc.ontrack = (event) => {
-                if (remoteVideoRef.current && event.streams && event.streams[0]) {
-                    remoteVideoRef.current.srcObject = event.streams[0];
+                
+                console.log('Evento ontrack recebido:', event);
+                if (event.streams && event.streams[0]) {
+                    const remoteStream = event.streams[0];
+                    console.log('Stream remoto recebido:', remoteStream);
+                    if (remoteVideoRef.current) {
+                        remoteVideoRef.current.srcObject = remoteStream;
+                        console.log('srcObject do vídeo remoto definido.');
+                        // Opcional: Tentar reproduzir o vídeo explicitamente
+                        remoteVideoRef.current.play().catch(e => {
+                            console.error('Erro ao tentar reproduzir vídeo remoto:', e);
+                            // Pode ser devido a políticas de autoplay do navegador
+                        });
+                    } else {
+                        console.warn('remoteVideoRef.current é null ao receber stream remoto.');
+                    }
+                } else {
+                    console.warn('Evento ontrack sem streams ou stream vazio.');
                 }
             };
 

@@ -22,30 +22,43 @@ router.get('/agendamento/:id/:year/:month', async (req, res) => {
   });
   
   router.post('/agendamento/:id', async (req, res) => {
-    console.log( req.body);
-  
     const { id_paciente, data, hora } = req.body;
     const { id } = req.params;
+  
 
+    if (!id_paciente || !data || !hora) {
+      return res.status(400).json({ error: 'Campos obrigatórios faltando.' });
+    }
+  
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(data)) {
+      return res.status(400).json({ error: 'Formato de data inválido. Use YYYY-MM-DD.' });
+    }
+  
+    const timeRegex = /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
+    if (!timeRegex.test(hora)) {
+      return res.status(400).json({ error: 'Formato de horário inválido. Use HH:MM:SS.' });
+    }
+  
     try {
       const [result] = await pool.query(
         `INSERT INTO Agendamento (id_profissional, id_paciente, data, hora)
          VALUES (?, ?, ?, ?)`,
         [id, id_paciente, data, hora]
       );
-      console.log('→ Result do INSERT:', result);
   
       if (result.affectedRows) {
         return res.status(201).json({ id_agendamento: result.insertId });
       } else {
-        console.warn('→ Nenhuma linha afetada no INSERT');
         return res.status(400).json({ error: 'Não foi possível agendar' });
       }
     } catch (err) {
-      console.error('→ Erro no POST /agendamento:', err);
+      console.error('Erro no POST /agendamento:', err);
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        return res.status(400).json({ error: 'Profissional ou paciente não encontrado.' });
+      }
       return res.status(500).json({ error: 'Erro ao criar agendamento' });
     }
-
   });
 
 

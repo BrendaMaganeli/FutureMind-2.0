@@ -48,6 +48,28 @@ describe('Agendamento Controller', () => {
 
       expect(response.status).toBe(400);
     });
+
+    it('deve retornar 400 se data estiver no formato errado', async () => {
+        const response = await request(app)
+          .post('/agendamento/1')
+          .send({
+            id_paciente: 1,
+            data: '31/12/2023', // Formato inválido
+            hora: '14:00:00'
+          });
+        expect(response.status).toBe(400);
+      });
+    
+      it('deve retornar 400 se hora estiver no formato errado', async () => {
+        const response = await request(app)
+          .post('/agendamento/1')
+          .send({
+            id_paciente: 1,
+            data: '2023-12-31',
+            hora: '14h00' // Formato inválido
+          });
+        expect(response.status).toBe(400);
+      });
   });
 
   // Caso 2: Cancelamento de agendamento

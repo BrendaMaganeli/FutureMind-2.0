@@ -159,25 +159,42 @@ router.post('/verificar_paciente', async (req, res) => {
     }
   });
 
-  router.delete('/editar-profissional', async(req, res) => {
-
+  router.delete('/editar-profissional', async (req, res) => {
     try {
-        
-        const { id_profissional } = req.body;
-        const [rows] = await pool.query("DELETE FROM profissionais WHERE id_profissional=?", [id_profissional]);
-
-        if (rows.affectedRows > 0) {
-
-            res.status(201).json('Registro de profissional deletado!');
-        } else {
-
-            res.status(404).json('Profissional não encontrado!');
-        }
+      const { id_profissional } = req.body;
+      
+      if (!id_profissional) {
+        return res.status(400).json({ error: 'ID do profissional é obrigatório' });
+      }
+  
+      // Verifica se o profissional existe antes de deletar
+      const [professional] = await pool.query(
+        'SELECT 1 FROM profissionais WHERE id_profissional = ?',
+        [id_profissional]
+      );
+  
+      if (professional.length === 0) {
+        return res.status(404).json({ error: 'Profissional não encontrado' });
+      }
+  
+      // Primeiro deleta os agendamentos relacionados
+      await pool.query(
+        'DELETE FROM Agendamento WHERE id_profissional = ?',
+        [id_profissional]
+      );
+  
+      // Depois deleta o profissional
+      const [result] = await pool.query(
+        'DELETE FROM profissionais WHERE id_profissional = ?',
+        [id_profissional]
+      );
+  
+      res.status(200).json({ message: 'Profissional e agendamentos relacionados deletados com sucesso' });
     } catch (err) {
-        
-        res.status(500).json('Erro no servidor, erro:', err);
+      console.error(err);
+      res.status(500).json({ error: 'Erro ao deletar profissional' });
     }
-});
+  });
 
 router.get('/profissional/:id', async(req, res) => {
 
@@ -234,56 +251,52 @@ router.put('/paciente', async (req, res) => {
     }
   });
 
+
+  // No seu router (profile.routes.js ou similar)
+router.delete('/paciente', async (req, res) => {
+  try {
+    const { id_paciente } = req.body;
+    const [rows] = await pool.query("DELETE FROM pacientes WHERE id_paciente = ?", [id_paciente]);
+
+    if (rows.affectedRows > 0) {
+      res.status(200).json({ message: 'Paciente deletado com sucesso!' });
+    } else {
+      res.status(404).json({ error: 'Paciente não encontrado!' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erro ao deletar paciente' });
+  }
+});
+
+
 router.put('/editarprofissional', async (req, res) => {
+  try {
+    const { id_profissional, ...updateData } = req.body;
     
-    try {
-      const {
-        nome,
-        cpf,
-        email,
-        telefone,
-        data_nascimento,
-        senha,
-        crp,
-        abordagem,
-        foto,
-        valor_consulta,
-        especializacao,
-        email_profissional,
-        sobre_mim,
-        id_profissional
-      } = req.body;
-  
-      const [result] = await pool.query(
-        `UPDATE profissionais SET nome=?, cpf=?, email=?, telefone=?, data_nascimento=?, senha=?, crp=? , abordagem=?,foto=?, valor_consulta=?, especializacao=?, email_profissional=?, sobre_mim=? WHERE id_profissional=?`,
-        [nome, cpf, email, telefone, data_nascimento, senha, crp, abordagem, foto, valor_consulta, especializacao, email_profissional, sobre_mim, id_profissional]
-      );
-  
-      if (result.affectedRows > 0) {
-        const [profissionalAtualizado] = await pool.query(
-            'SELECT * FROM profissionais WHERE id_profissional = ?',
-            [id_profissional]
-          );
-          
-          res.status(200).json(profissionalAtualizado[0]); 
-      } else {
-        res.status(404).json('Profissional não encontrado!');
-      }
-    } catch (err) {
-      console.error(err);
-      res.status(500).json('Erro ao atualizar o profissional');
+    if (!id_profissional) {
+      return res.status(400).json({ error: 'ID do profissional é obrigatório' });
     }
-  });
 
-  router.get('/pacientes', async(req, res) => {
-    try {
-        const [rows] = await pool.query('SELECT * FROM pacientes');
+    const [result] = await pool.query(
+      'UPDATE profissionais SET ? WHERE id_profissional = ?',
+      [updateData, id_profissional]
+    );
 
-        res.status(200).json(rows);
-    } catch (err) {
-        console.error('Erro ao buscar pacientes:', err);
-        res.status(500).json('erro servidor');
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Profissional não encontrado' });
     }
+
+    const [updatedProfessional] = await pool.query(
+      'SELECT * FROM profissionais WHERE id_profissional = ?',
+      [id_profissional]
+    );
+    
+    res.status(200).json(updatedProfessional[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erro ao atualizar o profissional' });
+  }
 });
 
 router.post('/cadastro-paciente', async(req, res) => {

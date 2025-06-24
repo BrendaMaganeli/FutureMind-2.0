@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-  "start": "nodemon server.js",
-  "test": "jest --watchAll",           
-  "test:unit": "jest --coverage",    
-  "test:integration": "jest --testPathPattern=integration"
+    "start": "nodemon server.js",
+    "test": "jest --watchAll",
+    "test:unit": "jest --coverage",
+    "test:integration": "jest --testPathPattern=integration"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "fs": "^0.0.1-security",
+    "jest-mock": "^30.0.2",
     "multer": "^2.0.1",
     "mysql2": "^3.14.0",
     "nodemailer": "^7.0.2",

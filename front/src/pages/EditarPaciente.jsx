@@ -291,7 +291,7 @@ function EditarPaciente() {
                 src={voltar}
                 alt="Voltar"
                 style={{ cursor: "pointer" }}
-                onClick={() => navigate("/inicio")}
+                onClick={() => navigate(`/inicio`)}
               />
             </div>
             <div className="botoes-superiores-p">

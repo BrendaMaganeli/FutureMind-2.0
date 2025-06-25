@@ -386,7 +386,7 @@ function CadastroProfissional2() {
           </div>
           <div className="container_text_termos">
             <label className="termos-styles">Aceitar os</label>{" "}
-            <a className="termos-a" href="/termos">
+            <a className="termos-a" href="/termo">
               termos
             </a>{" "}
             <label className="de_uso">de uso</label>

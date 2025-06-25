@@ -5,11 +5,7 @@ import "./CSS/Consulta.css";
 import imgConsulta from "../assets/Group 239294.svg";
 import voltar from "../assets/seta-principal.svg";
 
-/**
- * Retorna dados sobre os meses do ano, incluindo o número de dias e o dia de início (0=Dom, 1=Seg...).
- * @param {number} ano - O ano para o qual obter os dados dos meses.
- * @returns {Array<Object>} Um array de objetos com nome, totalDias e inicio para cada mês.
- */
+
 const obterDadosMes = (ano) => {
   const bissexto = ano % 4 === 0 && (ano % 100 !== 0 || ano % 400 === 0);
   const diasNoMes = [
@@ -33,11 +29,7 @@ const obterDadosMes = (ano) => {
   }));
 };
 
-/**
- * Verifica se uma consulta está no passado em relação ao momento atual.
- * @param {Object} consulta - Objeto da consulta com 'ano', 'mes' (0-indexed), 'dia' e 'horario' ("HH:MM").
- * @returns {boolean} True se a consulta já passou, False caso contrário.
- */
+
 const verificarConsultaPassada = (consulta) => {
   const [horaConsulta, minutoConsulta] = consulta.horario.split(":").map(Number);
   const hojeParaComparacao = new Date(); // Obtém o momento atual para a comparação

@@ -147,13 +147,13 @@ function EditarProfissional() {
     if (selectedFile) {
       // Verifica se o arquivo é uma imagem
       if (!selectedFile.type.startsWith('image/')) {
-        alert('Por favor, selecione um arquivo de imagem válido (JPEG, PNG)');
+        console.log('Por favor, selecione um arquivo de imagem válido (JPEG, PNG)');
         return;
       }
       
       // Verifica o tamanho do arquivo (máximo 5MB)
       if (selectedFile.size > 5 * 1024 * 1024) {
-        alert('A imagem deve ter no máximo 5MB');
+        console.log('A imagem deve ter no máximo 5MB');
         return;
       }
 
@@ -196,11 +196,11 @@ function EditarProfissional() {
         setFotoSelecionada(null);
       } else {
         console.error('Erro no upload da foto');
-        alert('Erro ao enviar a foto. Por favor, tente novamente.');
+        console.log('Erro ao enviar a foto. Por favor, tente novamente.');
       }
     } catch (err) {
       console.error('Erro:', err.message);
-      alert('Erro de conexão. Por favor, tente novamente.');
+      console.log('Erro de conexão. Por favor, tente novamente.');
     }
   };
 
@@ -229,13 +229,13 @@ function EditarProfissional() {
         data.foto = foto;
         setUser(data);
         setProfissionais(data);
-        alert('Dados atualizados com sucesso!');
+        console.log('Dados atualizados com sucesso!');
       } else {
-        alert('Erro ao atualizar dados. Por favor, tente novamente.');
+        console.log('Erro ao atualizar dados. Por favor, tente novamente.');
       }
     } catch (err) {
       console.error("Erro na requisição:", err);
-      alert('Erro de conexão. Por favor, tente novamente.');
+      console.log('Erro de conexão. Por favor, tente novamente.');
     }
   };
 

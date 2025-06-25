@@ -356,10 +356,13 @@ function Pagamento() {
         });
       } else {
         // Lógica para agendamento
+        // Na função handleFinalizar, antes de enviar o agendamento:
         const agendamentoBody = {
           id_paciente: user.id_paciente,
           data: dataSelecionada,
-          hora: horaSelecionada,
+          hora: horaSelecionada.includes(':') && horaSelecionada.split(':').length === 2 
+            ? `${horaSelecionada}:00` 
+            : horaSelecionada,
         };
         const agendamentoResp = await fetch(
           `http://localhost:4242/agendamento/${id}`,

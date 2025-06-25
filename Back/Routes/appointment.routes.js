@@ -8,10 +8,10 @@ router.get('/agendamento/:id/:year/:month', async (req, res) => {
     try {
       const [rows] = await pool.query(
         `SELECT id_agendamento, id_paciente, data, hora
-         FROM Agendamento
-         WHERE id_profissional = ?
-           AND YEAR(data) = ?
-           AND MONTH(data) = ?`,
+          FROM Agendamento
+          WHERE id_profissional = ?
+            AND YEAR(data) = ?
+            AND MONTH(data) = ?`,
         [id_profissional, year, month]
       );
       return res.status(200).json(rows);
@@ -25,7 +25,6 @@ router.get('/agendamento/:id/:year/:month', async (req, res) => {
     const { id_paciente, data, hora } = req.body;
     const { id } = req.params;
   
-
     if (!id_paciente || !data || !hora) {
       return res.status(400).json({ error: 'Campos obrigatórios faltando.' });
     }
@@ -35,15 +34,16 @@ router.get('/agendamento/:id/:year/:month', async (req, res) => {
       return res.status(400).json({ error: 'Formato de data inválido. Use YYYY-MM-DD.' });
     }
   
-    const timeRegex = /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
+    // Alteração AQUI: Novo regex para aceitar HH:MM
+    const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/; 
     if (!timeRegex.test(hora)) {
-      return res.status(400).json({ error: 'Formato de horário inválido. Use HH:MM:SS.' });
+      return res.status(400).json({ error: 'Formato de horário inválido. Use HH:MM.' }); // Altera a mensagem de erro também
     }
   
     try {
       const [result] = await pool.query(
         `INSERT INTO Agendamento (id_profissional, id_paciente, data, hora)
-         VALUES (?, ?, ?, ?)`,
+          VALUES (?, ?, ?, ?)`,
         [id, id_paciente, data, hora]
       );
   
@@ -62,7 +62,6 @@ router.get('/agendamento/:id/:year/:month', async (req, res) => {
   });
 
 
-
 router.get('/consulta/profissional/:id_profissional/:year/:month' , async (req,res) => {
     const {id_profissional , year ,month} = req.params;
 
@@ -73,8 +72,8 @@ router.get('/consulta/profissional/:id_profissional/:year/:month' , async (req,r
             a.data,
             a.hora,
             p.id_paciente,
-            p.nome            AS nome_paciente,
-            p.foto            AS foto_paciente
+            p.nome             AS nome_paciente,
+            p.foto             AS foto_paciente
           FROM Agendamento a
           INNER JOIN pacientes p
             ON a.id_paciente = p.id_paciente
@@ -82,7 +81,7 @@ router.get('/consulta/profissional/:id_profissional/:year/:month' , async (req,r
             AND YEAR(a.data) = ?
             AND MONTH(a.data) = ?
           ORDER BY a.data, a.hora;`,
-         [id_profissional, year, month]
+          [id_profissional, year, month]
         );
 
         return res.status(200).json(rows)
@@ -136,17 +135,17 @@ router.get('/consulta/:id_paciente' , async (req, res) =>{
     try {
         const [rows] = await pool.query(
           `SELECT
-             a.id_agendamento     AS id_consultas,
-             a.data,
-             a.hora,
-             pr.id_profissional,
-             pr.nome              AS nome_profissional,
-             pr.foto              AS foto_profissional
-           FROM Agendamento a
-           INNER JOIN profissionais pr
-             ON a.id_profissional = pr.id_profissional
-           WHERE a.id_paciente = ?
-           ORDER BY a.data, a.hora;`,
+              a.id_agendamento     AS id_consultas,
+              a.data,
+              a.hora,
+              pr.id_profissional,
+              pr.nome              AS nome_profissional,
+              pr.foto              AS foto_profissional
+            FROM Agendamento a
+            INNER JOIN profissionais pr
+              ON a.id_profissional = pr.id_profissional
+            WHERE a.id_paciente = ?
+            ORDER BY a.data, a.hora;`,
           [id_paciente]
         );
     
@@ -164,8 +163,8 @@ router.put('/consulta/:id_consulta', async (req, res) => {
     try {
       const [result] = await pool.query(
         `UPDATE Agendamento
-         SET data = ?, hora = ?
-         WHERE id_agendamento = ?`,
+          SET data = ?, hora = ?
+          WHERE id_agendamento = ?`,
         [data, hora, id_consulta]
       );
   

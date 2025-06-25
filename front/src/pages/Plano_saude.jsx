@@ -317,7 +317,10 @@ function Plano_saude() {
         </div>
       </div>
 
-      {user?.id_paciente && !user?.chk_plano && (
+    {(
+  !user || 
+  (user?.id_paciente && !user.chk_plano)
+) &&(
         <>
           <div className="container-planos">
             <h1 className="titulo-planos">Escolha seu plano</h1>

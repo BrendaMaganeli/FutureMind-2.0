@@ -365,6 +365,12 @@ router.post('/cadastro-profissional', async(req, res) => {
 
         const foto = 'icon_user.svg';
 
+        const [check] = await pool.query('SELECT * FROM profissionais WHERE email = ?', [email]);
+          if (check.length > 0) {
+            return res.status(409).json({ erro: 'E-mail já está em uso' });
+        }
+
+
         const [rows] = await pool.query('INSERT INTO profissionais (nome, cpf, email, senha, telefone, crp, especializacao, abordagem, foto, data_nascimento, email_profissional, valor_consulta) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
             nome,
             cpf,

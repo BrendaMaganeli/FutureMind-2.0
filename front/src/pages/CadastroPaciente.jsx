@@ -31,6 +31,9 @@ function CadastroPaciente() {
   const [mensagemTelefone, setMensagemTelefone] = useState("");
   const [mensagemEmail, setMensagemEmail] = useState("");
 
+  const [aceitouTermos, setAceitouTermos] = useState(false);
+  const [checkboxInvalido, setCheckboxInvalido] = useState(false);
+
   const alternarTipo = () => {
     setTipoInput(tipoInput === "password" ? "text" : "password");
     setTipoIconSenha(
@@ -214,6 +217,14 @@ function CadastroPaciente() {
       setSenhaValido(false);
     }
 
+    if (!aceitouTermos) {
+      setCheckboxInvalido(false);
+      setTimeout(() => {
+        setCheckboxInvalido(true);
+      }, 10);
+      validacoes = false;
+    }
+
     if (validacoes) {
       await handleFinish();
     }
@@ -344,13 +355,23 @@ function CadastroPaciente() {
 
         <div className="div-check">
           <div className="container_styles-check">
-            <input className="styles-check" type="checkbox" />
+            <input
+              className={`styles-check ${checkboxInvalido ? "tremer" : ""}`}
+              type="checkbox"
+              checked={aceitouTermos}
+              onChange={(e) => {
+                setAceitouTermos(e.target.checked);
+                setCheckboxInvalido(false);
+              }}
+            />
           </div>
-          <label className="termos-styles">Aceitar os</label>{" "}
-          <a className="termos-a" href="/termos">
-            termos
-          </a>{" "}
-          <label className="de_uso">de uso</label>
+          <div className="container_text_termos">
+            <label className="termos-styles">Aceitar os</label>{" "}
+            <a className="termos-a" href="/termos">
+              termos
+            </a>{" "}
+            <label className="de_uso">de uso</label>
+          </div>
         </div>
 
         <button className="botao-cadastro" onClick={handleCadastro}>

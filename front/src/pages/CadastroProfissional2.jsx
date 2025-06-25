@@ -49,6 +49,9 @@ function CadastroProfissional2() {
   const [tipoInput, setTipoInput] = useState("password");
   const [tipoIconSenha, setTipoIconSenha] = useState("icon_nao_ver.png");
 
+  const [aceitouTermos, setAceitouTermos] = useState(false);
+  const [checkboxInvalido, setCheckboxInvalido] = useState(false);
+
   const inputRef = useRef(null);
   const [caretPos, setCaretPos] = useState(null);
 
@@ -134,128 +137,134 @@ function CadastroProfissional2() {
   useEffect(() => {
     setSenhaValidado(false);
   }, [valorSenha]);
- 
-    useEffect(() => {
+
+  useEffect(() => {
     setUsuarioValido(false);
   }, [prefixoEmailProfissional]);
-  
 
- const handleCadastro = async () => {
-  let erro = false;
-  let data;
+  const handleCadastro = async () => {
+    let erro = false;
+    let data;
 
-  try {
-    const response = await fetch("http://localhost:4242/verificar_profissional_dois", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        valorEmail,
-        email_profissional: `${prefixoEmailProfissional}${DOMINIO}`,
-      }),
-    });
+    try {
+      const response = await fetch(
+        "http://localhost:4242/verificar_profissional_dois",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            valorEmail,
+            email_profissional: `${prefixoEmailProfissional}${DOMINIO}`,
+          }),
+        }
+      );
 
-    if (response.ok) {
-      data = await response.json();
-      console.log(data);
-    } else {
-      console.error("Erro na verificação do profissional");
+      if (response.ok) {
+        data = await response.json();
+        console.log(data);
+      } else {
+        console.error("Erro na verificação do profissional");
+        return;
+      }
+    } catch (error) {
+      console.error("Erro na requisição:", error);
       return;
     }
-  } catch (error) {
-    console.error("Erro na requisição:", error);
-    return;
-  }
 
-  // Validações
-  if (especializacoes?.length === 0) {
-    setEspValidado(true);
-    erro = true;
-  }
-
-  if (abordagens?.length === 0) {
-    setAboValidado(true);
-    erro = true;
-  }
-
-  if (
-    !valorEmail.includes("@gmail.com") &&
-    !valorEmail.includes("@hotmail.com")
-  ) {
-    setEmailValidado(true);
-    setMensagemEmail("Use um email válido!");
-    erro = true;
-  } else if (data.emailExisteProf) {
-    setEmailValidado(true);
-    setMensagemEmail("Email já cadastrado!");
-    erro = true;
-  } else {
-    setEmailValidado(false);
-    setMensagemEmail("");
-  }
-
-  if (valorSenha?.length !== 8) {
-    setSenhaValidado(true);
-    erro = true;
-  } else {
-    setSenhaValidado(false);
-  }
-
-  if (!prefixoEmailProfissional.includes(".")) {
-    setMensagemUsuario('Seu usuário deve conter um "." antes do "@" !');
-    setUsuarioValido(true);
-    erro = true;
-  } else if (data.usuarioExisteProf) {
-    setMensagemUsuario("Usuário já cadastrado!");
-    setUsuarioValido(true);
-    erro = true;
-  } else {
-    setUsuarioValido(false);
-    setMensagemUsuario("");
-  }
-
-  // Impede envio se tiver erro
-  if(!erro){
-  console.log("Iniciando cadastro...")
-      try {
-    const response = await fetch(
-      "https://futuremind-2-0-mw60.onrender.com/cadastro-profissional",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(profissional),
-      }
-    );
-
-    if (response.ok) {
-      setProfissional({
-        nome: "",
-        cpf: "",
-        telefone: "",
-        data_nascimento: "",
-        especializacao: [],
-        senha: "",
-        foto: "../assets/icon-profile.svg",
-        abordagem: [],
-        email: "",
-        email_profissional: "@futuremind.com",
-        crp: "",
-        valor_consulta: null,
-      });
-      navigate("/login");
-    }else{
-
-      console.log('erro mateus')
+    // Validações
+    if (especializacoes?.length === 0) {
+      setEspValidado(true);
+      erro = true;
     }
-  } catch (err) {
-    console.log("Erro ao cadastrar profissional:", err);
-  }
-  }
 
- 
-};
+    if (abordagens?.length === 0) {
+      setAboValidado(true);
+      erro = true;
+    }
 
+    if (
+      !valorEmail.includes("@gmail.com") &&
+      !valorEmail.includes("@hotmail.com")
+    ) {
+      setEmailValidado(true);
+      setMensagemEmail("Use um email válido!");
+      erro = true;
+    } else if (data.emailExisteProf) {
+      setEmailValidado(true);
+      setMensagemEmail("Email já cadastrado!");
+      erro = true;
+    } else {
+      setEmailValidado(false);
+      setMensagemEmail("");
+    }
+
+    if (valorSenha?.length !== 8) {
+      setSenhaValidado(true);
+      erro = true;
+    } else {
+      setSenhaValidado(false);
+    }
+
+    if (!prefixoEmailProfissional.includes(".")) {
+      setMensagemUsuario('Seu usuário deve conter um "." antes do "@" !');
+      setUsuarioValido(true);
+      erro = true;
+    } else if (data.usuarioExisteProf) {
+      setMensagemUsuario("Usuário já cadastrado!");
+      setUsuarioValido(true);
+      erro = true;
+    } else {
+      setUsuarioValido(false);
+      setMensagemUsuario("");
+    }
+
+    if (!aceitouTermos) {
+      setCheckboxInvalido(false);
+      setTimeout(() => {
+        setCheckboxInvalido(true);
+      }, 10);
+      validacoes = false;
+    }
+
+    // Impede envio se tiver erro
+    if (!erro) {
+      console.log("Iniciando cadastro...");
+      try {
+        const response = await fetch(
+          "https://futuremind-2-0-mw60.onrender.com/cadastro-profissional",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(profissional),
+          }
+        );
+
+        if (response.ok) {
+          setProfissional({
+            nome: "",
+            cpf: "",
+            telefone: "",
+            data_nascimento: "",
+            especializacao: [],
+            senha: "",
+            foto: "../assets/icon-profile.svg",
+            abordagem: [],
+            email: "",
+            email_profissional: "@futuremind.com",
+            crp: "",
+            valor_consulta: null,
+          });
+          navigate("/login");
+        } else {
+          console.log("erro mateus");
+        }
+      } catch (err) {
+        console.log("Erro ao cadastrar profissional:", err);
+      }
+    }
+  };
 
   return (
     <div className="container-profissional">
@@ -358,9 +367,29 @@ function CadastroProfissional2() {
               required
             />
             <label>Usuário</label>
-            <div className={`com_erros ${!usuarioValidado ? "sem_erro" : ""}`}>
+            <div className={`com_erros_usuario ${!usuarioValidado ? "sem_erro_usuario" : ""}`}>
               {usuarioMensgaem}
             </div>
+          </div>
+        </div>
+        <div className="div-check-profissional">
+          <div className="container_styles-check">
+            <input
+              className={`styles-check ${checkboxInvalido ? "tremer" : ""}`}
+              type="checkbox"
+              checked={aceitouTermos}
+              onChange={(e) => {
+                setAceitouTermos(e.target.checked);
+                setCheckboxInvalido(false);
+              }}
+            />
+          </div>
+          <div className="container_text_termos">
+            <label className="termos-styles">Aceitar os</label>{" "}
+            <a className="termos-a" href="/termos">
+              termos
+            </a>{" "}
+            <label className="de_uso">de uso</label>
           </div>
         </div>
 

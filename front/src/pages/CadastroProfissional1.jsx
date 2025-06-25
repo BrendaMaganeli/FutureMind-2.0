@@ -340,7 +340,8 @@ function CadastroProfissional1() {
             </span>
           </div>
         </div>
-        <button className="botao-cadastro" onClick={handleCadastro}>
+        
+        <button className="botao-cadastro-profissional" onClick={handleCadastro}>
           Prosseguir com cadastro
         </button>
         <p className="login-texto">

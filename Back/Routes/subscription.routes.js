@@ -116,7 +116,7 @@ router.put('/pagamento', async (req, res) => {
   try {
 
     const [response] = await pool.query(
-      `UPDATE pacientes SET chk_plano=? WHERE id_paciente=?`,
+      UPDATE pacientes SET chk_plano=? WHERE id_paciente=?,
       [chk_plano, id_paciente]
     );
 

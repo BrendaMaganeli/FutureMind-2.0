@@ -6,34 +6,6 @@ import voltar from "../assets/seta-principal.svg";
 import emailjs from "@emailjs/browser";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
-// Horários fixos disponíveis para agendamento
-const HORARIOS_DISPONIVEIS = ["11:00", "13:00", "13:30", "14:30", "16:10", "17:30", "19:20"];
-
-// Utilitários de data/hora
-const isPastDate = (dateString) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const selectedDate = new Date(dateString);
-  return selectedDate < today;
-};
-
-const isPastTime = (dateString, timeString) => {
-  if (!dateString || !timeString) return false;
-  
-  const today = new Date();
-  const selectedDate = new Date(dateString);
-  
-  if (selectedDate.toDateString() !== today.toDateString()) {
-    return false;
-  }
-  
-  const [hours, minutes] = timeString.split(':').map(Number);
-  const nowHours = today.getHours();
-  const nowMinutes = today.getMinutes();
-  
-  return hours < nowHours || (hours === nowHours && minutes <= nowMinutes);
-};
-
 function Pagamento() {
   const navigate = useNavigate();
   const { id } = useParams();

@@ -7,29 +7,38 @@ const path = require('path');
 router.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
 router.post('/profissional/foto-perfil', upload.single('foto'), async (req, res) => {
-    const { id_profissional } = req.body;
-    const fotoPath = req.file ? `/uploads/${req.file.filename}` : null;
+  const { id_profissional } = req.body;
   
-    if (!id_profissional || !fotoPath) {
-      return res.status(400).json({ Erro: 'ID do profissional ou foto ausente.' });
+  if (!id_profissional || !req.file) {
+    return res.status(400).json({ Erro: 'ID do profissional ou foto ausente.' });
+  }
+
+  try {
+    const fotoPath = `/uploads/${req.file.filename}`;
+    
+    const [result] = await pool.query(
+      'UPDATE profissionais SET foto = ? WHERE id_profissional = ?',
+      [fotoPath, id_profissional]
+    );
+
+    if (result.affectedRows === 0) {
+      fs.unlinkSync(req.file.path);
+      return res.status(404).json({ Erro: 'Profissional não encontrado.' });
     }
-  
-    try {
-      const [result] = await pool.query(
-        'UPDATE profissionais SET foto = ? WHERE id_profissional = ?',
-        [fotoPath, id_profissional]
-      );
-  
-      if (result.affectedRows === 0) {
-        return res.status(404).json({ Erro: 'Profissional não encontrado.' });
-      }
-  
-      res.json(result[0]);
-    } catch (err) {
-      console.error(err.message);
-      return res.status(500).json({ Erro: 'Erro ao atualizar profissional.' });
+
+    res.json({
+      success: true,
+      foto: fotoPath,
+      message: 'Foto atualizada com sucesso'
+    });
+  } catch (err) {
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
     }
-  });
+    console.error(err.message);
+    return res.status(500).json({ Erro: 'Erro ao atualizar foto.' });
+  }
+});
   
   router.post('/paciente/foto-perfil', upload.single('foto'), async (req, res) => {
     try {

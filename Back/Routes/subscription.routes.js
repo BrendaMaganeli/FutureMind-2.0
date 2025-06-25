@@ -43,29 +43,29 @@ router.post('/assinatura', async (req, res) => {
   }
 });
 
-router.get('/pagamento/:id', async (req, res) => {
+router.get('/pagamento/:id', async(req, res) => {
 
-  try {
-
-    const { id } = req.params;
-    const [rows] = await pool.query(
-      'SELECT consultas_disponiveis FROM assinaturas WHERE fk_id_paciente = ?',
-      [id]
-    );
-
-
-    if (rows.length > 0) {
-
-      res.status(200).json(rows[0]);
-    } else {
-
-      res.status(404).json('Profissional não encontrado!');
-    }
-  } catch (err) {
-
-    res.status(500).json({ Erro: 'Erro no servidor, erro: ', err });
-  };
-});
+      try {
+         
+        const { id } = req.params;
+            const [rows] = await pool.query(
+               'SELECT consultas_disponiveis FROM assinaturas WHERE fk_id_paciente = ?',
+               [ id ]
+              );
+     
+  
+          if (rows.length > 0) {
+  
+              res.status(200).json(rows[0]);
+          } else {
+  
+              res.status(404).json('Profissional não encontrado!');
+          }
+      } catch (err) {
+  
+          res.status(500).json({Erro: 'Erro no servidor, erro: ', err});
+      };
+  });
 
 router.post('/planos', async (req, res) => {
   try {
@@ -111,28 +111,28 @@ router.post('/plano_empressarial', async (req, res) => {
 
 router.put('/pagamento', async (req, res) => {
 
-  const { id_paciente, chk_plano } = req.body;
-
-  try {
-
-    const [response] = await pool.query(
-      `UPDATE pacientes SET chk_plano=? WHERE id_paciente=?`,
-      [chk_plano, id_paciente]
-    );
-
-    if (response.affectedRows > 0) {
-
-      return res.status(201).json({ success: true });
-    }
-    return res.status(404).json({ Error: 'erro ao inserir dados' })
-
-  } catch (error) {
-
-    console.error('Erro ao salvar mensagem:', error);
-    res.status(500).json({ Error: 'Erro interno do servidor' });
-  }
-
-});
+      const {id_paciente, chk_plano} = req.body;
+  
+     try {
+     
+      const [response] = await pool.query(
+          `UPDATE pacientes SET chk_plano=? WHERE id_paciente=?`,
+          [chk_plano, id_paciente]
+      );
+  
+      if(response.affectedRows > 0){
+  
+          return res.status(201).json({ success: true});
+      }
+      return res.status(404).json({ Error: 'erro ao inserir dados'})
+  
+     } catch (error) {
+       
+      console.error('Erro ao salvar mensagem:', error);
+      res.status(500).json({ Error: 'Erro interno do servidor' });
+     }
+     
+  });
 
 
 

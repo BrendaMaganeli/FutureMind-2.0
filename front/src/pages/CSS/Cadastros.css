@@ -99,6 +99,23 @@
   font-weight: bold;
 }
 
+.botao-cadastro-profissional{
+  width: 100%;
+  max-width: 700px;
+  padding: 14px;
+  background-color: #5a789f;
+  color: white;
+  font-size: 1.3em;
+  border: none;
+  border-radius: 5px;
+  margin-top: 3%;
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
+}
+
+
+
 .botao-cadastro:hover {
   background-color: #466484;
 }
@@ -212,7 +229,6 @@
   width: 100%;
   max-width: 800px;
   justify-content: center;
-  margin-bottom: 5%;
   gap: 12px;
 }
 
@@ -240,6 +256,18 @@
 }
 
 /* css da chackbox */
+
+.div-check-profissional{
+
+   display: flex;
+  align-items: center;
+  font-size: 1em;
+  color: #5a789f;
+  width: 100%;
+  justify-content: start;
+  margin-bottom: 2%;
+  
+}
 .div-check {
   display: flex;
   align-items: center;
@@ -247,15 +275,26 @@
   color: #5a789f;
   width: 100%;
   justify-content: start;
-  margin-bottom: 5%;
+  margin-bottom: 2%;
+  margin-top: 3%;
 }
 
 .container_styles-check {
   width: 3%;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container_text_termos{
+
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
 .styles-check {
-  appearance: none; /* Remove o estilo padrão do navegador */
+  appearance: none; 
   width: 100%;
   height: 18px;
   border: 2px solid #5a789f;
@@ -283,8 +322,9 @@
   color: #5a789f;
   font-size: 1em;
   width: fit-content;
-  width: 13%;
+  width: 13.5%;
   padding-left: 1%;
+
 }
 
 .termos-a {
@@ -501,11 +541,31 @@
   color: #013a63;
 }
 .com_erros{
+
   display: flex;
   height: 30px;
   align-items: center;
   color: #d9534f;
 }
+
+.com_erros_usuario{
+ 
+  display: flex;
+  align-items: center;
+  color: #d9534f;
+  height: 30px;
+
+}
+
+.sem_erro_usuario{
+
+ display: flex;
+ height: 30px;
+ color: white;
+ align-items: center;
+ 
+}
+
 .sem_erro {
  display: flex;
  color: white;
@@ -517,4 +577,17 @@
  visibility: hidden;
  opacity: 0;
  transition: opacity 0.3s ease;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+
+.tremer {
+  animation: shake 0.4s ease-in-out;
+  
 }

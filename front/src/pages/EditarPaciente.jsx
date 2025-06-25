@@ -104,7 +104,7 @@ function EditarPaciente() {
       );
 
       if (response.ok) {
-        localStorage.setItem("User Logado", false);
+        localStorage.removeItem("User Logado");
         setUser(null);
         navigate("/");
       } else {
@@ -113,12 +113,11 @@ function EditarPaciente() {
       }
     } catch (err) {
       console.error("Falha na conexão: ", err);
-      console.log(`Erro ao deletar paciente: ${err.message}`);
     }
   };
 
   const sairPaciente = () => {
-    localStorage.setItem("User Logado", false);
+    localStorage.removeItem("User Logado");
     setUser(null);
     navigate("/");
   };
@@ -152,21 +151,20 @@ function EditarPaciente() {
           foto: pacienteExibido.foto
         };
         
-        setUser(JSON.stringify(updatedProfile));
+        setUser(updatedProfile);
+        localStorage.setItem("User Logado", JSON.stringify(updatedProfile));
         setPacienteEditado(updatedProfile);
         setPacienteExibido({
           ...pacienteExibido,
           nome: pacienteEditado.nome
         });
         setDataNascimentoFormatada(formatarDataBrasileira(data.data_nascimento));
-        console.log("Dados atualizados com sucesso!");
       } else {
         const errorData = await response.json();
         throw new Error(errorData.message || "Erro ao salvar dados");
       }
     } catch (err) {
       console.error("Erro ao salvar:", err);
-      console.log(`Erro ao salvar dados: ${err.message}`);
     }
   };
 
@@ -174,13 +172,13 @@ function EditarPaciente() {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       if (selectedFile.size > 5 * 1024 * 1024) {
-        console.log("A imagem deve ter no máximo 5MB");
+        alert("A imagem deve ter no máximo 5MB");
         return;
       }
       
       const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
       if (!validTypes.includes(selectedFile.type)) {
-        console.log("Por favor, selecione uma imagem JPEG, PNG ou GIF");
+        alert("Por favor, selecione uma imagem JPEG, PNG ou GIF");
         return;
       }
 
@@ -191,7 +189,7 @@ function EditarPaciente() {
 
   const onImageChange = async () => {
     if (!image) {
-      console.log('Por favor, selecione uma imagem primeiro');
+      alert('Por favor, selecione uma imagem primeiro');
       return;
     }
 
@@ -213,25 +211,24 @@ function EditarPaciente() {
 
       const fotoUrl = `http://localhost:4242${data.foto}`;
       
+      const updatedUser = {
+        ...user,
+        foto: fotoUrl
+      };
+      
       setPacienteExibido({
         ...pacienteExibido,
         foto: fotoUrl
       });
       
-      const updatedProfile = {
-        ...pacienteEditado,
-        foto: fotoUrl
-      };
-
-      setUser(JSON.stringify(updatedProfile));
-      setPacienteEditado(updatedProfile);
+      setUser(updatedUser);
+      localStorage.setItem("User Logado", JSON.stringify(updatedUser));
       setImagemPreview(null);
       setIsVisible(false);
-      console.log("Foto atualizada com sucesso!");
       
     } catch (err) {
       console.error('Erro:', err);
-      console.log(`Erro ao enviar imagem: ${err.message}`);
+      alert('Erro ao atualizar foto de perfil');
     }
   };
 
@@ -291,7 +288,7 @@ function EditarPaciente() {
                 src={voltar}
                 alt="Voltar"
                 style={{ cursor: "pointer" }}
-                onClick={() => navigate(`/inicio`)}
+                onClick={() => navigate(-1)}
               />
             </div>
             <div className="botoes-superiores-p">
@@ -414,6 +411,7 @@ function EditarPaciente() {
                   id="imagem" 
                   accept="image/jpeg, image/png, image/gif"
                   onChange={handleImagemChange} 
+                  style={{ display: 'none' }}
                 />
               </div>
             </div>

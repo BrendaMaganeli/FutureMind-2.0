@@ -595,3 +595,14 @@
   text-align: center;
   font-size: 0.9rem;
 }
+
+/* Consulta.css */
+
+.disabled-hour {
+  background-color: #e0e0e0; /* A lighter gray */
+  color: #a0a0a0; /* Faded text color */
+  cursor: not-allowed;
+  text-decoration: line-through; /* Add a strikethrough */
+}
+
+

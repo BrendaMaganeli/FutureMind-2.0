@@ -30,7 +30,7 @@ div::-webkit-scrollbar{
   transition: 1s;
   background-color: #cad7eb;
   color: #5a789f;
-  padding: 2%;
+  padding: 1.2%;
   text-align: center;
   text-decoration: none;
 }

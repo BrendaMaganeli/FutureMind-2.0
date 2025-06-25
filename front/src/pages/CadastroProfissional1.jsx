@@ -39,31 +39,32 @@ function CadastroProfissional1() {
 
   const formatarValorConsultaB = (valor) => {
     if (!valor) return "";
-  
-    const numerico = valor
-      .replace("R$", "")
-      .replace(/\s/g, "")
-      .replace(/\./g, "")
-      .replace(",", ".");
-  
-    const valorFloat = parseFloat(numerico);
-  
-    return isNaN(valorFloat) ? "" : valorFloat.toFixed(2);
+    const valorNumerico = parseFloat(
+      valor.replace(/[^\d,-]/g, '')
+           .replace(',', '.')
+    );
+    
+    return isNaN(valorNumerico) ? "" : valorNumerico.toFixed(2);
   };
   
   const formatarValorConsulta = (valor) => {
     if (!valor) return "";
-  
-    const numeros = valor.replace(/\D/g, "");
-  
-    const valorComZeros = numeros.padStart(3, "0");
-  
-    const reais = valorComZeros.slice(0, -2);
-    const centavos = valorComZeros.slice(-2);
-  
-    const reaisFormatado = reais.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  
-    return `R$ ${reaisFormatado},${centavos}`;
+    
+    // Remove todos os caracteres não numéricos
+    let numeros = valor.replace(/\D/g, "");
+    
+    // Adiciona zeros à esquerda para garantir que temos pelo menos centavos
+    if (numeros.length === 0) return "";
+    
+    // Converte para número e divide por 100 para obter o valor decimal
+    const valorNumerico = parseFloat(numeros) / 100;
+    
+    // Formata como moeda brasileira
+    return valorNumerico.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2
+    });
   };
   
 
@@ -340,7 +341,8 @@ function CadastroProfissional1() {
             </span>
           </div>
         </div>
-        <button className="botao-cadastro" onClick={handleCadastro}>
+        
+        <button className="botao-cadastro-profissional" onClick={handleCadastro}>
           Prosseguir com cadastro
         </button>
         <p className="login-texto">

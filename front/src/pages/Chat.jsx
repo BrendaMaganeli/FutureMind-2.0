@@ -419,18 +419,6 @@ function Chat({
     }
   };
 
-  const encaminharPerfil = () => {
-    if (userType === "Paciente") {
-      if (profissionalSelected) {
-        setIsInChat(false);
-        setIdChatSelected(chatSelected.id_profissional);
-      } else {
-        setIdChatSelected(chatSelected.id_profissional);
-        navigate(`profissional/${chatSelected.id_profissional}`);
-      }
-    }
-  };
-
   const messageRef = useRef(null);
 
   useEffect(() => {
@@ -713,9 +701,14 @@ function Chat({
               {
                 userType === 'Paciente' &&
                 <div className="acess-profile-div">
-                  <div className="user-name">@jana.silvaa</div>
+                  {
+                    chatSelected.nome?.split(' ')[1] ?
+                    <div className="user-name">{`@${chatSelected.nome?.split(' ')[0].toLowerCase()}.${chatSelected.nome?.split(' ')[1].toLowerCase()}`}</div>
+                    :
+                    <div className="user-name">{`@${chatSelected.nome?.split(' ')[0].toLowerCase()}`}</div>
+                  }
                   <div className="btn-acess">
-                    <b onClick={encaminharPerfil}>Acessar perfil</b>
+                    <b onClick={() => { setIsInChat(false); navigate(`/profissional/${chatSelected.id_profissional}`); }}>Acessar perfil</b>
                   </div>
                 </div>
               }

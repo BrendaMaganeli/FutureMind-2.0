@@ -25,10 +25,6 @@ function VisualizarProfissional() {
   const [idChatSelected, setIdChatSelected] = useState(id);
   const navigate = useNavigate();
 
-  const encaminhaAgendamento = () => {
-    navigate(`/agendamento/${id}`);
-  };
-
   const encaminharChat = () => {
     setIsInChat(true);
   };
@@ -149,7 +145,7 @@ function VisualizarProfissional() {
 
                       user?.id_paciente
                       ?
-                      encaminharChat
+                      setIsInChat(true)
                       :
                       user?.id_profissional
                       ?

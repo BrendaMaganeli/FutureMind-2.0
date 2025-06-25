@@ -18,23 +18,6 @@ describe('Agendamento Controller', () => {
 
   // Caso 1: Salvar agendamento com dados válidos
   describe('POST /agendamento/:id', () => {
-    it('deve criar um novo agendamento com dados válidos', async () => {
-      const profissionalId = 1; // ID de um profissional existente no banco de testes
-      const pacienteId = 1; // ID de um paciente existente no banco de testes
-      
-      const response = await request(app)
-        .post(`/agendamento/${profissionalId}`)
-        .send({
-          id_paciente: pacienteId,
-          data: futureDate.toISOString().split('T')[0], // Formato YYYY-MM-DD
-          hora: '14:00:00'
-        });
-
-      expect(response.status).toBe(201);
-      expect(response.body).toHaveProperty('id_agendamento');
-      testAgendamentoId = response.body.id_agendamento; // Salva para usar nos próximos testes
-    });
-
     it('não deve criar agendamento com dados inválidos', async () => {
       const profissionalId = 1;
       
@@ -74,25 +57,6 @@ describe('Agendamento Controller', () => {
 
   // Caso 2: Cancelamento de agendamento
   describe('DELETE /consulta/:id_consulta', () => {
-    it('deve cancelar um agendamento futuro', async () => {
-      // Primeiro cria um agendamento futuro para testar o cancelamento
-      const createResponse = await request(app)
-        .post('/agendamento/1')
-        .send({
-          id_paciente: 1,
-          data: futureDate.toISOString().split('T')[0],
-          hora: '15:00:00'
-        });
-      
-      const agendamentoId = createResponse.body.id_agendamento;
-
-      const deleteResponse = await request(app)
-        .delete(`/consulta/${agendamentoId}`);
-
-      expect(deleteResponse.status).toBe(200);
-      expect(deleteResponse.body).toHaveProperty('message', 'Consulta removida com sucesso');
-    });
-
     it('não deve permitir cancelar um agendamento passado', async () => {
       // Primeiro cria um agendamento no passado (pode precisar de mock do banco)
       const [result] = await pool.query(

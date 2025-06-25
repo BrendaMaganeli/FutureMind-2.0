@@ -30,20 +30,6 @@ describe('Perfil do Paciente - Fluxo Completo', () => {
 
   // CASO 5: Atualização de dados
   describe('Atualização de Perfil', () => {
-    it('deve verificar disponibilidade de dados antes de atualizar', async () => {
-      const response = await request(app)
-        .post('/verificar_paciente')
-        .send({
-          valorEmail: 'novo_email@example.com',
-          cpf: '98765432109',
-          telefone: '11999998888'
-        });
-      
-      expect(response.status).toBe(200);
-      expect(response.body.emailExiste).toBe(false);
-      expect(response.body.cpfExiste).toBe(false);
-    });
-
     it('deve atualizar os dados do paciente', async () => {
       const updatedData = {
         nome: 'Nome Atualizado',

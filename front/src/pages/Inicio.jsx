@@ -375,7 +375,7 @@ alt="Foto do profissional" />
           <div className="swiper-button-next-custom">›</div>
         </div>
       </div>
-      <div className="botao-anota">
+      {/* <div className="botao-anota">
         <Link
           to="/diarioemocional"
           onMouseEnter={() => setIsHovered(true)}
@@ -390,7 +390,7 @@ alt="Foto do profissional" />
             isStopped={!isHovered}
             />
         </Link>
-      </div>
+      </div> */}
       <div className="footer_inicio">
         <Footer className="footer_inicio" />
       </div>

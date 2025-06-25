@@ -52,6 +52,11 @@ io.on('connection', (socket) => {
     delete onlineUsers[socket.id];
     io.emit("users", Object.entries(onlineUsers).map(([id, name]) => ({ id, name })));
   });
+
+  socket.on('end-call'), () => {
+
+    io.emit('call-ended');
+  }
 });
 
 server.listen(5000, () => {

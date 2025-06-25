@@ -10,10 +10,8 @@ import "./CSS/EditarProfissional.css";
 import icon from "../assets/iconusu.svg";
 import { GlobalContext } from "../Context/GlobalContext";
 
-
 function EditarProfissional() {
   const navigate = useNavigate();
-
   const { user, setUser } = useContext(GlobalContext);
 
   const [showModal, setShowModal] = useState(false);
@@ -21,6 +19,8 @@ function EditarProfissional() {
   const [hasValueAbordagem, setHasValueAbordagem] = useState(false);
   const [imagemPreview, setImagemPreview] = useState(null);
   const [fotoSelecionada, setFotoSelecionada] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
+  
   const [foto, setFoto] = useState(
     user.foto?.includes('http') 
       ? user.foto 
@@ -35,23 +35,20 @@ function EditarProfissional() {
     cpf: user?.cpf || "",
     telefone: user?.telefone || "",
     email: user?.email || "",
-    data_nascimento: user
-      ? formatarDataBrasileira(user.data_nascimento)
-      : "",
+    data_nascimento: user ? formatarDataBrasileira(user.data_nascimento) : "",
     senha: user?.senha || "",
     crp: user?.crp || "",
     foto: user?.foto || "",
     sobre_mim: user?.sobre_mim || "",
     especializacao: parseCampoArray(user?.especializacao),
     abordagem: parseCampoArray(user?.abordagem),
-    valor_consulta: user?.valor_consulta  ? formatarValorConsulta(user.valor_consulta.toString()) : "R$ 0,00",
+    valor_consulta: user?.valor_consulta ? formatarValorConsulta(user.valor_consulta.toString()) : "R$ 0,00",
     email_profissional: user?.email_profissional || "",
-});
+  });
 
-const [profissionais, setProfissionais] = useState(formData);
+  const [profissionais, setProfissionais] = useState(formData);
 
   useEffect(() => {
-
     const profissionalAux = {...user, foto: foto};
     setUser(profissionalAux);
   }, [foto]);
@@ -68,8 +65,9 @@ const [profissionais, setProfissionais] = useState(formData);
     { value: "humanista", label: "Humanista" },
   ];
 
-
+  // Funções auxiliares
   function formatarDataBrasileira(dataISO) {
+    if (!dataISO) return "";
     const data = new Date(dataISO);
     const dia = String(data.getDate()).padStart(2, "0");
     const mes = String(data.getMonth() + 1).padStart(2, "0");
@@ -115,13 +113,11 @@ const [profissionais, setProfissionais] = useState(formData);
     return `R$ ${numero.replace(".", ",")}`;
   }
 
-function formatarValorConsultab(valor) {
-  if (typeof valor !== "string") return "0.00";
-  // Remove "R$", espaços e converte vírgula para ponto
-  const valorLimpo = valor.replace("R$", "").trim().replace(",", ".");
-  // Converte para número e formata com 2 casas decimais
-  return parseFloat(valorLimpo).toFixed(2);
-}
+  function formatarValorConsultab(valor) {
+    if (typeof valor !== "string") return "0.00";
+    const valorLimpo = valor.replace("R$", "").trim().replace(",", ".");
+    return parseFloat(valorLimpo).toFixed(2);
+  }
 
   function parseCampoArray(campo) {
     try {
@@ -145,10 +141,103 @@ function formatarValorConsultab(valor) {
     }
   }
 
-  const [isVisible, setIsVisible] = useState(false);
+  // Funções para manipulação de foto
+  const handleImagemChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      // Verifica se o arquivo é uma imagem
+      if (!selectedFile.type.startsWith('image/')) {
+        console.log('Por favor, selecione um arquivo de imagem válido (JPEG, PNG)');
+        return;
+      }
+      
+      // Verifica o tamanho do arquivo (máximo 5MB)
+      if (selectedFile.size > 5 * 1024 * 1024) {
+        console.log('A imagem deve ter no máximo 5MB');
+        return;
+      }
 
-  const toggleDiv = () => setIsVisible(true);
-  const desativar_div = () => setIsVisible(false);
+      setFotoSelecionada(selectedFile);
+      setImagemPreview(URL.createObjectURL(selectedFile));
+    }
+  };
+
+  const uploadFoto = async () => {
+    if (!fotoSelecionada) return;
+
+    const formData = new FormData();
+    formData.append('foto', fotoSelecionada);
+    formData.append('id_profissional', user.id_profissional);
+
+    try {
+      const response = await fetch('http://localhost:4242/profissional/foto-perfil', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Atualiza a foto com o novo caminho
+        const novoCaminhoFoto = data.foto || `/uploads/${fotoSelecionada.name}`;
+        const fotoCompleta = `http://localhost:4242${novoCaminhoFoto}`;
+        
+        setFoto(fotoCompleta);
+        
+        // Atualiza o contexto/user com a nova foto
+        setUser(prev => ({
+          ...prev,
+          foto: novoCaminhoFoto
+        }));
+        
+        // Fecha o modal e limpa os estados temporários
+        setIsVisible(false);
+        setImagemPreview(null);
+        setFotoSelecionada(null);
+      } else {
+        console.error('Erro no upload da foto');
+        console.log('Erro ao enviar a foto. Por favor, tente novamente.');
+      }
+    } catch (err) {
+      console.error('Erro:', err.message);
+      console.log('Erro de conexão. Por favor, tente novamente.');
+    }
+  };
+
+  // Funções para manipulação de dados
+  const salvarEdicao = async () => {
+    const valorConsultaNumerico = formatarValorConsultab(formData.valor_consulta);
+
+    try {
+      const profissionalParaEnviar = {
+        ...formData,
+        data_nascimento: formatarDataParaEnvio(formData.data_nascimento),
+        abordagem: JSON.stringify(formData.abordagem),
+        especializacao: JSON.stringify(formData.especializacao),
+        valor_consulta: valorConsultaNumerico,
+      };
+
+      const response = await fetch("http://localhost:4242/editarprofissional", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(profissionalParaEnviar),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        data.valor_consulta = data.valor_consulta.toFixed(2);
+        data.foto = foto;
+        setUser(data);
+        setProfissionais(data);
+        console.log('Dados atualizados com sucesso!');
+      } else {
+        console.log('Erro ao atualizar dados. Por favor, tente novamente.');
+      }
+    } catch (err) {
+      console.error("Erro na requisição:", err);
+      console.log('Erro de conexão. Por favor, tente novamente.');
+    }
+  };
 
   const deletarProfissional = async () => {
     try {
@@ -171,38 +260,6 @@ function formatarValorConsultab(valor) {
     }
   };
 
-const salvarEdicao = async () => {
-
-  const valorConsultaNumerico = formatarValorConsultab(formData.valor_consulta);
-
-  try {
-    const profissionalParaEnviar = {
-      ...formData,
-      data_nascimento: formatarDataParaEnvio(formData.data_nascimento),
-      abordagem: JSON.stringify(formData.abordagem),
-      especializacao: JSON.stringify(formData.especializacao),
-      valor_consulta: valorConsultaNumerico, // Já está formatado como string numérica
-    };
-
-    const response = await fetch("http://localhost:4242/editarprofissional", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(profissionalParaEnviar),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      data.valor_consulta = data.valor_consulta.toFixed(2);
-      data.foto = foto;
-      setUser(JSON.stringify(data));
-      setProfissionais(data); // Atualiza o estado de exibição com os dados salvos
-      window.location.reload();
-    }
-  } catch (err) {
-    console.error("Erro na requisição:", err);
-  }
-};
-
   const sairProfissional = () => {
     localStorage.setItem("User Logado", false);
     setUser(null);
@@ -213,6 +270,10 @@ const salvarEdicao = async () => {
     navigate(-1);
   };
 
+  const navegaParaConsulta = () => {
+    navigate(`/consulta/profissional/${profissionais.id_profissional}`);
+  };
+
   const handleDeletarClick = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
   const handleConfirmarDeletar = () => {
@@ -220,48 +281,11 @@ const salvarEdicao = async () => {
     setShowModal(false);
   };
 
-  //fotos
-
-  const handleImagemChange = (event) => {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      setFotoSelecionada(selectedFile);
-      setImagemPreview(URL.createObjectURL(selectedFile));
-      setImage(selectedFile);
-    }
-  };
-
-   const onImageChange = async () => {
-    if (image) {
-      const file = image
-      console.log('Arquivo selecionado:', file);
-  
-      const formData = new FormData(); // Corrigir a criação do FormData
-      formData.append('foto', file); // Adicionar o arquivo selecionado
-      formData.append('id_profissional', user.id_profissional);
-  
-      try {
-        const response = await fetch('http://localhost:4242/profissional/foto-perfil', {
-          method: 'POST',
-          body: formData,
-        });
-  
-        if (response.ok) {
-          setFoto(imagemPreview);
-          window.location.reload();
-        } else {
-          console.log('Erro no envio da foto:', response.status);
-        }
-      } catch (err) {
-        console.error('Erro:', err.message);
-      }
-    }
-  };
-
-  const [image, setImage] = useState(null);
-
-  const navegaParaConsulta = () => {
-    navigate(`/consulta/profissional/${profissionais.id_profissional}`);
+  const toggleDiv = () => setIsVisible(true);
+  const desativar_div = () => {
+    setIsVisible(false);
+    setImagemPreview(null);
+    setFotoSelecionada(null);
   };
 
   return (
@@ -270,52 +294,43 @@ const salvarEdicao = async () => {
         onClick={toggleDiv}
         className="icone_editar"
         src="editar_icone.svg"
-        alt=""
+        alt="Editar foto"
       />
+      
       <aside className="barra-lateral">
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px",
-            width: "100%",
-            height: "fit-content",
-            alignItems: "center",
-          }}
-        >
-          <div className="cabecalho-perfil">
-            <img
-              src={foto}
-              alt="Foto do perfil"
-              className="imagem-perfil"
-              onClick={onImageChange}
+        <div className="cabecalho-perfil">
+          <img
+            src={foto}
+            alt="Foto do perfil"
+            className="imagem-perfil"
+            onClick={toggleDiv}
+          />
+          <h2 className="nome-perfil">{profissionais.nome}</h2>
+        </div>
+        
+        <div className="textarea-wrapper" style={{ width: "20rem" }}>
+          <div style={{ position: "relative", width: "100%", minWidth: "200px" }}>
+            <textarea
+              className="textarea-custom"
+              placeholder=" "
+              value={formData.sobre_mim}
+              onChange={(e) => 
+                setFormData(prev => ({
+                  ...prev,
+                  sobre_mim: e.target.value
+                }))
+              }
             />
-            <h2 className="nome-perfil">{profissionais.nome}</h2>
-          </div>
-          <div className="textarea-wrapper" style={{ width: "20rem" }}>
-            <div
-              style={{ position: "relative", width: "100%", minWidth: "200px" }}
-            >
-              <textarea
-                className="textarea-custom"
-                placeholder=" "
-                value={formData.sobre_mim}
-                onChange={(e) => 
-                  setFormData(prev => ({
-                    ...prev,
-                    sobre_mim: e.target.value
-                  }))
-                }
-              />
-              <label className="label-custom">Sua descrição...</label>
-            </div>
-          </div>
-          <div className="baixarButton">
-            <button className="botao-baixar" onClick={salvarEdicao}>
-              Salvar
-            </button>
+            <label className="label-custom">Sua descrição...</label>
           </div>
         </div>
+        
+        <div className="baixarButton">
+          <button className="botao-baixar" onClick={salvarEdicao}>
+            Salvar
+          </button>
+        </div>
+        
         <div className="caixa-comandos-p">
           <div className="cartao-informacao">
             <div className="cabecalho-informacao">
@@ -373,36 +388,36 @@ const salvarEdicao = async () => {
           </div>
 
           <div className="floating-input-pac">
-          <input
-            type="text"
-            placeholder=" "
-            value={formData.cpf}
-            required
-            onChange={(e) => 
-              setFormData(prev => ({
-                ...prev, 
-                cpf: aplicarMascaraCPF(e.target.value)
-              }))
-            }
-          />
-          <label>CPF</label>
-        </div>
+            <input
+              type="text"
+              placeholder=" "
+              value={formData.cpf}
+              required
+              onChange={(e) => 
+                setFormData(prev => ({
+                  ...prev, 
+                  cpf: aplicarMascaraCPF(e.target.value)
+                }))
+              }
+            />
+            <label>CPF</label>
+          </div>
 
-        <div className="floating-input-pac">
-          <input
-            type="text"
-            placeholder=" "
-            value={formData.telefone}
-            required
-            onChange={(e) => 
-              setFormData(prev => ({
-                ...prev, 
-                telefone: aplicarMascaraTelefone(e.target.value)
-              }))
-            }
-          />
-          <label>Telefone</label>
-        </div>
+          <div className="floating-input-pac">
+            <input
+              type="text"
+              placeholder=" "
+              value={formData.telefone}
+              required
+              onChange={(e) => 
+                setFormData(prev => ({
+                  ...prev, 
+                  telefone: aplicarMascaraTelefone(e.target.value)
+                }))
+              }
+            />
+            <label>Telefone</label>
+          </div>
 
           <div className="floating-input-pac">
             <input
@@ -431,28 +446,28 @@ const salvarEdicao = async () => {
             <label>Data de Nascimento</label>
           </div>
 
-        <div className="floating-input-pac">
-          <input
-            type="password"
-            placeholder=" "
-            value={formData.senha}
-            required
-            onChange={(e) => setFormData(prev => ({...prev, senha: e.target.value}))}
-          />
-          <label>Senha</label>
-        </div>
+          <div className="floating-input-pac">
+            <input
+              type="password"
+              placeholder=" "
+              value={formData.senha}
+              required
+              onChange={(e) => setFormData(prev => ({...prev, senha: e.target.value}))}
+            />
+            <label>Senha</label>
+          </div>
 
-        <div className="floating-input-pac">
-          <input
-            type="text"
-            placeholder=" "
-            value={formData.crp}
-            required
-            maxLength={8}
-            onChange={(e) => setFormData(prev => ({...prev, crp: e.target.value}))}
-          />
-          <label>CRP</label>
-        </div>
+          <div className="floating-input-pac">
+            <input
+              type="text"
+              placeholder=" "
+              value={formData.crp}
+              required
+              maxLength={8}
+              onChange={(e) => setFormData(prev => ({...prev, crp: e.target.value}))}
+            />
+            <label>CRP</label>
+          </div>
 
           <div className="floating-input-pac">
             <input
@@ -545,16 +560,24 @@ const salvarEdicao = async () => {
         </div>
       </div>
 
+      {/* Modal de Edição de Foto */}
       {isVisible && (
         <div className="container_oculto_editar">
           <div className="nav_div_oculta">
             <p className="text_editar_foto_perfil">Editar foto de perfil</p>
           </div>
           <div className="container_oculta_corpo_geral">
-            <div className="container_oculta_corpo_esquerda">
+          <div className="container_oculta_corpo_esquerda">
               <div className="quadrado_fotos">
-                <img className="fotos_editar" src="icone_usuario.svg" alt="" />
-                <input type="file" id="imagem" onChange={handleImagemChange} />
+                <label htmlFor="imagem" className="botao-selecionar-imagem">
+                  + Selecionar Imagem
+                </label>
+                <input 
+                  type="file" 
+                  id="imagem" 
+                  accept="image/jpeg, image/png, image/gif"
+                  onChange={handleImagemChange} 
+                />
               </div>
             </div>
             <div className="container_oculta_corpo_direita">
@@ -569,15 +592,13 @@ const salvarEdicao = async () => {
                   <div
                     className="modelo_foto_redondo"
                     style={{
-                      backgroundImage: imagemPreview
-                        ? `url(${imagemPreview})`
-                        : "none",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      borderRadius: "50%",
-                      width: "120px",
-                      height: "120px",
-                      border: "2px solid #ccc",
+                      backgroundImage: imagemPreview ? `url(${imagemPreview})` : `url(${foto})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      borderRadius: '50%',
+                      width: '120px',
+                      height: '120px',
+                      border: '2px solid #ccc',
                     }}
                   ></div>
                 </div>
@@ -598,7 +619,8 @@ const salvarEdicao = async () => {
                 <div className="container_button_gostei_salvar">
                   <button
                     className="button_gostei_salvar"
-                    onClick={onImageChange}
+                    onClick={uploadFoto}
+                    disabled={!fotoSelecionada}
                   >
                     Gostei, Salvar
                   </button>
@@ -609,6 +631,7 @@ const salvarEdicao = async () => {
         </div>
       )}
 
+      {/* Modal de Confirmação para Deletar Conta */}
       {showModal && (
         <div className="modal">
           <div className="modal-content">

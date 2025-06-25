@@ -160,6 +160,10 @@ function VideoConferencia() {
            socket.disconnect();
         });
 
+        socket.on('call-ended', () => {
+
+            endCall('');
+        });
 
         return () => {
             socket.off("connect", handleConnect);
@@ -171,6 +175,7 @@ function VideoConferencia() {
             socket.off("offer");
             socket.off("answer");
             socket.off("ice-candidate");
+            socket.off('call-ended');
 
             if (localStreamRef.current) {
                 localStreamRef.current.getTracks().forEach(track => track.stop());
@@ -412,10 +417,7 @@ function VideoConferencia() {
     const endCall = (reason = '') => {
         // Notifica o outro participante
         if (targetUser && socket) {
-            socket.emit('end-call', {
-                to: targetUser,
-                reason: reason
-            });
+            socket.emit('end-call',);
         }
     
         // Limpeza local
@@ -608,7 +610,7 @@ function VideoConferencia() {
             )}
 
             {callInProgress &&  (
-                <button style={{backgroundColor: '#d30000'}} className="start-call-button" onClick={endCall}>
+                <button style={{backgroundColor: '#d30000'}} className="start-call-button" onClick={() => endCall('')}>
                     Encerrar Chamada
                     <img src='/public/phone.png' />
                 </button>

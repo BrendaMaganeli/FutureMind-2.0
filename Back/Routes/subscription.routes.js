@@ -1,176 +1,165 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const pool = require('../config/db.config');
+const pool = require("../config/db.config");
 
-
-router.post('/assinatura', async (req, res) => {
-
-  const { data_assinatura, fk_id_paciente, tipo_assinatura, data_fim_assinatura } = req.body;
-
+router.post("/assinatura", async (req, res) => {
+  const {
+    data_assinatura,
+    fk_id_paciente,
+    tipo_assinatura,
+    data_fim_assinatura,
+  } = req.body;
 
   try {
-
     let consultas_disponiveis;
 
-    if (tipo_assinatura === 'prata') {
-
+    if (tipo_assinatura === "prata") {
       consultas_disponiveis = 4;
-    } else if (tipo_assinatura === 'ouro') {
-
+    } else if (tipo_assinatura === "ouro") {
       consultas_disponiveis = 12;
     } else {
-
       consultas_disponiveis = null;
     }
 
-    if (!data_assinatura || !fk_id_paciente || !tipo_assinatura || !consultas_disponiveis || !data_fim_assinatura) return res.status(404).json({ Error: 'erro dados' })
+    if (
+      !data_assinatura ||
+      !fk_id_paciente ||
+      !tipo_assinatura ||
+      !consultas_disponiveis ||
+      !data_fim_assinatura
+    )
+      return res.status(404).json({ Error: "erro dados" });
 
     const [response] = await pool.query(
-      'INSERT INTO assinaturas (data_assinatura, fk_id_paciente, tipo_assinatura, consultas_disponiveis, data_fim_assinatura) VALUES (?, ?, ?, ?, ?)',
-      [data_assinatura, fk_id_paciente, tipo_assinatura, consultas_disponiveis, data_fim_assinatura]
+      "INSERT INTO assinaturas (data_assinatura, fk_id_paciente, tipo_assinatura, consultas_disponiveis, data_fim_assinatura) VALUES (?, ?, ?, ?, ?)",
+      [
+        data_assinatura,
+        fk_id_paciente,
+        tipo_assinatura,
+        consultas_disponiveis,
+        data_fim_assinatura,
+      ]
     );
 
     if (response.affectedRows > 0) {
-
       return res.status(201).json({ success: true });
     }
 
-    return res.status(404).json({ Error: 'erro ao inserir dados' })
+    return res.status(404).json({ Error: "erro ao inserir dados" });
   } catch (error) {
-
-    console.error('Erro ao salvar mensagem:', error);
-    res.status(500).json({ Error: 'Erro interno do servidor' });
+    console.error("Erro ao salvar mensagem:", error);
+    res.status(500).json({ Error: "Erro interno do servidor" });
   }
 });
 
-router.get('/pagamento/:id', async(req, res) => {
+router.get("/pagamento/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [rows] = await pool.query(
+      "SELECT consultas_disponiveis FROM assinaturas WHERE fk_id_paciente = ?",
+      [id]
+    );
+    if (rows.length > 0) {
+      res.status(200).json(rows[0]);
+    } else {
+      res.status(404).json("Profissional não encontrado!");
+    }
+  } catch (err) {
+    res.status(500).json({ Erro: "Erro no servidor, erro: ", err });
+  }
+});
 
-      try {
-         
-        const { id } = req.params;
-            const [rows] = await pool.query(
-               'SELECT consultas_disponiveis FROM assinaturas WHERE fk_id_paciente = ?',
-               [ id ]
-              );
-     
-  
-          if (rows.length > 0) {
-  
-              res.status(200).json(rows[0]);
-          } else {
-  
-              res.status(404).json('Profissional não encontrado!');
-          }
-      } catch (err) {
-  
-          res.status(500).json({Erro: 'Erro no servidor, erro: ', err});
-      };
-  });
-
-router.post('/planos', async (req, res) => {
+router.post("/planos", async (req, res) => {
   try {
     const { id } = req.body; // <-- CORRETO para POST
 
-    const [rows] = await pool.query('SELECT data_fim_assinatura FROM assinaturas WHERE fk_id_paciente = ?', [id]);
+    const [rows] = await pool.query(
+      "SELECT data_fim_assinatura FROM assinaturas WHERE fk_id_paciente = ?",
+      [id]
+    );
 
     if (rows.length > 0) {
       res.status(200).json(rows[0]); // retorna { data_fim_assinaturas: '...' }
     } else {
-      res.status(404).json({ erro: 'Assinatura não encontrada!' });
+      res.status(404).json({ erro: "Assinatura não encontrada!" });
     }
   } catch (err) {
-    res.status(500).json({ erro: 'Erro no servidor', detalhes: err.message });
+    res.status(500).json({ erro: "Erro no servidor", detalhes: err.message });
   }
 });
 
-router.post('/plano_empressarial', async (req, res) => {
-
+router.post("/plano_empressarial", async (req, res) => {
   const { tipo_assinatura, fk_id_paciente, data_assinatura } = req.body;
 
   try {
-
     const [response] = await pool.query(
-      'INSERT INTO assinaturas (tipo_assinatura, fk_id_paciente, data_assinatura) VALUES (?, ?, ?)',
+      "INSERT INTO assinaturas (tipo_assinatura, fk_id_paciente, data_assinatura) VALUES (?, ?, ?)",
       [tipo_assinatura, fk_id_paciente, data_assinatura]
     );
 
     if (response.affectedRows > 0) {
-
       return res.status(201).json({ success: true });
     }
 
-    return res.status(404).json({ Error: 'erro ao inserir dados' })
-
+    return res.status(404).json({ Error: "erro ao inserir dados" });
   } catch (error) {
-
-    console.error('Erro ao salvar mensagem:', error);
-    res.status(500).json({ Error: 'Erro interno do servidor' });
+    console.error("Erro ao salvar mensagem:", error);
+    res.status(500).json({ Error: "Erro interno do servidor" });
   }
 });
 
+router.put("/pagamento", async (req, res) => {
+  const { id_paciente, chk_plano } = req.body;
 
-router.put('/pagamento', async (req, res) => {
+  try {
+    const [response] = await pool.query(
+      `UPDATE pacientes SET chk_plano=? WHERE id_paciente=?`,
+      [chk_plano, id_paciente]
+    );
 
-      const {id_paciente, chk_plano} = req.body;
-  
-     try {
-     
-      const [response] = await pool.query(
-          `UPDATE pacientes SET chk_plano=? WHERE id_paciente=?`,
-          [chk_plano, id_paciente]
-      );
-  
-      if(response.affectedRows > 0){
-  
-          return res.status(201).json({ success: true});
-      }
-      return res.status(404).json({ Error: 'erro ao inserir dados'})
-  
-     } catch (error) {
-       
-      console.error('Erro ao salvar mensagem:', error);
-      res.status(500).json({ Error: 'Erro interno do servidor' });
-     }
-     
-  });
+    if (response.affectedRows > 0) {
+      return res.status(201).json({ success: true });
+    }
+    return res.status(404).json({ Error: "erro ao inserir dados" });
+  } catch (error) {
+    console.error("Erro ao salvar mensagem:", error);
+    res.status(500).json({ Error: "Erro interno do servidor" });
+  }
+});
 
-
-
-router.put('/validacao_planos', async (req, res) => {
+router.put("/validacao_planos", async (req, res) => {
   const { id_paciente, chk_plano } = req.body;
 
   try {
     const [response] = await pool.query(
       `UPDATE pacientes SET chk_plano = ? WHERE id_paciente = ?`,
-      [chk_plano, id_paciente]);
+      [chk_plano, id_paciente]
+    );
 
     const [result] = await pool.query(
       `DELETE FROM assinaturas WHERE fk_id_paciente = ?`,
-      [id_paciente]);
+      [id_paciente]
+    );
 
     if (response.affectedRows > 0) {
-      console.log('update')
+      console.log("update");
       return res.status(200).json({ success: true });
     } else {
-
-      console.log('err update')
+      console.log("err update");
     }
 
     if (result.affectedRows > 0) {
-      console.log('delete')
+      console.log("delete");
       return res.status(200).json({ success: true });
     } else {
-      console.log('erro delete')
+      console.log("erro delete");
     }
 
-    return res.status(404).json({ error: 'Paciente não encontrado.' });
-
+    return res.status(404).json({ error: "Paciente não encontrado." });
   } catch (error) {
-    console.error('Erro ao atualizar plano:', error);
-    res.status(500).json({ error: 'Erro interno do servidor' });
+    console.error("Erro ao atualizar plano:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
 });
 
 module.exports = router;
-
-

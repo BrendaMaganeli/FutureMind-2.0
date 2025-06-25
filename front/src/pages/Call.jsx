@@ -10,7 +10,7 @@ if (rawUser) {
   try {
     const user = JSON.parse(rawUser);
 
-    socket = io('http://192.168.86.96:5000', {
+    socket = io('http://172.20.10.13:5000', {
       auth: {
         name: user?.nome
       },
@@ -224,14 +224,16 @@ function VideoConferencia() {
             });
 
             pc.onicecandidate = (event) => {
-                console.log('ICE candidate:', event.candidate);
-                if (event.candidate && targetUser) {
-                    socket.emit("ice-candidate", {
-                        to: targetUser,
-                        candidate: event.candidate
-                    });
-                } else if (!event.candidate) {
-                    console.log('No more ICE candidates');
+                if (event.candidate) {
+                    console.log('Novo ICE candidate:', event.candidate.candidate);
+                    if (targetUser) {
+                        socket.emit("ice-candidate", {
+                            to: targetUser,
+                            candidate: event.candidate
+                        });
+                    }
+                } else {
+                    console.log('Todos ICE candidates foram enviados');
                 }
             };
 
@@ -292,6 +294,19 @@ function VideoConferencia() {
                 }
             };
 
+            pc.onconnectionstatechange = () => {
+                console.log('Connection state:', pc.connectionState);
+                if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed') {
+                    setError("Conexão perdida. Tentando reconectar...");
+                    setTimeout(() => {
+                        if (callInProgress) {
+                            endCall();
+                            startCall();
+                        }
+                    }, 2000);
+                }
+            };
+
             return pc;
         } catch (error) {
             console.error("Error setting up peer connection:", error);
@@ -305,34 +320,60 @@ function VideoConferencia() {
             setError("Selecione um usuário para chamar");
             return;
         }
-
+    
         try {
             setIsCaller(true);
             peerConnection.current = setupPeerConnection();
             
+            // 1. Timeout para criação da oferta (já existe no seu código)
             const offerTimeout = setTimeout(() => {
                 if (!callInProgress) {
                     setError("Tempo esgotado ao tentar conectar");
                     endCall();
                 }
             }, 30000);
-
+    
+            // 2. ADICIONE ESTE TIMEOUT PARA CONEXÃO ICE
+            const iceTimeout = setTimeout(() => {
+                if (peerConnection.current && 
+                    peerConnection.current.iceConnectionState !== 'connected' && 
+                    peerConnection.current.iceConnectionState !== 'completed') {
+                    console.warn('Timeout ICE - Conexão não estabelecida a tempo');
+                    setError("Não foi possível conectar ao parceiro. Tentando novamente...");
+                    endCall();
+                    
+                    // Reconecta automaticamente após 2 segundos
+                    setTimeout(() => {
+                        if (!callInProgress) {
+                            startCall();
+                        }
+                    }, 2000);
+                }
+            }, 15000); // 15 segundos é um bom tempo para maioria das conexões
+    
             const offer = await peerConnection.current.createOffer({
                 offerToReceiveAudio: 1,
                 offerToReceiveVideo: 1
             });
             await peerConnection.current.setLocalDescription(offer);
-
+    
             socket.emit("offer", {
                 to: targetUser,
                 offer: offer,
                 from: socket.id
             });
-
+    
             setCallInProgress(true);
             setError(null);
+            
+            // 3. LIMPE OS TIMEOUTS QUANDO TUDO DER CERTO
             clearTimeout(offerTimeout);
+            clearTimeout(iceTimeout);
         } catch (error) {
+            // 4. GARANTA QUE OS TIMEOUTS SÃO LIMPOS EM CASO DE ERRO
+            clearTimeout(offerTimeout);
+            clearTimeout(iceTimeout);
+            
             console.error("Error starting call:", error);
             setError("Falha ao iniciar chamada");
             endCall();
@@ -370,15 +411,19 @@ function VideoConferencia() {
 
     const endCall = (reason = '') => {
         // Notifica o outro participante
-        if (targetUser && socket.current) {
-            socket.current.emit('end-call', {
+        if (targetUser && socket) {
+            socket.emit('end-call', {
                 to: targetUser,
                 reason: reason
             });
         }
-
+    
         // Limpeza local
         if (peerConnection.current) {
+            peerConnection.current.ontrack = null;
+            peerConnection.current.onicecandidate = null;
+            peerConnection.current.oniceconnectionstatechange = null;
+            peerConnection.current.onnegotiationneeded = null;
             peerConnection.current.close();
             peerConnection.current = null;
         }
@@ -526,7 +571,7 @@ function VideoConferencia() {
 
         {
         
-        JSON.parse(rawUser).id_profissional &&
+        JSON.parse(rawUser)?.id_profissional &&
         <div className="ppp" onClick={() => setSalaDeEspera(salaDeEspera ? false : true)} style={{ display: "flex", flexDirection: "column" }}>
             <img
                 src={salaDeEspera ? "/public/pacientes blue (2) 1.svg" : "/public/pacientes grey 1.svg"}
@@ -555,7 +600,7 @@ function VideoConferencia() {
         </div>
     )}
 
-            {!callInProgress && !incomingOffer && JSON.parse(rawUser).id_profissional && targetUser && (
+            {!callInProgress && !incomingOffer && JSON.parse(rawUser)?.id_profissional && targetUser && (
                 <button className="start-call-button" onClick={startCall}>
                     Iniciar Chamada
                     <img src='/public/phone.png' />

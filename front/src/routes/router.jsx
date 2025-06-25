@@ -20,6 +20,7 @@ import Termos from "../pages/Termos.jsx";
 import Consulta from "../pages/Consulta.jsx";
 import Text_modal from "../pages/Text_modal.jsx";
 import VideoConferencia from "../pages/Call.jsx";
+import ErrorElement from "../Components/ErrorElement.jsx";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Landing_page />,
+    errorElement: <ErrorElement />
   },
   {
     path: "/inicio",

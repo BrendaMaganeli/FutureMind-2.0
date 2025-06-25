@@ -11,6 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Chat from "./Chat";
 import { useContext } from "react";
 import { GlobalContext } from "../Context/GlobalContext";
+import ModalUserProfi from "../Components/ModalUserProfi";
 
 function VisualizarProfissional() {
 
@@ -18,6 +19,7 @@ function VisualizarProfissional() {
   const [profissional, setProfissional] = useState({});
   const [isInChat, setIsInChat] = useState(false);
   const [modalLogin, setModalLogin] = useState(false);
+  const [mostrarModalUserProfi, setMostrarModalUserProfi] = useState(false);
 
   const { id } = useParams();
   const [idChatSelected, setIdChatSelected] = useState(id);
@@ -109,9 +111,13 @@ function VisualizarProfissional() {
               </div>
               <div className="funcionalidades">
                 <div className="topicos" onClick={() => {
-                      user.id_paciente 
+                      user?.id_paciente 
                       ? 
                       navigate(`/agendamento/${id}`) 
+                      :
+                      user?.id_profissional
+                      ?
+                      setMostrarModalUserProfi(true)
                       : 
                       setModalLogin(true);
                     }
@@ -120,10 +126,14 @@ function VisualizarProfissional() {
                   <p>Agende sua consulta</p>
                 </div>
                 <div
-                  onClick={() => {
-                      user.id_paciente 
+                  onClick={() => {''
+                      user?.id_paciente 
                       ?
                       navigate(`/live/${id}`)
+                      :
+                      user?.id_profissional
+                      ?
+                      setMostrarModalUserProfi(true)
                       :
                       setModalLogin(true);
                     }
@@ -137,9 +147,13 @@ function VisualizarProfissional() {
                   <img src={icon_tres} alt="" />
                   <p onClick={() => {
 
-                      user.id_paciente
+                      user?.id_paciente
                       ?
                       encaminharChat
+                      :
+                      user?.id_profissional
+                      ?
+                      setMostrarModalUserProfi(true)
                       :
                       setModalLogin(true);
                     }
@@ -213,6 +227,10 @@ function VisualizarProfissional() {
       {
         modalLogin &&
         <ModalLogin setMostrarModalLogin={setModalLogin} />
+      }
+      {
+        mostrarModalUserProfi &&
+        <ModalUserProfi setMostrarModalUserProfi={setMostrarModalUserProfi} />
       }
     </>
   );

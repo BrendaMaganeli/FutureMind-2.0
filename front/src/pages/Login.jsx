@@ -36,7 +36,7 @@ function Login() {
     const credentials = { email: valorEmail, senha: valorSenha };
     try {
       const response = await fetch(
-        "https://futuremind-2-0.onrender.com/login",
+        "http://localhost:4242/login",
         {
           method: "POST",
           headers: {

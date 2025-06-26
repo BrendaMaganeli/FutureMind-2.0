@@ -233,7 +233,7 @@ function CadastroProfissional2() {
       console.log("Iniciando cadastro...");
       try {
         const response = await fetch(
-          "https://futuremind-2-0-mw60.onrender.com/cadastro-profissional",
+          "http://localhost:4242/cadastro-profissional",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

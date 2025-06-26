@@ -261,11 +261,7 @@ function EditarPaciente() {
               </div>
             </div>
             <div className="funcionalidades-paciente">
-              <div className="topicos">
-                <img src={icon_dois} alt="" />
-                <p>Vídeo Chamada</p>
-              </div>
-              <div className="topicos">
+              <div onClick={() => navigate('/chats')} className="topicos">
                 <img src={icon_tres} alt="" />
                 <p>Chat</p>
               </div>

@@ -12,9 +12,7 @@ function Pagamento() {
   const location = useLocation();
   const { date: initialDate = "", time: initialTime = "" } =
     location.state || {};
-  const [foto, setFoto] = useState({
-    profissional: "",
-  });
+  const [foto, setFoto] = useState('');
 
   // Verificação da origem via URL
   const searchParams = new URLSearchParams(location.search);
@@ -200,12 +198,10 @@ function Pagamento() {
              user?.chk_plano ? 0 : data.valor_consulta != null ? data.valor_consulta : 0
           );
 
-          setFoto((prev) => ({
-            ...prev,
-            profissional: data.foto?.startsWith("http")
+          console.log(data);
+          setFoto(data.foto?.startsWith("http")
               ? data.foto
-              : `http://localhost:4242${data.foto}`,
-          }));
+              : `http://localhost:4242${data.foto}`);
         } catch (err) {
           console.error("Erro no fetch /profissional/:id →", err);
         }
@@ -214,7 +210,6 @@ function Pagamento() {
     }
   }, [id, cadastrandoPlano, plano_selecionado]);
 
-  // Validações em tempo real
   useEffect(() => {
     if (generoDependente.length > 0) setValida_banco(false);
   }, [generoDependente]);
@@ -841,7 +836,7 @@ function Pagamento() {
                 }}
               >
                 <img
-                  src={foto.profissional || mulher}
+                  src={foto}
                   alt={`Foto de ${profissionalNome}`}
                   style={{
                     borderRadius: "9999px",

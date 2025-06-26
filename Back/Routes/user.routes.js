@@ -145,7 +145,8 @@ router.post('/verificar_paciente', async (req, res) => {
         SELECT
           p.nome,
           p.crp,
-          p.valor_consulta
+          p.valor_consulta,
+          p.foto
         FROM profissionais AS p
         WHERE p.id_profissional = ?
         `,
@@ -161,6 +162,7 @@ router.post('/verificar_paciente', async (req, res) => {
         nome: profissional.nome,
         crp: profissional.crp,
         valor_consulta: profissional.valor_consulta,
+        foto: profissional.foto
       });
     } catch (err) {
       console.error("Erro no servidor (/profissional/:id):", err);

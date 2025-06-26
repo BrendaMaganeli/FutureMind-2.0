@@ -342,11 +342,7 @@ function EditarProfissional() {
               <img src={icon_um} alt="" />
               <p onClick={navegaParaConsulta}>Suas Consultas</p>
             </div>
-            <div className="topicos" onClick={() => navigate(`/live/${user.id_profissional}`)}>
-              <img src={icon_dois} alt="" />
-              <p>Vídeo Chamada</p>
-            </div>
-            <div className="topicos">
+            <div onClick={() => navigate('/chats')} className="topicos">
               <img src={icon_tres} alt="" />
               <p>Chat</p>
             </div>

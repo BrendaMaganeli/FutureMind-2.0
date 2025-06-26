@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import "./CSS/Consulta.css";
 import imgConsulta from "../assets/Group 239294.svg";
 import voltar from "../assets/seta-principal.svg";
-
+import icon from "../assets/icon-profile.svg";
 
 const obterDadosMes = (ano) => {
   const bissexto = ano % 4 === 0 && (ano % 100 !== 0 || ano % 400 === 0);
@@ -62,6 +62,30 @@ function Consulta() {
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(null);
   const [semanaOffset, setSemanaOffset] = useState(0); 
+  const [foto, setFoto] = useState();
+
+  useEffect(() => {
+
+    const getFoto = async () => {
+     try {
+          const response = await fetch(
+            `http://localhost:4242/profissional/${consultaSelecionada.id_profissional}`
+          );
+          if (!response.ok) {
+            console.error("Falha ao buscar foto do profissional:", response.statusText);
+            return;
+          }
+          const data = await response.json();
+          console.log(data);
+          setFoto(data.foto?.startsWith("http")
+              ? data.foto
+              : `http://localhost:4242${data.foto}`);
+        } catch (err) {
+          console.error("Erro no fetch /profissional/:id →", err);
+        }
+      };
+    getFoto();
+  }, [consultaSelecionada]);
 
   const mesesDoAno = useMemo(() => obterDadosMes(anoAtual), [anoAtual]);
   const mesAtual = useMemo(() => mesesDoAno[indiceMesAtual], [mesesDoAno, indiceMesAtual]);
@@ -567,9 +591,9 @@ function Consulta() {
           <div className="resumo-card-c">
             <div className="agendamento-info-c">
               <div className="profissional-c">
-                {consultaSelecionada.fotoPar && (
+                {foto && (
                   <img
-                    src={consultaSelecionada.fotoPar}
+                    src={foto.startsWith('http') ? foto : icon}
                     alt="Foto"
                     className="foto-profissional-c"
                   />

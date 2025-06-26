@@ -5,6 +5,7 @@ import "./CSS/Cadastros.css";
 import { useContext, useState } from "react";
 import { GlobalContext } from "../Context/GlobalContext";
 
+
 function Login() {
   const navigate = useNavigate();
   const { setUserLogado, setUser, setPaginaAnterior } = useContext(GlobalContext);
@@ -109,7 +110,7 @@ function Login() {
               placeholder=" "
               required
             />
-            <label>E-mail</label>
+            <label>E-mail ou e-mail profissional</label>
             <span className={`com_erros ${!emailValido ? "sem_erro" : ""}`}>
               {mensagemEmail}
             </span>

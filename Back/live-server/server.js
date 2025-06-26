@@ -53,12 +53,11 @@ io.on('connection', (socket) => {
     io.emit("users", Object.entries(onlineUsers).map(([id, name]) => ({ id, name })));
   });
 
-  socket.on('end-call'), () => {
+  socket.on('end-call', () => {
 
     io.emit('call-ended');
-  }
+  });
 });
-
 server.listen(5000, () => {
   console.log("Servidor Socket.IO rodando na porta 5000");
 });

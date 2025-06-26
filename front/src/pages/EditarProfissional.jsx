@@ -346,6 +346,10 @@ function EditarProfissional() {
               <img src={icon_tres} alt="" />
               <p>Chat</p>
             </div>
+            <div onClick={() => navigate(`/live/${user.id_profissional}`)} className="topicos">
+              <img src={icon_tres} alt="" />
+              <p>Vídeo Conferência</p>
+            </div>
           </div>
         </div>
       </aside>

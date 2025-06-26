@@ -10,15 +10,16 @@ function Pagamento() {
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
-  const { date: initialDate = "", time: initialTime = "" } = location.state || {};
+  const { date: initialDate = "", time: initialTime = "" } =
+    location.state || {};
   const [foto, setFoto] = useState({
-    profissional: "", 
+    profissional: "",
   });
-    
+
   // Verificação da origem via URL
   const searchParams = new URLSearchParams(location.search);
-  const vimPlanoQuery = searchParams.get('vim_plano') === 'true';
-  const vimAgendamentoQuery = searchParams.get('vim_agendamento') === 'true';
+  const vimPlanoQuery = searchParams.get("vim_plano") === "true";
+  const vimAgendamentoQuery = searchParams.get("vim_agendamento") === "true";
 
   // Estados de agendamento e formulário de pagamento
   const [dataSelecionada, setDataSelecionada] = useState(initialDate);
@@ -48,7 +49,15 @@ function Pagamento() {
 
   const [metodoSelecionado, setMetodoSelecionado] = useState("cartao");
 
-  const { plano_selecionado, vim_plano, vim_agendamento, setVim_plano, setVim_agendamento } = useContext(GlobalContext);
+  const [consultas_disponiveis, setConsultas_disponiveis] = useState("");
+
+  const {
+    plano_selecionado,
+    vim_plano,
+    vim_agendamento,
+    setVim_plano,
+    setVim_agendamento,
+  } = useContext(GlobalContext);
 
   const user = JSON.parse(localStorage.getItem("User-Profile"));
 
@@ -60,12 +69,12 @@ function Pagamento() {
   const [cadastrandoPlano, setCadastrandoPlano] = useState(() => {
     if (vimPlanoQuery) return true;
     if (vimAgendamentoQuery) return false;
-    
+
     if (vim_plano) return true;
     if (vim_agendamento) return false;
-    
-    const savedOrigin = localStorage.getItem('pagamentoOrigin');
-    return savedOrigin === 'plano';
+
+    const savedOrigin = localStorage.getItem("pagamentoOrigin");
+    return savedOrigin === "plano";
   });
 
   // Estados para controle de UI
@@ -79,9 +88,9 @@ function Pagamento() {
   const [nascimentoDependente, setNascimentoDependente] = useState("");
 
   useEffect(() => {
-    const origin = cadastrandoPlano ? 'plano' : 'agendamento';
-    localStorage.setItem('pagamentoOrigin', origin);
-    
+    const origin = cadastrandoPlano ? "plano" : "agendamento";
+    localStorage.setItem("pagamentoOrigin", origin);
+
     setVim_plano(cadastrandoPlano);
     setVim_agendamento(!cadastrandoPlano);
   }, [cadastrandoPlano, setVim_plano, setVim_agendamento]);
@@ -97,31 +106,31 @@ function Pagamento() {
 
   const validarValidadeCartao = (validade) => {
     if (!validade || validade.length !== 5) return false;
-    
-    const [mesStr, anoStr] = validade.split('/');
+
+    const [mesStr, anoStr] = validade.split("/");
     const mes = parseInt(mesStr, 10);
     const ano = parseInt(anoStr, 10);
-    
+
     if (mes < 1 || mes > 12) return false;
-    
+
     const agora = new Date();
     const anoAtual = agora.getFullYear() % 100;
     const mesAtual = agora.getMonth() + 1;
-    
+
     if (ano < anoAtual) return false;
     if (ano === anoAtual && mes < mesAtual) return false;
-    
+
     return true;
   };
 
   const formatarValidade = (valor) => {
     const somenteNumeros = valor.replace(/\D/g, "");
     const numerosLimitados = somenteNumeros.slice(0, 4);
-    
+
     if (numerosLimitados.length <= 2) {
       return numerosLimitados;
     }
-    
+
     return (
       numerosLimitados.substring(0, 2) + "/" + numerosLimitados.substring(2, 4)
     );
@@ -142,7 +151,7 @@ function Pagamento() {
   // Buscar dados do profissional ou plano
   useEffect(() => {
     if (!id) {
-      localStorage.removeItem('pagamentoOrigin');
+      localStorage.removeItem("pagamentoOrigin");
       return;
     }
 
@@ -176,7 +185,9 @@ function Pagamento() {
     } else {
       const getDadosProfissional = async () => {
         try {
-          const response = await fetch(`http://localhost:4242/profissional/${id}`);
+          const response = await fetch(
+            `http://localhost:4242/profissional/${id}`
+          );
           if (!response.ok) {
             console.error("Falha ao buscar profissional:", response.statusText);
             return;
@@ -185,20 +196,22 @@ function Pagamento() {
 
           setProfissionalNome(data.nome || "");
           setProfissionalCRP(data.crp || "");
-          setValorConsulta(data.valor_consulta != null ? data.valor_consulta : 0);
-          
-          setFoto(prev => ({
+          setValorConsulta(
+             user?.chk_plano ? 0 : data.valor_consulta != null ? data.valor_consulta : 0
+          );
+
+          setFoto((prev) => ({
             ...prev,
-            profissional: data.foto?.startsWith("http") 
-              ? data.foto 
-              : `http://localhost:4242${data.foto}`
+            profissional: data.foto?.startsWith("http")
+              ? data.foto
+              : `http://localhost:4242${data.foto}`,
           }));
         } catch (err) {
           console.error("Erro no fetch /profissional/:id →", err);
         }
       };
       getDadosProfissional();
-     }
+    }
   }, [id, cadastrandoPlano, plano_selecionado]);
 
   // Validações em tempo real
@@ -287,7 +300,7 @@ function Pagamento() {
         "ms7_9wi7dG_5vMUGt"
       )
       .then(() => {
-        localStorage.removeItem('pagamentoOrigin');
+        localStorage.removeItem("pagamentoOrigin");
         navigate("/inicio");
       })
       .catch((error) => {
@@ -374,7 +387,139 @@ function Pagamento() {
             "Falha ao registrar agendamento:",
             await agendamentoResp.text()
           );
+
           return;
+        }
+        if (user.chk_plano) {
+          try {
+            // 1. Buscar consultas disponíveis
+            const response = await fetch(
+              "http://localhost:4242/valor_consultas",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id_paciente: user.id_paciente }),
+              }
+            );
+
+            if (!response.ok) throw new Error("Erro ao buscar consultas");
+
+            const data = await response.json();
+            setConsultas_disponiveis(data.consultas_disponiveis);
+
+            // 2. Requisições separadas dependendo do valor
+            if (data.consultas_disponiveis > 0) {
+              // Fazer PUT para diminuir 1 consulta
+              const putResponse = await fetch(
+                "http://localhost:4242/mudar_valor_consultas",
+                {
+                  method: "PUT",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    id_paciente: user.id_paciente,
+                    chk_plano: false,
+                  }),
+                }
+              );
+
+              const putData = await putResponse.json();
+
+              if (putResponse.ok) {
+                console.log("Consulta debitada:", putData.message);
+                setConsultas_disponiveis((prev) => prev - 1);
+              } else if (
+                putResponse.status === 400 &&
+                putData.error ===
+                  "Última consulta, use a rota DELETE para remover a assinatura."
+              ) {
+                // Aqui detectou que é a última consulta, chama DELETE
+                const deleteResponse = await fetch(
+                  "http://localhost:4242/remover_assinatura",
+                  {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id_paciente: user.id_paciente }),
+                  }
+                );
+
+                const deleteData = await deleteResponse.json();
+
+                if (deleteResponse.ok) {
+                  console.log("Assinatura removida:", deleteData.message);
+
+                  // Atualiza chk_plano no backend
+                  const updateResponse = await fetch(
+                    "http://localhost:4242/atualizar_chk_plano",
+                    {
+                      method: "PUT",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        id_paciente: user.id_paciente,
+                        chk_plano: false,
+                      }),
+                    }
+                  );
+
+                  if (updateResponse.ok) {
+                    const userAtualizado = { ...user, chk_plano: false };
+                    setUser(userAtualizado); 
+                    localStorage.setItem(
+                      "User-Profile",
+                      JSON.stringify(userAtualizado)
+                    );
+                    setConsultas_disponiveis(0);
+                  } else {
+                    console.error("Erro ao atualizar chk_plano no backend");
+                  }
+                } else {
+                  console.warn("Erro ao remover assinatura:", deleteData.error);
+                }
+              } else {
+                console.warn("Erro ao debitar consulta:", putData.error);
+              }
+            } else if (data.consultas_disponiveis === 0) {
+              // Já não tem consulta disponível, remove assinatura direto
+              const deleteResponse = await fetch(
+                "http://localhost:4242/remover_assinatura",
+                {
+                  method: "DELETE",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ id_paciente: user.id_paciente }),
+                }
+              );
+
+              const deleteData = await deleteResponse.json();
+
+              if (deleteResponse.ok) {
+                console.log("Assinatura removida:", deleteData.message);
+
+                // Atualiza chk_plano no backend
+                const updateResponse = await fetch(
+                  "http://localhost:4242/atualizar_chk_plano",
+                  {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      id_paciente: user.id_paciente,
+                      chk_plano: false,
+                    }),
+                  }
+                );
+
+                if (updateResponse.ok) {
+                  user.chk_plano = false;
+                  localStorage.setItem("User-Profile", JSON.stringify(user));
+                  setConsultas_disponiveis(0);
+                } else {
+                  console.error("Erro ao atualizar chk_plano no backend");
+                }
+              } else {
+                console.warn("Erro ao remover assinatura:", deleteData.error);
+              }
+            }
+          } catch (error) {
+            console.error("Erro geral:", error);
+          }
         }
       }
 
@@ -508,8 +653,8 @@ function Pagamento() {
                   <label>Validade</label>
                 </div>
                 <p className={`error-text ${valida_cartao ? "show" : ""}`}>
-                  {validadeCartao.length !== 5 
-                    ? "Formato inválido (MM/AA)" 
+                  {validadeCartao.length !== 5
+                    ? "Formato inválido (MM/AA)"
                     : "Data de validade expirada ou inválida"}
                 </p>
               </div>
@@ -610,12 +755,14 @@ function Pagamento() {
           </button>
         </div>
         {cupomInvalido && (
-          <p style={{ 
-            color: "#d9534f", 
-            marginTop: "-16px", 
-            marginBottom: "16px",
-            fontSize: "14px"
-          }}>
+          <p
+            style={{
+              color: "#d9534f",
+              marginTop: "-16px",
+              marginBottom: "16px",
+              fontSize: "14px",
+            }}
+          >
             Cupom inválido!
           </p>
         )}
@@ -736,16 +883,16 @@ function Pagamento() {
                   marginTop: "12px",
                 }}
               >
-              <img
-                src={foto.profissional || mulher}
-                alt={`Foto de ${profissionalNome}`}
-                style={{
-                  borderRadius: "9999px",
-                  width: "60px",
-                  height: "60px",
-                  objectFit: "cover",
-                }}
-              />
+                <img
+                  src={foto.profissional || mulher}
+                  alt={`Foto de ${profissionalNome}`}
+                  style={{
+                    borderRadius: "9999px",
+                    width: "60px",
+                    height: "60px",
+                    objectFit: "cover",
+                  }}
+                />
                 <div>
                   <p style={{ fontWeight: "500", fontSize: "16px" }}>
                     {profissionalNome}

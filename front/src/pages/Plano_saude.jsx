@@ -246,6 +246,9 @@ function Plano_saude() {
   mandar_data();
 }, [dataAr]);
 
+
+
+
   return (
     <>
     {

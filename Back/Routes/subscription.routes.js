@@ -162,4 +162,115 @@ router.put("/validacao_planos", async (req, res) => {
   }
 });
 
+router.post("/valor_consultas", async (req, res) => {
+  const { id_paciente } = req.body;
+
+  try {
+    const [rows] = await pool.query(
+      "SELECT consultas_disponiveis FROM assinaturas WHERE fk_id_paciente = ?",
+      [id_paciente]
+    );
+
+    if (rows.length > 0) {
+      res.status(200).json(rows[0]);
+    }else{
+
+      console.log('erro ao buscar contador!')
+    }
+  } catch (error) {
+
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+router.put("/mudar_valor_consultas", async (req, res) => {
+ const { id_paciente, chk_plano } = req.body;
+
+  try {
+    const [rows] = await pool.query(
+      "SELECT consultas_disponiveis FROM assinaturas WHERE fk_id_paciente = ?",
+      [id_paciente]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Assinatura não encontrada para esse paciente." });
+    }
+
+    const consultasDisponiveis = rows[0].consultas_disponiveis;
+
+    if (consultasDisponiveis > 1) {
+      // Debita 1 consulta
+      await pool.query(
+        "UPDATE assinaturas SET consultas_disponiveis = consultas_disponiveis - 1 WHERE fk_id_paciente = ?",
+        [id_paciente]
+      );
+      return res.status(200).json({ message: "Consulta debitada com sucesso." });
+    } else if (consultasDisponiveis === 1) {
+      // Última consulta: remove assinatura e atualiza chk_plano
+      await pool.query(
+        "DELETE FROM assinaturas WHERE fk_id_paciente = ?",
+        [id_paciente]
+      );
+
+      await pool.query(
+        "UPDATE pacientes SET chk_plano = ? WHERE id_paciente = ?",
+        [chk_plano, id_paciente]
+      );
+
+      return res.status(200).json({
+        message: "Última consulta usada, assinatura removida e plano cancelado."
+      });
+    } else {
+      return res.status(400).json({
+        error: "Paciente não possui consultas disponíveis."
+      });
+    }
+  } catch (error) {
+    console.error("Erro ao debitar consulta:", error);
+    return res.status(500).json({ error: "Erro interno do servidor." });
+  }
+});
+
+
+
+router.delete("/remover_assinatura", async (req, res) => {
+  const { id_paciente } = req.body;
+
+  try {
+    const [result] = await pool.query(
+      "DELETE FROM assinaturas WHERE fk_id_paciente = ?",
+      [id_paciente]
+    );
+
+    if (result.affectedRows > 0) {
+      return res.status(200).json({ message: "Assinatura removida com sucesso." });
+    } else {
+      return res.status(404).json({ error: "Assinatura não encontrada." });
+    }
+  } catch (error) {
+    console.error("Erro ao remover assinatura:", error);
+    return res.status(500).json({ error: "Erro interno do servidor." });
+  }
+});
+
+router.put("/atualizar_chk_plano", async (req, res) => {
+  const { id_paciente, chk_plano } = req.body;
+
+  try {
+    const [result] = await pool.query(
+      "UPDATE pacientes SET chk_plano = ? WHERE id_paciente = ?",
+      [chk_plano, id_paciente]
+    );
+
+    if (result.affectedRows > 0) {
+      res.status(200).json({ message: "chk_plano atualizado com sucesso" });
+    } else {
+      res.status(404).json({ error: "Paciente não encontrado" });
+    }
+  } catch (error) {
+    console.error("Erro ao atualizar chk_plano:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
 module.exports = router;

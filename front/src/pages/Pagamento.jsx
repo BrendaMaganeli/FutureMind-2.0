@@ -461,12 +461,8 @@ function Pagamento() {
                   );
 
                   if (updateResponse.ok) {
-                    const userAtualizado = { ...user, chk_plano: false };
-                    setUser(userAtualizado); 
-                    localStorage.setItem(
-                      "User-Profile",
-                      JSON.stringify(userAtualizado)
-                    );
+                    setUser({ ...user, chk_plano: false }); 
+                    console.log(user)
                     setConsultas_disponiveis(0);
                   } else {
                     console.error("Erro ao atualizar chk_plano no backend");
@@ -476,45 +472,6 @@ function Pagamento() {
                 }
               } else {
                 console.warn("Erro ao debitar consulta:", putData.error);
-              }
-            } else if (data.consultas_disponiveis === 0) {
-              // Já não tem consulta disponível, remove assinatura direto
-              const deleteResponse = await fetch(
-                "http://localhost:4242/remover_assinatura",
-                {
-                  method: "DELETE",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ id_paciente: user.id_paciente }),
-                }
-              );
-
-              const deleteData = await deleteResponse.json();
-
-              if (deleteResponse.ok) {
-                console.log("Assinatura removida:", deleteData.message);
-
-                // Atualiza chk_plano no backend
-                const updateResponse = await fetch(
-                  "http://localhost:4242/atualizar_chk_plano",
-                  {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      id_paciente: user.id_paciente,
-                      chk_plano: false,
-                    }),
-                  }
-                );
-
-                if (updateResponse.ok) {
-                  user.chk_plano = false;
-                  localStorage.setItem("User-Profile", JSON.stringify(user));
-                  setConsultas_disponiveis(0);
-                } else {
-                  console.error("Erro ao atualizar chk_plano no backend");
-                }
-              } else {
-                console.warn("Erro ao remover assinatura:", deleteData.error);
               }
             }
           } catch (error) {

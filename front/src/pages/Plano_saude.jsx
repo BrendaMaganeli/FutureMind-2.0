@@ -15,7 +15,7 @@ function Plano_saude() {
 
   const navigate = useNavigate();
   const { plano_selecionado, setPlano_selecionado, setVim_plano, setVim_agendamento, user, setUser } = useContext(GlobalContext);
-
+  
   const [modalAberto, setModalAberto] = useState(false);
   const [modalPrataAberto, setModalPrataAberto] = useState(false);
   const [modalOuroAberto, setModalOuroAberto] = useState(false);
@@ -204,6 +204,9 @@ function Plano_saude() {
     pegar_data_fim();
   }, []);
 
+
+
+
   useEffect(() => {
   const rawDate = dataAr;
 
@@ -238,16 +241,11 @@ function Plano_saude() {
       } catch (error) {
         console.error("Erro ao validar plano:", error);
       }
-
-     
     }
   };
 
   mandar_data();
 }, [dataAr]);
-
-
-
 
   return (
     <>

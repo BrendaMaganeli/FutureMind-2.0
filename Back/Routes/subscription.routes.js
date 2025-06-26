@@ -273,4 +273,5 @@ router.put("/atualizar_chk_plano", async (req, res) => {
   }
 });
 
+
 module.exports = router;

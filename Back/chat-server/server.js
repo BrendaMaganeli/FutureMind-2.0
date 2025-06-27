@@ -17,8 +17,7 @@ app.use(cors({origin: '*'}));
 io.on('connection', (socket) => {
   socket.on('sendMessage', (message) => {
     // Emite para ambos os participantes
-    socket.to(message.roomId).emit('receiveMessage', message);
-    socket.emit('receiveMessage', message); // Para o remetente
+    io.emit('receiveMessage', message); // Para o remetente
   });
 
   socket.on("joinRoom", (roomId) => {

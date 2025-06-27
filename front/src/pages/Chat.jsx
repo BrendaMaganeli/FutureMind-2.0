@@ -305,7 +305,7 @@ function Chat({
           ? user.id_profissional + "_" + chatSelected.id_paciente
           : user.id_paciente + "_" + chatSelected.id_profissional
       }` && savedMessage.mensageiro !== userType) {
-        setMessages((prev) => [...prev, savedMessage.mensagem]);
+        setMessages((prev) => [...prev, savedMessage]);
       }
   };
 
@@ -314,7 +314,7 @@ function Chat({
   return () => {
     socket.current?.off("receiveMessage", handleNewMessage);
   };
-}, [chatSelected, userType, user.id_profissional, user.id_paciente]);
+}, []);
 
   useEffect(() => {
     if (messagesEndRef.current) {

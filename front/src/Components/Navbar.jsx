@@ -51,7 +51,7 @@ function Navbar({ cor }) {
       </div>
       <div className="container-icon">
         <Link to={user?.id_profissional ? "/editarprofissional" : user?.id_paciente ? '/paciente' : "/login"}>
-          <img src={user?.foto?.startsWith('http') ? user?.foto : user?.foto ? `http://localhost:4242${user?.foto}` : icon} alt="Perfil" />
+          <img src={!user?.foto ? 'icone_usuario.svg' : user?.foto === 'icone_usuario.svg' || user?.foto?.startsWith('http') ? user?.foto : `http://localhost:4242${user?.foto}`} alt="Perfil" />
         </Link>
       </div>
       {mostrarModalLogin && 

@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import Select from "react-select";
 import icon_um from "../assets/calendar-check.svg";
-import icon_dois from "../assets/video.svg";
 import icon_tres from "../assets/message-square (1).svg";
 import Arvore from "../assets/Group 239274.svg";
 import voltar from "../assets/seta-principal.svg";
@@ -20,15 +19,15 @@ function EditarProfissional() {
   const [imagemPreview, setImagemPreview] = useState(null);
   const [fotoSelecionada, setFotoSelecionada] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [mostrarLogo, setMostrarLogo] = useState(true);
+
   
   const [foto, setFoto] = useState(
-    user.foto?.includes('http') 
-      ? user.foto 
-      : user.foto 
-        ? `http://localhost:4242${user.foto}` 
-        : icon
+    user.foto?.includes('http') || user.foto === 'icone_usuario.svg'
+    ? user.foto 
+    : `http://localhost:4242${user.foto}` 
   );
-
+  
   const [formData, setFormData] = useState({
     id_profissional: user?.id_profissional || "",
     nome: user?.nome || "",
@@ -53,6 +52,11 @@ function EditarProfissional() {
     setUser(profissionalAux);
   }, [foto]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => setMostrarLogo(false), 500);
+     return () => clearTimeout(timer);
+   }, []);
+  
   const opcoesEspecializacao = [
     { value: "psicologia-clinica", label: "Psicologia Clínica" },
     { value: "psicopedagogia", label: "Psicopedagogia" },
@@ -163,7 +167,11 @@ function EditarProfissional() {
   };
 
   const uploadFoto = async () => {
-    if (!fotoSelecionada) return;
+    if (!fotoSelecionada) {
+
+      desativar_div();
+      return;
+    }
 
     const formData = new FormData();
     formData.append('foto', fotoSelecionada);
@@ -225,8 +233,10 @@ function EditarProfissional() {
 
       if (response.ok) {
         const data = await response.json();
-        data.valor_consulta = data.valor_consulta.toFixed(2);
-        data.foto = foto;
+
+        if (data.foto !== 'icone_usuario.svg') {
+          data.foto = foto;
+        }
         setUser(data);
         setProfissionais(data);
         console.log('Dados atualizados com sucesso!');
@@ -289,13 +299,23 @@ function EditarProfissional() {
   };
 
   return (
+    <>
+    {
+      mostrarLogo ? (
+      <div className="logo-container">
+        <div className="logo-elements">
+          <h2 className="loading-animation">Carregando...</h2>
+        </div>
+      </div>
+      ) : (
+
     <div className="container">
       <img
         onClick={toggleDiv}
         className="icone_editar"
         src="editar_icone.svg"
         alt="Editar foto"
-      />
+        />
       
       <aside className="barra-lateral">
         <div className="cabecalho-perfil">
@@ -304,7 +324,7 @@ function EditarProfissional() {
             alt="Foto do perfil"
             className="imagem-perfil"
             onClick={toggleDiv}
-          />
+            />
           <h2 className="nome-perfil">{profissionais.nome}</h2>
         </div>
         
@@ -320,7 +340,7 @@ function EditarProfissional() {
                   sobre_mim: e.target.value
                 }))
               }
-            />
+              />
             <label className="label-custom">Sua descrição...</label>
           </div>
         </div>
@@ -399,7 +419,7 @@ function EditarProfissional() {
                   cpf: aplicarMascaraCPF(e.target.value)
                 }))
               }
-            />
+              />
             <label>CPF</label>
           </div>
 
@@ -415,7 +435,7 @@ function EditarProfissional() {
                   telefone: aplicarMascaraTelefone(e.target.value)
                 }))
               }
-            />
+              />
             <label>Telefone</label>
           </div>
 
@@ -426,7 +446,7 @@ function EditarProfissional() {
               value={formData.email}
               required
               onChange={(e) => setFormData(prev => ({...prev, email: e.target.value}))}
-            />
+              />
             <label>E-mail</label>
           </div>
 
@@ -442,7 +462,7 @@ function EditarProfissional() {
                   data_nascimento: aplicarMascaraData(e.target.value)
                 }))
               }
-            />
+              />
             <label>Data de Nascimento</label>
           </div>
 
@@ -453,7 +473,7 @@ function EditarProfissional() {
               value={formData.senha}
               required
               onChange={(e) => setFormData(prev => ({...prev, senha: e.target.value}))}
-            />
+              />
             <label>Senha</label>
           </div>
 
@@ -505,7 +525,7 @@ function EditarProfissional() {
                 }));
                 setHasValueEspecializacao(novos.length > 0);
               }}
-            />
+              />
             <label className={hasValueEspecializacao ? "has-value" : ""}>
               Especialização
             </label>
@@ -548,7 +568,7 @@ function EditarProfissional() {
                   email_profissional: e.target.value
                 }))
               }
-            />
+              />
             <label>E-mail Profissional</label>
           </div>
         </div>
@@ -600,7 +620,7 @@ function EditarProfissional() {
                       height: '120px',
                       border: '2px solid #ccc',
                     }}
-                  ></div>
+                    ></div>
                 </div>
               </div>
             </div>
@@ -620,9 +640,8 @@ function EditarProfissional() {
                   <button
                     className="button_gostei_salvar"
                     onClick={uploadFoto}
-                    disabled={!fotoSelecionada}
-                  >
-                    Gostei, Salvar
+                    >
+                    Gostei, salvar
                   </button>
                 </div>
               </div>
@@ -648,6 +667,8 @@ function EditarProfissional() {
         </div>
       )}
     </div>
+    )};
+    </>
   );
 }
 

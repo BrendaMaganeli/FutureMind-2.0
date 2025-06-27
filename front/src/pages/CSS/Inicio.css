@@ -95,7 +95,6 @@
 
 .filtrados:hover{
   overflow-y: auto;
-  
 }
 
 .filtrados{
@@ -223,6 +222,12 @@ background-color: #5A789F;
 .filter-profissionais-baixo .plano-saude-img {
   width: 80%;
   height: 100%;
+  filter: drop-shadow(1px 10px 10px rgb(73, 73, 73));
+}
+
+.filter-profissionais-baixo .plano-saude-img:hover {
+  transform: scale(1.05);
+  transition: 1s;
 }
 
 .filter-profissionais-baixo .plano-saude-img img {
@@ -251,6 +256,12 @@ background-color: #5A789F;
   justify-content: center;
   padding: 2%;
   cursor: pointer;
+}
+
+.div-btn-filtro:hover {
+
+  background-color: #013a63;
+  transition: 1s;
 }
 
 .text-btn-filtro {

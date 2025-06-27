@@ -581,6 +581,7 @@
     justify-content: center;
     border: 2px solid #C1DFF4;
     border-radius: 15px;
+    cursor: pointer;
 }
 .container_img img{
 

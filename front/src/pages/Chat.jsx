@@ -249,7 +249,7 @@ function Chat({
 
  useEffect(() => {
   if (!socket.current) {
-    socket.current = io("https://backend-futuremind.onrender.com");
+    socket.current = io("https://futuremind-2-0-2.onrender.com");
 
     socket.current.on("connect", () => {
       console.log("Conectado ao Socket.IO!");
@@ -276,24 +276,39 @@ function Chat({
 
     if (!chatSelected) return;
 
-    const isRelevantMessage =
-      // Profissional recebendo mensagem do paciente atual
-      (userType === "Profissional" &&
-        savedMessage.userType === "Paciente" &&
-        savedMessage.id_paciente === chatSelected.id_paciente &&
-        savedMessage.id_profissional === user.id_profissional) ||
-      // Paciente recebendo mensagem do profissional atual
-      (userType === "Paciente" &&
-        savedMessage.userType === "Profissional" &&
-        savedMessage.id_profissional === chatSelected.id_profissional &&
-        savedMessage.id_paciente === user.id_paciente);
+    // const isRelevantMessage =
+    //   // Profissional recebendo mensagem do paciente atual
+    //   (userType === "Profissional" &&
+    //     savedMessage.userType === "Paciente" &&
+    //     savedMessage.id_paciente === chatSelected.id_paciente &&
+    //     savedMessage.id_profissional === user.id_profissional) ||
+    //   // Paciente recebendo mensagem do profissional atual
+    //   (userType === "Paciente" &&
+    //     savedMessage.userType === "Profissional" &&
+    //     savedMessage.id_profissional === chatSelected.id_profissional &&
+    //     savedMessage.id_paciente === user.id_paciente);
 
-    if (isRelevantMessage) {
-      setMessages((prev) => [...prev, savedMessage]);
-    }
+    // if (userType === 'Profissional') {
+
+    //   if (savedMessage.mensageiro === 'Paciente' && savedMessage.id_paciente === chatSelected.id_paciente && savedMessage.id_profissional === user.id_profissional) {
+    //     setMessages((prev) => [...prev, savedMessage]);
+    //   }
+    // } else if (userType === 'Paciente') {
+
+    //    if (savedMessage.mensageiro === 'Profissional' && savedMessage.id_paciente === user.id_paciente && savedMessage.id_profissional === chatSelected.id_profissional) {
+    //     setMessages((prev) => [...prev, savedMessage]);
+    //   }
+    // }
+
+    if (savedMessage.roomId ===`chat_${
+        userType === "Profissional"
+          ? user.id_profissional + "_" + chatSelected.id_paciente
+          : user.id_paciente + "_" + chatSelected.id_profissional
+      }` && savedMessage.mensageiro !== userType) {
+        setMessages((prev) => [...prev, savedMessage.mensagem]);
+      }
   };
 
-  socket.current.off("receiveMessage");
   socket.current.on("receiveMessage", handleNewMessage);
 
   return () => {
@@ -412,7 +427,7 @@ function Chat({
         console.log("a");
         console.log("Mensagem salva no banco de dados!");
         socket.current.emit("sendMessage", message);
-        setMessages((prev) => [...prev, message]); // Otimista
+        setMessages((prev) => [...prev, message]);
       }
     } catch (error) {
       console.error(error);

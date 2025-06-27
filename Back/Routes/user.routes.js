@@ -321,19 +321,21 @@ router.post('/cadastro-paciente', async (req, res) => {
           Idade
       } = req.body;
 
-      // Verifica se o e-mail já está cadastrado
+      const foto = 'icone_usuario.svg';
+
       const [verificaEmail] = await pool.query('SELECT * FROM pacientes WHERE email = ?', [Email]);
       if (verificaEmail.length > 0) {
           return res.status(409).json({ error: 'E-mail já cadastrado' });
       }
 
-      const [rows] = await pool.query('INSERT INTO pacientes (nome, data_nascimento, cpf, email, telefone, senha) VALUES (?, ?, ?, ?, ?, ?)', [
+      const [rows] = await pool.query('INSERT INTO pacientes (nome, data_nascimento, cpf, email, telefone, senha, foto) VALUES (?, ?, ?, ?, ?, ?, ?)', [
           Nome_completo,
-          Idade, // deve ser data no formato YYYY-MM-DD
+          Idade,
           cpf,
           Email,
           Telefone,
-          Senha
+          Senha,
+          foto
       ]);
 
       if (rows.affectedRows > 0) {
@@ -365,7 +367,7 @@ router.post('/cadastro-profissional', async(req, res) => {
             valor_consulta
         } = req.body;
 
-        const foto = 'icon_user.svg';
+        const foto = 'icone_usuario.svg';
 
         const [check] = await pool.query('SELECT * FROM profissionais WHERE email = ?', [email]);
           if (check.length > 0) {

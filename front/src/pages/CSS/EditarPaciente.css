@@ -5,6 +5,7 @@
   position: absolute;
   padding-left: 9%;
   padding-top: 9%;
+  cursor: pointer;
 }
 .editar-paciente-maior {
   display: flex;
@@ -301,6 +302,16 @@ input[type="file"]:hover {
   padding: 5%;
   border-radius: 10px;
   font-weight: 400;
+}
+
+.button_gostei_salvar:hover {
+  background-color: #013a63;
+  transition: 0.5s;
+}
+
+.button_cancelar_editar:hover {
+  opacity: 60%;
+  transition: 0.5s;
 }
 
 .floating-input-pac {

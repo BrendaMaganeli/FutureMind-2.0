@@ -1,5 +1,6 @@
 import NavBar from "../Components/Navbar.jsx";
 import fundo from "../assets/fundo inicio.svg";
+import icon from "../assets/icon-profile.svg";
 import "./CSS/Inicio.css";
 import { Link, useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -330,7 +331,7 @@ function Inicio() {
                       <div className="foto-perfilInicio">
                       <img src={item.foto?.startsWith('/') 
   ? `http://localhost:4242${item.foto}`
-  : item.foto || '/caminho/para/imagem-padrao.jpg'} 
+  : item.foto || icon} 
 alt="Foto do profissional" />
                         <div className="perfil-nomeValor">
                           <h2

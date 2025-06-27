@@ -1,8 +1,8 @@
 import "./CSS/EditarPaciente.css";
-import { useContext, useState } from "react";
+import "./CSS/EditarProfissional.css";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import icon_um from "../assets/calendar-check.svg";
-import icon_dois from "../assets/video.svg";
 import icon_tres from "../assets/message-square (1).svg";
 import logo from "../assets/logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
@@ -45,6 +45,12 @@ function EditarPaciente() {
   const [showModal, setShowModal] = useState(false);
   const [imagemPreview, setImagemPreview] = useState(null);
   const [image, setImage] = useState(null);
+  const [mostrarLogo, setMostrarLogo] = useState(true);
+
+   useEffect(() => {
+    const timer = setTimeout(() => setMostrarLogo(false), 500);
+     return () => clearTimeout(timer);
+   }, []);
 
   function formatarDataBrasileira(dataISO) {
     if (!dataISO) return "";
@@ -93,18 +99,19 @@ function EditarPaciente() {
 
   const deletarPaciente = async () => {
     try {
+
       const response = await fetch(
-        `http://localhost:4242/paciente/${pacienteEditado.id_paciente}`,
+        `http://localhost:4242/paciente`,
         {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({ id_paciente: user.id_paciente })
         }
       );
 
       if (response.ok) {
-        localStorage.removeItem("User Logado");
         setUser(null);
         navigate("/");
       } else {
@@ -152,7 +159,6 @@ function EditarPaciente() {
         };
         
         setUser(updatedProfile);
-        localStorage.setItem("User Logado", JSON.stringify(updatedProfile));
         setPacienteEditado(updatedProfile);
         setPacienteExibido({
           ...pacienteExibido,
@@ -189,7 +195,8 @@ function EditarPaciente() {
 
   const onImageChange = async () => {
     if (!image) {
-      alert('Por favor, selecione uma imagem primeiro');
+      
+      desativar_div();
       return;
     }
 
@@ -237,7 +244,17 @@ function EditarPaciente() {
   };
 
   return (
-    <div>
+
+    <>
+    {
+    mostrarLogo ? (
+      <div className="logo-container">
+        <div className="logo-elements">
+          <h2 className="loading-animation">Carregando...</h2>
+        </div>
+      </div>
+    ) : (
+      <div>
       <img
         onClick={toggleDiv}
         className="icone_editar"
@@ -285,7 +302,7 @@ function EditarPaciente() {
                 alt="Voltar"
                 style={{ cursor: "pointer" }}
                 onClick={() => navigate(-1)}
-              />
+                />
             </div>
             <div className="botoes-superiores-p">
               <button onClick={handleDeletarClick} className="botao-deletar">
@@ -353,7 +370,7 @@ function EditarPaciente() {
                 onChange={(e) =>
                   setPacienteEditado({ ...pacienteEditado, email: e.target.value })
                 }
-              />
+                />
               <label>E-mail</label>
             </div>
             <div className="floating-input-pac">
@@ -366,7 +383,7 @@ function EditarPaciente() {
                   const valorFormatado = aplicarMascaraData(e.target.value);
                   setDataNascimentoFormatada(valorFormatado);
                 }}
-              />
+                />
               <label>Data de Nascimento</label>
             </div>
             <div className="floating-input-pac">
@@ -408,7 +425,7 @@ function EditarPaciente() {
                   accept="image/jpeg, image/png, image/gif"
                   onChange={handleImagemChange} 
                   style={{ display: 'none' }}
-                />
+                  />
               </div>
             </div>
             <div className="container_oculta_corpo_direita">
@@ -424,8 +441,8 @@ function EditarPaciente() {
                     className="modelo_foto_redondo"
                     style={{
                       backgroundImage: imagemPreview
-                        ? `url(${imagemPreview})`
-                        : pacienteExibido.foto ? `url(${pacienteExibido.foto})` : "none",
+                      ? `url(${imagemPreview})`
+                      : pacienteExibido.foto ? `url(${pacienteExibido.foto})` : "none",
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       borderRadius: "50%",
@@ -433,7 +450,7 @@ function EditarPaciente() {
                       height: "120px",
                       border: "2px solid #ccc",
                     }}
-                  ></div>
+                    ></div>
                 </div>
               </div>
             </div>
@@ -453,9 +470,8 @@ function EditarPaciente() {
                   <button
                     className="button_gostei_salvar"
                     onClick={onImageChange}
-                    disabled={!image}
                   >
-                    Salvar
+                    Gostei, salvar
                   </button>
                 </div>
               </div>
@@ -464,23 +480,25 @@ function EditarPaciente() {
         </div>
       )}
 
+      {/* Modal de Confirmação para Deletar Conta */}
       {showModal && (
         <div className="modal">
           <div className="modal-content">
             <h3>Tem certeza de que deseja deletar sua conta?</h3>
-            <p>Todos os seus dados serão permanentemente removidos.</p>
-            <div className="modal-buttons">
-              <button onClick={handleCloseModal} className="modal-btn-cancelar">
-                Cancelar
+            <div className="buttons">
+              <button onClick={handleConfirmarDeletar} className="modal-btn-1">
+                Sim
               </button>
-              <button onClick={handleConfirmarDeletar} className="modal-btn-confirmar">
-                Confirmar
+              <button onClick={handleCloseModal} className="modal-btn-2">
+                Cancelar
               </button>
             </div>
           </div>
         </div>
       )}
     </div>
+    )};
+  </>
   );
 }
 

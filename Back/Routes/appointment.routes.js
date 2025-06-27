@@ -34,10 +34,10 @@ router.get('/agendamento/:id/:year/:month', async (req, res) => {
       return res.status(400).json({ error: 'Formato de data inválido. Use YYYY-MM-DD.' });
     }
   
-    // Alteração AQUI: Novo regex para aceitar HH:MM
+    // Alteração para aceitar HH:MM REGEX garante horas de 00:00 até 23:59
     const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/; 
     if (!timeRegex.test(hora)) {
-      return res.status(400).json({ error: 'Formato de horário inválido. Use HH:MM.' }); // Altera a mensagem de erro também
+      return res.status(400).json({ error: 'Formato de horário inválido. Use HH:MM.' }); 
     }
   
     try {

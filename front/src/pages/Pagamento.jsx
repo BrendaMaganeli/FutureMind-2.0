@@ -777,9 +777,15 @@ function Pagamento() {
             <span>
               {cadastrandoPlano
                 ? planoInfo?.nome || "Assinatura do plano"
-                : "Consultas"}
+                : "Consulta psicológica"}
             </span>
-            <span>R${valorConsulta.toFixed(2)}</span>
+            <span>
+              {!cadastrandoPlano && user?.chk_plano ? (
+                <span style={{ color: 'rgb(1, 58, 99)' }}>Inclusa no plano</span>
+              ) : (
+                `R$${valorConsulta.toFixed(2)}`
+              )}
+            </span>
           </div>
 
           {desconto > 0 && (
@@ -810,7 +816,11 @@ function Pagamento() {
               Valor a ser pago{" "}
             </p>
             <span style={{ fontSize: "22px" }}>
-              R${(valorConsulta - desconto).toFixed(2)}
+              {!cadastrandoPlano && user?.chk_plano ? (
+                <span style={{ color: 'rgb(1, 58, 99)' }}>Grátis(plano)</span>
+              ) : (
+                `R$${(valorConsulta - desconto).toFixed(2)}`
+              )}
             </span>
           </div>
 
@@ -856,12 +866,26 @@ function Pagamento() {
                 </div>
               </div>
 
+              {!cadastrandoPlano && user?.chk_plano && (
+                <div style={{
+                  backgroundColor: '#e6f7ff',
+                  padding: '8px',
+                  borderRadius: '4px',
+                  marginTop: '8px',
+                  borderLeft: '3px solid #013a63'
+                }}>
+                  <p style={{ color: '#013a63', fontSize: '14px' }}>
+                    Esta consulta está inclusa no seu plano. Não será cobrado valor adicional.
+                  </p>
+                </div>
+              )}
+
               <div
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  marginTop: "10%",
+                  marginTop: '10%',
                   borderTop: "1.5px solid #ddd",
                 }}
               >
@@ -891,7 +915,6 @@ function Pagamento() {
                       border: "none",
                       borderRadius: "6px",
                       backgroundColor: "rgb(1, 58, 99)",
-                      // fontSize: "15px",
                       color: "white",
                     }}
                   >

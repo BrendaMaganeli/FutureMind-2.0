@@ -26,7 +26,7 @@ function CadastroPaciente() {
 
   // Estados de senha visível
   const [tipoInput, setTipoInput] = useState("password");
-  const [tipoIconSenha, setTipoIconSenha] = useState("icon_nao_ver.png");
+  const [tipoIconSenha, setTipoIconSenha] = useState("hide.png");
   const [mensagemCpf, setMensagemCpf] = useState("");
   const [mensagemTelefone, setMensagemTelefone] = useState("");
   const [mensagemEmail, setMensagemEmail] = useState("");
@@ -37,7 +37,7 @@ function CadastroPaciente() {
   const alternarTipo = () => {
     setTipoInput(tipoInput === "password" ? "text" : "password");
     setTipoIconSenha(
-      tipoInput === "password" ? "icon_ver.png" : "icon_nao_ver.png"
+      tipoInput === "password" ? "view (1).png" : "hide.png"
     );
   };
 

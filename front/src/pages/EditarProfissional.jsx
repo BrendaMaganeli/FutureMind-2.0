@@ -41,7 +41,7 @@ function EditarProfissional() {
     sobre_mim: user?.sobre_mim || "",
     especializacao: parseCampoArray(user?.especializacao),
     abordagem: parseCampoArray(user?.abordagem),
-    valor_consulta: user?.valor_consulta ? formatarValorConsulta(user.valor_consulta.toString()) : "R$ 0,00",
+    valor_consulta: user?.valor_consulta ? `R$ ${user.valor_consulta.toFixed(2).replace('.', ',')}` : "R$ 0,00",
     email_profissional: user?.email_profissional || "",
   });
 
@@ -513,17 +513,13 @@ function EditarProfissional() {
               className="custom-select"
               classNamePrefix="custom-select"
               options={opcoesEspecializacao}
-              value={transformarParaOpcoesSelecionadas(
-                formData.especializacao,
-                opcoesEspecializacao
-              )}
+              value={formData.especializacao}
               onChange={(selectedOptions) => {
-                const novos = selectedOptions.map((opt) => opt.value);
                 setFormData(prev => ({
                   ...prev,
-                  especializacao: novos
+                  especializacao: selectedOptions
                 }));
-                setHasValueEspecializacao(novos.length > 0);
+                setHasValueAbordagem(selectedOptions.length > 0);
               }}
               />
             <label className={hasValueEspecializacao ? "has-value" : ""}>
@@ -538,17 +534,13 @@ function EditarProfissional() {
               className="custom-select"
               classNamePrefix="custom-select"
               options={opcoesAbordagens}
-              value={transformarParaOpcoesSelecionadas(
-                formData.abordagem,
-                opcoesAbordagens
-              )}
+              value={formData.abordagem}
               onChange={(selectedOptions) => {
-                const novos = selectedOptions.map((opt) => opt.value);
                 setFormData(prev => ({
                   ...prev,
-                  abordagem: novos
+                  abordagem: selectedOptions
                 }));
-                setHasValueAbordagem(novos.length > 0);
+                setHasValueAbordagem(selectedOptions.length > 0);
               }}
             />
             <label className={hasValueAbordagem ? "has-value" : ""}>

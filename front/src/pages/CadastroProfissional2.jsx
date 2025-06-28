@@ -47,7 +47,7 @@ function CadastroProfissional2() {
   const [usuarioMensgaem, setMensagemUsuario] = useState("");
 
   const [tipoInput, setTipoInput] = useState("password");
-  const [tipoIconSenha, setTipoIconSenha] = useState("icon_nao_ver.png");
+  const [tipoIconSenha, setTipoIconSenha] = useState("view (1).png");
 
   const [aceitouTermos, setAceitouTermos] = useState(false);
   const [checkboxInvalido, setCheckboxInvalido] = useState(false);
@@ -114,7 +114,7 @@ function CadastroProfissional2() {
   const alternarTipo = () => {
     setTipoInput((prev) => (prev === "password" ? "text" : "password"));
     setTipoIconSenha((prev) =>
-      prev === "icon_nao_ver.png" ? "icon_ver.png" : "icon_nao_ver.png"
+      prev === "hide.png" ? "view (1).png" : "hide.png"
     );
   };
 

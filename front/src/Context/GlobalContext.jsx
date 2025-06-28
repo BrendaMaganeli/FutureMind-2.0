@@ -15,7 +15,7 @@ export const GlobalContextProvider = ({ children }) => {
     email: "",
     email_profissional: "",
     crp: "",
-    valor_consulta: 0.0,
+    valor_consulta: '',
   });
 
   // const [profissional, setProfissional] = useState(() => {

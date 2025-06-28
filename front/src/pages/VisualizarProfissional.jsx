@@ -20,21 +20,15 @@ function VisualizarProfissional() {
   const [isInChat, setIsInChat] = useState(false);
   const [modalLogin, setModalLogin] = useState(false);
   const [mostrarModalUserProfi, setMostrarModalUserProfi] = useState(false);
-
+  
   const { id } = useParams();
   const [idChatSelected, setIdChatSelected] = useState(id);
   const navigate = useNavigate();
 
-  const encaminharChat = () => {
-    setIsInChat(true);
-  };
-
+  useEffect(() => {
   const renderizarPerfil = async () => {
     try {
-      const response = await fetch(
-        `https://futuremind-2-0.onrender.com/profissional/${idChatSelected}`,
-        { method: "GET" }
-      );
+      const response = await fetch(`http://localhost:4242/profissional/${id}`);
 
       if (response.ok) {
         const data = await response.json();
@@ -52,6 +46,7 @@ function VisualizarProfissional() {
           ...data,
           especializacoes: Array.isArray(especializacoes) ? especializacoes : [],
           abordagens: Array.isArray(abordagens) ? abordagens : [],
+          foto: data.foto
         });
       }
     } catch (err) {
@@ -59,7 +54,6 @@ function VisualizarProfissional() {
     }
   };
 
-  useEffect(() => {
     renderizarPerfil();
   }, []);
 
@@ -91,7 +85,7 @@ function VisualizarProfissional() {
             >
               <div className="cabecalho-perfil">
                 <img
-                  src={`http://localhost:4242${profissional.foto}`}
+                  src={profissional?.foto === 'icone_usuario.svg' || profissional?.foto?.startsWith('http') ? profissional?.foto : `http://localhost:4242${profissional.foto}`}
                   alt="Foto do perfil"
                   className="imagem-perfil"
                 />

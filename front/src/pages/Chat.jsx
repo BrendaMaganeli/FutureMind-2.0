@@ -300,11 +300,7 @@ function Chat({
     //   }
     // }
 
-    if (savedMessage.roomId ===`chat_${
-        userType === "Profissional"
-          ? user.id_profissional + "_" + chatSelected.id_paciente
-          : user.id_paciente + "_" + chatSelected.id_profissional
-      }` && savedMessage.mensageiro !== userType) {
+    if (savedMessage.mensageiro !== userType && savedMessage) {
         setMessages((prev) => [...prev, savedMessage]);
       }
   };
@@ -324,7 +320,7 @@ function Chat({
 
   function buscaProfissional(e) {
     const termo = e.target.value;
-    setBusca(termo.toLowerCase());
+    setBusca(termo);
 
     if (termo === "") {
       setResult([]);
@@ -333,7 +329,7 @@ function Chat({
     }
 
     const filtrados = profissionais.filter((chat) =>
-      chat.nome.toLowerCase().includes(termo)
+      chat.nome.toLowerCase().includes(termo.toLowerCase())
     );
     setResult(filtrados || []);
     setUseResult(true);
@@ -553,6 +549,15 @@ function Chat({
     window.location.reload();
   };
 
+  const acessaPerfil = () => { 
+
+    if (typeof setIsInChat === 'function') {
+
+      setIsInChat(false); 
+    };
+    navigate(`/profissional/${chatSelected.id_profissional}`);
+  }
+
   return (
     <>
     {
@@ -638,7 +643,7 @@ function Chat({
                 setOpenModal(null);
               }}
               >
-              <img src={item.foto ? `http://localhost:4242${item.foto}` : icon} alt="" />
+              <img src={item?.foto === 'icone_usuario.svg' || item?.foto.startsWith('http') ? item.foto : `http://localhost:4242${item.foto}`} alt="" />
               <div className="nome">
                 <p>{item.nome.split(' ')[0]}</p>
               </div>
@@ -691,7 +696,7 @@ function Chat({
         <div className={`chat ${isChatSelected}`}>
           <div className="barra-top">
             <div className="img-foto">
-              <img src={chatSelected.foto ? `http://localhost:4242${chatSelected.foto}` : icon} alt="" />
+              <img src={chatSelected?.foto === 'icone_usuario.svg' || chatSelected?.foto.startsWith('http') ? chatSelected.foto : `http://localhost:4242${chatSelected.foto}`} alt="" />
             </div>
             <div className="nome-user-chat">
               <h5>{chatSelected.nome.split(' ')[0]}</h5>
@@ -723,7 +728,7 @@ function Chat({
                     <div className="user-name">{`@${chatSelected.nome?.split(' ')[0].toLowerCase()}`}</div>
                   }
                   <div className="btn-acess">
-                    <b onClick={() => { setIsInChat(false); navigate(`/profissional/${chatSelected.id_profissional}`); }}>Acessar perfil</b>
+                    <b onClick={acessaPerfil}>Acessar perfil</b>
                   </div>
                 </div>
               }

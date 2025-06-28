@@ -16,32 +16,29 @@ function CadastroProfissional1() {
   const [crpValido, setCrpValido] = useState(false);
   const [telefone, setTelefone] = useState(profissional.telefone);
   const [telefoneValido, setTelefoneValido] = useState(false);
-  const [dataNascimento, setDataNascimento] = useState(
-    profissional.data_nascimento
-  );
-
+  
   // validar ValorCRP, telefone, cpf 
-
+  
   const [dataNascimentoValido, setDataNascimentoValido] = useState(false);
   const [cpf, setCpf] = useState(profissional.cpf);
   const [cpfValido, setCpfValido] = useState(false);
-  const [valorConsulta, setValorConsulta] = useState("");
+  const [valorConsulta, setValorConsulta] = useState(profissional.valor_consulta ? `R$ ${profissional.valor_consulta}` : profissional.valor_consulta);
   const [valorConsultaValido, setValorConsultaValido] = useState(false);
   const [mensagemCrp, setMensagemCrp] = useState('')
   const [mensagemTelefone, setMensagemTelefone] = useState('')
   const [mensagemCpf, setMensagemCpf] = useState('')
-
+  
   const converterParaFormatoBanco = (data) => {
     if (!data || data.split("/").length !== 3) return "";
     const [dia, mes, ano] = data.split("/");
     return `${ano}-${mes.padStart(2, "0")}-${dia.padStart(2, "0")}`;
   };
-
+  
   const formatarValorConsultaB = (valor) => {
     if (!valor) return "";
     const valorNumerico = parseFloat(
       valor.replace(/[^\d,-]/g, '')
-           .replace(',', '.')
+      .replace(',', '.')
     );
     
     return isNaN(valorNumerico) ? "" : valorNumerico.toFixed(2);
@@ -67,7 +64,24 @@ function CadastroProfissional1() {
     });
   };
   
+  const formatarData = (value) => {
+    value = value.replace(/\D/g, "");
+    value = value.replace(/(\d{2})(\d{2})(\d{4})/, "$1/$2/$3");
+    return value.slice(0, 10);
+  };
 
+  function formatarDataParaBR(dataBanco) {
+  // Verifica se está no formato esperado
+  if (!dataBanco || !/^\d{4}-\d{2}-\d{2}$/.test(dataBanco)) {
+    return "Data inválida";
+  }
+
+  const [ano, mes, dia] = dataBanco.split("-");
+  return `${dia}/${mes}/${ano}`;
+}
+  
+  const [dataNascimento, setDataNascimento] = useState(profissional.data_nascimento ? formatarDataParaBR(profissional.data_nascimento) : profissional.data_nascimento);
+  
   useEffect(() => {
     setProfissional({
       nome,
@@ -78,7 +92,7 @@ function CadastroProfissional1() {
       valor_consulta: formatarValorConsultaB(valorConsulta),
     });
   }, [nome, valorCRP, telefone, dataNascimento, cpf, valorConsulta]);
-
+  
   const formatarCPF = (value) => {
     value = value.replace(/\D/g, "");
     value = value.replace(/^(\d{3})(\d)/, "$1.$2");
@@ -86,33 +100,28 @@ function CadastroProfissional1() {
     value = value.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3-$4");
     return value.slice(0, 14);
   };
-
+  
   const formatarCRP = (value) => {
     value = value.replace(/\D/g, ""); // Remove tudo que não for número
-
+    
     if (value.length <= 2) {
       return value; // ex: "0", "06"
     }
-
+    
     return value.slice(0, 2) + "/" + value.slice(2, 7); // ex: "06/123456"
   };
-
+  
   const formatarTelefone = (value) => {
     value = value.replace(/\D/g, "");
     value = value.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
     return value.slice(0, 15);
   };
 
-  const formatarData = (value) => {
-    value = value.replace(/\D/g, "");
-    value = value.replace(/(\d{2})(\d{2})(\d{4})/, "$1/$2/$3");
-    return value.slice(0, 10);
-  };
-
+  
   const formatarNome = (value) => {
     return value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, "");
   };
-
+  
   const handleCadastro = async () => {
     let validacoes = true;
     let data 

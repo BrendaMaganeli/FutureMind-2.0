@@ -546,6 +546,7 @@
   height: 30px;
   align-items: center;
   color: #d9534f;
+  transition: ease-in-out 0.5s;
 }
 
 .com_erros_usuario{
@@ -554,7 +555,7 @@
   align-items: center;
   color: #d9534f;
   height: 30px;
-
+  transition: ease-in-out 0.5s;
 }
 
 .sem_erro_usuario{
@@ -563,7 +564,7 @@
  height: 30px;
  color: white;
  align-items: center;
- 
+ transition: ease-in-out 0.5s;
 }
 
 .sem_erro {

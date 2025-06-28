@@ -17,18 +17,20 @@ function Login() {
   const [senhaValido, setSenhaValido] = useState(false);
 
   const [tipoInput, setTipoInput] = useState("password");
-  const [tipoIconSenha, setTipoIconSenha] = useState("icon_nao_ver.png");
+  const [tipoIconSenha, setTipoIconSenha] = useState("hide.png");
   
-  const [mensagemSenha, setMensagemSenha] = useState("")
-  const [mensagemEmail, setMensagemEmail] = useState("")
+  const [mensagemSenha, setMensagemSenha] = useState("");
+  const [mensagemEmail, setMensagemEmail] = useState("");
+  const [borderSenha, setBorderSenha] = useState('2px solid #ccc');
+  const [borderEmail, setBorderEmail] = useState('2px solid #ccc');
 
   const alternarTipo = () => {
     if (tipoInput === "password") {
       setTipoInput("text");
-      setTipoIconSenha("icon_ver.png");
+      setTipoIconSenha("view (1).png");
     } else {
       setTipoInput("password");
-      setTipoIconSenha("icon_nao_ver.png");
+      setTipoIconSenha("hide.png");
     }
   };
 
@@ -57,6 +59,9 @@ function Login() {
         
         const data = await response.json();
         console.log(data);  
+
+         setBorderSenha('2px solid #ccc');
+         setBorderEmail('2px solid #ccc');
         
         if(data == 'Paciente não encontrado' || data == 'Profissional não encontrado'){
           
@@ -64,6 +69,7 @@ function Login() {
            setMensagemEmail('Email não cadastrado!')
            setSenhaValido(true)
            setMensagemSenha('')
+           setBorderEmail('1px solid rgb(231, 95, 95)')
 
         }else{
            
@@ -75,7 +81,8 @@ function Login() {
         if(data == 'Senha incorreta'){
          
           setSenhaValido(true)
-          setMensagemSenha('senha incorreta!')
+          setMensagemSenha('Senha incorreta!')
+          setBorderSenha('1px solid rgb(231, 95, 95)');
           
         }
       }
@@ -106,9 +113,11 @@ function Login() {
               onChange={(e) => {
                 setValorEmail(e.target.value);
                 setEmailValido(false);
+                setBorderEmail('2px solid #ccc');
               }}
               placeholder=" "
               required
+              style={{border: borderEmail}}
             />
             <label>E-mail ou e-mail profissional</label>
             <span className={`com_erros ${!emailValido ? "sem_erro" : ""}`}>
@@ -124,9 +133,11 @@ function Login() {
               onChange={(e) => {
                 setValorSenha(e.target.value);
                 setSenhaValido(false);
+                setBorderSenha('2px solid #ccc');
               }}
               placeholder=" "
               required
+              style={{border: borderSenha}}
             />
             <label>Senha</label>
             <span className={`com_erros ${!senhaValido ? "sem_erro" : ""}`}>

@@ -12,9 +12,36 @@ import Chat from "./Chat";
 import { useContext } from "react";
 import { GlobalContext } from "../Context/GlobalContext";
 import ModalUserProfi from "../Components/ModalUserProfi";
+import iconeUsuario from "../assets/iconusu.svg";
+
+// Componente de Imagem de Perfil Reutilizável
+const ProfileImage = ({ src, alt, className }) => {
+  const [imageSrc, setImageSrc] = useState(iconeUsuario);
+
+  useEffect(() => {
+    if (!src || src === 'iconusu.svg') {
+      setImageSrc(iconeUsuario);
+    } else if (src.startsWith('http') || src.startsWith('/')) {
+      setImageSrc(src);
+    } else {
+      setImageSrc(`http://localhost:4242${src}`);
+    }
+  }, [src]);
+
+  return (
+    <img
+      src={imageSrc}
+      alt={alt}
+      className={className}
+      onError={(e) => {
+        e.target.onerror = null;
+        e.target.src = iconeUsuario;
+      }}
+    />
+  );
+};
 
 function VisualizarProfissional() {
-
   const { user } = useContext(GlobalContext);
   const [profissional, setProfissional] = useState({});
   const [isInChat, setIsInChat] = useState(false);
@@ -26,36 +53,35 @@ function VisualizarProfissional() {
   const navigate = useNavigate();
 
   useEffect(() => {
-  const renderizarPerfil = async () => {
-    try {
-      const response = await fetch(`http://localhost:4242/profissional/${id}`);
+    const renderizarPerfil = async () => {
+      try {
+        const response = await fetch(`http://localhost:4242/profissional/${id}`);
 
-      if (response.ok) {
-        const data = await response.json();
-        
-        // Verifica se os dados são strings e faz o parse
-        const especializacoes = typeof data.especializacao === 'string' 
-          ? JSON.parse(data.especializacao || "[]") 
-          : data.especializacao || [];
-        
-        const abordagens = typeof data.abordagem === 'string'
-          ? JSON.parse(data.abordagem || "[]")
-          : data.abordagem || [];
+        if (response.ok) {
+          const data = await response.json();
+          
+          const especializacoes = typeof data.especializacao === 'string' 
+            ? JSON.parse(data.especializacao || "[]") 
+            : data.especializacao || [];
+          
+          const abordagens = typeof data.abordagem === 'string'
+            ? JSON.parse(data.abordagem || "[]")
+            : data.abordagem || [];
 
-        setProfissional({
-          ...data,
-          especializacoes: Array.isArray(especializacoes) ? especializacoes : [],
-          abordagens: Array.isArray(abordagens) ? abordagens : [],
-          foto: data.foto
-        });
+          setProfissional({
+            ...data,
+            especializacoes: Array.isArray(especializacoes) ? especializacoes : [],
+            abordagens: Array.isArray(abordagens) ? abordagens : [],
+            foto: data.foto || 'iconusu.svg'
+          });
+        }
+      } catch (err) {
+        console.log("Erro no servidor, erro: ", err);
       }
-    } catch (err) {
-      console.log("Erro no servidor, erro: ", err);
-    }
-  };
+    };
 
     renderizarPerfil();
-  }, []);
+  }, [id]);
 
   const voltarTelas = () => {
     navigate("/inicio");
@@ -84,8 +110,8 @@ function VisualizarProfissional() {
               }}
             >
               <div className="cabecalho-perfil">
-                <img
-                  src={profissional?.foto === 'icone_usuario.svg' || profissional?.foto?.startsWith('http') ? profissional?.foto : `http://localhost:4242${profissional.foto}`}
+                <ProfileImage 
+                  src={profissional?.foto}
                   alt="Foto do perfil"
                   className="imagem-perfil"
                 />
@@ -112,11 +138,11 @@ function VisualizarProfissional() {
                       setModalLogin(true);
                     }
                   }>
-                  <img src={icon_um} alt="" />
+                  <img src={icon_um} alt="Agendar consulta" />
                   <p>Agende sua consulta</p>
                 </div>
                 <div
-                  onClick={() => {''
+                  onClick={() => {
                       user?.id_paciente 
                       ?
                       navigate(`/live/${id}`)
@@ -130,13 +156,12 @@ function VisualizarProfissional() {
                   }
                   className="topicos"
                 >
-                  <img src={icon_dois} alt="" />
+                  <img src={icon_dois} alt="Vídeo chamada" />
                   <p>Vídeo Chamada</p>
                 </div>
                 <div className="topicos">
-                  <img src={icon_tres} alt="" />
+                  <img src={icon_tres} alt="Chat" />
                   <p onClick={() => {
-
                       user?.id_paciente
                       ?
                       setIsInChat(true)
@@ -147,8 +172,7 @@ function VisualizarProfissional() {
                       :
                       setModalLogin(true);
                     }
-                  }
-                  >Chat</p>
+                  }>Chat</p>
                 </div>
               </div>
             </div>
@@ -156,17 +180,17 @@ function VisualizarProfissional() {
 
           <main className="conteudo">
             <div className="arvore">
-              <img src={Arvore} alt="" />
+              <img src={Arvore} alt="Árvore decorativa" />
             </div>
 
             <div className="botoes-maior">
               <div className="botoes">
-                <img onClick={voltarTelas} src={voltar} alt="" />
+                <img onClick={voltarTelas} src={voltar} alt="Voltar" />
               </div>
             </div>
 
             <div className="loguinho">
-              <img src={logo} alt="" />
+              <img src={logo} alt="Logo" />
             </div>
 
             <div className="caixa-info-geral">

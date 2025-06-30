@@ -26,16 +26,15 @@ function Plano_saude() {
   const [senhaEmpresa, setSenhaEmpresa] = useState("");
   const [erroEmail, setErroEmail] = useState("");
   const [erroSenha, setErroSenha] = useState("");
-
+  const [estadoPlano, setEstadoPlano] = useState()
   const [dataAr, setDataAr] = useState();
-
+  const [assinatura, setAssinatura] = useState('')
   const [mostrarLogo, setMostrarLogo] = useState(true);
  
     useEffect(() => {
       const timer = setTimeout(() => setMostrarLogo(false), 500);
       return () => clearTimeout(timer);
     }, []);
- 
 
   const abrirModalPrata = () => (!user ? setMostrarModalLogin(true) : setModalPrataAberto(true));
   const fecharModalPrata = () => setModalPrataAberto(false);
@@ -247,6 +246,121 @@ function Plano_saude() {
   mandar_data();
 }, [dataAr]);
 
+useEffect(() =>{
+  const estado_plano = async ()  =>{
+     try {
+    const response = await fetch("http://localhost:4242/estado_plano", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id_paciente: user.id_paciente }),
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        setEstadoPlano(data.chk_plano)
+        
+    }else{
+
+      console.log('erro ao pegar valor')
+    }
+    
+  } catch (error) {
+    console.error("Erro no frontend ao pegar chk_plano:", error);
+    return null;
+  }
+  }
+  estado_plano()
+})
+
+useEffect(() =>{
+  const valor_assinatura = async ()  =>{
+     try {
+    const response = await fetch("http://localhost:4242/Valores_assinatura", {
+      method: "POST", 
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id_paciente: user.id_paciente }),
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        setAssinatura(data[0])
+        
+    }else{
+
+      console.log('erro ao pegar valor')
+    }
+    
+  } catch (error) {
+    console.error("Erro no frontend ao pegar chk_plano:", error);
+    return null;
+  }
+  }
+  valor_assinatura()
+})
+
+function formatarData(dataISO) {
+  if (!dataISO) return "";
+  const data = new Date(dataISO);
+
+  // Pega dia, mês e ano no formato local
+  const dia = String(data.getDate()).padStart(2, "0");
+  const mes = String(data.getMonth() + 1).padStart(2, "0"); // mês começa do zero
+  const ano = data.getFullYear();
+
+  return `${dia}/${mes}/${ano}`;
+}
+
+
+// No início do seu componente Plano_saude, adicione o estado:
+const [modalCancelarAberto, setModalCancelarAberto] = useState(false);
+const [cancelando, setCancelando] = useState(false);
+
+// Função para abrir e fechar modal
+const abrirModalCancelar = () => setModalCancelarAberto(true);
+const fecharModalCancelar = () => setModalCancelarAberto(false);
+
+// Função para cancelar plano
+const cancelarPlano = async () => {
+  if (!user?.id_paciente) return;
+
+  setCancelando(true);
+
+  try {
+    // 1. Remover assinatura
+    const responseDelete = await fetch("http://localhost:4242/remover_assinatura", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_paciente: user.id_paciente }),
+    });
+
+    if (!responseDelete.ok) throw new Error("Erro ao remover assinatura");
+
+    // 2. Atualizar chk_plano para false
+    const responsePut = await fetch("http://localhost:4242/atualizar_chk_plano", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_paciente: user.id_paciente, chk_plano: false }),
+    });
+
+    if (!responsePut.ok) throw new Error("Erro ao atualizar plano");
+
+    alert("Plano cancelado com sucesso.");
+    setUser({ ...user, chk_plano: false });
+    setEstadoPlano(false);
+    setAssinatura({});
+    fecharModalCancelar();
+  } catch (error) {
+    console.error(error);
+    alert("Erro ao cancelar plano. Tente novamente.");
+  } finally {
+    setCancelando(false);
+  }
+};
+
   return (
     <>
     {
@@ -317,10 +431,10 @@ function Plano_saude() {
           </div>
         </div>
       </div>
-
+ 
     {(
   !user || 
-  (user?.id_paciente && !user.chk_plano)
+  (user?.id_paciente && !estadoPlano)
 ) &&(
         <>
           <div className="container-planos">
@@ -486,6 +600,45 @@ function Plano_saude() {
           </Modal>
         </>
       )}
+     {user?.id_paciente && estadoPlano === 1 && (
+  <div className="container_estado_plano">
+    <div className="estado_plano_esq">
+      <img className="img_estado_plano" src={trimestral} alt="Plano trimestral" />
+    </div>
+    <div className="estado_plano_dir">
+      <h1 className="titulo_plano">Plano {assinatura.tipo_assinatura} Ativo</h1>
+      <ul className="lista_plano"> 
+        <li><strong>Data de assinatura:</strong> {formatarData(assinatura.data_assinatura)}</li>
+        <li><strong>Data de fim do plano:</strong> {formatarData(assinatura.data_fim_assinatura)}</li>
+        <li><strong>Consultas disponíveis:</strong> {assinatura.consultas_disponiveis}</li>
+      </ul>
+      <div className="container_button_plano_cancelar">
+        <button className="button_plano_cancelar" onClick={abrirModalCancelar}>
+  Cancelar plano
+</button>
+
+      </div>
+    </div>
+  </div>
+)}
+
+<Modal open={modalCancelarAberto} onClose={fecharModalCancelar}>
+  <div className="modal-overlay-cancelar">
+    <div className="modal-content-cancelar">
+      <h2 className="modal-title-cancelar">Confirmar Cancelamento</h2>
+      <p className="p_cancelar">Tem certeza que deseja cancelar seu plano?</p>
+
+      <div className="modal-buttons-cancelar">
+        <button className="btn-cancelar" onClick={fecharModalCancelar} disabled={cancelando}>
+          Não
+        </button>
+        <button className="btn-confirmar" onClick={cancelarPlano} disabled={cancelando}>
+          {cancelando ? "Cancelando..." : "Sim, cancelar"}
+        </button>
+      </div>
+    </div>
+  </div>
+</Modal>
 
       <Footer />
 

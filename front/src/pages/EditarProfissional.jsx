@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import Select from "react-select";
 import icon_um from "../assets/calendar-check.svg";
+import icon_dois from "../assets/video.svg";
 import icon_tres from "../assets/message-square (1).svg";
 import Arvore from "../assets/Group 239274.svg";
 import voltar from "../assets/seta-principal.svg";
@@ -23,8 +24,10 @@ function EditarProfissional() {
 
   
   const [foto, setFoto] = useState(
-    user.foto?.includes('http') || user.foto === 'icone_usuario.svg'
+    user.foto?.includes('http')
     ? user.foto 
+    : user.foto === 'icone_usuario.svg'
+    ? icon
     : `http://localhost:4242${user.foto}` 
   );
   
@@ -367,8 +370,8 @@ function EditarProfissional() {
               <p>Chat</p>
             </div>
             <div onClick={() => navigate(`/live/${user.id_profissional}`)} className="topicos">
-              <img src={icon_tres} alt="" />
-              <p>Vídeo Conferência</p>
+              <img src={icon_dois} alt="" />
+              <p>Iniciar consulta</p>
             </div>
           </div>
         </div>

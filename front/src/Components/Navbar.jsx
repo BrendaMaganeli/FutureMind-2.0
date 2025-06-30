@@ -1,6 +1,6 @@
-import icon from "../assets/icon-profile.svg";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState, useRef, useContext } from "react";
+import iconeUsuario from "../assets/iconusu.svg";
 import ModalLogin from "./ModalLogin";
 import "./CSS/NavBar.css";
 import { GlobalContext } from "../Context/GlobalContext";
@@ -51,7 +51,7 @@ function Navbar({ cor }) {
       </div>
       <div className="container-icon">
         <Link to={user?.id_profissional ? "/editarprofissional" : user?.id_paciente ? '/paciente' : "/login"}>
-          <img src={!user?.foto ? 'icone_usuario.svg' : user?.foto === 'icone_usuario.svg' || user?.foto?.startsWith('http') ? user?.foto : `http://localhost:4242${user?.foto}`} alt="Perfil" />
+          <img src={!user?.foto ? 'icone_usuario.svg' : ((user?.foto === 'icone_usuario.svg' || user?.foto?.startsWith('data')) && location.pathname === '/planoSaude') ? iconeUsuario : user?.foto === 'icone_usuario.svg' || user?.foto?.startsWith('http') ? user?.foto : user?.foto?.startsWith('data') ? 'icone_usuario.svg' : `http://localhost:4242${user?.foto}`} alt="Perfil" />
         </Link>
       </div>
       {mostrarModalLogin && 

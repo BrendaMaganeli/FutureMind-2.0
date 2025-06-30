@@ -259,58 +259,31 @@ function Chat({
       console.error("Erro de conexão:", err);
     });
   }
+}, []); // Só conecta uma vez
 
-  // Entra na sala do chat selecionado
-  if (chatSelected) {
-    const roomId = `chat_${
-      userType === "Profissional"
-        ? user.id_profissional + "_" + chatSelected.id_paciente
-        : user.id_paciente + "_" + chatSelected.id_profissional
-    }`;
-    socket.current.emit("joinRoom", roomId); // Entra na sala
-  }
+useEffect(() => {
+  if (!chatSelected || !socket.current) return;
 
-  // Listener para novas mensagens
+  const roomId =
+    userType === "Profissional"
+      ? `chat_${chatSelected.id_paciente}_${user.id_profissional}`
+      : `chat_${user.id_paciente}_${chatSelected.id_profissional}`;
+
+  socket.current.emit("joinRoom", roomId); // entra na sala correta
+
   const handleNewMessage = (savedMessage) => {
     console.log("Nova mensagem recebida:", savedMessage);
-
-    if (!chatSelected) return;
-
-    // const isRelevantMessage =
-    //   // Profissional recebendo mensagem do paciente atual
-    //   (userType === "Profissional" &&
-    //     savedMessage.userType === "Paciente" &&
-    //     savedMessage.id_paciente === chatSelected.id_paciente &&
-    //     savedMessage.id_profissional === user.id_profissional) ||
-    //   // Paciente recebendo mensagem do profissional atual
-    //   (userType === "Paciente" &&
-    //     savedMessage.userType === "Profissional" &&
-    //     savedMessage.id_profissional === chatSelected.id_profissional &&
-    //     savedMessage.id_paciente === user.id_paciente);
-
-    // if (userType === 'Profissional') {
-
-    //   if (savedMessage.mensageiro === 'Paciente' && savedMessage.id_paciente === chatSelected.id_paciente && savedMessage.id_profissional === user.id_profissional) {
-    //     setMessages((prev) => [...prev, savedMessage]);
-    //   }
-    // } else if (userType === 'Paciente') {
-
-    //    if (savedMessage.mensageiro === 'Profissional' && savedMessage.id_paciente === user.id_paciente && savedMessage.id_profissional === chatSelected.id_profissional) {
-    //     setMessages((prev) => [...prev, savedMessage]);
-    //   }
-    // }
-
-    if (savedMessage.mensageiro !== userType && savedMessage) {
-        setMessages((prev) => [...prev, savedMessage]);
-      }
+    setMessages((prev) => [...prev, savedMessage]);
   };
 
   socket.current.on("receiveMessage", handleNewMessage);
 
   return () => {
-    socket.current?.off("receiveMessage", handleNewMessage);
+    socket.current.off("receiveMessage", handleNewMessage);
+    socket.current.emit("leaveRoom", roomId); // opcional se implementado no backend
   };
-}, []);
+}, [chatSelected]);
+
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -393,7 +366,7 @@ function Chat({
           : user.id_profissional,
       roomId: `chat_${
         userType === "Profissional"
-          ? user.id_profissional + "_" + chatSelected.id_paciente
+          ? chatSelected.id_paciente + "_" + user.id_profissional
           : user.id_paciente + "_" + chatSelected.id_profissional
       }`, // ID único para a sala
     };
@@ -423,7 +396,6 @@ function Chat({
         console.log("a");
         console.log("Mensagem salva no banco de dados!");
         socket.current.emit("sendMessage", message);
-        setMessages((prev) => [...prev, message]);
       }
     } catch (error) {
       console.error(error);
@@ -456,23 +428,11 @@ function Chat({
 
   const excluiMensagem = async (mensagem, index) => {
     try {
-      let data = {};
-
-      if (userType === "Profissional") {
-        data = {
-          id_profissional: user.id_profissional,
-          id_paciente: mensagem.fk_pacientes_id_paciente,
-          datahora: mensagem.datahora,
+      const data = {
+          id_profissional: mensagem.id_profissional,
+          id_paciente: mensagem.id_paciente,
+          mensagem: mensagem.mensagem
         };
-      } else if (userType === "Paciente") {
-        data = {
-          id_paciente: user.id_paciente,
-          id_profissional: mensagem.fk_profissionais_id_profissional,
-          datahora: mensagem.datahora,
-        };
-      }
-
-      if (!data) return console.log("Erro ao carregar dados");
 
       const response = await fetch("http://localhost:4242/chats/mensagens", {
         method: "DELETE",
@@ -643,7 +603,7 @@ function Chat({
                 setOpenModal(null);
               }}
               >
-              <img src={item?.foto === 'icone_usuario.svg' || item?.foto.startsWith('http') ? item.foto : `http://localhost:4242${item.foto}`} alt="" />
+              <img src={!item?.foto ? 'icone_usuario.svg' : item?.foto === 'icone_usuario.svg' || item?.foto?.startsWith('http') ? item.foto : `http://localhost:4242${item.foto}`} alt="" />
               <div className="nome">
                 <p>{item.nome.split(' ')[0]}</p>
               </div>
@@ -684,7 +644,6 @@ function Chat({
           {result.length === 0 && useResult && (
             <>
               <p className="no-results">Não há resultados para esta busca.</p>
-              <img className="arvore-results" src={arvoreAzul} />
             </>
           )}
         </div>
@@ -696,7 +655,7 @@ function Chat({
         <div className={`chat ${isChatSelected}`}>
           <div className="barra-top">
             <div className="img-foto">
-              <img src={chatSelected?.foto === 'icone_usuario.svg' || chatSelected?.foto.startsWith('http') ? chatSelected.foto : `http://localhost:4242${chatSelected.foto}`} alt="" />
+              <img src={!chatSelected?.foto ? 'icone_usuario.svg' : chatSelected?.foto === 'icone_usuario.svg' || chatSelected?.foto?.startsWith('http') ? chatSelected.foto : `http://localhost:4242${chatSelected.foto}`} alt="" />
             </div>
             <div className="nome-user-chat">
               <h5>{chatSelected.nome.split(' ')[0]}</h5>
@@ -748,9 +707,9 @@ function Chat({
                   : "message-left"
                 }
                 >
-                  {msg.mensageiro === !userType && (
-                    <div className="image-message-right">
-                      <img src={user.foto ? `http://localhost:4242${user.foto}` : icon} alt="" />
+                  {msg.mensageiro !== userType && (
+                    <div className="image-message-left">
+                      <img src={!chatSelected?.foto ? 'icone_usuario.svg' : chatSelected?.foto === 'icone_usuario.svg' || chatSelected?.foto?.startsWith('http') ? chatSelected.foto : chatSelected?.foto?.startsWith('data') ? 'icone_usuario.svg' : `http://localhost:4242${chatSelected.foto}`} alt="" />
                     </div>
                   )}
                   <div
@@ -779,14 +738,17 @@ function Chat({
                       </div>
                     )}
                   </div>
+                    {msg.mensageiro === userType && (
+                      <div className="image-message-right">
+                        <img src={!user?.foto ? 'icone_usuario.svg' : user?.foto === 'icone_usuario.svg' || user?.foto?.startsWith('http') ? user.foto : user?.foto?.startsWith('data') ? 'icone_usuario.svg' : `http://localhost:4242${user.foto}`} alt="" />
+                      </div>
+                    )}
                   {openModalMessage === index && (
                     <div className="modal-excluir-msg" ref={messageRef}>
                       <button
                         className="btn-ocultar"
                         onClick={() => {
                           ocultaMensagem(index);
-                          setChatSelected(null);
-                          setIsChatSelected("chat-not-selected");
                         }}
                         >
                         Ocultar
@@ -797,11 +759,6 @@ function Chat({
                       >
                         Excluir
                       </button>
-                    </div>
-                  )}
-                  {msg.mensageiro === userType && (
-                    <div className="image-message-left">
-                      <img src={chatSelected.foto ? `http://localhost:4242${chatSelected.foto}` : icon} alt="" />
                     </div>
                   )}
                 </div>
@@ -819,9 +776,7 @@ function Chat({
                 />
             </div>
             <div className="icons-chat-inpt">
-              <button type="submit">
                 <img src="send-message.png" className="hand-click" alt="" />
-              </button>
             </div>
           </form>
         </div>

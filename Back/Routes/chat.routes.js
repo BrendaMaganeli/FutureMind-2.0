@@ -84,14 +84,12 @@ router.delete('/chats/mensagens', async(req, res) => {
 
     try {
         
-        const { id_profissional, id_paciente, datahora } = req.body;
+        const { id_profissional, id_paciente, mensagem } = req.body;
 
-        if (!id_profissional || !id_paciente || !datahora) return res.status(404).json('Erro ao deletar mensagem!');
-
-        const [response] = await pool.query('DELETE FROM chat_paciente_profissional WHERE fk_pacientes_id_paciente=? AND fk_profissionais_id_profissional=? AND datahora=?', [
+        const [response] = await pool.query('DELETE FROM chat_paciente_profissional WHERE fk_pacientes_id_paciente = ? AND fk_profissionais_id_profissional = ? AND mensagem = ?', [
             id_paciente,
             id_profissional,
-            datahora
+            mensagem
         ]);
 
         if (response.affectedRows > 0) {

@@ -14,15 +14,27 @@ const io = new Server(server, {
 
 app.use(cors({origin: '*'}));
 
-io.on('connection', (socket) => {
-  socket.on('sendMessage', (message) => {
-    // Emite para ambos os participantes
-    io.emit('receiveMessage', message); // Para o remetente
-  });
+io.on("connection", (socket) => {
+  console.log("Novo usuário conectado:", socket.id);
 
   socket.on("joinRoom", (roomId) => {
-  socket.join(roomId); // Entra na sala
-});
+    socket.join(roomId);
+    console.log(`Usuário ${socket.id} entrou na sala ${roomId}`);
+  });
+
+  socket.on("leaveRoom", (roomId) => {
+    socket.leave(roomId);
+    console.log(`Usuário ${socket.id} saiu da sala ${roomId}`);
+  });
+
+  socket.on("sendMessage", (message) => {
+    const { roomId } = message;
+    io.to(roomId).emit("receiveMessage", message);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Usuário desconectado:", socket.id);
+  });
 });
 
 const PORT = process.env.PORT || 3001;

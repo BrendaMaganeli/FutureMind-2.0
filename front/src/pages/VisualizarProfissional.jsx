@@ -21,7 +21,7 @@ const ProfileImage = ({ src, alt, className }) => {
   useEffect(() => {
     if (!src || src === 'iconusu.svg') {
       setImageSrc(iconeUsuario);
-    } else if (src.startsWith('http') || src.startsWith('/')) {
+    } else if (src.startsWith('http')) {
       setImageSrc(src);
     } else {
       setImageSrc(`http://localhost:4242${src}`);
@@ -141,6 +141,21 @@ function VisualizarProfissional() {
                   <img src={icon_um} alt="Agendar consulta" />
                   <p>Agende sua consulta</p>
                 </div>
+                <div className="topicos">
+                  <img src={icon_tres} alt="Chat" />
+                  <p onClick={() => {
+                      user?.id_paciente
+                      ?
+                      setIsInChat(true)
+                      :
+                      user?.id_profissional
+                      ?
+                      setMostrarModalUserProfi(true)
+                      :
+                      setModalLogin(true);
+                    }
+                  }>Chat</p>
+                </div>
                 <div
                   onClick={() => {
                       user?.id_paciente 
@@ -157,22 +172,7 @@ function VisualizarProfissional() {
                   className="topicos"
                 >
                   <img src={icon_dois} alt="Vídeo chamada" />
-                  <p>Vídeo Chamada</p>
-                </div>
-                <div className="topicos">
-                  <img src={icon_tres} alt="Chat" />
-                  <p onClick={() => {
-                      user?.id_paciente
-                      ?
-                      setIsInChat(true)
-                      :
-                      user?.id_profissional
-                      ?
-                      setMostrarModalUserProfi(true)
-                      :
-                      setModalLogin(true);
-                    }
-                  }>Chat</p>
+                  <p>Ingressar em sua consulta</p>
                 </div>
               </div>
             </div>

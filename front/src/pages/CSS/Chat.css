@@ -1193,9 +1193,10 @@ html {
     height: 10%;
     padding: 1%;
   }
-
+  
   .image-message-right img {
     width: 100%;
+    border-radius: 50%;
   }
 
   .image-message-left {
@@ -1208,6 +1209,7 @@ html {
 
   .image-message-left img {
     width: 100%;
+    border-radius: 50%;
   }
 
   .barra-bottom {
@@ -1392,6 +1394,13 @@ html {
     opacity: 30%;
     margin: 60px 0 0 0;
   }
+}
+
+.chat-barra img {
+
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
 }
 
 .config-chat {

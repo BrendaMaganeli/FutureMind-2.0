@@ -284,7 +284,7 @@ function EditarPaciente() {
               </div>
               <div className="topicos">
                 <img src={icon_um} alt="" />
-                <p onClick={irParaConsultas}>Consulta</p>
+                <p onClick={irParaConsultas}>Consultas</p>
               </div>
             </div>
           </div>

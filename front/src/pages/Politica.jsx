@@ -5,12 +5,12 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Footer from "../Components/Footer";
-import "./CSS/Politica.css";
 import identificacao from "../assets/identificacao.svg";
 import seguranca from "../assets/seguranca.svg";
 import iconeChaves from "../assets/icone_chaves.svg";
 import iconeBanco from "../assets/icone_banco.svg";
 import voltar from "../assets/seta-principal.svg";
+import "./CSS/Politica.css";
 
 function ScrollToTop() {
   const { pathname } = useLocation();

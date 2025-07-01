@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/logoCadastro2.svg";
-import imagem from "../assets/FotoCadastro.svg";
-import "./CSS/Cadastros.css";
 import { useContext, useState } from "react";
 import { GlobalContext } from "../Context/GlobalContext";
 
+import logo from "../assets/logoCadastro2.svg";
+import imagem from "../assets/FotoCadastro.svg";
+import "./CSS/Cadastros.css";
 
 function Login() {
   const navigate = useNavigate();
@@ -12,43 +12,30 @@ function Login() {
 
   const [valorEmail, setValorEmail] = useState("");
   const [valorSenha, setValorSenha] = useState("");
-  
   const [emailValido, setEmailValido] = useState(false);
   const [senhaValido, setSenhaValido] = useState(false);
-
   const [tipoInput, setTipoInput] = useState("password");
   const [tipoIconSenha, setTipoIconSenha] = useState("hide.png");
-  
   const [mensagemSenha, setMensagemSenha] = useState("");
   const [mensagemEmail, setMensagemEmail] = useState("");
   const [borderSenha, setBorderSenha] = useState('2px solid #ccc');
   const [borderEmail, setBorderEmail] = useState('2px solid #ccc');
 
   const alternarTipo = () => {
-    if (tipoInput === "password") {
-      setTipoInput("text");
-      setTipoIconSenha("view (1).png");
-    } else {
-      setTipoInput("password");
-      setTipoIconSenha("hide.png");
-    }
+    setTipoInput(prev => prev === "password" ? "text" : "password");
+    setTipoIconSenha(prev => prev === "hide.png" ? "view (1).png" : "hide.png");
   };
 
   const handleLogin = async () => {
     const credentials = { email: valorEmail, senha: valorSenha };
+    
     try {
-      const response = await fetch(
-        "http://localhost:4242/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(credentials),
-        }
-      );
+      const response = await fetch("http://localhost:4242/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(credentials),
+      });
 
-      
       if (response.ok) {
         const data = await response.json();
         setUserLogado(true);
@@ -56,53 +43,39 @@ function Login() {
         setPaginaAnterior('Login');
         navigate("/inicio");
       } else {
-        
         const data = await response.json();
-        console.log(data);  
-
-         setBorderSenha('2px solid #ccc');
-         setBorderEmail('2px solid #ccc');
         
-        if(data == 'Paciente não encontrado' || data == 'Profissional não encontrado'){
-          
-           setEmailValido(true)
-           setMensagemEmail('Email não cadastrado!')
-           setSenhaValido(true)
-           setMensagemSenha('')
-           setBorderEmail('1px solid rgb(231, 95, 95)')
-
-        }else{
-           
-          setEmailValido(false)
-          setMensagemEmail('')
-
+        setBorderSenha('2px solid #ccc');
+        setBorderEmail('2px solid #ccc');
+        
+        if (data === 'Paciente não encontrado' || data === 'Profissional não encontrado') {
+          setEmailValido(true);
+          setMensagemEmail('Email não cadastrado!');
+          setSenhaValido(true);
+          setMensagemSenha('');
+          setBorderEmail('1px solid rgb(231, 95, 95)');
+        } else {
+          setEmailValido(false);
+          setMensagemEmail('');
         }
 
-        if(data == 'Senha incorreta'){
-         
-          setSenhaValido(true)
-          setMensagemSenha('Senha incorreta!')
+        if (data === 'Senha incorreta') {
+          setSenhaValido(true);
+          setMensagemSenha('Senha incorreta!');
           setBorderSenha('1px solid rgb(231, 95, 95)');
-          
         }
       }
-
     } catch (err) {
       console.log("Erro no servidor", err);
     }
   };
-
 
   return (
     <div className="container-profissional">
       <div className="lado-esquerdoProfissional">
         <div className="titulo-logo">
           <p className="titulo-cadastro">Bem vindo de volta!</p>
-          <img
-            src={logo}
-            alt="Future Mind Logo"
-            className="logo-paraCadastro"
-          />
+          <img src={logo} alt="Future Mind Logo" className="logo-paraCadastro" />
         </div>
 
         <div className="inputs-login-div">
@@ -117,7 +90,7 @@ function Login() {
               }}
               placeholder=" "
               required
-              style={{border: borderEmail}}
+              style={{ border: borderEmail }}
             />
             <label>E-mail ou e-mail profissional</label>
             <span className={`com_erros ${!emailValido ? "sem_erro" : ""}`}>
@@ -137,7 +110,7 @@ function Login() {
               }}
               placeholder=" "
               required
-              style={{border: borderSenha}}
+              style={{ border: borderSenha }}
             />
             <label>Senha</label>
             <span className={`com_erros ${!senhaValido ? "sem_erro" : ""}`}>

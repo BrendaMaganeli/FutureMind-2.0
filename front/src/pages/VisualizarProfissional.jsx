@@ -1,20 +1,18 @@
+import { useEffect, useState, useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import "./CSS/VisualizarProfissional.css";
+import { GlobalContext } from "../Context/GlobalContext";
+import ModalLogin from "../Components/ModalLogin";
+import ModalUserProfi from "../Components/ModalUserProfi";
+import Chat from "./Chat";
 import icon_um from "../assets/calendar-check.svg";
 import icon_dois from "../assets/video.svg";
 import icon_tres from "../assets/message-square (1).svg";
 import logo from "../assets/logo-prin.png";
 import voltar from "../assets/seta-principal.svg";
 import Arvore from "../assets/Arvore-perfil.svg";
-import ModalLogin from "../Components/ModalLogin";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import Chat from "./Chat";
-import { useContext } from "react";
-import { GlobalContext } from "../Context/GlobalContext";
-import ModalUserProfi from "../Components/ModalUserProfi";
 import iconeUsuario from "../assets/iconusu.svg";
 
-// Componente de Imagem de Perfil Reutilizável
 const ProfileImage = ({ src, alt, className }) => {
   const [imageSrc, setImageSrc] = useState(iconeUsuario);
 
@@ -33,59 +31,141 @@ const ProfileImage = ({ src, alt, className }) => {
       src={imageSrc}
       alt={alt}
       className={className}
-      onError={(e) => {
-        e.target.onerror = null;
-        e.target.src = iconeUsuario;
-      }}
+      onError={() => setImageSrc(iconeUsuario)}
     />
   );
 };
 
+const handleUserAction = (user, options) => {
+  if (user?.id_paciente) {
+    options.patientAction();
+  } else if (user?.id_profissional) {
+    options.professionalAction();
+  } else {
+    options.guestAction();
+  }
+};
+
 function VisualizarProfissional() {
   const { user } = useContext(GlobalContext);
+  const navigate = useNavigate();
+  const { id } = useParams();
+  
   const [profissional, setProfissional] = useState({});
   const [isInChat, setIsInChat] = useState(false);
   const [modalLogin, setModalLogin] = useState(false);
   const [mostrarModalUserProfi, setMostrarModalUserProfi] = useState(false);
-  
-  const { id } = useParams();
   const [idChatSelected, setIdChatSelected] = useState(id);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const renderizarPerfil = async () => {
+    const fetchProfessionalData = async () => {
       try {
         const response = await fetch(`http://localhost:4242/profissional/${id}`);
+        
+        if (!response.ok) return;
 
-        if (response.ok) {
-          const data = await response.json();
-          
-          const especializacoes = typeof data.especializacao === 'string' 
-            ? JSON.parse(data.especializacao || "[]") 
-            : data.especializacao || [];
-          
-          const abordagens = typeof data.abordagem === 'string'
-            ? JSON.parse(data.abordagem || "[]")
-            : data.abordagem || [];
+        const data = await response.json();
+        
+        const parseArrayField = (field) => {
+          if (!field) return [];
+          return typeof field === 'string' ? JSON.parse(field) : field;
+        };
 
-          setProfissional({
-            ...data,
-            especializacoes: Array.isArray(especializacoes) ? especializacoes : [],
-            abordagens: Array.isArray(abordagens) ? abordagens : [],
-            foto: data.foto || 'iconusu.svg'
-          });
-        }
-      } catch (err) {
-        console.log("Erro no servidor, erro: ", err);
+        setProfissional({
+          ...data,
+          especializacoes: parseArrayField(data.especializacao),
+          abordagens: parseArrayField(data.abordagem),
+          foto: data.foto || 'iconusu.svg'
+        });
+      } catch (error) {
+        console.error("Erro ao buscar profissional:", error);
       }
     };
 
-    renderizarPerfil();
+    fetchProfessionalData();
   }, [id]);
 
-  const voltarTelas = () => {
-    navigate("/inicio");
-  };
+  const handleNavigate = (path) => navigate(path);
+  const handleGoBack = () => navigate("/inicio");
+  const openChat = () => setIsInChat(true);
+
+  const renderProfessionalInfo = () => (
+    <div className="caixa-info-geral">
+      <div className="cartao-sobremim">
+        <div className="cabecalho-sobre-mim">
+          <h2>Sobre mim</h2>
+        </div>
+        <div className="corpo-sobre-mim">
+          <p>{profissional?.sobre_mim}</p>
+        </div>
+      </div>
+
+      <div className="caixa-informacoes">
+        <div className="cartao-informacao-e">
+          <div className="cabecalho-informacao">
+            <h2>Especialização</h2>
+          </div>
+          <div className="corpo-informacao">
+            {profissional.especializacoes?.map((item, index) => (
+              <p className="abordagens-especializacoes" key={index}>
+                {typeof item === 'object' ? item.label : item}
+              </p>
+            ))}
+          </div>
+        </div>
+
+        <div className="cartao-informacao-a">
+          <div className="cabecalho-informacao">
+            <h2>Abordagem</h2>
+          </div>
+          <div className="corpo-informacao">
+            {profissional.abordagens?.map((item, index) => (
+              <p className="abordagens-especializacoes" key={index}>
+                {typeof item === 'object' ? item.label : item}
+              </p>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderActionButtons = () => (
+    <div className="funcionalidades">
+      <div 
+        className="topicos" 
+        onClick={() => handleUserAction(user, {
+          patientAction: () => handleNavigate(`/agendamento/${id}`),
+          professionalAction: () => setMostrarModalUserProfi(true),
+          guestAction: () => setModalLogin(true)
+        })}
+      >
+        <img src={icon_um} alt="Agendar consulta" />
+        <p>Agendamento</p>
+      </div>
+      
+      <div className="topicos">
+        <img src={icon_tres} alt="Chat" />
+        <p onClick={() => handleUserAction(user, {
+          patientAction: openChat,
+          professionalAction: () => setMostrarModalUserProfi(true),
+          guestAction: () => setModalLogin(true)
+        })}>Chat</p>
+      </div>
+      
+      <div 
+        className="topicos"
+        onClick={() => handleUserAction(user, {
+          patientAction: () => handleNavigate(`/live/${id}`),
+          professionalAction: () => setMostrarModalUserProfi(true),
+          guestAction: () => setModalLogin(true)
+        })}
+      >
+        <img src={icon_dois} alt="Vídeo chamada" />
+        <p>Consulta</p>
+      </div>
+    </div>
+  );
 
   return (
     <>
@@ -99,24 +179,13 @@ function VisualizarProfissional() {
       ) : (
         <div className="container">
           <aside className="barra-lateral">
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-                width: "100%",
-                height: "fit-content",
-                alignItems: "center",
-              }}
-            >
-              <div className="cabecalho-perfil">
-                <ProfileImage 
-                  src={profissional?.foto}
-                  alt="Foto do perfil"
-                  className="imagem-perfil"
-                />
-                <h2 className="nome-perfil">{profissional?.nome}</h2>
-              </div>
+            <div className="cabecalho-perfil">
+              <ProfileImage 
+                src={profissional?.foto}
+                alt="Foto do perfil"
+                className="imagem-perfil"
+              />
+              <h2 className="nome-perfil">{profissional?.nome}</h2>
             </div>
 
             <div className="caixa-comandos">
@@ -125,56 +194,7 @@ function VisualizarProfissional() {
                   <h2>Funções</h2>
                 </div>
               </div>
-              <div className="funcionalidades">
-                <div className="topicos" onClick={() => {
-                      user?.id_paciente 
-                      ? 
-                      navigate(`/agendamento/${id}`) 
-                      :
-                      user?.id_profissional
-                      ?
-                      setMostrarModalUserProfi(true)
-                      : 
-                      setModalLogin(true);
-                    }
-                  }>
-                  <img src={icon_um} alt="Agendar consulta" />
-                  <p>Agendamento</p>
-                </div>
-                <div className="topicos">
-                  <img src={icon_tres} alt="Chat" />
-                  <p onClick={() => {
-                      user?.id_paciente
-                      ?
-                      setIsInChat(true)
-                      :
-                      user?.id_profissional
-                      ?
-                      setMostrarModalUserProfi(true)
-                      :
-                      setModalLogin(true);
-                    }
-                  }>Chat</p>
-                </div>
-                <div
-                  onClick={() => {
-                      user?.id_paciente 
-                      ?
-                      navigate(`/live/${id}`)
-                      :
-                      user?.id_profissional
-                      ?
-                      setMostrarModalUserProfi(true)
-                      :
-                      setModalLogin(true);
-                    }
-                  }
-                  className="topicos"
-                >
-                  <img src={icon_dois} alt="Vídeo chamada" />
-                  <p>Consulta</p>
-                </div>
-              </div>
+              {renderActionButtons()}
             </div>
           </aside>
 
@@ -185,7 +205,7 @@ function VisualizarProfissional() {
 
             <div className="botoes-maior">
               <div className="botoes">
-                <img onClick={voltarTelas} src={voltar} alt="Voltar" />
+                <img onClick={handleGoBack} src={voltar} alt="Voltar" />
               </div>
             </div>
 
@@ -193,44 +213,7 @@ function VisualizarProfissional() {
               <img src={logo} alt="Logo" />
             </div>
 
-            <div className="caixa-info-geral">
-              <div className="cartao-sobremim">
-                <div className="cabecalho-sobre-mim">
-                  <h2>Sobre mim</h2>
-                </div>
-                <div className="corpo-sobre-mim">
-                  <p>{profissional?.sobre_mim}</p>
-                </div>
-              </div>
-
-              <div className="caixa-informacoes">
-                <div className="cartao-informacao-e">
-                  <div className="cabecalho-informacao">
-                    <h2>Especialização</h2>
-                  </div>
-                  <div className="corpo-informacao">
-                    {profissional.especializacoes?.map((item, index) => (
-                      <p className="abordagens-especializacoes" key={index}>
-                        {typeof item === 'object' ? item.label : item}
-                      </p>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="cartao-informacao-a">
-                  <div className="cabecalho-informacao">
-                    <h2>Abordagem</h2>
-                  </div>
-                  <div className="corpo-informacao">
-                    {profissional.abordagens?.map((item, index) => (
-                      <p className="abordagens-especializacoes" key={index}>
-                        {typeof item === 'object' ? item.label : item}
-                      </p>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+            {renderProfessionalInfo()}
 
             <div className="crp">
               <p className="crp-design">{profissional?.crp}</p>
@@ -238,14 +221,9 @@ function VisualizarProfissional() {
           </main>
         </div>
       )}
-      {
-        modalLogin &&
-        <ModalLogin setMostrarModalLogin={setModalLogin} />
-      }
-      {
-        mostrarModalUserProfi &&
-        <ModalUserProfi setMostrarModalUserProfi={setMostrarModalUserProfi} />
-      }
+
+      {modalLogin && <ModalLogin setMostrarModalLogin={setModalLogin} />}
+      {mostrarModalUserProfi && <ModalUserProfi setMostrarModalUserProfi={setMostrarModalUserProfi} />}
     </>
   );
 }

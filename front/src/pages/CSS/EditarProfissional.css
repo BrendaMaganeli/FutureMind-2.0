@@ -58,8 +58,15 @@
     display: flex;
     justify-content: end;
     align-items: start;
-    margin: 6.5% 0 0 30%;
+    margin: 6% 0 0 41%;
   }
+
+.icone_editarr {
+  position: absolute;
+  padding-left: 8.5%;
+  padding-top: 8%;
+  cursor: pointer;
+}
 
   .salvar-btn {
     position: relative;
@@ -639,3 +646,32 @@
   overflow-y: auto;
 }
 
+.botao-baixarr {
+  width: 40%;
+  text-align: center;
+  font-size: 15px;
+  padding: 2.2%;
+  border-radius: 8px;
+  border: none;
+  background-color: white;
+  color: #013a63;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.botao-baixarr:hover {
+  background-color: #BFDBFE;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.botao-baixarr:active {
+  transform: scale(0.97);
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 3px 10px 0px;
+}
+
+.baixarButtonn{
+  width: 95%;
+  display: flex;
+  justify-content: end;
+  margin-top: -15%;
+}

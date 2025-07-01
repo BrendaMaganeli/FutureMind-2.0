@@ -222,7 +222,7 @@ background-color: #5A789F;
 .filter-profissionais-baixo .plano-saude-img {
   width: 80%;
   height: 100%;
-  filter: drop-shadow(1px 10px 10px rgb(73, 73, 73));
+  filter: drop-shadow(1px 10px 10px #013a635e);
 }
 
 .filter-profissionais-baixo .plano-saude-img:hover {

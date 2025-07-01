@@ -209,7 +209,7 @@ function EditarPaciente() {
       setIsVisible(false);
     } catch (err) {
       console.error('Erro:', err);
-      alert('Erro ao atualizar foto de perfil');
+      console.log('Erro ao atualizar foto de perfil');
     }
   };
 

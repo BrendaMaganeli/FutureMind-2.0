@@ -1,99 +1,81 @@
 import { useState, useEffect, useContext } from "react";
-import { GlobalContext } from "../Context/GlobalContext";
-import "./CSS/Pagamento.css";
-import mulher from "../assets/image 8.png";
-import voltar from "../assets/seta-principal.svg";
-import emailjs from "@emailjs/browser";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { GlobalContext } from "../Context/GlobalContext";
+import emailjs from "@emailjs/browser";
+
+import voltar from "../assets/seta-principal.svg";
+import "./CSS/Pagamento.css";
 
 function Pagamento() {
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
-  const { date: initialDate = "", time: initialTime = "" } =
-    location.state || {};
-  const [foto, setFoto] = useState('');
+  const { date: initialDate = "", time: initialTime = "" } = location.state || {};
+  const { 
+    plano_selecionado,
+    vim_plano,
+    vim_agendamento,
+    setVim_plano,
+    setVim_agendamento
+  } = useContext(GlobalContext);
 
-  // Verificação da origem via URL
+  // URL parameters
   const searchParams = new URLSearchParams(location.search);
   const vimPlanoQuery = searchParams.get("vim_plano") === "true";
   const vimAgendamentoQuery = searchParams.get("vim_agendamento") === "true";
 
-  // Estados de agendamento e formulário de pagamento
+  // User data
+  const user = JSON.parse(localStorage.getItem("User-Profile"));
+
+  // Payment form states
+  const [foto, setFoto] = useState('');
   const [dataSelecionada, setDataSelecionada] = useState(initialDate);
   const [horaSelecionada, setHoraSelecionada] = useState(initialTime);
-
-  // Estados do formulário de pagamento
   const [toque_input_numero, setToque_input_numero] = useState(false);
   const [toque_input_validade, setToque_input_validade] = useState(false);
   const [toque_input_cvv, setToque_input_cvv] = useState(false);
-
   const [generoDependente, setGeneroDependente] = useState("");
   const [numeroCartao, setNumeroCartao] = useState("");
   const [nomeCartao, setNomeCartao] = useState("");
   const [validadeCartao, setValidadeCartao] = useState("");
   const [cvvCartao, setCvvCartao] = useState("");
-
   const [cupom, setCupom] = useState("");
   const [desconto, setDesconto] = useState(0);
   const [cupomInvalido, setCupomInvalido] = useState(false);
+  const [metodoSelecionado, setMetodoSelecionado] = useState("cartao");
+  const [consultas_disponiveis, setConsultas_disponiveis] = useState("");
 
-  // Validações visuais
+  // Validation states
   const [valida_banco, setValida_banco] = useState(false);
   const [valida_numero_cartao, setValida_numero_cartao] = useState(false);
   const [valida_nome, setValida_nome] = useState(false);
   const [valida_cartao, setValida_cartao] = useState(false);
   const [valida_cvv, setValida_cvv] = useState(false);
 
-  const [metodoSelecionado, setMetodoSelecionado] = useState("cartao");
-
-  const [consultas_disponiveis, setConsultas_disponiveis] = useState("");
-
-  const {
-    plano_selecionado,
-    vim_plano,
-    vim_agendamento,
-    setVim_plano,
-    setVim_agendamento,
-  } = useContext(GlobalContext);
-
-  const user = JSON.parse(localStorage.getItem("User-Profile"));
-
+  // Professional/plan info states
   const [profissionalNome, setProfissionalNome] = useState("");
   const [profissionalCRP, setProfissionalCRP] = useState("");
   const [valorConsulta, setValorConsulta] = useState(0);
   const [planoInfo, setPlanoInfo] = useState(null);
 
+  // UI control states
   const [cadastrandoPlano, setCadastrandoPlano] = useState(() => {
     if (vimPlanoQuery) return true;
     if (vimAgendamentoQuery) return false;
-
     if (vim_plano) return true;
     if (vim_agendamento) return false;
-
-    const savedOrigin = localStorage.getItem("pagamentoOrigin");
-    return savedOrigin === "plano";
+    return localStorage.getItem("pagamentoOrigin") === "plano";
   });
-
-  // Estados para controle de UI
   const [mostrarModal, setMostrarModal] = useState(false);
   const [mostrarAgenda, setMostrarAgenda] = useState(false);
   const [mostrarModalRemover, setMostrarModalRemover] = useState(false);
   const [dependentes, setDependentes] = useState([
-    { value: "evelyn", label: "Evelyn Lohanny Santos Da Silva" },
+    { value: "evelyn", label: "Evelyn Lohanny Santos Da Silva" }
   ]);
   const [nomeDependente, setNomeDependente] = useState("");
   const [nascimentoDependente, setNascimentoDependente] = useState("");
 
-  useEffect(() => {
-    const origin = cadastrandoPlano ? "plano" : "agendamento";
-    localStorage.setItem("pagamentoOrigin", origin);
-
-    setVim_plano(cadastrandoPlano);
-    setVim_agendamento(!cadastrandoPlano);
-  }, [cadastrandoPlano, setVim_plano, setVim_agendamento]);
-
-  // Formatação de campos
+  // Formatting functions
   const formatarNumeroCartao = (valor) => {
     return valor
       .replace(/\D/g, "")
@@ -104,34 +86,24 @@ function Pagamento() {
 
   const validarValidadeCartao = (validade) => {
     if (!validade || validade.length !== 5) return false;
-
     const [mesStr, anoStr] = validade.split("/");
     const mes = parseInt(mesStr, 10);
     const ano = parseInt(anoStr, 10);
-
     if (mes < 1 || mes > 12) return false;
 
     const agora = new Date();
     const anoAtual = agora.getFullYear() % 100;
     const mesAtual = agora.getMonth() + 1;
 
-    if (ano < anoAtual) return false;
-    if (ano === anoAtual && mes < mesAtual) return false;
-
-    return true;
+    return ano > anoAtual || (ano === anoAtual && mes >= mesAtual);
   };
 
   const formatarValidade = (valor) => {
     const somenteNumeros = valor.replace(/\D/g, "");
     const numerosLimitados = somenteNumeros.slice(0, 4);
-
-    if (numerosLimitados.length <= 2) {
-      return numerosLimitados;
-    }
-
-    return (
-      numerosLimitados.substring(0, 2) + "/" + numerosLimitados.substring(2, 4)
-    );
+    return numerosLimitados.length <= 2 
+      ? numerosLimitados 
+      : `${numerosLimitados.substring(0, 2)}/${numerosLimitados.substring(2, 4)}`;
   };
 
   const aplicarCupom = () => {
@@ -140,13 +112,28 @@ function Pagamento() {
       setCupomInvalido(false);
     } else {
       setDesconto(0);
-      if (cupom.trim() !== "") {
-        setCupomInvalido(true);
-      }
+      if (cupom.trim() !== "") setCupomInvalido(true);
     }
   };
 
-  // Buscar dados do profissional ou plano
+  const getFotoUrl = (foto) => {
+  if (!foto || foto === 'icone_usuario.svg' || foto === 'iconusu.svg') {
+    console.log(foto)
+    return 'icone_usuario.svg';
+  }
+  if (foto.startsWith('http') || foto.startsWith('data')) {
+    return foto;
+  }
+  return `http://localhost:4242${foto}`;
+};
+
+  useEffect(() => {
+    const origin = cadastrandoPlano ? "plano" : "agendamento";
+    localStorage.setItem("pagamentoOrigin", origin);
+    setVim_plano(cadastrandoPlano);
+    setVim_agendamento(!cadastrandoPlano);
+  }, [cadastrandoPlano, setVim_plano, setVim_agendamento]);
+
   useEffect(() => {
     if (!id) {
       localStorage.removeItem("pagamentoOrigin");
@@ -176,40 +163,28 @@ function Pagamento() {
       }
 
       setValorConsulta(valor);
-      setPlanoInfo({
-        nome: nomePlano,
-        valor: valor,
-      });
+      setPlanoInfo({ nome: nomePlano, valor });
     } else {
       const getDadosProfissional = async () => {
         try {
-          const response = await fetch(
-            `http://localhost:4242/profissional/${id}`
-          );
-          if (!response.ok) {
-            console.error("Falha ao buscar profissional:", response.statusText);
-            return;
-          }
-          const data = await response.json();
+          const response = await fetch(`http://localhost:4242/profissional/${id}`);
+          if (!response.ok) return;
 
+          const data = await response.json();
           setProfissionalNome(data.nome || "");
           setProfissionalCRP(data.crp || "");
-          setValorConsulta(
-             user?.chk_plano ? 0 : data.valor_consulta != null ? data.valor_consulta : 0
-          );
-
-          console.log(data);
-          setFoto(data.foto?.startsWith("http")
-              ? data.foto
-              : `http://localhost:4242${data.foto}`);
+          setValorConsulta(user?.chk_plano ? 0 : data.valor_consulta ?? 0);          
+          setFoto(getFotoUrl(data?.foto));
+          console.log(data.foto);
         } catch (err) {
-          console.error("Erro no fetch /profissional/:id →", err);
+          console.error("Erro ao buscar profissional:", err);
         }
       };
       getDadosProfissional();
     }
   }, [id, cadastrandoPlano, plano_selecionado]);
 
+  // Validation effect handlers
   useEffect(() => {
     if (generoDependente.length > 0) setValida_banco(false);
   }, [generoDependente]);
@@ -230,15 +205,14 @@ function Pagamento() {
     if (cvvCartao.length > 0) setValida_cvv(false);
   }, [cvvCartao]);
 
-  // Handlers dos campos
+  // Handlers
   const handleNumeroCartaoChange = (e) => {
     setNumeroCartao(formatarNumeroCartao(e.target.value));
     if (!toque_input_numero) setToque_input_numero(true);
   };
 
   const handleNomeCartao = (e) => {
-    const apenasLetras = e.target.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, "");
-    setNomeCartao(apenasLetras);
+    setNomeCartao(e.target.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, ""));
   };
 
   const handleValidade = (e) => {
@@ -253,18 +227,12 @@ function Pagamento() {
     if (!toque_input_cvv) setToque_input_cvv(true);
   };
 
-  const voltar_pagina = () => {
-    navigate(-1);
-  };
+  const voltar_pagina = () => navigate(-1);
 
   const handleCadastrarDependente = () => {
     if (nomeDependente && nascimentoDependente && generoDependente) {
       const novoId = `dep-${Date.now()}`;
-      const novoDependente = {
-        value: novoId,
-        label: nomeDependente,
-      };
-      setDependentes((prev) => [...prev, novoDependente]);
+      setDependentes(prev => [...prev, { value: novoId, label: nomeDependente }]);
       setMostrarModal(false);
       setNomeDependente("");
       setNascimentoDependente("");
@@ -287,24 +255,19 @@ function Pagamento() {
       logo: "logo oficial.svg",
     };
 
-    emailjs
-      .send(
-        "service_5zq83hw",
-        "template_bec35gi",
-        templateParams,
-        "ms7_9wi7dG_5vMUGt"
-      )
-      .then(() => {
-        localStorage.removeItem("pagamentoOrigin");
-        navigate("/inicio");
-      })
-      .catch((error) => {
-        console.error("Erro ao enviar e-mail:", error);
-      });
+    emailjs.send(
+      "service_5zq83hw",
+      "template_bec35gi",
+      templateParams,
+      "ms7_9wi7dG_5vMUGt"
+    ).then(() => {
+      localStorage.removeItem("pagamentoOrigin");
+      navigate("/inicio");
+    }).catch(console.error);
   };
 
   const handleFinalizar = async () => {
-    // Validações
+    // Validation
     if (
       generoDependente.length <= 1 ||
       numeroCartao.length !== 19 ||
@@ -321,17 +284,15 @@ function Pagamento() {
     }
 
     try {
-      // Lógica para planos
       if (cadastrandoPlano) {
         const hoje = new Date();
         const data_assinatura = hoje.toISOString().split("T")[0];
         const data_fim = new Date(hoje);
         data_fim.setMonth(data_fim.getMonth() + 1);
-        const data_fim_assinatura = data_fim.toISOString().split("T")[0];
 
         const assinaturaBody = {
           data_assinatura,
-          data_fim_assinatura,
+          data_fim_assinatura: data_fim.toISOString().split("T")[0],
           fk_id_paciente: user.id_paciente,
           tipo_assinatura: plano_selecionado,
         };
@@ -344,14 +305,10 @@ function Pagamento() {
 
         if (!assinaturaResp.ok) {
           const err = await assinaturaResp.json();
-          alert(
-            "Erro ao processar assinatura: " +
-              (err.Error || assinaturaResp.statusText)
-          );
+          console.error("Erro ao processar assinatura:", err.Error || assinaturaResp.statusText);
           return;
         }
 
-        // Atualizar usuário localmente e no servidor
         user.chk_plano = true;
         localStorage.setItem("User-Profile", JSON.stringify(user));
         await fetch("http://localhost:4242/pagamento", {
@@ -363,110 +320,75 @@ function Pagamento() {
           }),
         });
       } else {
-        // Lógica para agendamento
         const agendamentoBody = {
           id_paciente: user.id_paciente,
           data: dataSelecionada,
           hora: horaSelecionada,
         };
-        const agendamentoResp = await fetch(
-          `http://localhost:4242/agendamento/${id}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(agendamentoBody),
-          }
-        );
-        if (!agendamentoResp.ok) {
-          console.error(
-            "Falha ao registrar agendamento:",
-            await agendamentoResp.text()
-          );
+        
+        const agendamentoResp = await fetch(`http://localhost:4242/agendamento/${id}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(agendamentoBody),
+        });
 
+        if (!agendamentoResp.ok) {
+          console.error("Falha ao registrar agendamento:", await agendamentoResp.text());
           return;
         }
+
         if (user.chk_plano) {
           try {
-            // 1. Buscar consultas disponíveis
-            const response = await fetch(
-              "http://localhost:4242/valor_consultas",
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id_paciente: user.id_paciente }),
-              }
-            );
+            const response = await fetch("http://localhost:4242/valor_consultas", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id_paciente: user.id_paciente }),
+            });
 
             if (!response.ok) throw new Error("Erro ao buscar consultas");
 
             const data = await response.json();
             setConsultas_disponiveis(data.consultas_disponiveis);
 
-            // 2. Requisições separadas dependendo do valor
             if (data.consultas_disponiveis > 0) {
-              // Fazer PUT para diminuir 1 consulta
-              const putResponse = await fetch(
-                "http://localhost:4242/mudar_valor_consultas",
-                {
-                  method: "PUT",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    id_paciente: user.id_paciente,
-                    chk_plano: false,
-                  }),
-                }
-              );
+              const putResponse = await fetch("http://localhost:4242/mudar_valor_consultas", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  id_paciente: user.id_paciente,
+                  chk_plano: false,
+                }),
+              });
 
               const putData = await putResponse.json();
 
               if (putResponse.ok) {
-                console.log("Consulta debitada:", putData.message);
-                setConsultas_disponiveis((prev) => prev - 1);
+                setConsultas_disponiveis(prev => prev - 1);
               } else if (
                 putResponse.status === 400 &&
-                putData.error ===
-                  "Última consulta, use a rota DELETE para remover a assinatura."
+                putData.error === "Última consulta, use a rota DELETE para remover a assinatura."
               ) {
-                // Aqui detectou que é a última consulta, chama DELETE
-                const deleteResponse = await fetch(
-                  "http://localhost:4242/remover_assinatura",
-                  {
-                    method: "DELETE",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ id_paciente: user.id_paciente }),
-                  }
-                );
-
-                const deleteData = await deleteResponse.json();
+                const deleteResponse = await fetch("http://localhost:4242/remover_assinatura", {
+                  method: "DELETE",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ id_paciente: user.id_paciente }),
+                });
 
                 if (deleteResponse.ok) {
-                  console.log("Assinatura removida:", deleteData.message);
-
-                  // Atualiza chk_plano no backend
-                  const updateResponse = await fetch(
-                    "http://localhost:4242/atualizar_chk_plano",
-                    {
-                      method: "PUT",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({
-                        id_paciente: user.id_paciente,
-                        chk_plano: false,
-                      }),
-                    }
-                  );
+                  const updateResponse = await fetch("http://localhost:4242/atualizar_chk_plano", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      id_paciente: user.id_paciente,
+                      chk_plano: false,
+                    }),
+                  });
 
                   if (updateResponse.ok) {
-                    setUser({ ...user, chk_plano: false }); 
-                    console.log(user)
+                    setUser({ ...user, chk_plano: false });
                     setConsultas_disponiveis(0);
-                  } else {
-                    console.error("Erro ao atualizar chk_plano no backend");
                   }
-                } else {
-                  console.warn("Erro ao remover assinatura:", deleteData.error);
                 }
-              } else {
-                console.warn("Erro ao debitar consulta:", putData.error);
               }
             }
           } catch (error) {
@@ -482,18 +404,8 @@ function Pagamento() {
   };
 
   return (
-    <div
-      className="container-principal"
-      style={{
-        maxWidth: "1300px",
-        margin: "0 auto",
-        padding: "40px",
-        display: "grid",
-        gridTemplateColumns: "2fr 1fr",
-        gap: "24px",
-      }}
-    >
-      {/* ========================== COLUNA ESQUERDA ========================== */}
+    <div className="container-principal" style={containerStyle}>
+      {/* Left Column */}
       <div>
         <div className="header-com-seta">
           <button onClick={voltar_pagina} className="back-button-pt">
@@ -502,22 +414,11 @@ function Pagamento() {
           <h2>Finalize seu {cadastrandoPlano ? "plano" : "agendamento"}</h2>
         </div>
 
-        {/* ------------ Forma de pagamento (abas Cartão / Boleto / Pix) ------------ */}
-        <p style={{ fontWeight: "500", marginBottom: "8px" }}>
-          Forma de pagamento
-        </p>
+        {/* Payment Method Tabs */}
+        <p style={sectionTitleStyle}>Forma de pagamento</p>
         <div className="tabs-container">
-          <div
-            className="slider"
-            style={{
-              left: `${["cartao", "boleto", "pix"].indexOf(metodoSelecionado) * 33.333}%`,
-            }}
-          />
-          {[
-            { value: "cartao", label: "Cartão de crédito" },
-            { value: "boleto", label: "Boleto bancário" },
-            { value: "pix", label: "Pix" },
-          ].map((metodo) => (
+          <div className="slider" style={sliderStyle(metodoSelecionado)} />
+          {paymentMethods.map(metodo => (
             <button
               key={metodo.value}
               onClick={() => setMetodoSelecionado(metodo.value)}
@@ -528,27 +429,18 @@ function Pagamento() {
           ))}
         </div>
 
+        {/* Payment Form */}
         {metodoSelecionado === "cartao" && (
-          <div
-            style={{
-              border: "1px solid #ddd",
-              padding: "16px",
-              borderRadius: "8px",
-              marginBottom: "7px",
-            }}
-          >
-            <h3 style={{ fontWeight: "500" }}>Informações do Pagamento</h3>
+          <div style={paymentFormStyle}>
+            <h3 style={sectionTitleStyle}>Informações do Pagamento</h3>
 
-            {/* Banco */}
             <div className="floating-select-2">
               <select
                 required
                 value={generoDependente}
                 onChange={(e) => setGeneroDependente(e.target.value)}
               >
-                <option value="" disabled hidden>
-                  Selecione
-                </option>
+                <option value="" disabled hidden>Selecione</option>
                 <option value="c6_bank">C6 bank</option>
                 <option value="inter">Inter</option>
                 <option value="nubank">Nubank</option>
@@ -557,11 +449,8 @@ function Pagamento() {
               </select>
               <label>Banco</label>
             </div>
-            <p className={`error-text ${valida_banco ? "show" : ""}`}>
-              Selecione um banco.
-            </p>
+            <p className={`error-text ${valida_banco ? "show" : ""}`}>Selecione um banco.</p>
 
-            {/* Número do cartão */}
             <div className="floating-input">
               <input
                 type="text"
@@ -572,11 +461,8 @@ function Pagamento() {
               />
               <label>Número do Cartão</label>
             </div>
-            <p className={`error-text ${valida_numero_cartao ? "show" : ""}`}>
-              Número do cartão inválido.
-            </p>
+            <p className={`error-text ${valida_numero_cartao ? "show" : ""}`}>Número do cartão inválido.</p>
 
-            {/* Nome no cartão */}
             <div className="floating-input">
               <input
                 type="text"
@@ -587,12 +473,9 @@ function Pagamento() {
               />
               <label>Nome como aparece no cartão</label>
             </div>
-            <p className={`error-text ${valida_nome ? "show" : ""}`}>
-              Nome obrigatório!
-            </p>
+            <p className={`error-text ${valida_nome ? "show" : ""}`}>Nome obrigatório!</p>
 
-            {/* Validade e CVV */}
-            <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+            <div style={rowStyle}>
               <div style={{ flex: 1 }}>
                 <div className="floating-input-2">
                   <input
@@ -605,9 +488,7 @@ function Pagamento() {
                   <label>Validade</label>
                 </div>
                 <p className={`error-text ${valida_cartao ? "show" : ""}`}>
-                  {validadeCartao.length !== 5
-                    ? "Formato inválido (MM/AA)"
-                    : "Data de validade expirada ou inválida"}
+                  {validadeCartao.length !== 5 ? "Formato inválido (MM/AA)" : "Data de validade expirada ou inválida"}
                 </p>
               </div>
               <div style={{ flex: 1 }}>
@@ -622,24 +503,16 @@ function Pagamento() {
                   />
                   <label>CVV</label>
                 </div>
-                <p className={`error-text ${valida_cvv ? "show" : ""}`}>
-                  CVV inválido!
-                </p>
+                <p className={`error-text ${valida_cvv ? "show" : ""}`}>CVV inválido!</p>
               </div>
             </div>
           </div>
         )}
 
+        {/* Other Payment Methods */}
         {(metodoSelecionado === "boleto" || metodoSelecionado === "pix") && (
-          <div
-            style={{
-              border: "1px solid #ddd",
-              padding: "16px",
-              borderRadius: "8px",
-              marginBottom: "24px",
-            }}
-          >
-            <h3 style={{ fontWeight: "500" }}>Informações do Pagamento</h3>
+          <div style={paymentFormStyle}>
+            <h3 style={sectionTitleStyle}>Informações do Pagamento</h3>
             <div className="floating-input">
               <input type="text" placeholder=" " required />
               <label>CPF</label>
@@ -652,7 +525,7 @@ function Pagamento() {
               <input type="text" placeholder=" " required />
               <label>Nome Completo</label>
             </div>
-            <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+            <div style={rowStyle}>
               <div className="floating-input-2">
                 <input type="text" placeholder=" " required />
                 <label>Estado</label>
@@ -665,17 +538,9 @@ function Pagamento() {
           </div>
         )}
 
-        {/* ------------ Cupom ------------ */}
-        <p style={{ fontWeight: "500" }}>Tem um cupom de desconto?</p>
-        <div
-          style={{
-            display: "flex",
-            gap: "8px",
-            marginBottom: "24px",
-            width: "100%",
-            alignItems: "center",
-          }}
-        >
+        {/* Coupon Section */}
+        <p style={sectionTitleStyle}>Tem um cupom de desconto?</p>
+        <div style={couponContainerStyle}>
           <div className="cupom">
             <input
               type="text"
@@ -689,91 +554,32 @@ function Pagamento() {
             />
             <label>Inserir código de desconto</label>
           </div>
-          <button
-            onClick={aplicarCupom}
-            style={{
-              backgroundColor: "#013a63",
-              color: "white",
-              padding: "8px 13px",
-              border: "none",
-              borderRadius: "6px",
-              width: "20%",
-              height: "45px",
-              marginTop: "2.6%",
-              cursor: "pointer",
-            }}
-          >
+          <button onClick={aplicarCupom} style={applyButtonStyle}>
             Aplicar
           </button>
         </div>
-        {cupomInvalido && (
-          <p
-            style={{
-              color: "#d9534f",
-              marginTop: "-16px",
-              marginBottom: "16px",
-              fontSize: "14px",
-            }}
-          >
-            Cupom inválido!
-          </p>
-        )}
+        {cupomInvalido && <p style={errorTextStyle}>Cupom inválido!</p>}
 
-        {/* ------------ Quem será atendido? ------------ */}
-        <div
-          style={{
-            border: "1px solid #ddd",
-            padding: "16px",
-            borderRadius: "8px",
-            marginBottom: "24px",
-          }}
-        >
+        {/* Who will be attended */}
+        <div style={attendedContainerStyle}>
           <p style={{ fontWeight: "600" }}>Quem será atendido?</p>
           <button className="botaoNome" disabled>
             {user.nome || "Paciente"}
           </button>
         </div>
 
-        {/* Botão finalizar */}
-        <button
-          onClick={handleFinalizar}
-          style={{
-            width: "100%",
-            marginTop: "24px",
-            backgroundColor: "#013a63",
-            color: "white",
-            padding: "15px",
-            border: "none",
-            borderRadius: "6px",
-            fontWeight: "600",
-          }}
-        >
+        {/* Finalize Button */}
+        <button onClick={handleFinalizar} style={finalizeButtonStyle}>
           Finalizar {cadastrandoPlano ? "plano" : "agendamento"}
         </button>
       </div>
 
-      {/* ========================== COLUNA DIREITA ========================== */}
+      {/* Right Column - Summary */}
       <div>
-        <div
-          style={{
-            border: "1px solid #ddd",
-            padding: "30px",
-            borderRadius: "8px",
-            width: "110%",
-          }}
-        >
-          <p style={{ fontWeight: "700", marginTop: "5%", fontSize: "20px" }}>
-            Resumo
-          </p>
+        <div style={summaryContainerStyle}>
+          <p style={summaryTitleStyle}>Resumo</p>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: "8px",
-              marginTop: "5%",
-            }}
-          >
+          <div style={summaryRowStyle}>
             <span>
               {cadastrandoPlano
                 ? planoInfo?.nome || "Assinatura do plano"
@@ -789,32 +595,15 @@ function Pagamento() {
           </div>
 
           {desconto > 0 && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "8px",
-              }}
-            >
+            <div style={summaryRowStyle}>
               <span style={{ color: "green" }}>Desconto aplicado</span>
               <span style={{ color: "green" }}>-R${desconto.toFixed(2)}</span>
             </div>
           )}
 
-          <div style={{ borderTop: "1.5px solid #ddd", margin: "8px 0" }}></div>
-          <div
-            style={{
-              fontWeight: "500",
-              textAlign: "right",
-              fontSize: "18px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-            }}
-          >
-            <p style={{ fontSize: "14px", marginRight: "4%" }}>
-              Valor a ser pago{" "}
-            </p>
+          <div style={dividerStyle}></div>
+          <div style={totalAmountStyle}>
+            <p style={{ fontSize: "14px", marginRight: "4%" }}>Valor a ser pago </p>
             <span style={{ fontSize: "22px" }}>
               {!cadastrandoPlano && user?.chk_plano ? (
                 <span style={{ color: 'rgb(1, 58, 99)' }}>Grátis(plano)</span>
@@ -824,42 +613,20 @@ function Pagamento() {
             </span>
           </div>
 
-          {/* Renderização condicional para agendamentos ou plano */}
+          {/* Appointment Details */}
           {!cadastrandoPlano && profissionalNome && (
-            <div style={{ marginTop: "24px" }}>
-              <p
-                style={{
-                  fontWeight: "500",
-                  marginTop: "16px",
-                  fontSize: "20px",
-                }}
-              >
-                Agendamentos
-              </p>
+            <div style={appointmentDetailsStyle}>
+              <p style={sectionTitleStyle}>Agendamentos</p>
 
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "25px",
-                  marginTop: "12px",
-                }}
-              >
+              <div style={professionalInfoStyle}>
                 <img
                   src={foto}
                   alt={`Foto de ${profissionalNome}`}
-                  style={{
-                    borderRadius: "9999px",
-                    width: "60px",
-                    height: "60px",
-                    objectFit: "cover",
-                  }}
+                  style={professionalImageStyle}
                 />
                 <div>
-                  <p style={{ fontWeight: "500", fontSize: "16px" }}>
-                    {profissionalNome}
-                  </p>
-                  <p style={{ fontSize: "16px", color: "#888" }}>
+                  <p style={professionalNameStyle}>{profissionalNome}</p>
+                  <p style={professionalCrpStyle}>
                     {profissionalCRP ? `CRP ${profissionalCRP}` : "--"}
                   </p>
                   <p style={{ fontSize: "16px" }}>Atendimento Online</p>
@@ -867,36 +634,15 @@ function Pagamento() {
               </div>
 
               {!cadastrandoPlano && user?.chk_plano && (
-                <div style={{
-                  backgroundColor: '#e6f7ff',
-                  padding: '8px',
-                  borderRadius: '4px',
-                  marginTop: '8px',
-                  borderLeft: '3px solid #013a63'
-                }}>
-                  <p style={{ color: '#013a63', fontSize: '14px' }}>
+                <div style={planIncludedStyle}>
+                  <p style={planIncludedTextStyle}>
                     Esta consulta está inclusa no seu plano. Não será cobrado valor adicional.
                   </p>
                 </div>
               )}
 
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginTop: '10%',
-                  borderTop: "1.5px solid #ddd",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "15px",
-                    display: "flex",
-                    marginTop: "5%",
-                    gap: "16px",
-                  }}
-                >
+              <div style={appointmentTimeStyle}>
+                <div style={dateTimeStyle}>
                   <p>
                     <strong>Data:</strong>{" "}
                     {dataSelecionada
@@ -907,16 +653,10 @@ function Pagamento() {
                     <strong>Horário:</strong> {horaSelecionada || "--:--"}
                   </p>
                 </div>
-                <div style={{ display: "flex", gap: "8px", marginTop: "5%" }}>
+                <div style={removeButtonContainerStyle}>
                   <button
                     onClick={() => setMostrarModalRemover(true)}
-                    style={{
-                      padding: "13px 29px",
-                      border: "none",
-                      borderRadius: "6px",
-                      backgroundColor: "rgb(1, 58, 99)",
-                      color: "white",
-                    }}
+                    style={removeButtonStyle}
                   >
                     Remover
                   </button>
@@ -927,42 +667,15 @@ function Pagamento() {
         </div>
       </div>
 
-      {/* Modais */}
+      {/* Modals */}
       {mostrarModal && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "24px",
-              borderRadius: "8px",
-              width: "30%",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <h3 style={{ fontSize: "18px", fontWeight: "600" }}>
-                Cadastre um novo dependente!
-              </h3>
+        <div style={modalOverlayStyle}>
+          <div style={modalContentStyle}>
+            <div style={modalHeaderStyle}>
+              <h3 style={modalTitleStyle}>Cadastre um novo dependente!</h3>
               <button
                 onClick={() => setMostrarModal(false)}
-                style={{ border: "none", background: "none", fontSize: "20px" }}
+                style={closeButtonStyle}
               >
                 ×
               </button>
@@ -993,9 +706,7 @@ function Pagamento() {
                 value={generoDependente}
                 onChange={(e) => setGeneroDependente(e.target.value)}
               >
-                <option value="" disabled hidden>
-                  Selecione
-                </option>
+                <option value="" disabled hidden>Selecione</option>
                 <option value="masculino">Masculino</option>
                 <option value="feminino">Feminino</option>
                 <option value="outro">Outro</option>
@@ -1004,17 +715,7 @@ function Pagamento() {
             </div>
             <button
               onClick={handleCadastrarDependente}
-              style={{
-                width: "100%",
-                marginTop: "16px",
-                backgroundColor: "#013a63",
-                color: "white",
-                padding: "15px",
-                border: "none",
-                borderRadius: "4px",
-                fontWeight: "600",
-                fontSize: "1em",
-              }}
+              style={registerButtonStyle}
             >
               Cadastrar
             </button>
@@ -1023,71 +724,21 @@ function Pagamento() {
       )}
 
       {mostrarModalRemover && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "24px",
-              borderRadius: "8px",
-              width: "90%",
-              maxWidth: "400px",
-            }}
-          >
-            <h3
-              style={{
-                fontSize: "18px",
-                fontWeight: "600",
-                marginBottom: "16px",
-              }}
-            >
-              Tem certeza que deseja remover este{" "}
-              {cadastrandoPlano ? "plano" : "agendamento"}?
+        <div style={modalOverlayStyle}>
+          <div style={confirmationModalStyle}>
+            <h3 style={confirmationTitleStyle}>
+              Tem certeza que deseja remover este {cadastrandoPlano ? "plano" : "agendamento"}?
             </h3>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                gap: "16px",
-              }}
-            >
+            <div style={confirmationButtonsStyle}>
               <button
-                onClick={() => {
-                  window.location.href = "/";
-                }}
-                style={{
-                  flex: 1,
-                  padding: "12px",
-                  backgroundColor: "#013a63",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "4px",
-                  fontWeight: "600",
-                }}
+                onClick={() => { window.location.href = "/"; }}
+                style={confirmButtonStyle}
               >
                 Sim
               </button>
               <button
                 onClick={() => setMostrarModalRemover(false)}
-                style={{
-                  flex: 1,
-                  padding: "12px",
-                  border: "1px solid #ddd",
-                  borderRadius: "4px",
-                  backgroundColor: "white",
-                  fontWeight: "600",
-                }}
+                style={cancelButtonStyle}
               >
                 Não
               </button>
@@ -1098,5 +749,279 @@ function Pagamento() {
     </div>
   );
 }
+
+// Styles
+const containerStyle = {
+  maxWidth: "1300px",
+  margin: "0 auto",
+  padding: "40px",
+  display: "grid",
+  gridTemplateColumns: "2fr 1fr",
+  gap: "24px"
+};
+
+const sectionTitleStyle = {
+  fontWeight: "500",
+  marginBottom: "8px"
+};
+
+const paymentFormStyle = {
+  border: "1px solid #ddd",
+  padding: "16px",
+  borderRadius: "8px",
+  marginBottom: "7px"
+};
+
+const rowStyle = {
+  display: "flex",
+  gap: "8px",
+  marginTop: "8px"
+};
+
+const couponContainerStyle = {
+  display: "flex",
+  gap: "8px",
+  marginBottom: "24px",
+  width: "100%",
+  alignItems: "center"
+};
+
+const applyButtonStyle = {
+  backgroundColor: "#013a63",
+  color: "white",
+  padding: "8px 13px",
+  border: "none",
+  borderRadius: "6px",
+  width: "20%",
+  height: "45px",
+  marginTop: "2.6%",
+  cursor: "pointer"
+};
+
+const errorTextStyle = {
+  color: "#d9534f",
+  marginTop: "-16px",
+  marginBottom: "16px",
+  fontSize: "14px"
+};
+
+const attendedContainerStyle = {
+  border: "1px solid #ddd",
+  padding: "16px",
+  borderRadius: "8px",
+  marginBottom: "24px"
+};
+
+const finalizeButtonStyle = {
+  width: "100%",
+  marginTop: "24px",
+  backgroundColor: "#013a63",
+  color: "white",
+  padding: "15px",
+  border: "none",
+  borderRadius: "6px",
+  fontWeight: "600"
+};
+
+const summaryContainerStyle = {
+  border: "1px solid #ddd",
+  padding: "30px",
+  borderRadius: "8px",
+  width: "110%"
+};
+
+const summaryTitleStyle = {
+  fontWeight: "700",
+  marginTop: "5%",
+  fontSize: "20px"
+};
+
+const summaryRowStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  marginBottom: "8px",
+  marginTop: "5%"
+};
+
+const dividerStyle = {
+  borderTop: "1.5px solid #ddd",
+  margin: "8px 0"
+};
+
+const totalAmountStyle = {
+  fontWeight: "500",
+  textAlign: "right",
+  fontSize: "18px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-end"
+};
+
+const appointmentDetailsStyle = {
+  marginTop: "24px"
+};
+
+const professionalInfoStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "25px",
+  marginTop: "12px"
+};
+
+const professionalImageStyle = {
+  borderRadius: "9999px",
+  width: "60px",
+  height: "60px",
+  objectFit: "cover"
+};
+
+const professionalNameStyle = {
+  fontWeight: "500",
+  fontSize: "16px"
+};
+
+const professionalCrpStyle = {
+  fontSize: "16px",
+  color: "#888"
+};
+
+const planIncludedStyle = {
+  backgroundColor: '#e6f7ff',
+  padding: '8px',
+  borderRadius: '4px',
+  marginTop: '8px',
+  borderLeft: '3px solid #013a63'
+};
+
+const planIncludedTextStyle = {
+  color: '#013a63',
+  fontSize: '14px'
+};
+
+const appointmentTimeStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginTop: '10%',
+  borderTop: "1.5px solid #ddd",
+};
+
+const dateTimeStyle = {
+  fontSize: "15px",
+  display: "flex",
+  marginTop: "5%",
+  gap: "20px"
+};
+
+const removeButtonContainerStyle = {
+  display: "flex",
+  gap: "8px",
+  marginTop: "5%"
+};
+
+const removeButtonStyle = {
+  padding: "13px 29px",
+  border: "none",
+  borderRadius: "6px",
+  backgroundColor: "rgb(1, 58, 99)",
+  color: "white"
+};
+
+const modalOverlayStyle = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  backgroundColor: "rgba(0,0,0,0.5)",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center"
+};
+
+const modalContentStyle = {
+  backgroundColor: "white",
+  padding: "24px",
+  borderRadius: "8px",
+  width: "30%"
+};
+
+const modalHeaderStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center"
+};
+
+const modalTitleStyle = {
+  fontSize: "18px",
+  fontWeight: "600"
+};
+
+const closeButtonStyle = {
+  border: "none",
+  background: "none",
+  fontSize: "20px"
+};
+
+const registerButtonStyle = {
+  width: "100%",
+  marginTop: "16px",
+  backgroundColor: "#013a63",
+  color: "white",
+  padding: "15px",
+  border: "none",
+  borderRadius: "4px",
+  fontWeight: "600",
+  fontSize: "1em"
+};
+
+const confirmationModalStyle = {
+  backgroundColor: "white",
+  padding: "24px",
+  borderRadius: "8px",
+  width: "90%",
+  maxWidth: "400px"
+};
+
+const confirmationTitleStyle = {
+  fontSize: "18px",
+  fontWeight: "600",
+  marginBottom: "16px"
+};
+
+const confirmationButtonsStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  gap: "16px"
+};
+
+const confirmButtonStyle = {
+  flex: 1,
+  padding: "12px",
+  backgroundColor: "#013a63",
+  color: "white",
+  border: "none",
+  borderRadius: "4px",
+  fontWeight: "600"
+};
+
+const cancelButtonStyle = {
+  flex: 1,
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "4px",
+  backgroundColor: "white",
+  fontWeight: "600"
+};
+
+const paymentMethods = [
+  { value: "cartao", label: "Cartão de crédito" },
+  { value: "boleto", label: "Boleto bancário" },
+  { value: "pix", label: "Pix" }
+];
+
+const sliderStyle = (metodoSelecionado) => ({
+  left: `${paymentMethods.findIndex(m => m.value === metodoSelecionado) * 33.333}%`
+});
 
 export default Pagamento;

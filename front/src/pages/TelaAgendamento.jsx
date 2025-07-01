@@ -1,225 +1,224 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 import "./CSS/TelaAgendamento.css";
 import imgConsulta from "../assets/Group 239294.svg";
 import voltar from "../assets/seta-principal.svg";
-import { useNavigate, useParams } from "react-router-dom";
 
 const calcularDadosDoMes = (ano) => {
-  const AnoBissexto = ano % 4 === 0 && (ano % 100 !== 0 || ano % 400 === 0);
-  const diasPorMes = [
-    31, AnoBissexto ? 29 : 28, 31, 30, 31, 30, 
-    31, 31, 30, 31, 30, 31
-  ];
+  const isLeapYear = ano % 4 === 0 && (ano % 100 !== 0 || ano % 400 === 0);
   
-  return diasPorMes.map((dias, indice) => ({
-    nome: new Date(ano, indice).toLocaleString("default", { month: "long" }),
+  return [
+    31, isLeapYear ? 29 : 28, 31, 30, 31, 30,
+    31, 31, 30, 31, 30, 31
+  ].map((dias, monthIndex) => ({
+    nome: new Date(ano, monthIndex).toLocaleString("default", { month: "long" }),
     dias,
-    inicio: new Date(ano, indice, 1).getDay(),
+    inicio: new Date(ano, monthIndex, 1).getDay(),
   }));
 };
 
-const verificarSeHorarioPassou = (ano, mes, dia, horario) => {
-  const agora = new Date();
-  const [horas, minutos] = horario.split(':').map(Number);
-  const dataAgendamento = new Date(ano, mes, dia, horas, minutos);
-  return dataAgendamento < agora;
+const isHorarioPassado = (year, month, day, time) => {
+  const now = new Date();
+  const [hours, minutes] = time.split(':').map(Number);
+  const appointmentDate = new Date(year, month, day, hours, minutes);
+  return appointmentDate < now;
 };
 
-const verificarSeDataPassou = (ano, mes, dia) => {
-  const hoje = new Date();
-  hoje.setHours(0, 0, 0, 0);
-  return new Date(ano, mes, dia) < hoje;
+const isDataPassada = (year, month, day) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return new Date(year, month, day) < today;
 };
 
 function AgendaConsultas() {
-  const hoje = new Date();
-  const navegar = useNavigate();
+  const today = new Date();
+  const navigate = useNavigate();
   const { id } = useParams();
-  const [anoAtual, setAnoAtual] = useState(hoje.getFullYear());
-  const [indiceMesAtual, setIndiceMesAtual] = useState(hoje.getMonth());
-  const [consultasAgendadas, setConsultasAgendadas] = useState({});
-  const [slotSelecionado, setSlotSelecionado] = useState({ dia: null, horario: null });
-  const [mensagemConfirmacao, setMensagemConfirmacao] = useState("");
-  const [convenioSelecionado, setConvenioSelecionado] = useState("");
-  const [procedimentoSelecionado, setProcedimentoSelecionado] = useState("");
+  
+  const [currentYear, setCurrentYear] = useState(today.getFullYear());
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(today.getMonth());
+  const [appointments, setAppointments] = useState({});
+  const [selectedSlot, setSelectedSlot] = useState({ day: null, time: null });
+  const [confirmationMessage, setConfirmationMessage] = useState("");
+  const [selectedInsurance, setSelectedInsurance] = useState("");
+  const [selectedProcedure, setSelectedProcedure] = useState("");
 
-  const meses = calcularDadosDoMes(anoAtual);
-  const mesAtual = meses[indiceMesAtual];
-  const mesAnterior = meses[(indiceMesAtual + 11) % 12];
-  const chaveAgendamento = `${anoAtual}-${indiceMesAtual}-${slotSelecionado.dia}`;
-  const horariosAgendados = consultasAgendadas[chaveAgendamento] || [];
+  const monthsData = calcularDadosDoMes(currentYear);
+  const currentMonth = monthsData[currentMonthIndex];
+  const previousMonth = monthsData[(currentMonthIndex + 11) % 12];
+  const appointmentKey = `${currentYear}-${currentMonthIndex}-${selectedSlot.day}`;
+  const bookedTimes = appointments[appointmentKey] || [];
 
-  const diasDoCalendario = Array.from({ length: 42 }, (_, indice) => {
-    let dia, ehMesAtual = true, estaIndisponivel = false, 
-        ehDataPassada = false, consultasDoDia = [];
+  const calendarDays = Array.from({ length: 42 }, (_, index) => {
+    let day, isCurrentMonth = true, isUnavailable = false, 
+        isPastDate = false, dayAppointments = [];
 
-    if (indice < mesAtual.inicio) {
-      dia = mesAnterior.dias - (mesAtual.inicio - indice - 1);
-      ehMesAtual = false;
-      estaIndisponivel = true;
-    } else if (indice >= mesAtual.inicio + mesAtual.dias) {
-      dia = indice - (mesAtual.inicio + mesAtual.dias) + 1;
-      ehMesAtual = false;
-      estaIndisponivel = true;
-    } else {
-      dia = indice - mesAtual.inicio + 1;
-      const chaveDia = `${anoAtual}-${indiceMesAtual}-${dia}`;
-      consultasDoDia = consultasAgendadas[chaveDia] || [];
-      ehDataPassada = verificarSeDataPassou(anoAtual, indiceMesAtual, dia);
-      estaIndisponivel = consultasDoDia.length > 0 || ehDataPassada;
+    if (index < currentMonth.inicio) {
+      day = previousMonth.dias - (currentMonth.inicio - index - 1);
+      isCurrentMonth = false;
+      isUnavailable = true;
+    } 
+    else if (index >= currentMonth.inicio + currentMonth.dias) {
+      day = index - (currentMonth.inicio + currentMonth.dias) + 1;
+      isCurrentMonth = false;
+      isUnavailable = true;
+    } 
+    else {
+      day = index - currentMonth.inicio + 1;
+      const dayKey = `${currentYear}-${currentMonthIndex}-${day}`;
+      dayAppointments = appointments[dayKey] || [];
+      isPastDate = isDataPassada(currentYear, currentMonthIndex, day);
+      isUnavailable = dayAppointments.length > 0 || isPastDate;
     }
 
     return { 
-      id: indice, 
-      dia, 
-      ehMesAtual, 
-      estaIndisponivel, 
-      ehDataPassada,
-      consultasDoDia 
+      id: index, 
+      day, 
+      isCurrentMonth, 
+      isUnavailable, 
+      isPastDate,
+      appointments: dayAppointments 
     };
   });
 
   useEffect(() => {
-    const buscarConsultasAgendadas = async () => {
+    const fetchAppointments = async () => {
       try {
-        const mesSQL = indiceMesAtual + 1;
-        const resposta = await fetch(
-          `http://localhost:4242/agendamento/${id}/${anoAtual}/${mesSQL}`
+        const sqlMonth = currentMonthIndex + 1;
+        const response = await fetch(
+          `http://localhost:4242/agendamento/${id}/${currentYear}/${sqlMonth}`
         );
         
-        if (!resposta.ok) throw new Error("Falha ao buscar agendamentos");
+        if (!response.ok) throw new Error("Failed to fetch appointments");
         
-        const dados = await resposta.json();
-        const mapaConsultas = dados.reduce((acumulador, consulta) => {
-          const dia = new Date(consulta.data).getDate();
-          const chave = `${anoAtual}-${indiceMesAtual}-${dia}`;
-          acumulador[chave] = acumulador[chave] || [];
-          acumulador[chave].push(consulta.hora);
-          return acumulador;
+        const data = await response.json();
+        const appointmentsMap = data.reduce((acc, appointment) => {
+          const day = new Date(appointment.data).getDate();
+          const key = `${currentYear}-${currentMonthIndex}-${day}`;
+          acc[key] = acc[key] || [];
+          acc[key].push(appointment.hora);
+          return acc;
         }, {});
         
-        setConsultasAgendadas(mapaConsultas);
-      } catch (erro) {
-        console.error("Erro ao buscar consultas:", erro);
+        setAppointments(appointmentsMap);
+      } catch (error) {
+        console.error("Error fetching appointments:", error);
       }
     };
 
-    buscarConsultasAgendadas();
-  }, [anoAtual, indiceMesAtual, id]);
+    fetchAppointments();
+  }, [currentYear, currentMonthIndex, id]);
 
-  const navegarEntreMeses = (direcao) => {
-    setIndiceMesAtual((mesAnterior) => {
-      let novoMes = mesAnterior + direcao;
-      let novoAno = anoAtual;
+  const navigateMonths = (direction) => {
+    setCurrentMonthIndex((prevMonth) => {
+      let newMonth = prevMonth + direction;
+      let newYear = currentYear;
       
-      if (novoMes < 0) {
-        novoMes = 11;
-        novoAno--;
-      } else if (novoMes > 11) {
-        novoMes = 0;
-        novoAno++;
+      if (newMonth < 0) {
+        newMonth = 11;
+        newYear--;
+      } else if (newMonth > 11) {
+        newMonth = 0;
+        newYear++;
       }
       
-      setAnoAtual(novoAno);
-      return novoMes;
+      setCurrentYear(newYear);
+      return newMonth;
     });
   };
 
-  const selecionarDia = (dia) => {
-    if (dia.ehMesAtual && !dia.ehDataPassada) {
-      setSlotSelecionado({ dia: dia.dia, horario: null });
-      // Resetar seleções ao mudar de dia
-      setConvenioSelecionado("");
-      setProcedimentoSelecionado("");
+  const selectDay = (day) => {
+    if (day.isCurrentMonth && !day.isPastDate) {
+      setSelectedSlot({ day: day.day, time: null });
+      setSelectedInsurance("");
+      setSelectedProcedure("");
     }
   };
 
-  const selecionarHorario = (horario) => {
-    const horarioPassou = verificarSeHorarioPassou(
-      anoAtual, 
-      indiceMesAtual, 
-      slotSelecionado.dia, 
-      horario
+  const selectTime = (time) => {
+    const isTimePassed = isHorarioPassado(
+      currentYear, 
+      currentMonthIndex, 
+      selectedSlot.day, 
+      time
     );
 
-    if (!horariosAgendados.includes(horario) && !horarioPassou) {
-      setSlotSelecionado(anterior => ({ ...anterior, horario }));
+    if (!bookedTimes.includes(time) && !isTimePassed) {
+      setSelectedSlot(prev => ({ ...prev, time }));
     }
   };
 
-  const confirmarAgendamento = () => {
-    if (!slotSelecionado.horario || !convenioSelecionado || !procedimentoSelecionado) {
-      setMensagemConfirmacao("Por favor, preencha todos os campos obrigatórios");
+  const confirmAppointment = () => {
+    if (!selectedSlot.time || !selectedInsurance || !selectedProcedure) {
+      setConfirmationMessage("Por favor, preencha todos os campos obrigatórios");
       return;
     }
 
-    const dataFormatada = `${anoAtual}-${String(indiceMesAtual + 1).padStart(2, "0")}-${String(slotSelecionado.dia).padStart(2, "0")}`;
+    const formattedDate = `${currentYear}-${String(currentMonthIndex + 1).padStart(2, "0")}-${String(selectedSlot.day).padStart(2, "0")}`;
     
-    navegar(`/pagamento/${id}?vim_agendamento=true`, {
+    navigate(`/pagamento/${id}?vim_agendamento=true`, {
       state: { 
-        date: dataFormatada, 
-        time: slotSelecionado.horario,
-        convenio: convenioSelecionado,
-        procedimento: procedimentoSelecionado 
+        date: formattedDate, 
+        time: selectedSlot.time,
+        convenio: selectedInsurance,
+        procedimento: selectedProcedure 
       },
     });
   };
 
-  const fecharPainelAgendamento = () => setSlotSelecionado({ dia: null, horario: null });
-  const fecharMensagemConfirmacao = () => setMensagemConfirmacao("");
-  const voltarPaginaAnterior = () => navegar(-1);
+  const closeAppointmentPanel = () => setSelectedSlot({ day: null, time: null });
+  const closeConfirmationMessage = () => setConfirmationMessage("");
+  const goBack = () => navigate(-1);
 
-  const horariosDisponiveis = [
+  const availableTimes = [
     "14:30", "17:30", "13:00", 
     "16:10", "11:00", "19:20", "13:30"
   ];
 
   return (
     <div className="container-agenda">
-      {mensagemConfirmacao && (
+      {confirmationMessage && (
         <div className="confirmation-message">
-          <span>{mensagemConfirmacao}</span>
-          <button className="close-confirmation" onClick={fecharMensagemConfirmacao}>
+          <span>{confirmationMessage}</span>
+          <button className="close-confirmation" onClick={closeConfirmationMessage}>
             <X size={16} />
           </button>
         </div>
       )}
 
       <button className="back-button-c">
-        <img src={voltar} alt="Voltar" onClick={voltarPaginaAnterior} />
+        <img src={voltar} alt="Voltar" onClick={goBack} />
       </button>
 
       <div className="calendar">
         <div className="calendar-header">
-          <button onClick={() => navegarEntreMeses(-1)} className="setaEsquerda">
+          <button onClick={() => navigateMonths(-1)} className="setaEsquerda">
             <ChevronLeft />
           </button>
-          <h2>
-            {mesAtual.nome} {anoAtual}
-          </h2>
-          <button onClick={() => navegarEntreMeses(1)} className="setadireita">
+          <h2>{currentMonth.nome} {currentYear}</h2>
+          <button onClick={() => navigateMonths(1)} className="setadireita">
             <ChevronRight />
           </button>
         </div>
 
         <div className="weekdays">
-          {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"].map((diaSemana) => (
-            <div key={diaSemana}>{diaSemana}</div>
+          {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"].map((weekday) => (
+            <div key={weekday}>{weekday}</div>
           ))}
         </div>
 
         <div className="days-grid">
-          {diasDoCalendario.map((dia) => (
+          {calendarDays.map((day) => (
             <div
-              key={dia.id}
-              className={`day ${dia.estaIndisponivel ? "unavailable" : ""} ${dia.ehDataPassada ? "past-date" : ""}`}
-              onClick={() => selecionarDia(dia)}
+              key={day.id}
+              className={`day ${day.isUnavailable ? "unavailable" : ""} ${day.isPastDate ? "past-date" : ""}`}
+              onClick={() => selectDay(day)}
             >
-              <span>{dia.dia}</span>
-              {dia.consultasDoDia.map((consulta, indice) => (
-                <div key={indice} className="appointment-detail">
-                  {consulta}
+              <span>{day.day}</span>
+              {day.appointments.map((appointment, index) => (
+                <div key={index} className="appointment-detail">
+                  {appointment}
                 </div>
               ))}
             </div>
@@ -232,20 +231,18 @@ function AgendaConsultas() {
         <img src={imgConsulta} alt="Imagem de consulta" />
       </div>
 
-      {slotSelecionado.dia && (
+      {selectedSlot.day && (
         <div className="schedule">
-          <button className="close-button" onClick={fecharPainelAgendamento}>
+          <button className="close-button" onClick={closeAppointmentPanel}>
             <X size={24} />
           </button>
-          <h1>
-            Horários disponíveis para {slotSelecionado.dia} de {mesAtual.nome}
-          </h1>
+          <h1>Horários disponíveis para {selectedSlot.day} de {currentMonth.nome}</h1>
 
           <div className="form-group">
             <label>Convênio *</label>
             <select 
-              value={convenioSelecionado}
-              onChange={(e) => setConvenioSelecionado(e.target.value)}
+              value={selectedInsurance}
+              onChange={(e) => setSelectedInsurance(e.target.value)}
               required
             >
               <option value="">Selecione o convênio</option>
@@ -260,8 +257,8 @@ function AgendaConsultas() {
           <div className="form-group">
             <label>Procedimento *</label>
             <select
-              value={procedimentoSelecionado}
-              onChange={(e) => setProcedimentoSelecionado(e.target.value)}
+              value={selectedProcedure}
+              onChange={(e) => setSelectedProcedure(e.target.value)}
               required
             >
               <option value="">Selecione o procedimento</option>
@@ -273,25 +270,25 @@ function AgendaConsultas() {
 
           <h3>Horários *</h3>
           <div className="times">
-            {horariosDisponiveis.map((horario) => {
-              const estaAgendado = horariosAgendados.includes(horario);
-              const horarioPassou = verificarSeHorarioPassou(
-                anoAtual, 
-                indiceMesAtual, 
-                slotSelecionado.dia, 
-                horario
+            {availableTimes.map((time) => {
+              const isBooked = bookedTimes.includes(time);
+              const isTimePassed = isHorarioPassado(
+                currentYear, 
+                currentMonthIndex, 
+                selectedSlot.day, 
+                time
               );
 
               return (
                 <button
-                  key={horario}
-                  className={`time-button ${slotSelecionado.horario === horario ? "selected-time" : ""} ${horarioPassou ? "expired-time" : ""}`}
-                  onClick={() => selecionarHorario(horario)}
-                  disabled={estaAgendado || horarioPassou}
-                  title={horarioPassou ? "Este horário já passou" : estaAgendado ? "Horário já agendado" : ""}
+                  key={time}
+                  className={`time-button ${selectedSlot.time === time ? "selected-time" : ""} ${isTimePassed ? "expired-time" : ""}`}
+                  onClick={() => selectTime(time)}
+                  disabled={isBooked || isTimePassed}
+                  title={isTimePassed ? "Este horário já passou" : isBooked ? "Horário já agendado" : ""}
                 >
-                  {horario}
-                  {horarioPassou && <span className="expired-badge"></span>}
+                  {time}
+                  {isTimePassed && <span className="expired-badge"></span>}
                 </button>
               );
             })}
@@ -299,8 +296,8 @@ function AgendaConsultas() {
 
           <button
             className="confirm-button"
-            onClick={confirmarAgendamento}
-            disabled={!slotSelecionado.horario || !convenioSelecionado || !procedimentoSelecionado}
+            onClick={confirmAppointment}
+            disabled={!selectedSlot.time || !selectedInsurance || !selectedProcedure}
           >
             Confirmar agendamento
           </button>

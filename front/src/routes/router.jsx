@@ -4,10 +4,7 @@ import TelaAgendamento from "../pages/TelaAgendamento.jsx";
 import EditarPaciente from "../pages/EditarPaciente.jsx";
 import EditarProfissional from "../pages/EditarProfissional.jsx";
 import Chat from "../pages/Chat.jsx";
-// import DiarioEmocional from "../pages/DiarioEmocional.jsx";
 import Plano_saude from "../pages/Plano_saude.jsx";
-// import Footer from '../Components/Footer.jsx'
-// import Navbar from '../Components/Navbar.jsx'
 import Landing_page from "../pages/Landing_page.jsx";
 import Inicio from "../pages/Inicio.jsx";
 import Pagamento from "../pages/Pagamento.jsx";
@@ -44,10 +41,6 @@ const router = createBrowserRouter([
     path: "/chats",
     element: <Chat />,
   },
-  // {
-  //   path: "/diarioemocional",
-  //   element: <DiarioEmocional />,
-  // },
   {
     path: "/planoSaude",
     element: <Plano_saude />,

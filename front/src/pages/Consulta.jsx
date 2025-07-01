@@ -69,7 +69,7 @@ function Consulta() {
         );
         if (!response.ok) return;
         const data = await response.json();
-        setFoto(data.foto?.startsWith("http") ? data.foto : `http://localhost:4242${data.foto}`);
+        setFoto(data?.foto?.startsWith("http") ? data.foto : `http://localhost:4242${data.foto}`);
       } catch (err) {
         console.error("Erro ao buscar foto:", err);
       }
@@ -90,7 +90,7 @@ function Consulta() {
       const dateForCell = new Date(anoAtual, indiceMesAtual, 1);
       dateForCell.setDate(firstDayOfMonth.getDate() + (i - startDayOffset));
 
-      const dia = dateForCell.getDate();
+      const dia = dateForCell?.getDate();
       const mesCalculado = dateForCell.getMonth();
       const anoCalculado = dateForCell.getFullYear();
       const mesCorrente = (mesCalculado === indiceMesAtual && anoCalculado === anoAtual);
@@ -280,7 +280,7 @@ function Consulta() {
 
   const confirmarReagendamento = async () => {
     if (!consultaSelecionada || !dataSelecionada || !horaSelecionada) {
-      alert("Selecione data e horário para reagendar");
+      console.log("Por favor, selecione uma nova data e horário para reagendar.");
       return;
     }
 
@@ -314,7 +314,7 @@ function Consulta() {
       setConsultaSelecionada(null);
     } catch (err) {
       console.error("Erro ao reagendar:", err);
-      alert(err.message || "Erro ao reagendar");
+      console.log(err.message || "Não foi possível reagendar a consulta.");
     }
   };
 

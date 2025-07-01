@@ -139,7 +139,7 @@ function VisualizarProfissional() {
                     }
                   }>
                   <img src={icon_um} alt="Agendar consulta" />
-                  <p>Agende sua consulta</p>
+                  <p>Agendamento</p>
                 </div>
                 <div className="topicos">
                   <img src={icon_tres} alt="Chat" />
@@ -172,7 +172,7 @@ function VisualizarProfissional() {
                   className="topicos"
                 >
                   <img src={icon_dois} alt="Vídeo chamada" />
-                  <p>Ingressar em sua consulta</p>
+                  <p>Consulta</p>
                 </div>
               </div>
             </div>

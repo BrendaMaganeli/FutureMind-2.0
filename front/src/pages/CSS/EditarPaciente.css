@@ -328,10 +328,12 @@ input[type="file"]:hover {
   border-radius: 8px;
   outline: none;
   transition: border-color 0.3s;
+  color: rgba(90, 90, 90, 0.61);
 }
 
 .floating-input-pac input:focus {
   border-color: #013a63;
+  color: #013a63;
 }
 
 .floating-input-pac label {

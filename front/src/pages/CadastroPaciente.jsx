@@ -7,7 +7,6 @@ import "./CSS/Cadastros.css";
 function CadastroPaciente() {
   const navigate = useNavigate();
 
-  // Estados de dados do formulário
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
   const [telefone, setTelefone] = useState("");
@@ -16,7 +15,6 @@ function CadastroPaciente() {
   const [valorSenha, setValorSenha] = useState("");
   const [paciente, setPaciente] = useState({});
 
-  // Estados de validação
   const [nomeValido, setNomeValido] = useState(false);
   const [cpfValido, setCpfValido] = useState(false);
   const [telefoneValido, setTelefoneValido] = useState(false);
@@ -24,7 +22,6 @@ function CadastroPaciente() {
   const [emailValido, setEmailValido] = useState(false);
   const [senhaValido, setSenhaValido] = useState(false);
 
-  // Estados de senha visível
   const [tipoInput, setTipoInput] = useState("password");
   const [tipoIconSenha, setTipoIconSenha] = useState("hide.png");
   const [mensagemCpf, setMensagemCpf] = useState("");
@@ -36,9 +33,7 @@ function CadastroPaciente() {
 
   const alternarTipo = () => {
     setTipoInput(tipoInput === "password" ? "text" : "password");
-    setTipoIconSenha(
-      tipoInput === "password" ? "view (1).png" : "hide.png"
-    );
+    setTipoIconSenha(tipoInput === "password" ? "view (1).png" : "hide.png");
   };
 
   const formatarCPF = (value) => {
@@ -88,9 +83,7 @@ function CadastroPaciente() {
         "https://futuremind-2-0-mw60.onrender.com/cadastro-paciente",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(pacienteAux),
         }
       );
@@ -115,18 +108,15 @@ function CadastroPaciente() {
     if (e) e.preventDefault();
     let validacoes = true;
     let data = {};
+    
     try {
       const response = await fetch("http://localhost:4242/verificar_paciente", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ valorEmail, cpf, telefone }),
       });
 
-      if (response.ok) {
-        data = await response.json();
-      }
+      if (response.ok) data = await response.json();
     } catch (error) {
       console.log("erro");
     }
@@ -134,9 +124,7 @@ function CadastroPaciente() {
     if (nome.trim().length < 1) {
       setNomeValido(true);
       validacoes = false;
-    } else {
-      setNomeValido(false);
-    }
+    } else setNomeValido(false);
 
     if (cpf.trim().length < 14) {
       setCpfValido(true);
@@ -185,9 +173,7 @@ function CadastroPaciente() {
       if (dataInvalida || idade < 18) {
         setDataNascimentoValido(true);
         validacoes = false;
-      } else {
-        setDataNascimentoValido(false);
-      }
+      } else setDataNascimentoValido(false);
     } else {
       setDataNascimentoValido(true);
       validacoes = false;
@@ -213,21 +199,15 @@ function CadastroPaciente() {
     if (!valorSenha || valorSenha.trim().length < 4) {
       setSenhaValido(true);
       validacoes = false;
-    } else {
-      setSenhaValido(false);
-    }
+    } else setSenhaValido(false);
 
     if (!aceitouTermos) {
       setCheckboxInvalido(false);
-      setTimeout(() => {
-        setCheckboxInvalido(true);
-      }, 10);
+      setTimeout(() => setCheckboxInvalido(true), 10);
       validacoes = false;
     }
 
-    if (validacoes) {
-      await handleFinish();
-    }
+    if (validacoes) await handleFinish();
   };
 
   return (
@@ -235,11 +215,7 @@ function CadastroPaciente() {
       <div className="lado-esquerdoProfissional">
         <div className="titulo-logo">
           <p className="titulo-cadastro">Cadastro Paciente</p>
-          <img
-            src={logo}
-            alt="Future Mind Logo"
-            className="logo-paraCadastro"
-          />
+          <img src={logo} alt="Future Mind Logo" className="logo-paraCadastro" />
         </div>
 
         <div className="inputs-cadastro-div">
@@ -384,11 +360,7 @@ function CadastroPaciente() {
       </div>
 
       <div className="lado-direitoProfissional">
-        <img
-          src={imagem}
-          alt="Cadastro Profissional"
-          className="imagem-cadastro"
-        />
+        <img src={imagem} alt="Cadastro Profissional" className="imagem-cadastro" />
       </div>
     </div>
   );

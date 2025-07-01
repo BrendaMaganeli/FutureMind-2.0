@@ -9,7 +9,7 @@ let socket;
 if (rawUser) {
   try {
     const user = JSON.parse(rawUser);
-    socket = io('http://10.28.144.22:5000', {
+    socket = io('http://192.168.15.2:5000', {
       auth: { name: user?.nome },
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,

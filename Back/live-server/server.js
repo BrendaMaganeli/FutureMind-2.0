@@ -53,9 +53,9 @@ io.on('connection', (socket) => {
     io.emit("users", Object.entries(onlineUsers).map(([id, name]) => ({ id, name })));
   });
 
-  socket.on('end-call', () => {
+  socket.on('end-call', (reason) => {
 
-    io.emit('call-ended');
+    io.emit('call-ended', reason);
   });
 });
 server.listen(5000, () => {

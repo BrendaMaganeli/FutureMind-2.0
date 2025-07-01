@@ -1,11 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import {
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Select from "react-select";
 import { GlobalContext } from "../Context/GlobalContext";
 import logo from "../assets/logoCadastro2.svg";
@@ -27,40 +21,34 @@ const opcoesAbordagens = [
 function CadastroProfissional2() {
   const navigate = useNavigate();
   const { profissional, setProfissional } = useContext(GlobalContext);
+  const inputRef = useRef(null);
 
-  const [especializacoes, setEspecializacoes] = useState(
-    profissional.especializacao || ""
-  );
+  const DOMINIO = "@futuremind.com.br";
+
+  const [especializacoes, setEspecializacoes] = useState(profissional.especializacao || "");
   const [abordagens, setAbordagens] = useState(profissional.abordagem || "");
   const [valorEmail, setValorEmail] = useState(profissional.email || "");
   const [valorSenha, setValorSenha] = useState(profissional.senha || "");
-  const [prefixoEmailProfissional, setPrefixoEmailProfissional] = useState(
-    profissional.email_profissional || ""
-  );
+  const [prefixoEmailProfissional, setPrefixoEmailProfissional] = useState(profissional.email_profissional || "");
 
   const [espValidado, setEspValidado] = useState(false);
   const [aboValidado, setAboValidado] = useState(false);
   const [emailValidado, setEmailValidado] = useState(false);
-  const [mensagemEmail, setMensagemEmail] = useState("");
   const [senhaValidado, setSenhaValidado] = useState(false);
   const [usuarioValidado, setUsuarioValido] = useState(false);
+  const [mensagemEmail, setMensagemEmail] = useState("");
   const [usuarioMensgaem, setMensagemUsuario] = useState("");
 
   const [tipoInput, setTipoInput] = useState("password");
   const [tipoIconSenha, setTipoIconSenha] = useState("view (1).png");
-
   const [aceitouTermos, setAceitouTermos] = useState(false);
   const [checkboxInvalido, setCheckboxInvalido] = useState(false);
-
-  const inputRef = useRef(null);
   const [caretPos, setCaretPos] = useState(null);
 
-  const DOMINIO = "@futuremind.com.br";
-
   useEffect(() => {
-    setProfissional((prev) => ({
+    setProfissional(prev => ({
       ...prev,
-      email_profissional: `${prefixoEmailProfissional}${DOMINIO}`,
+      email_profissional: `${prefixoEmailProfissional}${DOMINIO}`
     }));
   }, [prefixoEmailProfissional]);
 
@@ -71,25 +59,25 @@ function CadastroProfissional2() {
   }, [prefixoEmailProfissional, caretPos]);
 
   useEffect(() => {
-    setProfissional((prev) => ({
+    setProfissional(prev => ({
       ...prev,
-      especializacao: JSON.stringify(especializacoes),
+      especializacao: JSON.stringify(especializacoes)
     }));
   }, [especializacoes]);
 
   useEffect(() => {
-    setProfissional((prev) => ({
+    setProfissional(prev => ({
       ...prev,
-      abordagem: JSON.stringify(abordagens),
+      abordagem: JSON.stringify(abordagens)
     }));
   }, [abordagens]);
 
   useEffect(() => {
-    setProfissional((prev) => ({ ...prev, email: valorEmail }));
+    setProfissional(prev => ({ ...prev, email: valorEmail }));
   }, [valorEmail]);
 
   useEffect(() => {
-    setProfissional((prev) => ({ ...prev, senha: valorSenha }));
+    setProfissional(prev => ({ ...prev, senha: valorSenha }));
   }, [valorSenha]);
 
   const handlePrefixoChange = (e) => {
@@ -101,33 +89,20 @@ function CadastroProfissional2() {
     setPrefixoEmailProfissional(val);
   };
 
-  const indentificadorEmail = (e) => {
-    const valor = e.target.value;
-    setValorEmail(valor);
-  };
-
-  const indentificadorSenha = (e) => {
-    const valor = e.target.value;
-    setValorSenha(valor);
-  };
+  const indentificadorEmail = (e) => setValorEmail(e.target.value);
+  const indentificadorSenha = (e) => setValorSenha(e.target.value);
 
   const alternarTipo = () => {
-    setTipoInput((prev) => (prev === "password" ? "text" : "password"));
-    setTipoIconSenha((prev) =>
-      prev === "hide.png" ? "view (1).png" : "hide.png"
-    );
+    setTipoInput(prev => prev === "password" ? "text" : "password");
+    setTipoIconSenha(prev => prev === "hide.png" ? "view (1).png" : "hide.png");
   };
 
   useEffect(() => {
-    if (especializacoes?.length > 0) {
-      setEspValidado(false);
-    }
+    if (especializacoes?.length > 0) setEspValidado(false);
   }, [especializacoes]);
 
   useEffect(() => {
-    if (abordagens?.length > 0) {
-      setAboValidado(false);
-    }
+    if (abordagens?.length > 0) setAboValidado(false);
   }, [abordagens]);
 
   useEffect(() => {
@@ -147,33 +122,21 @@ function CadastroProfissional2() {
     let data;
 
     try {
-      const response = await fetch(
-        "http://localhost:4242/verificar_profissional_dois",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            valorEmail,
-            email_profissional: `${prefixoEmailProfissional}${DOMINIO}`,
-          }),
-        }
-      );
+      const response = await fetch("http://localhost:4242/verificar_profissional_dois", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          valorEmail,
+          email_profissional: `${prefixoEmailProfissional}${DOMINIO}`
+        }),
+      });
 
-      if (response.ok) {
-        data = await response.json();
-        console.log(data);
-      } else {
-        console.error("Erro na verificação do profissional");
-        return;
-      }
+      if (response.ok) data = await response.json();
+      else return console.error("Erro na verificação do profissional");
     } catch (error) {
-      console.error("Erro na requisição:", error);
-      return;
+      return console.error("Erro na requisição:", error);
     }
 
-    // Validações
     if (especializacoes?.length === 0) {
       setEspValidado(true);
       erro = true;
@@ -184,10 +147,7 @@ function CadastroProfissional2() {
       erro = true;
     }
 
-    if (
-      !valorEmail.includes("@gmail.com") &&
-      !valorEmail.includes("@hotmail.com")
-    ) {
+    if (!valorEmail.includes("@gmail.com") && !valorEmail.includes("@hotmail.com")) {
       setEmailValidado(true);
       setMensagemEmail("Use um email válido!");
       erro = true;
@@ -203,9 +163,7 @@ function CadastroProfissional2() {
     if (valorSenha?.length !== 8) {
       setSenhaValidado(true);
       erro = true;
-    } else {
-      setSenhaValidado(false);
-    }
+    } else setSenhaValidado(false);
 
     if (!prefixoEmailProfissional.includes(".")) {
       setMensagemUsuario('Seu usuário deve conter um "." antes do "@" !');
@@ -222,24 +180,17 @@ function CadastroProfissional2() {
 
     if (!aceitouTermos) {
       setCheckboxInvalido(false);
-      setTimeout(() => {
-        setCheckboxInvalido(true);
-      }, 10);
-      validacoes = false;
+      setTimeout(() => setCheckboxInvalido(true), 10);
+      erro = true;
     }
 
-    // Impede envio se tiver erro
     if (!erro) {
-      console.log("Iniciando cadastro...");
       try {
-        const response = await fetch(
-          "http://localhost:4242/cadastro-profissional",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(profissional),
-          }
-        );
+        const response = await fetch("http://localhost:4242/cadastro-profissional", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(profissional),
+        });
 
         if (response.ok) {
           setProfissional({
@@ -257,8 +208,6 @@ function CadastroProfissional2() {
             valor_consulta: null,
           });
           navigate("/login");
-        } else {
-          console.log("erro mateus");
         }
       } catch (err) {
         console.log("Erro ao cadastrar profissional:", err);
@@ -271,11 +220,7 @@ function CadastroProfissional2() {
       <div className="lado-esquerdoProfissional">
         <div className="titulo-logo">
           <p className="titulo-cadastro">Cadastro Profissional</p>
-          <img
-            src={logo}
-            alt="Future Mind Logo"
-            className="logo-paraCadastro"
-          />
+          <img src={logo} alt="Future Mind Logo" className="logo-paraCadastro" />
         </div>
 
         <div className="inputs-cadastro-divP">
@@ -287,9 +232,7 @@ function CadastroProfissional2() {
               value={especializacoes}
               options={opcoesEspecializacao}
               isMulti
-              onChange={(opcoes) => {
-                setEspecializacoes(opcoes || []);
-              }}
+              onChange={(opcoes) => setEspecializacoes(opcoes || [])}
               menuPortalTarget={document.body}
               styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
             />
@@ -297,6 +240,7 @@ function CadastroProfissional2() {
               Selecione no minimo uma especialização
             </div>
           </div>
+
           <div className="input-cadastro">
             <label className="label-input">Abordagens</label>
             <Select
@@ -305,9 +249,7 @@ function CadastroProfissional2() {
               value={abordagens}
               options={opcoesAbordagens}
               isMulti
-              onChange={(opcoes) => {
-                setAbordagens(opcoes || []);
-              }}
+              onChange={(opcoes) => setAbordagens(opcoes || [])}
               menuPortalTarget={document.body}
               styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
             />
@@ -341,7 +283,6 @@ function CadastroProfissional2() {
                 maxLength={8}
               />
               <label>Senha</label>
-
               <img
                 src={tipoIconSenha}
                 alt="Mostrar senha"
@@ -353,14 +294,11 @@ function CadastroProfissional2() {
               </div>
             </div>
           </div>
+
           <div className="cadastro-input">
             <input
               type="text"
-              value={
-                prefixoEmailProfissional
-                  ? `${prefixoEmailProfissional}${DOMINIO}`
-                  : ""
-              }
+              value={prefixoEmailProfissional ? `${prefixoEmailProfissional}${DOMINIO}` : ""}
               onChange={handlePrefixoChange}
               ref={inputRef}
               placeholder=" "
@@ -372,6 +310,7 @@ function CadastroProfissional2() {
             </div>
           </div>
         </div>
+
         <div className="div-check-profissional">
           <div className="container_styles-check">
             <input
@@ -386,9 +325,7 @@ function CadastroProfissional2() {
           </div>
           <div className="container_text_termos">
             <label className="termos-styles">Aceitar os</label>{" "}
-            <a className="termos-a" href="/termo">
-              termos
-            </a>{" "}
+            <a className="termos-a" href="/termo">termos</a>{" "}
             <label className="de_uso">de uso</label>
           </div>
         </div>
@@ -403,11 +340,7 @@ function CadastroProfissional2() {
       </div>
 
       <div className="lado-direitoProfissional">
-        <img
-          src={imagem}
-          alt="Cadastro Profissional"
-          className="imagem-cadastro"
-        />
+        <img src={imagem} alt="Cadastro Profissional" className="imagem-cadastro" />
       </div>
     </div>
   );

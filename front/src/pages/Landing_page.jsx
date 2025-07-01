@@ -30,9 +30,6 @@ function Landing_page() {
 
   useEffect(() => {
     AOS.init({ duration: 2000, once: true });
-  }, []);
-
-  useEffect(() => {
     const timer = setTimeout(() => setMostrarLogo(false), 2500);
     return () => clearTimeout(timer);
   }, []);
@@ -42,12 +39,20 @@ function Landing_page() {
   const irParaPaciente = () => navigate("/cadastroPaciente");
   const irParaProfissional = () => navigate("/cadastroProfissional1");
 
+  const empresasParceiras = [
+    "apoio-acate 1.svg",
+    "senai_color 1.svg",
+    "Softplan 1.svg",
+    "imagem_gogle.svg",
+    "imagem_bradesco.svg"
+  ];
+
   return (
     <div>
       {mostrarLogo ? (
         <div className="logo-container">
           <div className='logo-elements'>
-          <img src="logo oficial.svg" alt="Logo" className="logo-animada" />
+            <img src="logo oficial.svg" alt="Logo" className="logo-animada" />
           </div>
         </div>
       ) : (
@@ -97,7 +102,10 @@ function Landing_page() {
                   </p>
                 </div>
                 <div className="container_button_comece_ja">
-                  <button className="button_comece_ja" onClick={!user ? abrir : () => setMostrarModalSair(true)}>
+                  <button 
+                    className="button_comece_ja" 
+                    onClick={!user ? abrir : () => setMostrarModalSair(true)}
+                  >
                     Comece já
                   </button>
                 </div>
@@ -109,31 +117,19 @@ function Landing_page() {
                 <div className="cilindro_dois_equilibrio"></div>
                 <div className="cilindro_tres_equilibrio"></div>
                 <div className="cilindro_quatro_equilibrio"></div>
-                <img
-                  className="imagem_computador"
-                  src="tela_computador.svg"
-                  alt=""
-                />
+                <img className="imagem_computador" src="tela_computador.svg" alt="" />
               </div>
             </div>
           </div>
 
-          <div
-            className="container-geral_landing_dois"
-            data-aos="fade-up"
-            data-aos-delay="100"
-          >
+          <div className="container-geral_landing_dois" data-aos="fade-up" data-aos-delay="100">
             <div className="container_info_emocional_esquerda">
               <div className="container_cilindros_emocional">
                 <div className="cilindro_um_emocional"></div>
                 <div className="cilindro_dois_emocional"></div>
                 <div className="cilindro_tres_emocional"></div>
                 <div className="cilindro_quatro_emocional"></div>
-                <img
-                  className="imagem_emocional"
-                  src="Group 239264.svg"
-                  alt=""
-                />
+                <img className="imagem_emocional" src="Group 239264.svg" alt="" />
               </div>
             </div>
             <div className="container_info_emocional_direita">
@@ -158,11 +154,7 @@ function Landing_page() {
             </div>
           </div>
 
-          <div
-            className="container-geral_funcionamento"
-            data-aos="fade-up"
-            data-aos-delay="200"
-          >
+          <div className="container-geral_funcionamento" data-aos="fade-up" data-aos-delay="200">
             <div className="container-geral_funcionamento_esquerda">
               <div className="conatainer_text_h1_funcionamento">
                 <h1 className="text_h1_funcionamento">
@@ -181,48 +173,26 @@ function Landing_page() {
               </div>
             </div>
             <div className="container-geral_funcionamento_direita">
-              <img
-                className="imagem_funcional"
-                src="imagem_emocional.svg"
-                alt=""
-              />
+              <img className="imagem_funcional" src="imagem_emocional.svg" alt="" />
             </div>
           </div>
 
-          <div
-            className="container_text_bem-estar"
-            data-aos="fade-up"
-            data-aos-delay="300"
-          >
+          <div className="container_text_bem-estar" data-aos="fade-up" data-aos-delay="300">
             <h1 className="h1_empresas">Empresas</h1>
             <h1 className="h1_bem-estar">
               que já cuidam do seu bem-estar dos colaboradores
             </h1>
           </div>
 
-          <div
-            className="container_bem-estar"
-            data-aos="fade-up"
-            data-aos-delay="600"
-          >
-            {[
-              "apoio-acate 1.svg",
-              "senai_color 1.svg",
-              "Softplan 1.svg",
-              "imagem_gogle.svg",
-              "imagem_bradesco.svg",
-            ].map((src, idx) => (
+          <div className="container_bem-estar" data-aos="fade-up" data-aos-delay="600">
+            {empresasParceiras.map((src, idx) => (
               <div className="container_imagems_empresas" key={idx}>
                 <img className="imagems_empresas_parceiras" src={src} alt="" />
               </div>
             ))}
           </div>
 
-          <div
-            className="container-geral_empresas_parceiras"
-            data-aos="fade-up"
-            data-aos-delay="500"
-          >
+          <div className="container-geral_empresas_parceiras" data-aos="fade-up" data-aos-delay="500">
             <div className="container-geral_empresas_parceiras_esquerda">
               <div className="container_esquerdo_info_empresas">
                 <div className="container_text_empresas_parceiras">
@@ -262,10 +232,12 @@ function Landing_page() {
           <Footer />
         </>
       )}
-      {
-        mostrarModalSair &&
-        <ModalSair setMostrarModalSair={setMostrarModalSair} setMostrarModalCadastro={setAberto} />
-      }
+      {mostrarModalSair && (
+        <ModalSair 
+          setMostrarModalSair={setMostrarModalSair} 
+          setMostrarModalCadastro={setAberto} 
+        />
+      )}
     </div>
   );
 }

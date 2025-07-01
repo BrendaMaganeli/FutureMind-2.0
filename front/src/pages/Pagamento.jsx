@@ -344,7 +344,7 @@ function Pagamento() {
 
         if (!assinaturaResp.ok) {
           const err = await assinaturaResp.json();
-          alert(
+          console.log(
             "Erro ao processar assinatura: " +
               (err.Error || assinaturaResp.statusText)
           );
@@ -894,7 +894,7 @@ function Pagamento() {
                     fontSize: "15px",
                     display: "flex",
                     marginTop: "5%",
-                    gap: "16px",
+                    gap: "20px",
                   }}
                 >
                   <p>

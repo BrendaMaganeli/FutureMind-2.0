@@ -141,7 +141,7 @@ function VideoConferencia4() {
 
     const startCall = async () => {
         if (!targetUser) {
-            alert("Selecione um usuário para chamar");
+            console.log("Selecione um usuário para chamar");
             return;
         }
 

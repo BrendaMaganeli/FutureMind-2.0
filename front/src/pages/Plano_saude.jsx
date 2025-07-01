@@ -106,7 +106,7 @@ function Plano_saude() {
         });
 
         if (response.ok) {
-          alert("Plano empresarial cadastrado com sucesso!");
+          console.log("Plano empresarial cadastrado com sucesso!");
         }
       }
     } catch (error) {
@@ -348,14 +348,14 @@ const cancelarPlano = async () => {
 
     if (!responsePut.ok) throw new Error("Erro ao atualizar plano");
 
-    alert("Plano cancelado com sucesso.");
+    console.log("Plano cancelado com sucesso.");
     setUser({ ...user, chk_plano: false });
     setEstadoPlano(false);
     setAssinatura({});
     fecharModalCancelar();
   } catch (error) {
     console.error(error);
-    alert("Erro ao cancelar plano. Tente novamente.");
+    console.log("Erro ao cancelar plano. Tente novamente.");
   } finally {
     setCancelando(false);
   }

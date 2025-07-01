@@ -210,7 +210,7 @@ function CadastroPaciente() {
       setMensagemEmail("");
     }
 
-    if (!valorSenha || valorSenha.trim().length < 4) {
+    if (!valorSenha || valorSenha.trim().length < 8) {
       setSenhaValido(true);
       validacoes = false;
     } else {
@@ -342,7 +342,7 @@ function CadastroPaciente() {
             />
             <label>Senha</label>
             <span className={`erro ${senhaValido ? "visivel" : ""}`}>
-              Senha deve ter no minimo 4 caracteres!
+              Senha deve ter no minimo 8 caracteres!
             </span>
             <img
               src={tipoIconSenha}

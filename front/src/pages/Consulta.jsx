@@ -277,7 +277,7 @@ function Consulta() {
     if (!consultaSelecionada) return;
 
     if (verificarConsultaPassada(consultaSelecionada)) {
-      alert("Não é possível cancelar consultas passadas.");
+      console.log("Não é possível cancelar consultas passadas.");
       return;
     }
 
@@ -287,7 +287,7 @@ function Consulta() {
         { method: "DELETE" }
       );
       if (resp.status === 404) {
-        alert("Consulta não encontrada.");
+        console.log("Consulta não encontrada.");
         return;
       }
       if (!resp.ok) {
@@ -300,7 +300,7 @@ function Consulta() {
       setMensagemConfirmacao("Consulta cancelada com sucesso!");
     } catch (err) {
       console.error("Erro ao remover agendamento:", err);
-      alert(err.message || "Não foi possível cancelar a consulta.");
+      console.log(err.message || "Não foi possível cancelar a consulta.");
     }
   };
 
@@ -335,7 +335,7 @@ function Consulta() {
           }
         }
       } else {
-        alert("ID do profissional não encontrado para reagendamento.");
+        console.log("ID do profissional não encontrado para reagendamento.");
         setMostrarModalReagendamento(false);
       }
     }
@@ -343,7 +343,7 @@ function Consulta() {
 
   const confirmarReagendamento = async () => {
     if (!consultaSelecionada || !dataSelecionada || !horaSelecionada) {
-      alert("Por favor, selecione uma nova data e horário para reagendar.");
+      console.log("Por favor, selecione uma nova data e horário para reagendar.");
       return;
     }
 
@@ -372,7 +372,7 @@ function Consulta() {
         }
       );
       if (resp.status === 404) {
-        alert("Consulta não encontrada.");
+        console.log("Consulta não encontrada.");
         return;
       }
       if (!resp.ok) {
@@ -388,7 +388,7 @@ function Consulta() {
       setConsultaSelecionada(null); 
     } catch (err) {
       console.error("Erro ao reagendar:", err);
-      alert(err.message || "Não foi possível reagendar a consulta.");
+      console.log(err.message || "Não foi possível reagendar a consulta.");
     }
   };
 

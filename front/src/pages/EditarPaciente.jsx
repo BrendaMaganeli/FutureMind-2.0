@@ -178,13 +178,13 @@ function EditarPaciente() {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       if (selectedFile.size > 5 * 1024 * 1024) {
-        alert("A imagem deve ter no máximo 5MB");
+        console.log("A imagem deve ter no máximo 5MB");
         return;
       }
       
       const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
       if (!validTypes.includes(selectedFile.type)) {
-        alert("Por favor, selecione uma imagem JPEG, PNG ou GIF");
+        console.log("Por favor, selecione uma imagem JPEG, PNG ou GIF");
         return;
       }
 
@@ -235,7 +235,7 @@ function EditarPaciente() {
       
     } catch (err) {
       console.error('Erro:', err);
-      alert('Erro ao atualizar foto de perfil');
+      console.log('Erro ao atualizar foto de perfil');
     }
   };
 

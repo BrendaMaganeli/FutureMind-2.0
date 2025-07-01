@@ -315,7 +315,7 @@ function EditarProfissional() {
     <div className="container">
       <img
         onClick={toggleDiv}
-        className="icone_editar"
+        className="icone_editarr"
         src="editar_icone.svg"
         alt="Editar foto"
         />
@@ -348,8 +348,8 @@ function EditarProfissional() {
           </div>
         </div>
         
-        <div className="baixarButton">
-          <button className="botao-baixar" onClick={salvarEdicao}>
+        <div className="baixarButtonn">
+          <button className="botao-baixarr" onClick={salvarEdicao}>
             Salvar
           </button>
         </div>

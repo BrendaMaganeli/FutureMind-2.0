@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "nodem server.js",
     "test": "echo 'No tests specified' && exit 0"
   },
   "keywords": [],

@@ -136,39 +136,39 @@ router.post('/verificar_paciente', async (req, res) => {
     }
   });
 
-  // router.get("/profissional/:id", async (req, res) => {
-  //   try {
-  //     const { id } = req.params; 
+  router.get("/consulta/profissional/:id", async (req, res) => {
+    try {
+      const { id } = req.params; 
   
-  //     const [rows] = await pool.query(
-  //       `
-  //       SELECT
-  //         p.nome,
-  //         p.crp,
-  //         p.valor_consulta,
-  //         p.foto
-  //       FROM profissionais AS p
-  //       WHERE p.id_profissional = ?
-  //       `,
-  //       [id]
-  //     );
+      const [rows] = await pool.query(
+        `
+        SELECT
+          p.nome,
+          p.crp,
+          p.valor_consulta,
+          p.foto
+        FROM profissionais AS p
+        WHERE p.id_profissional = ?
+        `,
+        [id]
+      );
   
-  //     if (rows.length === 0) {
-  //       return res.status(404).json({ erro: "Profissional não encontrado." });
-  //     }
+      if (rows.length === 0) {
+        return res.status(404).json({ erro: "Profissional não encontrado." });
+      }
   
-  //     const profissional = rows[0];
-  //     return res.status(200).json({
-  //       nome: profissional.nome,
-  //       crp: profissional.crp,
-  //       valor_consulta: profissional.valor_consulta,
-  //       foto: profissional.foto
-  //     });
-  //   } catch (err) {
-  //     console.error("Erro no servidor (/profissional/:id):", err);
-  //     return res.status(500).json({ erro: "Erro interno do servidor." });
-  //   }
-  // });
+      const profissional = rows[0];
+      return res.status(200).json({
+        nome: profissional.nome,
+        crp: profissional.crp,
+        valor_consulta: profissional.valor_consulta,
+        foto: profissional.foto
+      });
+    } catch (err) {
+      console.error("Erro no servidor (/profissional/:id):", err);
+      return res.status(500).json({ erro: "Erro interno do servidor." });
+    }
+  });
 
   router.delete('/editar-profissional', async (req, res) => {
     try {

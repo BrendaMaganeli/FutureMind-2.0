@@ -168,7 +168,7 @@ function EditarProfissional() {
     formData.append('id_profissional', user.id_profissional);
 
     try {
-      const response = await fetch('http://localhost:4242/profissional/foto-perfil', {
+      const response = await fetch('https://futuremind-2-0.onrender.com/profissional/foto-perfil', {
         method: 'POST',
         body: formData,
       });
@@ -176,7 +176,7 @@ function EditarProfissional() {
       if (response.ok) {
         const data = await response.json();
         const novoCaminhoFoto = data.foto || `/uploads/${fotoSelecionada.name}`;
-        const fotoCompleta = `http://localhost:4242${novoCaminhoFoto}`;
+        const fotoCompleta = `https://futuremind-2-0.onrender.com${novoCaminhoFoto}`;
         setFoto(fotoCompleta);
         setUser(prev => ({ ...prev, foto: novoCaminhoFoto }));
         setIsVisible(false);

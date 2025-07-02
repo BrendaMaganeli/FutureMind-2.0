@@ -87,7 +87,7 @@ function AgendaConsultas() {
       try {
         const sqlMonth = currentMonthIndex + 1;
         const response = await fetch(
-          `http://localhost:4242/agendamento/${id}/${currentYear}/${sqlMonth}`
+          `https://futuremind-2-0.onrender.com/agendamento/${id}/${currentYear}/${sqlMonth}`
         );
         
         if (!response.ok) throw new Error("Failed to fetch appointments");

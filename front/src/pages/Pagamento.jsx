@@ -28,7 +28,7 @@ function Pagamento() {
   const user = JSON.parse(localStorage.getItem("User-Profile"));
 
   // Payment form states
-  const [foto, setFoto] = useState('');
+  const [foto, setFoto] = useState('/public/icone_usuario.svg');
   const [dataSelecionada, setDataSelecionada] = useState(initialDate);
   const [horaSelecionada, setHoraSelecionada] = useState(initialTime);
   const [toque_input_numero, setToque_input_numero] = useState(false);
@@ -117,11 +117,11 @@ function Pagamento() {
   };
 
   const getFotoUrl = (foto) => {
-  if (!foto || foto === 'icone_usuario.svg' || foto === 'iconusu.svg') {
+  if (!foto || foto === 'icone_usuario.svg' || foto === 'iconusu.svg' || foto.startsWith('data')) {
     console.log(foto)
-    return 'icone_usuario.svg';
+    return '/public/icone_usuario.svg';
   }
-  if (foto.startsWith('http') || foto.startsWith('data')) {
+  if (foto.startsWith('http')) {
     return foto;
   }
   return `http://localhost:4242${foto}`;
@@ -167,7 +167,7 @@ function Pagamento() {
     } else {
       const getDadosProfissional = async () => {
         try {
-          const response = await fetch(`http://localhost:4242/profissional/${id}`);
+          const response = await fetch(`https://futuremind-2-0.onrender.com/profissional/${id}`);
           if (!response.ok) return;
 
           const data = await response.json();
@@ -297,7 +297,7 @@ function Pagamento() {
           tipo_assinatura: plano_selecionado,
         };
 
-        const assinaturaResp = await fetch("http://localhost:4242/assinatura", {
+        const assinaturaResp = await fetch("https://futuremind-2-0.onrender.com/assinatura", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(assinaturaBody),
@@ -311,7 +311,7 @@ function Pagamento() {
 
         user.chk_plano = true;
         localStorage.setItem("User-Profile", JSON.stringify(user));
-        await fetch("http://localhost:4242/pagamento", {
+        await fetch("https://futuremind-2-0.onrender.com/pagamento", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -326,7 +326,7 @@ function Pagamento() {
           hora: horaSelecionada,
         };
         
-        const agendamentoResp = await fetch(`http://localhost:4242/agendamento/${id}`, {
+        const agendamentoResp = await fetch(`https://futuremind-2-0.onrender.com/agendamento/${id}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(agendamentoBody),
@@ -339,7 +339,7 @@ function Pagamento() {
 
         if (user.chk_plano) {
           try {
-            const response = await fetch("http://localhost:4242/valor_consultas", {
+            const response = await fetch("https://futuremind-2-0.onrender.com/valor_consultas", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ id_paciente: user.id_paciente }),
@@ -351,7 +351,7 @@ function Pagamento() {
             setConsultas_disponiveis(data.consultas_disponiveis);
 
             if (data.consultas_disponiveis > 0) {
-              const putResponse = await fetch("http://localhost:4242/mudar_valor_consultas", {
+              const putResponse = await fetch("https://futuremind-2-0.onrender.com/mudar_valor_consultas", {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -368,14 +368,14 @@ function Pagamento() {
                 putResponse.status === 400 &&
                 putData.error === "Última consulta, use a rota DELETE para remover a assinatura."
               ) {
-                const deleteResponse = await fetch("http://localhost:4242/remover_assinatura", {
+                const deleteResponse = await fetch("https://futuremind-2-0.onrender.com/remover_assinatura", {
                   method: "DELETE",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ id_paciente: user.id_paciente }),
                 });
 
                 if (deleteResponse.ok) {
-                  const updateResponse = await fetch("http://localhost:4242/atualizar_chk_plano", {
+                  const updateResponse = await fetch("https://futuremind-2-0.onrender.com/atualizar_chk_plano", {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({

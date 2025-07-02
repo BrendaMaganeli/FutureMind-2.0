@@ -13,7 +13,6 @@ import cam from "../assets/cam-recorder (1) 1.svg";
 import block from "../assets/blocked 1.svg";
 import arvoreAzul from "../assets/Arvore Azul.svg";
 import arvoreBranca from "../assets/Arvore Branca.svg";
-import icon from "../assets/icon-profile.svg";
 
 function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsInChat }) {
   const { user } = useContext(GlobalContext);
@@ -107,7 +106,7 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
 
         if (!dado) return console.log("erro N");
 
-        const response = await fetch("http://localhost:4242/chats/chat", {
+        const response = await fetch("https://futuremind-2-0.onrender.com/chats/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dado),
@@ -356,7 +355,7 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
         mensagem: mensagem.mensagem
       };
 
-      const response = await fetch("http://localhost:4242/chats/mensagens", {
+      const response = await fetch("https://futuremind-2-0.onrender.com/chats/mensagens", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -398,7 +397,7 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
 
       if (!data) return console.log("Erro ao carregar dados");
 
-      const response = await fetch("http://localhost:4242/chats", {
+      const response = await fetch("https://futuremind-2-0.onrender.com/chats", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -499,7 +498,7 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
               <img 
                 src={
                   !item?.foto ? 'icone_usuario.svg' : 
-                  item?.foto === 'icone_usuario.svg' || item?.foto?.startsWith('http') ? 
+                  item?.foto === 'icone_usuario.svg' || item?.foto?.startsWith('http') || item?.foto?.startsWith('data') ? 
                     item.foto : 
                     `http://localhost:4242${item.foto}`
                 } 

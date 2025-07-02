@@ -60,7 +60,7 @@ function VisualizarProfissional() {
   useEffect(() => {
     const fetchProfessionalData = async () => {
       try {
-        const response = await fetch(`http://localhost:4242/profissional/${id}`);
+        const response = await fetch(`https://futuremind-2-0.onrender.com/profissional/${id}`);
         
         if (!response.ok) return;
 

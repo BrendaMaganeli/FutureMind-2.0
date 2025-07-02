@@ -122,7 +122,7 @@ function CadastroProfissional2() {
     let data;
 
     try {
-      const response = await fetch("http://localhost:4242/verificar_profissional_dois", {
+      const response = await fetch("https://futuremind-2-0.onrender.com/verificar_profissional_dois", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -186,7 +186,7 @@ function CadastroProfissional2() {
 
     if (!erro) {
       try {
-        const response = await fetch("http://localhost:4242/cadastro-profissional", {
+        const response = await fetch("https://futuremind-2-0.onrender.com/cadastro-profissional", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(profissional),
@@ -304,7 +304,7 @@ function CadastroProfissional2() {
               placeholder=" "
               required
             />
-            <label>Usuário</label>
+            <label>Email profissional</label>
             <div className={`com_erros_usuario ${!usuarioValidado ? "sem_erro_usuario" : ""}`}>
               {usuarioMensgaem}
             </div>

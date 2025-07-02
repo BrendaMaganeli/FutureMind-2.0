@@ -65,11 +65,11 @@ function Consulta() {
     const getFoto = async () => {
       try {
         const response = await fetch(
-          `http://localhost:4242/profissional/${consultaSelecionada?.id_profissional}`
+          `https://futuremind-2-0.onrender.com/profissional/${consultaSelecionada?.id_profissional}`
         );
         if (!response.ok) return;
         const data = await response.json();
-        setFoto(data?.foto?.startsWith("http") ? data.foto : `http://localhost:4242${data.foto}`);
+        setFoto(data?.foto?.startsWith("http") ? data.foto : data?.foto === 'icone_usuario.svg' ? '/public/icone-usuario.svg' : `http://localhost:4242${data.foto}`);
       } catch (err) {
         console.error("Erro ao buscar foto:", err);
       }
@@ -116,7 +116,7 @@ function Consulta() {
     setLoading(true);
     try {
       const resp = await fetch(
-        `http://localhost:4242/consulta/profissional/${professionalId}/${year}/${month}`
+        `https://futuremind-2-0.onrender.com/consulta/profissional/${professionalId}/${year}/${month}`
       );
       if (!resp.ok) throw new Error("Falha ao buscar consultas do profissional");
 
@@ -143,8 +143,8 @@ function Consulta() {
     setLoading(true);
     try {
       const respUser = role === "profissional"
-        ? await fetch(`http://localhost:4242/consulta/profissional/${id}/${currentYear}/${currentMonthIndex + 1}`)
-        : await fetch(`http://localhost:4242/consulta/${id}`);
+        ? await fetch(`https://futuremind-2-0.onrender.com/consulta/profissional/${id}/${currentYear}/${currentMonthIndex + 1}`)
+        : await fetch(`https://futuremind-2-0.onrender.com/consulta/${id}`);
 
       if (!respUser.ok) throw new Error("Falha ao buscar consultas");
 
@@ -235,7 +235,7 @@ function Consulta() {
 
     try {
       const resp = await fetch(
-        `http://localhost:4242/consulta/${consultaSelecionada.id_consulta}`,
+        `https://futuremind-2-0.onrender.com/consulta/${consultaSelecionada.id_consulta}`,
         { method: "DELETE" }
       );
       if (!resp.ok) throw new Error("Erro ao cancelar consulta");
@@ -300,7 +300,7 @@ function Consulta() {
 
     try {
       const resp = await fetch(
-        `http://localhost:4242/consulta/${consultaSelecionada.id_consulta}`,
+        `https://futuremind-2-0.onrender.com/consulta/${consultaSelecionada.id_consulta}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

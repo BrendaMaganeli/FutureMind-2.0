@@ -95,7 +95,7 @@ router.delete('/chats/mensagens', async(req, res) => {
         if (response.affectedRows > 0) {
 
             return res.status(200).json('Mensagem deletada com sucesso!');
-        }
+        };
 
         return res.status(404).json('Erro ao deletar mensagem!');
     } catch (error) {

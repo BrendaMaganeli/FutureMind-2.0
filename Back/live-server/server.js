@@ -58,6 +58,8 @@ io.on('connection', (socket) => {
     io.emit('call-ended', reason);
   });
 });
-server.listen(5000, () => {
+
+const PORT = process.env.PORT || 5000
+server.listen(PORT, () => {
   console.log("Servidor Socket.IO rodando na porta 5000");
 });

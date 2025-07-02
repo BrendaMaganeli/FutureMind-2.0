@@ -108,7 +108,7 @@ function CadastroProfissional1() {
     let data;
 
     try {
-      const response = await fetch("http://localhost:4242/verificar_profissional_um", {
+      const response = await fetch("https://futuremind-2-0.onrender.com/verificar_profissional_um", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ valorCRP, cpf, telefone }),

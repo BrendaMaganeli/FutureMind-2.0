@@ -110,7 +110,7 @@ function CadastroPaciente() {
     let data = {};
     
     try {
-      const response = await fetch("http://localhost:4242/verificar_paciente", {
+      const response = await fetch("https://futuremind-2-0.onrender.com/verificar_paciente", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ valorEmail, cpf, telefone }),

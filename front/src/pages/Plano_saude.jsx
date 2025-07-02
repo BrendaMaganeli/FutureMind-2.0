@@ -65,7 +65,7 @@ function Plano_saude() {
       if (!id) return;
 
       try {
-        const response = await fetch("http://localhost:4242/planos", {
+        const response = await fetch("https://futuremind-2-0.onrender.com/planos", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id }),
@@ -97,7 +97,7 @@ function Plano_saude() {
     const mandar_data = async () => {
       if (data_fim_assinatura === hoje) {
         try {
-          const response = await fetch("http://localhost:4242/validacao_planos", {
+          const response = await fetch("https://futuremind-2-0.onrender.com/validacao_planos", {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -121,7 +121,7 @@ function Plano_saude() {
   useEffect(() => {
     const estado_plano = async () => {
       try {
-        const response = await fetch("http://localhost:4242/estado_plano", {
+        const response = await fetch("https://futuremind-2-0.onrender.com/estado_plano", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id_paciente: user.id_paciente }),
@@ -142,7 +142,7 @@ function Plano_saude() {
   useEffect(() => {
     const valor_assinatura = async () => {
       try {
-        const response = await fetch("http://localhost:4242/Valores_assinatura", {
+        const response = await fetch("https://futuremind-2-0.onrender.com/Valores_assinatura", {
           method: "POST", 
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id_paciente: user.id_paciente }),
@@ -221,7 +221,7 @@ function Plano_saude() {
         data_assinatura: hoje.toISOString().split("T")[0],
       };
 
-      const response = await fetch("http://localhost:4242/plano_empressarial", {
+      const response = await fetch("https://futuremind-2-0.onrender.com/plano_empressarial", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -275,7 +275,7 @@ function Plano_saude() {
     setCancelando(true);
 
     try {
-      const responseDelete = await fetch("http://localhost:4242/remover_assinatura", {
+      const responseDelete = await fetch("https://futuremind-2-0.onrender.com/remover_assinatura", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id_paciente: user.id_paciente }),
@@ -283,7 +283,7 @@ function Plano_saude() {
 
       if (!responseDelete.ok) throw new Error("Erro ao remover assinatura");
 
-      const responsePut = await fetch("http://localhost:4242/atualizar_chk_plano", {
+      const responsePut = await fetch("https://futuremind-2-0.onrender.com/atualizar_chk_plano", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id_paciente: user.id_paciente, chk_plano: false }),

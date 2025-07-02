@@ -8,7 +8,7 @@ import "./CSS/Cadastros.css";
 
 function Login() {
   const navigate = useNavigate();
-  const { setUserLogado, setUser, setPaginaAnterior } = useContext(GlobalContext);
+  const { setPaginaAnterior, setUser } = useContext(GlobalContext);
 
   const [valorEmail, setValorEmail] = useState("");
   const [valorSenha, setValorSenha] = useState("");
@@ -30,7 +30,7 @@ function Login() {
     const credentials = { email: valorEmail, senha: valorSenha };
     
     try {
-      const response = await fetch("http://localhost:4242/login", {
+      const response = await fetch("https://futuremind-2-0.onrender.com/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
@@ -38,7 +38,6 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        setUserLogado(true);
         setUser(data);
         setPaginaAnterior('Login');
         navigate("/inicio");

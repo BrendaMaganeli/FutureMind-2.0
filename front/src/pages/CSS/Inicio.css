@@ -333,7 +333,7 @@ background-color: #5A789F;
   display: flex;
   align-items: center;
   width: 100%;
-  height: 82vh;
+  height: 100vh;
   position: relative;
 }
 
@@ -348,7 +348,7 @@ background-color: #5A789F;
   box-shadow: 0 0.4em 1em rgba(0, 0, 0, 0.15);
   text-align: left;
   width: 98%;
-  height: 100%;
+  height: 90%;
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease-in-out;
@@ -743,7 +743,7 @@ background-color: #5A789F;
 
 .footer_inicio{
   
-  top: 199.3%;
+  top: 218.8%;
   position: absolute;
   z-index: 999;
   width: 100%;
@@ -756,4 +756,5 @@ background-color: #5A789F;
   white-space: nowrap;
   position: absolute;
   margin-left: 37%;
+  margin-bottom: 7.5%;
 }

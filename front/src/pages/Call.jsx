@@ -9,11 +9,11 @@ let socket;
 if (rawUser) {
   try {
     const user = JSON.parse(rawUser);
-    socket = io('http://192.168.15.2:5000', {
+    socket = io('wss://futuremind-2-0-2.onrender.com', {
       auth: { name: user?.nome },
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
-      timeout: 10000,
+      timeout: 1000000,
       transports: ['websocket']
     });
   } catch (error) {

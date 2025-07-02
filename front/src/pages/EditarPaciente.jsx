@@ -106,7 +106,7 @@ function EditarPaciente() {
 
   const deletarPaciente = async () => {
     try {
-      const response = await fetch(`http://localhost:4242/paciente`, {
+      const response = await fetch(`https://futuremind-2-0.onrender.com/paciente`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id_paciente: user.id_paciente })
@@ -137,7 +137,7 @@ function EditarPaciente() {
         data_nascimento: formatarDataParaEnvio(dataNascimentoFormatada)
       };
 
-      const response = await fetch(`http://localhost:4242/paciente`, {
+      const response = await fetch(`https://futuremind-2-0.onrender.com/paciente`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(pacienteParaEnviar),
@@ -190,7 +190,7 @@ function EditarPaciente() {
     formData.append('id_paciente', pacienteEditado.id_paciente);
 
     try {
-      const response = await fetch('http://localhost:4242/paciente/foto-perfil', {
+      const response = await fetch('https://futuremind-2-0.onrender.com/paciente/foto-perfil', {
         method: 'POST',
         body: formData,
       });
@@ -199,7 +199,7 @@ function EditarPaciente() {
       
       if (!response.ok) throw new Error(data.error || 'Erro ao atualizar foto');
 
-      const fotoUrl = `http://localhost:4242${data.foto}`;
+      const fotoUrl = `https://futuremind-2-0.onrender.com${data.foto}`;
       const updatedUser = { ...user, foto: fotoUrl };
       
       setPacienteExibido({ ...pacienteExibido, foto: fotoUrl });

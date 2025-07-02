@@ -3,11 +3,11 @@ const cors = require('cors');
 const path = require('path');
 
 // Importar rotas
-const authRoutes = require('./routes/auth.routes');
-const userRoutes = require('./routes/user.routes');
-const chatRoutes = require('./routes/chat.routes');
-const appointmentRoutes = require('./routes/appointment.routes');
-const subscriptionRoutes = require('./routes/subscription.routes');
+const authRoutes = require('./Routes/auth.routes');
+const userRoutes = require('./Routes/user.routes');
+const chatRoutes = require('./Routes/chat.routes');
+const appointmentRoutes = require('./Routes/appointment.routes');
+const subscriptionRoutes = require('./Routes/subscription.routes');
 
 const app = express();
 

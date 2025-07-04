@@ -51,7 +51,7 @@ function Navbar({ cor }) {
       </div>
       <div className="container-icon">
         <Link to={user?.id_profissional ? "/editarprofissional" : user?.id_paciente ? '/paciente' : "/login"}>
-          <img src={!user?.foto || location.pathname === '/planoSaude' ? iconeUsuario : !user?.foto ? 'icone_usuario.svg' : ((user?.foto === 'icone_usuario.svg' || user?.foto?.startsWith('data')) && location.pathname === '/planoSaude') ? iconeUsuario : user?.foto === 'icone_usuario.svg' || user?.foto?.startsWith('http') ? user?.foto : user?.foto?.startsWith('data') ? 'icone_usuario.svg' : `https://futuremind-2-0.onrender.com${user?.foto}`} alt="Perfil" />
+          <img src={!user?.foto && location.pathname === '/planoSaude' ? iconeUsuario : !user?.foto ? 'icone_usuario.svg' : ((user?.foto === 'icone_usuario.svg' || user?.foto?.startsWith('data')) && location.pathname === '/planoSaude') ? iconeUsuario : user?.foto === 'icone_usuario.svg' || user?.foto?.startsWith('http') ? user?.foto : user?.foto?.startsWith('data') ? 'icone_usuario.svg' : `https://futuremind-2-0.onrender.com${user?.foto}`} alt="Perfil" />
         </Link>
       </div>
       {mostrarModalLogin && 

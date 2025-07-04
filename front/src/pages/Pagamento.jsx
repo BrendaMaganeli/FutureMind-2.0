@@ -124,7 +124,7 @@ function Pagamento() {
   if (foto.startsWith('http')) {
     return foto;
   }
-  return `http://localhost:4242${foto}`;
+  return `https://futuremind-2-0.onrender.com${foto}`;
 };
 
   useEffect(() => {

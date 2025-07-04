@@ -30,7 +30,7 @@ function EditarPaciente() {
     foto: user?.foto 
       ? user.foto.startsWith('http') 
         ? user.foto 
-        : `http://localhost:4242${user.foto}`
+        : `https://futuremind-2-0.onrender.com${user.foto}`
       : icon
   });
 

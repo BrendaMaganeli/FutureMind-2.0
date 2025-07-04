@@ -69,7 +69,7 @@ function Consulta() {
         );
         if (!response.ok) return;
         const data = await response.json();
-        setFoto(data?.foto?.startsWith("http") ? data.foto : data?.foto === 'icone_usuario.svg' ? '/public/icone-usuario.svg' : `http://localhost:4242${data.foto}`);
+        setFoto(data?.foto?.startsWith("http") ? data.foto : data?.foto === 'icone_usuario.svg' ? '/public/icone-usuario.svg' : `https://futuremind-2-0.onrender.com${data.foto}`);
       } catch (err) {
         console.error("Erro ao buscar foto:", err);
       }

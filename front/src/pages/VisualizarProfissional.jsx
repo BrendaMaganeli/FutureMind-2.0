@@ -22,7 +22,7 @@ const ProfileImage = ({ src, alt, className }) => {
     } else if (src.startsWith('http')) {
       setImageSrc(src);
     } else {
-      setImageSrc(`http://localhost:4242${src}`);
+      setImageSrc(`https://futuremind-2-0.onrender.com${src}`);
     }
   }, [src]);
 

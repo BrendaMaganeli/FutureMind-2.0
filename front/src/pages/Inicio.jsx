@@ -294,7 +294,7 @@ function Inicio() {
                           <div className="foto-perfilInicio">
                             <img 
                               src={item.foto?.startsWith('/') 
-                                ? `http://localhost:4242${item.foto}`
+                                ? `https://futuremind-2-0.onrender.com${item.foto}`
                                 : item.foto || icon} 
                               alt="Foto do profissional" 
                             />

@@ -325,7 +325,7 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
 
   const fetchSendMessage = async (message) => {
     try {
-      const response = await fetch("http://localhost:4242/chats/chat/send-message", {
+      const response = await fetch("https://futuremind-2-0.onrender.com/chats/chat/send-message", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(message),
@@ -500,7 +500,7 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
                   !item?.foto ? 'icone_usuario.svg' : 
                   item?.foto === 'icone_usuario.svg' || item?.foto?.startsWith('http') || item?.foto?.startsWith('data') ? 
                     item.foto : 
-                    `http://localhost:4242${item.foto}`
+                    `https://futuremind-2-0.onrender.com${item.foto}`
                 } 
                 alt="" 
               />
@@ -553,7 +553,7 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
                   !chatSelected?.foto ? 'icone_usuario.svg' : 
                   chatSelected?.foto === 'icone_usuario.svg' || chatSelected?.foto?.startsWith('http') ? 
                     chatSelected.foto : 
-                    `http://localhost:4242${chatSelected.foto}`
+                    `https://futuremind-2-0.onrender.com${chatSelected.foto}`
                 } 
                 alt="" 
               />
@@ -621,7 +621,7 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
                             chatSelected.foto : 
                             chatSelected?.foto?.startsWith('data') ? 
                               'icone_usuario.svg' : 
-                              `http://localhost:4242${chatSelected.foto}`
+                              `https://futuremind-2-0.onrender.com${chatSelected.foto}`
                         } 
                         alt="" 
                       />
@@ -655,7 +655,7 @@ function Chat({ idChatSelected, setIdChatSelected, profissionalSelected, setIsIn
                             user.foto : 
                             user?.foto?.startsWith('data') ? 
                               'icone_usuario.svg' : 
-                              `http://localhost:4242${user.foto}`
+                              `https://futuremind-2-0.onrender.com${user.foto}`
                         } 
                         alt="" 
                       />

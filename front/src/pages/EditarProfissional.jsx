@@ -28,7 +28,7 @@ function EditarProfissional() {
       ? user.foto 
       : user.foto === 'icone_usuario.svg'
       ? icon
-      : `http://localhost:4242${user.foto}` 
+      : `https://futuremind-2-0.onrender.com${user.foto}` 
   );
 
   const [formData, setFormData] = useState({
@@ -198,7 +198,7 @@ function EditarProfissional() {
         valor_consulta: valorConsultaNumerico,
       };
 
-      const response = await fetch("http://localhost:4242/editarprofissional", {
+      const response = await fetch("https://futuremind-2-0.onrender.com/editarprofissional", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(profissionalParaEnviar),
@@ -215,7 +215,7 @@ function EditarProfissional() {
 
   const deletarProfissional = async () => {
     try {
-      const response = await fetch("http://localhost:4242/editar-profissional", {
+      const response = await fetch("https://futuremind-2-0.onrender.com/editar-profissional", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id_profissional: user.id_profissional }),

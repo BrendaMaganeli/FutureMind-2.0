@@ -3,31 +3,13 @@ import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import "./CSS/Call.css";
 
-const rawUser = localStorage.getItem("User-Profile");
-let socket;
-
-if (rawUser) {
-  try {
-    const user = JSON.parse(rawUser);
-    socket = io("https://futuremind-2-0-2.onrender.com", {
-      auth: { name: user?.nome },
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-      timeout: 1000000,
-      transports: ["websocket", "polling"],
-      secure: true
-    });
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 function VideoConferencia() {
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const peerConnection = useRef(null);
   const localStreamRef = useRef(null);
   const navigate = useNavigate();
+  const [socket, setSocket] = useState(null);
   const [videoActive, setVideoActive] = useState(true);
   const [micActive, setMicActive] = useState(true);
   const [callInProgress, setCallInProgress] = useState(false);
@@ -63,123 +45,113 @@ function VideoConferencia() {
         setError("Não foi possível acessar câmera/microfone. Verifique as permissões.");
       }
     };
-
     initializeMedia();
+  }, []);
 
-    if (!socket) return;
-
-    const handleConnect = () => {
-      setConnectionStatus("Connected");
-      setError(null);
-    };
-
-    const handleConnectError = (err) => {
-      setConnectionStatus("Connection Failed");
-      setError(`Falha na conexão: ${err.message}`);
-    };
-
-    const handleDisconnect = (reason) => {
-      setConnectionStatus("Disconnected");
-      if (reason === "io server disconnect") {
-        setError("Servidor desconectado. Reconectando...");
-      }
-    };
-
-    const handleReconnectAttempt = (attempt) => {
-      setConnectionStatus(`Tentando reconectar (${attempt}/5)`);
-    };
-
-    const handleReconnectFailed = () => {
-      setConnectionStatus("Failed to reconnect");
-      setError("Não foi possível reconectar ao servidor. Recarregue a página.");
-    };
-
-    const handleUsersUpdate = (users) => {
+  useEffect(() => {
+    const rawUser = localStorage.getItem("User-Profile");
+    const user = rawUser ? JSON.parse(rawUser) : null;
+    const wakeupAndConnect = async () => {
       try {
-        const currentName = JSON.parse(rawUser).nome;
-        setOnlineUsers(users.filter((user) => user.name !== currentName));
-      } catch {
-        setOnlineUsers(users);
-      }
-    };
+        await fetch("https://futuremind-2-0-2.onrender.com/");
+      } catch (e) {}
+      const s = io("https://futuremind-2-0-2.onrender.com", {
+        auth: { name: user?.nome || user?.name || "unknown" },
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+        transports: ["websocket", "polling"]
+      });
+      setSocket(s);
 
-    const handleIncomingOffer = (data) => {
-      setIncomingOffer(data);
-      setTargetUser(data.from);
-    };
+      s.on("connect", () => {
+        setConnectionStatus("Connected");
+        console.log("SOCKET CONNECTED", s.id);
+      });
 
-    const handleAnswer = async (data) => {
-      showNotification("Chamada iniciada");
-      if (peerConnection.current) {
-        try {
-          const remoteDesc = new RTCSessionDescription(data.answer);
-          await peerConnection.current.setRemoteDescription(remoteDesc);
-          setCallInProgress(true);
-          setError(null);
-        } catch {
-          setError("Falha ao estabelecer conexão com o parceiro.");
+      s.on("connect_error", (err) => {
+        setConnectionStatus("Connection Failed");
+        console.log("SOCKET CONNECT_ERROR", err);
+        setError(`Falha na conexão: ${err.message || err}`);
+      });
+
+      s.on("disconnect", (reason) => {
+        setConnectionStatus("Disconnected");
+        console.log("SOCKET DISCONNECTED", reason);
+        if (reason === "io server disconnect") {
+          setError("Servidor desconectado. Reconectando...");
         }
-      }
-    };
+      });
 
-    const handleIceCandidate = async (data) => {
-      if (peerConnection.current && data.candidate) {
+      s.on("reconnect_attempt", (attempt) => {
+        setConnectionStatus(`Tentando reconectar (${attempt}/5)`);
+      });
+
+      s.on("reconnect_failed", () => {
+        setConnectionStatus("Failed to reconnect");
+        setError("Não foi possível reconectar ao servidor. Recarregue a página.");
+      });
+
+      s.on("users", (users) => {
+        console.log("USERS RECEBIDOS", users);
         try {
-          await peerConnection.current.addIceCandidate(new RTCIceCandidate(data.candidate));
+          const selfId = s.id;
+          const filtered = Array.isArray(users) ? users.filter(u => u.id !== selfId) : users;
+          setOnlineUsers(filtered);
         } catch {
-          setError("Falha na conexão de rede. Tentando reconectar...");
-          setTimeout(() => {
-            if (callInProgress) {
-              startCall();
-            }
-          }, 2000);
+          setOnlineUsers(users);
         }
-      }
+      });
+
+      s.on("offer", (data) => {
+        console.log("OFFER RECEIVED", data);
+        setIncomingOffer(data);
+        setTargetUser(data.from);
+      });
+
+      s.on("answer", async (data) => {
+        console.log("ANSWER RECEIVED", data);
+        if (peerConnection.current) {
+          try {
+            await peerConnection.current.setRemoteDescription(new RTCSessionDescription(data.answer));
+            setCallInProgress(true);
+            setError(null);
+          } catch (e) {
+            setError("Falha ao estabelecer conexão com o parceiro.");
+          }
+        }
+      });
+
+      s.on("ice-candidate", async (data) => {
+        console.log("ICE CANDIDATE RECEIVED", data);
+        if (peerConnection.current && data.candidate) {
+          try {
+            await peerConnection.current.addIceCandidate(new RTCIceCandidate(data.candidate));
+          } catch (e) {
+            setError("Falha ao adicionar ICE candidate.");
+          }
+        }
+      });
+
+      s.on("name-taken", (data) => {
+        alert(data.message);
+        s.disconnect();
+      });
+
+      s.on("call-ended", (data) => {
+        if (!data || !data.to || data.to === s.id) {
+          endCall("");
+        }
+      });
     };
 
-    const handleAnySocketEvent = () => {};
-
-    const handleNameTaken = (data) => {
-      alert(data.message);
-      socket.disconnect();
-    };
-
-    socket.on("connect", handleConnect);
-    socket.on("connect_error", handleConnectError);
-    socket.on("disconnect", handleDisconnect);
-    socket.on("reconnect_attempt", handleReconnectAttempt);
-    socket.on("reconnect_failed", handleReconnectFailed);
-    socket.on("users", handleUsersUpdate);
-    socket.on("offer", handleIncomingOffer);
-    socket.on("answer", handleAnswer);
-    socket.on("ice-candidate", handleIceCandidate);
-    socket.onAny(handleAnySocketEvent);
-    socket.on("name-taken", handleNameTaken);
-    socket.on("call-ended", (data) => {
-      if (!data || !data.to || data.to === socket.id) {
-        endCall("");
-      }
-    });
+    wakeupAndConnect();
 
     return () => {
-      socket.off("connect", handleConnect);
-      socket.off("connect_error", handleConnectError);
-      socket.off("disconnect", handleDisconnect);
-      socket.off("reconnect_attempt", handleReconnectAttempt);
-      socket.off("reconnect_failed", handleReconnectFailed);
-      socket.off("users", handleUsersUpdate);
-      socket.off("offer", handleIncomingOffer);
-      socket.off("answer", handleAnswer);
-      socket.off("ice-candidate", handleIceCandidate);
-      socket.off("call-ended");
-      socket.offAny(handleAnySocketEvent);
-      socket.off("name-taken", handleNameTaken);
-
-      if (localStreamRef.current) {
-        localStreamRef.current.getTracks().forEach((track) => track.stop());
+      if (socket) {
+        socket.disconnect();
       }
-      endCall();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -192,7 +164,6 @@ function VideoConferencia() {
       timerRef.current = null;
       setCallTime(0);
     }
-
     return () => clearInterval(timerRef.current);
   }, [callInProgress]);
 
@@ -204,7 +175,6 @@ function VideoConferencia() {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     }
-
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
@@ -507,7 +477,7 @@ function VideoConferencia() {
             <p style={{ color: espelhar === "mirror" ? "#BEBEBE" : "#5A7DA0" }}>Mirror</p>
           </div>
 
-          {JSON.parse(rawUser)?.id_profissional && (
+          {JSON.parse(localStorage.getItem("User-Profile") || "{}")?.id_profissional && (
             <div className="ppp" onClick={() => setSalaDeEspera(!salaDeEspera)} style={{ display: "flex", flexDirection: "column" }}>
               <img src={salaDeEspera ? "/pacientes blue (2) 1.svg" : "/pacientes grey 1.svg"} alt={salaDeEspera ? "Sala de Espera Aberta" : "Sala de Espera Fechada"} />
               <p style={{ color: salaDeEspera ? "#5a7da0" : "#CFCFCF" }}>Pacientes</p>
@@ -527,7 +497,7 @@ function VideoConferencia() {
         </div>
       )}
 
-      {!callInProgress && !incomingOffer && JSON.parse(rawUser)?.id_profissional && targetUser && (
+      {!callInProgress && !incomingOffer && JSON.parse(localStorage.getItem("User-Profile") || "{}")?.id_profissional && targetUser && (
         <button className={!offerSent ? "start-call-button" : "requested-call-button"} onClick={!offerSent ? startCall : undefined}>
           {offerSent ? "Chamada solicitada" : "Iniciar Chamada"}
           <img src="/phone.png" />

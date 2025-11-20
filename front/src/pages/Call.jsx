@@ -1,23 +1,24 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import "./CSS/Call.css";
 
-const rawUser = localStorage.getItem('User-Profile');
+const rawUser = localStorage.getItem("User-Profile");
 let socket;
 
 if (rawUser) {
   try {
     const user = JSON.parse(rawUser);
-    socket = io('http://192.168.15.6:3000', {
+    socket = io("https://futuremind-2-0-2.onrender.com", {
       auth: { name: user?.nome },
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
       timeout: 1000000,
-      transports: ['websocket']
+      transports: ["websocket"],
+      secure: true
     });
   } catch (error) {
-    console.error("Erro ao parsear o user do localStorage:", error);
+    console.error(error);
   }
 }
 
@@ -34,7 +35,7 @@ function VideoConferencia() {
   const [targetUser, setTargetUser] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [configBarVisible, setConfigBarVisible] = useState(true);
-  const [espelhar, setEspelhar] = useState('mirror');
+  const [espelhar, setEspelhar] = useState("mirror");
   const [connectionStatus, setConnectionStatus] = useState("Disconnected");
   const [error, setError] = useState(null);
   const [dragging, setDragging] = useState(false);
@@ -42,7 +43,7 @@ function VideoConferencia() {
   const dragOffset = useRef({ x: 0, y: 0 });
   const [callTime, setCallTime] = useState(0);
   const timerRef = useRef(null);
-  const [iceGatheringState, setIceGatheringState] = useState('');
+  const [iceGatheringState, setIceGatheringState] = useState("");
   const [salaDeEspera, setSalaDeEspera] = useState(false);
   const [offerSent, setOfferSent] = useState(false);
   const [notification, setNotification] = useState(null);
@@ -50,32 +51,31 @@ function VideoConferencia() {
   useEffect(() => {
     const initializeMedia = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ 
-          video: { width: 1280, height: 720 }, 
-          audio: true 
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: 1280, height: 720 },
+          audio: true
         });
         localStreamRef.current = stream;
         if (localVideoRef.current) {
           localVideoRef.current.srcObject = stream;
         }
       } catch (error) {
-        console.error("Error accessing media devices:", error);
         setError("Não foi possível acessar câmera/microfone. Verifique as permissões.");
       }
     };
 
     initializeMedia();
 
+    if (!socket) return;
+
     const handleConnect = () => {
       setConnectionStatus("Connected");
       setError(null);
-      console.log("Conectado ao servidor Socket.IO");
     };
 
     const handleConnectError = (err) => {
       setConnectionStatus("Connection Failed");
       setError(`Falha na conexão: ${err.message}`);
-      console.error("Connection error:", err);
     };
 
     const handleDisconnect = (reason) => {
@@ -83,41 +83,40 @@ function VideoConferencia() {
       if (reason === "io server disconnect") {
         setError("Servidor desconectado. Reconectando...");
       }
-      console.log("Disconnected:", reason);
     };
 
     const handleReconnectAttempt = (attempt) => {
       setConnectionStatus(`Tentando reconectar (${attempt}/5)`);
-      console.log(`Reconnection attempt ${attempt}`);
     };
 
     const handleReconnectFailed = () => {
       setConnectionStatus("Failed to reconnect");
       setError("Não foi possível reconectar ao servidor. Recarregue a página.");
-      console.error("Reconnection failed");
     };
 
     const handleUsersUpdate = (users) => {
-      setOnlineUsers(users.filter((user) => user.name !== JSON.parse(rawUser).nome));
+      try {
+        const currentName = JSON.parse(rawUser).nome;
+        setOnlineUsers(users.filter((user) => user.name !== currentName));
+      } catch {
+        setOnlineUsers(users);
+      }
     };
 
     const handleIncomingOffer = (data) => {
-      console.log("Offer received from:", data.from);
       setIncomingOffer(data);
       setTargetUser(data.from);
     };
 
     const handleAnswer = async (data) => {
-      showNotification("Chamada iniciada");       
-      console.log("Answer received:", data);
+      showNotification("Chamada iniciada");
       if (peerConnection.current) {
         try {
           const remoteDesc = new RTCSessionDescription(data.answer);
           await peerConnection.current.setRemoteDescription(remoteDesc);
           setCallInProgress(true);
           setError(null);
-        } catch (error) {
-          console.error("Error setting remote description:", error);
+        } catch {
           setError("Falha ao estabelecer conexão com o parceiro.");
         }
       }
@@ -126,12 +125,8 @@ function VideoConferencia() {
     const handleIceCandidate = async (data) => {
       if (peerConnection.current && data.candidate) {
         try {
-          await peerConnection.current.addIceCandidate(
-            new RTCIceCandidate(data.candidate)
-          );
-          console.log("ICE candidate added successfully");
-        } catch (error) {
-          console.error("Error adding ICE candidate:", error);
+          await peerConnection.current.addIceCandidate(new RTCIceCandidate(data.candidate));
+        } catch {
           setError("Falha na conexão de rede. Tentando reconectar...");
           setTimeout(() => {
             if (callInProgress) {
@@ -142,9 +137,7 @@ function VideoConferencia() {
       }
     };
 
-    const handleAnySocketEvent = (event, ...args) => {
-      console.log(`Socket event: ${event}`, args);
-    };
+    const handleAnySocketEvent = () => {};
 
     const handleNameTaken = (data) => {
       alert(data.message);
@@ -162,7 +155,11 @@ function VideoConferencia() {
     socket.on("ice-candidate", handleIceCandidate);
     socket.onAny(handleAnySocketEvent);
     socket.on("name-taken", handleNameTaken);
-    socket.on("call-ended", () => endCall(''));
+    socket.on("call-ended", (data) => {
+      if (!data || !data.to || data.to === socket.id) {
+        endCall("");
+      }
+    });
 
     return () => {
       socket.off("connect", handleConnect);
@@ -174,10 +171,12 @@ function VideoConferencia() {
       socket.off("offer", handleIncomingOffer);
       socket.off("answer", handleAnswer);
       socket.off("ice-candidate", handleIceCandidate);
-      socket.off('call-ended');
+      socket.off("call-ended");
+      socket.offAny(handleAnySocketEvent);
+      socket.off("name-taken", handleNameTaken);
 
       if (localStreamRef.current) {
-        localStreamRef.current.getTracks().forEach(track => track.stop());
+        localStreamRef.current.getTracks().forEach((track) => track.stop());
       }
       endCall();
     };
@@ -186,7 +185,7 @@ function VideoConferencia() {
   useEffect(() => {
     if (callInProgress) {
       timerRef.current = setInterval(() => {
-        setCallTime(prev => prev + 1);
+        setCallTime((prev) => prev + 1);
       }, 1000);
     } else {
       clearInterval(timerRef.current);
@@ -213,50 +212,37 @@ function VideoConferencia() {
   }, [dragging]);
 
   const formatTime = (totalSeconds) => {
-    const hrs = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-    const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-    const secs = String(totalSeconds % 60).padStart(2, '0');
+    const hrs = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+    const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
+    const secs = String(totalSeconds % 60).padStart(2, "0");
     return `${hrs}:${mins}:${secs}`;
   };
 
   const handleIceCandidateEvent = (event) => {
     if (event.candidate) {
-      console.log('Novo ICE candidate:', event.candidate.candidate);
-      if (targetUser) {
+      if (targetUser && socket) {
         socket.emit("ice-candidate", {
           to: targetUser,
           candidate: event.candidate
         });
       }
-    } else {
-      console.log('Todos ICE candidates foram enviados');
     }
   };
 
   const handleTrackEvent = (event) => {
-    console.log('Evento ontrack recebido:', event);
     if (event.streams && event.streams[0]) {
       const remoteStream = event.streams[0];
-      console.log('Stream remoto recebido:', remoteStream);
       if (remoteVideoRef.current) {
         remoteVideoRef.current.srcObject = remoteStream;
-        console.log('srcObject do vídeo remoto definido.');
-        remoteVideoRef.current.play().catch(e => {
-          console.error('Erro ao tentar reproduzir vídeo remoto:', e);
-        });
-      } else {
-        console.warn('remoteVideoRef.current é null ao receber stream remoto.');
+        remoteVideoRef.current.play().catch(() => {});
       }
-    } else {
-      console.warn('Evento ontrack sem streams ou stream vazio.');
     }
   };
 
   const handleIceConnectionStateChange = () => {
     const pc = peerConnection.current;
-    console.log('ICE Connection State:', pc.iceConnectionState);
-    if (pc.iceConnectionState === 'disconnected' || 
-        pc.iceConnectionState === 'failed') {
+    if (!pc) return;
+    if (pc.iceConnectionState === "disconnected" || pc.iceConnectionState === "failed") {
       setError("Problema na conexão. Tentando reconectar...");
       setTimeout(() => {
         if (callInProgress) {
@@ -267,31 +253,30 @@ function VideoConferencia() {
   };
 
   const handleIceGatheringStateChange = () => {
-    console.log('ICE gathering state:', peerConnection.current.iceGatheringState);
-    setIceGatheringState(peerConnection.current.iceGatheringState);
+    if (peerConnection.current) {
+      setIceGatheringState(peerConnection.current.iceGatheringState);
+    }
   };
 
   const handleNegotiationNeeded = async () => {
     try {
       const offer = await peerConnection.current.createOffer();
       await peerConnection.current.setLocalDescription(offer);
-      if (targetUser) {
+      if (targetUser && socket) {
         socket.emit("offer", {
           to: targetUser,
-          offer: offer,
+          offer,
           from: socket.id
         });
       }
-    } catch (err) {
-      console.error("Negotiation error:", err);
+    } catch {
       setError("Erro na negociação de conexão");
     }
   };
 
   const handleConnectionStateChange = () => {
-    console.log('Connection state:', peerConnection.current.connectionState);
-    if (peerConnection.current.connectionState === 'disconnected' || 
-        peerConnection.current.connectionState === 'failed') {
+    if (!peerConnection.current) return;
+    if (peerConnection.current.connectionState === "disconnected" || peerConnection.current.connectionState === "failed") {
       setError("Conexão perdida. Tentando reconectar...");
       setTimeout(() => {
         if (callInProgress) {
@@ -311,24 +296,17 @@ function VideoConferencia() {
     try {
       const pc = new RTCPeerConnection({
         iceServers: [
-          {
-            urls: [
-              'stun:stun.l.google.com:19302',
-              'stun:stun1.l.google.com:19302',
-              'stun:stun2.l.google.com:19302',
-              'turn:relay1.expressturn.com:3480',
-              'turn:relay1.expressturn.com:3480'
-            ],
-            username: '000000002065129162',
-            credential: 'vCxR0rq7wtXcOLu30ME4BD4mhmE=',
-          }
+          { urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302", "stun:stun2.l.google.com:19302"] },
+          { urls: ["turn:relay1.expressturn.com:3478"], username: "000000002065129162", credential: "vCxR0rq7wtXcOLu30ME4BD4mhmE=" }
         ],
-        iceTransportPolicy: 'all'
+        iceTransportPolicy: "all"
       });
 
-      localStreamRef.current.getTracks().forEach(track => {
-        pc.addTrack(track, localStreamRef.current);
-      });
+      if (localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach((track) => {
+          pc.addTrack(track, localStreamRef.current);
+        });
+      }
 
       pc.onicecandidate = handleIceCandidateEvent;
       pc.ontrack = handleTrackEvent;
@@ -339,8 +317,7 @@ function VideoConferencia() {
 
       return pc;
     } catch (error) {
-      console.error("Error setting up peer connection:", error);
-      setError(`Falha ao configurar conexão P2P: ${error.message}`);
+      setError("Falha ao configurar conexão P2P");
       return null;
     }
   };
@@ -350,27 +327,30 @@ function VideoConferencia() {
       setError("Selecione um usuário para chamar");
       return;
     }
-  
+    if (!socket) {
+      setError("Socket não conectado");
+      return;
+    }
+
+    let offerTimeout;
+    let iceTimeout;
+
     try {
-        peerConnection.current = setupPeerConnection();
-        showNotification("Solicitação enviada");
-        setOfferSent(true); 
-      
-      const offerTimeout = setTimeout(() => {
+      peerConnection.current = setupPeerConnection();
+      showNotification("Solicitação enviada");
+      setOfferSent(true);
+
+      offerTimeout = setTimeout(() => {
         if (!callInProgress) {
           setError("Tempo esgotado ao tentar conectar");
           endCall();
         }
       }, 30000);
-  
-      const iceTimeout = setTimeout(() => {
-        if (peerConnection.current && 
-            peerConnection.current.iceConnectionState !== 'connected' && 
-            peerConnection.current.iceConnectionState !== 'completed') {
-          console.warn('Timeout ICE - Conexão não estabelecida a tempo');
+
+      iceTimeout = setTimeout(() => {
+        if (peerConnection.current && peerConnection.current.iceConnectionState !== "connected" && peerConnection.current.iceConnectionState !== "completed") {
           setError("Não foi possível conectar ao parceiro. Tentando novamente...");
           endCall();
-          
           setTimeout(() => {
             if (!callInProgress) {
               startCall();
@@ -379,65 +359,45 @@ function VideoConferencia() {
         }
       }, 15000);
 
-      const offer = await peerConnection.current.createOffer({
-        offerToReceiveAudio: 1,
-        offerToReceiveVideo: 1
-      });
+      const offer = await peerConnection.current.createOffer({ offerToReceiveAudio: 1, offerToReceiveVideo: 1 });
       await peerConnection.current.setLocalDescription(offer);
 
-      socket.emit("offer", {
-        to: targetUser,
-        offer: offer,
-        from: socket.id
-      });
+      socket.emit("offer", { to: targetUser, offer, from: socket.id });
 
       setError(null);
-      
+
       clearTimeout(offerTimeout);
       clearTimeout(iceTimeout);
     } catch (error) {
       clearTimeout(offerTimeout);
       clearTimeout(iceTimeout);
-      
-      console.error("Error starting call:", error);
       setError("Falha ao iniciar chamada");
       endCall();
     }
   };
 
   const acceptCall = async () => {
-    if (!incomingOffer) return;
+    if (!incomingOffer || !socket) return;
 
     try {
       peerConnection.current = setupPeerConnection();
       showNotification("Chamada iniciada");
-
-      await peerConnection.current.setRemoteDescription(
-        new RTCSessionDescription(incomingOffer.offer)
-      );
-
+      await peerConnection.current.setRemoteDescription(new RTCSessionDescription(incomingOffer.offer));
       const answer = await peerConnection.current.createAnswer();
       await peerConnection.current.setLocalDescription(answer);
-
-      socket.emit("answer", {
-        to: incomingOffer.from,
-        answer: answer,
-        from: socket.id
-      });
-
+      socket.emit("answer", { to: incomingOffer.from, answer, from: socket.id });
       setCallInProgress(true);
       setIncomingOffer(null);
       setError(null);
-    } catch (error) {
-      console.error("Error accepting call:", error);
+    } catch {
       setError("Falha ao aceitar chamada");
       endCall();
     }
   };
 
-  const endCall = (reason = '') => {
+  const endCall = (reason = "") => {
     if (targetUser && socket) {
-      socket.emit('end-call');
+      socket.emit("end-call", { to: targetUser, from: socket.id });
     }
 
     showNotification("Chamada encerrada");
@@ -450,12 +410,12 @@ function VideoConferencia() {
       peerConnection.current.close();
       peerConnection.current = null;
     }
-    
+
     if (remoteVideoRef.current && remoteVideoRef.current.srcObject) {
-      remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
+      remoteVideoRef.current.srcObject.getTracks().forEach((track) => track.stop());
       remoteVideoRef.current.srcObject = null;
     }
-    
+
     setCallInProgress(false);
     setOfferSent(false);
     setIncomingOffer(null);
@@ -487,18 +447,12 @@ function VideoConferencia() {
   const handleMouseDown = (e) => {
     setDragging(true);
     const rect = e.target.getBoundingClientRect();
-    dragOffset.current = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    };
+    dragOffset.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
   };
 
   const handleMouseMove = (e) => {
     if (dragging) {
-      setPosition({
-        x: e.clientX - dragOffset.current.x,
-        y: e.clientY - dragOffset.current.y,
-      });
+      setPosition({ x: e.clientX - dragOffset.current.x, y: e.clientY - dragOffset.current.y });
     }
   };
 
@@ -508,126 +462,88 @@ function VideoConferencia() {
 
   return (
     <div className="videoconferencia-container">
-      <video 
-        ref={localVideoRef} 
-        className={`me-video ${espelhar}`} 
-        autoPlay 
-        playsInline 
+      <video
+        ref={localVideoRef}
+        className={`me-video ${espelhar}`}
+        autoPlay
+        playsInline
         onMouseDown={handleMouseDown}
-        style={{
-          left: position.x,
-          top: position.y,
-          cursor: dragging ? "grabbing" : "grab"
-        }}
+        style={{ left: position.x, top: position.y, cursor: dragging ? "grabbing" : "grab" }}
         muted
       />
 
-      <video 
-        ref={remoteVideoRef} 
-        className={`other-video ${espelhar}`} 
-        autoPlay 
-        playsInline 
+      <video
+        ref={remoteVideoRef}
+        className={`other-video ${espelhar}`}
+        autoPlay
+        playsInline
         style={{ display: callInProgress ? "block" : "none" }}
       />
 
-      {!callInProgress && (
-        <img
-          className="resposta.carre"
-          src="/carregando.svg"
-          alt="Waiting for call"
-        />
-      )}
+      {!callInProgress && <img className="resposta.carre" src="/carregando.svg" alt="Waiting for call" />}
 
-      {callInProgress && (
-        <div className="call-timer">
-          {formatTime(callTime)}
-        </div>
-      )}
+      {callInProgress && <div className="call-timer">{formatTime(callTime)}</div>}
 
-      <div className={`barra-config-container ${configBarVisible ? '' : 'hidden'}`}>
+      <div className={`barra-config-container ${configBarVisible ? "" : "hidden"}`}>
         <div className="barra-config">
           <div className="sair-button">
             <div className="sair-button-interno" onClick={() => navigate(-1)}>
-              <img src='/seta-principal.svg' />
+              <img src="/seta-principal.svg" />
             </div>
           </div>
-          
+
           <div className="ppp" onClick={toggleVideo} style={{ display: "flex", flexDirection: "column" }}>
-            <img
-              src={!videoActive ? "/cam blue.svg" : "/cam grey.svg"}
-              alt={videoActive ? "Video On" : "Video Off"}
-            />
+            <img src={!videoActive ? "/cam blue.svg" : "/cam grey.svg"} alt={videoActive ? "Video On" : "Video Off"} />
             <p style={{ color: videoActive ? "#BEBEBE" : "#5A7DA0" }}>Video</p>
           </div>
-          
+
           <div className="ppp" onClick={toggleAudio} style={{ display: "flex", flexDirection: "column" }}>
-            <img
-              src={!micActive ? "/audio blue.svg" : "/audio grey.svg"}
-              alt={micActive ? "Mic On" : "Mic Off"}
-            />
+            <img src={!micActive ? "/audio blue.svg" : "/audio grey.svg"} alt={micActive ? "Mic On" : "Mic Off"} />
             <p style={{ color: micActive ? "#BEBEBE" : "#5A7DA0" }}>Audio</p>
           </div>
-          
-          <div className="ppp" onClick={() => setEspelhar(espelhar === 'mirror' ? '' : 'mirror')} style={{ display: "flex", flexDirection: "column" }}>
-            <img
-              src={espelhar !== 'mirror' ? "/espelho blue 1.svg" : "/espelho grey.svg"}
-              alt={espelhar === 'mirror' ? "Mirror On" : "Mirror Off"}
-            />
-            <p style={{ color: espelhar === 'mirror' ? "#BEBEBE" : "#5A7DA0" }}>Mirror</p>
+
+          <div className="ppp" onClick={() => setEspelhar(espelhar === "mirror" ? "" : "mirror")} style={{ display: "flex", flexDirection: "column" }}>
+            <img src={espelhar !== "mirror" ? "/espelho blue 1.svg" : "/espelho grey.svg"} alt={espelhar === "mirror" ? "Mirror On" : "Mirror Off"} />
+            <p style={{ color: espelhar === "mirror" ? "#BEBEBE" : "#5A7DA0" }}>Mirror</p>
           </div>
 
           {JSON.parse(rawUser)?.id_profissional && (
             <div className="ppp" onClick={() => setSalaDeEspera(!salaDeEspera)} style={{ display: "flex", flexDirection: "column" }}>
-              <img
-                src={salaDeEspera ? "/pacientes blue (2) 1.svg" : "/pacientes grey 1.svg"}
-                alt={salaDeEspera ? "Sala de Espera Aberta" : "Sala de Espera Fechada"}
-              />
+              <img src={salaDeEspera ? "/pacientes blue (2) 1.svg" : "/pacientes grey 1.svg"} alt={salaDeEspera ? "Sala de Espera Aberta" : "Sala de Espera Fechada"} />
               <p style={{ color: salaDeEspera ? "#5a7da0" : "#CFCFCF" }}>Pacientes</p>
             </div>
           )}
 
           <div className="ppp" onClick={() => setConfigBarVisible(false)} style={{ display: "flex", flexDirection: "column" }}>
-            <img
-              src="/botao-fechar 1.svg"
-              alt="Fechar Barra de Configurações"
-            />
-            <p style={{color: "#CFCFCF" }}>Esconder</p>
+            <img src="/botao-fechar 1.svg" alt="Fechar Barra de Configurações" />
+            <p style={{ color: "#CFCFCF" }}>Esconder</p>
           </div>
         </div>
       </div>
 
       {!configBarVisible && (
-        <div 
-          className="ppp-2"
-          onClick={() => setConfigBarVisible(true)}
-        >
-          <img src='/proximo 1.svg' />
+        <div className="ppp-2" onClick={() => setConfigBarVisible(true)}>
+          <img src="/proximo 1.svg" />
         </div>
       )}
 
       {!callInProgress && !incomingOffer && JSON.parse(rawUser)?.id_profissional && targetUser && (
-        <button className={!offerSent ? "start-call-button" : "requested-call-button"} onClick={!offerSent && startCall}>
-          {
-            offerSent
-            ?
-            'Chamada solicitada'
-            :
-            'Iniciar Chamada'
-          }
-          <img src='/phone.png' />
+        <button className={!offerSent ? "start-call-button" : "requested-call-button"} onClick={!offerSent ? startCall : undefined}>
+          {offerSent ? "Chamada solicitada" : "Iniciar Chamada"}
+          <img src="/phone.png" />
         </button>
       )}
 
       {callInProgress && (
-        <button style={{backgroundColor: '#d30000'}} className="start-call-button" onClick={() => endCall('')}>
+        <button style={{ backgroundColor: "#d30000" }} className="start-call-button" onClick={() => endCall("")}>
           Encerrar Chamada
-          <img src='/phone.png' />
+          <img src="/phone.png" />
         </button>
       )}
 
       {incomingOffer && !callInProgress && (
         <div className="incoming-call">
-          <button className="end-call-button" style={{backgroundColor: '#d30000'}} onClick={endCall}>
+          <button className="end-call-button" style={{ backgroundColor: "#d30000" }} onClick={endCall}>
             Recusar
           </button>
           <button className="accept-call-button" onClick={acceptCall}>
@@ -635,27 +551,19 @@ function VideoConferencia() {
           </button>
         </div>
       )}
-      
-      <div className={`users-online-container ${salaDeEspera ? '' : 'hidden'}`}>
+
+      <div className={`users-online-container ${salaDeEspera ? "" : "hidden"}`}>
         <h4>Pacientes em espera ({onlineUsers.length})</h4>
         {onlineUsers.map((user) => (
           <div key={user.id} className="user-item">
-            <span>{user.name?.split(' ')[0]}</span>
-            <button
-              onClick={() => !targetUser ? setTargetUser(user.id) : setTargetUser(null)}
-              disabled={callInProgress || incomingOffer}
-              className={targetUser === user.id ? "select-name red" : "select-name"}
-            >
+            <span>{user.name?.split(" ")[0]}</span>
+            <button onClick={() => (!targetUser ? setTargetUser(user.id) : setTargetUser(null))} disabled={callInProgress || incomingOffer} className={targetUser === user.id ? "select-name red" : "select-name"}>
               {targetUser === user.id ? "Remover" : "Adicionar"}
             </button>
           </div>
         ))}
       </div>
-       {notification && (
-        <div className={notification === 'Chamada encerrada' ? `notification-modal-end-call` : 'notification-modal'}>
-            <span>{notification}</span>
-        </div>
-       )}
+      {notification && <div className={notification === "Chamada encerrada" ? `notification-modal-end-call` : "notification-modal"}><span>{notification}</span></div>}
     </div>
   );
 }

@@ -533,7 +533,7 @@ function VideoConferencia() {
       {!callInProgress && (
         <img
           className="resposta.carre"
-          src="/public/carregando.svg"
+          src="/carregando.svg"
           alt="Waiting for call"
         />
       )}
@@ -548,13 +548,13 @@ function VideoConferencia() {
         <div className="barra-config">
           <div className="sair-button">
             <div className="sair-button-interno" onClick={() => navigate(-1)}>
-              <img src='/public/seta-principal.svg' />
+              <img src='/seta-principal.svg' />
             </div>
           </div>
           
           <div className="ppp" onClick={toggleVideo} style={{ display: "flex", flexDirection: "column" }}>
             <img
-              src={!videoActive ? "/public/cam blue.svg" : "/public/cam grey.svg"}
+              src={!videoActive ? "/cam blue.svg" : "/cam grey.svg"}
               alt={videoActive ? "Video On" : "Video Off"}
             />
             <p style={{ color: videoActive ? "#BEBEBE" : "#5A7DA0" }}>Video</p>
@@ -562,7 +562,7 @@ function VideoConferencia() {
           
           <div className="ppp" onClick={toggleAudio} style={{ display: "flex", flexDirection: "column" }}>
             <img
-              src={!micActive ? "/public/audio blue.svg" : "/public/audio grey.svg"}
+              src={!micActive ? "/audio blue.svg" : "/audio grey.svg"}
               alt={micActive ? "Mic On" : "Mic Off"}
             />
             <p style={{ color: micActive ? "#BEBEBE" : "#5A7DA0" }}>Audio</p>
@@ -570,7 +570,7 @@ function VideoConferencia() {
           
           <div className="ppp" onClick={() => setEspelhar(espelhar === 'mirror' ? '' : 'mirror')} style={{ display: "flex", flexDirection: "column" }}>
             <img
-              src={espelhar !== 'mirror' ? "/public/espelho blue 1.svg" : "/public/espelho grey.svg"}
+              src={espelhar !== 'mirror' ? "/espelho blue 1.svg" : "/espelho grey.svg"}
               alt={espelhar === 'mirror' ? "Mirror On" : "Mirror Off"}
             />
             <p style={{ color: espelhar === 'mirror' ? "#BEBEBE" : "#5A7DA0" }}>Mirror</p>
@@ -579,7 +579,7 @@ function VideoConferencia() {
           {JSON.parse(rawUser)?.id_profissional && (
             <div className="ppp" onClick={() => setSalaDeEspera(!salaDeEspera)} style={{ display: "flex", flexDirection: "column" }}>
               <img
-                src={salaDeEspera ? "/public/pacientes blue (2) 1.svg" : "/public/pacientes grey 1.svg"}
+                src={salaDeEspera ? "/pacientes blue (2) 1.svg" : "/pacientes grey 1.svg"}
                 alt={salaDeEspera ? "Sala de Espera Aberta" : "Sala de Espera Fechada"}
               />
               <p style={{ color: salaDeEspera ? "#5a7da0" : "#CFCFCF" }}>Pacientes</p>
@@ -588,7 +588,7 @@ function VideoConferencia() {
 
           <div className="ppp" onClick={() => setConfigBarVisible(false)} style={{ display: "flex", flexDirection: "column" }}>
             <img
-              src="/public/botao-fechar 1.svg"
+              src="/botao-fechar 1.svg"
               alt="Fechar Barra de Configurações"
             />
             <p style={{color: "#CFCFCF" }}>Esconder</p>
@@ -601,7 +601,7 @@ function VideoConferencia() {
           className="ppp-2"
           onClick={() => setConfigBarVisible(true)}
         >
-          <img src='/public/proximo 1.svg' />
+          <img src='/proximo 1.svg' />
         </div>
       )}
 
@@ -614,14 +614,14 @@ function VideoConferencia() {
             :
             'Iniciar Chamada'
           }
-          <img src='/public/phone.png' />
+          <img src='/phone.png' />
         </button>
       )}
 
       {callInProgress && (
         <button style={{backgroundColor: '#d30000'}} className="start-call-button" onClick={() => endCall('')}>
           Encerrar Chamada
-          <img src='/public/phone.png' />
+          <img src='/phone.png' />
         </button>
       )}
 

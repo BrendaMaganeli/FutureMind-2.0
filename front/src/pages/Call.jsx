@@ -14,7 +14,7 @@ if (rawUser) {
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
       timeout: 1000000,
-      transports: ["websocket"],
+      transports: ["websocket", "polling"],
       secure: true
     });
   } catch (error) {

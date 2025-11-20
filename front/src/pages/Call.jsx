@@ -9,7 +9,7 @@ let socket;
 if (rawUser) {
   try {
     const user = JSON.parse(rawUser);
-    socket = io('https://futuremind-2-0-2.onrender.com', {
+    socket = io('http://192.168.15.6:3000', {
       auth: { name: user?.nome },
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
